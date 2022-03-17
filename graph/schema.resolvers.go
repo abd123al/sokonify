@@ -8,21 +8,38 @@ import (
 	"fmt"
 	"mahesabu/graph/generated"
 	"mahesabu/graph/model"
-	"math/rand"
 )
 
-func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	todo := &model.Todo{
-		Text: input.Text,
-		ID:   fmt.Sprintf("T%d", rand.Int()),
-		User: &model.User{ID: input.UserID, Name: "user " + input.UserID},
-	}
-	r.todos = append(r.todos, todo)
-	return todo, nil
+func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput) (*model.Item, error) {
+	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	return r.todos, nil
+func (r *mutationResolver) CreateShop(ctx context.Context, input model.ShopInput) (*model.Shop, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) EditItem(ctx context.Context, id string, input model.ItemInput) (*model.Item, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) DeleteItem(ctx context.Context, id string) (*model.Item, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Item(ctx context.Context, id string) (*model.Item, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Items(ctx context.Context, shopID string) ([]*model.Item, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Shop(ctx context.Context, id string) (*model.Shop, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Shops(ctx context.Context) ([]*model.Shop, error) {
+	panic(fmt.Errorf("not implemented"))
 }
 
 // Mutation returns generated.MutationResolver implementation.

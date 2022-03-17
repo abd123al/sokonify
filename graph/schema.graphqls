@@ -2,27 +2,61 @@
 #
 # https://gqlgen.com/getting-started/
 
-type Todo {
-  id: ID!
-  text: String!
-  done: Boolean!
-  user: User!
+enum ItemUnitType {
+    tablet
+    syrup
+    suspension
+    package
+    box
+}
+
+type Item {
+    id: ID!
+    quantity: Int!
+    batch: String
+    unit: ItemUnitType
+    title: String!
+    price: String!
+    user: User!
+    shop: Shop!
+}
+
+input ItemInput {
+    quantity: Int!
+    title: String!
+    price: String!
+    batch: String
+    unit: ItemUnitType
 }
 
 type User {
-  id: ID!
-  name: String!
+    id: ID!
+    name: String!
+}
+
+input ShopInput {
+    title: String!
+}
+
+# add tracking type package/tabs
+type Shop {
+    id: ID!
+    name: String!
+    type: String
+    admin: User!
+    users: [User!]!
 }
 
 type Query {
-  todos: [Todo!]!
-}
-
-input NewTodo {
-  text: String!
-  userId: String!
+    item(id: ID!): Item!
+    items(shopId:ID!): [Item!]!
+    shop(id: ID!): Shop!
+    shops: [Shop!]!
 }
 
 type Mutation {
-  createTodo(input: NewTodo!): Todo!
+    createItem(input: ItemInput!): Item!
+    createShop(input: ShopInput!): Shop!
+    editItem(id: ID!,input: ItemInput!): Item!
+    deleteItem(id: ID!): Item!
 }
