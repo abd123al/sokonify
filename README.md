@@ -5,6 +5,7 @@ go run github.com/99designs/gqlgen init
 ```
 
 go run server.go
+go run server.go -mod=mod
 go run ./server.go
 
 go run github.com/99designs/gqlgen generate

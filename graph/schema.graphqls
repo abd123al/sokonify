@@ -17,7 +17,8 @@ type Item {
     unit: ItemUnitType
     title: String!
     price: String!
-    user: User!
+    expiresAt: Time!
+    employee: Employee!
     shop: Shop!
 }
 
@@ -29,7 +30,7 @@ input ItemInput {
     unit: ItemUnitType
 }
 
-type User {
+type Employee {
     id: ID!
     name: String!
 }
@@ -43,8 +44,20 @@ type Shop {
     id: ID!
     name: String!
     type: String
-    admin: User!
-    users: [User!]!
+    admin: Employee!
+    users: [Employee!]!
+}
+
+type Order {
+    id:ID!
+    totalPrice: String!
+    employee:Employee!
+}
+
+type OrderedItem {
+    id:ID!
+    quantity: Int!
+    item: Item!
 }
 
 type Query {
@@ -60,3 +73,5 @@ type Mutation {
     editItem(id: ID!,input: ItemInput!): Item!
     deleteItem(id: ID!): Item!
 }
+
+scalar Time
