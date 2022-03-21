@@ -11,7 +11,21 @@ import (
 )
 
 func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput) (*model.Item, error) {
-	panic(fmt.Errorf("not implemented"))
+	order := model.Item{
+		Quantity: input.Quantity,
+	}
+	r.DB.Create(&order)
+	return &order, nil
+}
+
+func (r *mutationResolver) CreateEmployee(ctx context.Context, input model.EmployeeInput) (*model.Employee, error) {
+	employee := model.Employee{
+		Name: input.Name,
+	}
+
+	r.DB.Create(&employee)
+
+	return &employee, nil
 }
 
 func (r *mutationResolver) CreateShop(ctx context.Context, input model.ShopInput) (*model.Shop, error) {

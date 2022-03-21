@@ -1,6 +1,12 @@
 # GraphQL schema example
 #
 # https://gqlgen.com/getting-started/
+interface Gorm {
+    id:ID!
+    createdAt:Time!
+    updatedAt:Time!
+    deletedAt:Time!
+}
 
 enum ItemUnitType {
     tablet
@@ -10,16 +16,19 @@ enum ItemUnitType {
     box
 }
 
-type Item {
-    id: ID!
+type Item implements Gorm {
+    id:ID!
+    createdAt:Time!
+    updatedAt:Time!
+    deletedAt:Time!
     quantity: Int!
     batch: String
     unit: ItemUnitType
     title: String!
     price: String!
     expiresAt: Time!
-    employee: Employee!
-    shop: Shop!
+    employee: Employee! @goTag(key: "gorm", value: "-")
+    shop: Shop! @goTag(key: "gorm", value: "-")
 }
 
 input ItemInput {
@@ -30,10 +39,17 @@ input ItemInput {
     unit: ItemUnitType
 }
 
-type Employee {
-    id: ID! @goTag(key: "gorm", value: "primaryKey;autoIncrement;type:INTEGER")
+type Employee implements Gorm {
+    id: ID! @goTag(key: "gorm", value: "primaryKey;type:INTEGER;autoIncrement;")
+    createdAt:Time!
+    updatedAt:Time!
+    deletedAt:Time!
     name: String! @goTag(key: "gorm", value: "index;size:50")
     shops: [Shop!]! @goTag(key: "gorm", value: "-")
+}
+
+input EmployeeInput {
+    name: String!
 }
 
 input ShopInput {
@@ -41,18 +57,24 @@ input ShopInput {
 }
 
 # add tracking type package/tabs
-type Shop {
-    id: ID!
+type Shop implements Gorm {
+    id:ID!
+    deletedAt:Time!
+    createdAt:Time!
+    updatedAt:Time!
     name: String!
     type: String
-    admin: Employee!
-    users: [Employee!]!
+    admin: Employee! @goTag(key: "gorm", value: "-")
+    users: [Employee!]! @goTag(key: "gorm", value: "-")
 }
 
-type Order {
+type Order implements Gorm {
     id:ID!
+    createdAt:Time!
+    updatedAt:Time!
+    deletedAt:Time!
     totalPrice: String!
-    employee:Employee!
+    employee:Employee! @goTag(key: "gorm", value: "-")
 }
 
 type OrderedItem {
@@ -70,6 +92,7 @@ type Query {
 
 type Mutation {
     createItem(input: ItemInput!): Item!
+    createEmployee(input: EmployeeInput!): Employee!
     createShop(input: ShopInput!): Shop!
     editItem(id: ID!,input: ItemInput!): Item!
     deleteItem(id: ID!): Item!
