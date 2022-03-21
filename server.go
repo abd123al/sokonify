@@ -22,7 +22,7 @@ func main() {
 		panic("failed to connect database")
 	}
 
-	err = db.AutoMigrate(&model.Employee{}, &model.Item{}, &model.Shop{})
+	err = db.AutoMigrate(&model.Employee{}, &model.Item{}, &model.Shop{}, &model.Order{}, model.OrderedItem{})
 	if err != nil {
 		panic("failed to auto migrate")
 	}
