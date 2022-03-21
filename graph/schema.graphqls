@@ -16,6 +16,15 @@ enum ItemUnitType {
     box
 }
 
+# With this user can reuse their credentials in different shops
+type User implements Gorm {
+    id:ID! @goTag(key: "gorm", value: "primaryKey")
+    createdAt:Time!
+    updatedAt:Time!
+    deletedAt:Time
+    name: String! @goTag(key: "gorm", value: "index;size:50")
+}
+
 type Item implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
     createdAt:Time!
@@ -25,10 +34,13 @@ type Item implements Gorm {
     batch: String
     unit: ItemUnitType
     title: String!
-    price: String!
+    buyingPrice: String!
+    sellingPrice: String!
     expiresAt: Time!
-    employee: Employee! @goTag(key: "gorm", value: "-")
-    shop: Shop! @goTag(key: "gorm", value: "-")
+    employeeId: Int!
+    employee: Employee! @goTag(key: "gorm", value: "foreignKey:EmployeeID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    shopId: Int!
+    shop: Shop! @goTag(key: "gorm", value:  "foreignKey:ShopID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 }
 
 input ItemInput {
@@ -40,16 +52,19 @@ input ItemInput {
 }
 
 type Employee implements Gorm {
-    id: ID! @goTag(key: "gorm", value: "primaryKey")
+    id: ID! @goTag(key: "gorm", value: "primaryKey;type:INTEGER")
     createdAt:Time!
     updatedAt:Time!
     deletedAt:Time
-    name: String! @goTag(key: "gorm", value: "index;size:50")
-    shops: [Shop!]! @goTag(key: "gorm", value: "-")
+    userId: Int!
+    user: User! @goTag(key: "gorm", value: "foreignKey:UserID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    shopId: Int!
+    shop: Shop! @goTag(key: "gorm", value: "foreignKey:ShopID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 }
 
 input EmployeeInput {
-    name: String!
+    shopId: Int!
+    userId: Int!
 }
 
 input ShopInput {
@@ -64,8 +79,9 @@ type Shop implements Gorm {
     updatedAt:Time!
     name: String!
     type: String
-    admin: Employee! @goTag(key: "gorm", value: "-")
-    users: [Employee!]! @goTag(key: "gorm", value: "-")
+    adminId: Int!
+    admin: Employee! @goTag(key: "gorm", value: "foreignKey:AdminID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    employees: [Employee!]! @goTag(key: "gorm", value: "-")
 }
 
 type Order implements Gorm {
@@ -74,16 +90,18 @@ type Order implements Gorm {
     updatedAt:Time!
     deletedAt:Time
     totalPrice: String!
-    employee:Employee! @goTag(key: "gorm", value: "-")
+    employeeId: Int!
+    employee: Employee! @goTag(key: "gorm", value: "foreignKey:EmployeeID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 }
 
-type OrderedItem implements Gorm {
+type OrderItem implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
     createdAt:Time!
     updatedAt:Time!
     deletedAt:Time
     quantity: Int!
-    item: Item! @goTag(key: "gorm", value: "-")
+    itemId: Int!
+    item: Item! @goTag(key: "gorm", value: "foreignKey:ItemID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 }
 
 type Query {

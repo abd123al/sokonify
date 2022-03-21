@@ -20,7 +20,8 @@ func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput
 
 func (r *mutationResolver) CreateEmployee(ctx context.Context, input model.EmployeeInput) (*model.Employee, error) {
 	employee := model.Employee{
-		Name: input.Name,
+		ShopID: input.ShopID,
+		UserID: input.UserID,
 	}
 
 	r.DB.Create(&employee)
