@@ -9,4 +9,5 @@ import "mahesabu/graph/model"
 
 type Resolver struct {
 	todos []*model.Item
+	//todo add database here and get it in resolvers
 }

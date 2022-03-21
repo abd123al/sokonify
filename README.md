@@ -8,4 +8,7 @@ go run server.go
 go run server.go -mod=mod
 go run ./server.go
 
-go run github.com/99designs/gqlgen generate
+go run -mod=mod github.com/99designs/gqlgen generate
+
+go mod tidy
+go generate ./...
