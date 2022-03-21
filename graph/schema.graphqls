@@ -17,7 +17,7 @@ enum ItemUnitType {
 }
 
 type Item implements Gorm {
-    id:ID!
+    id:ID! @goTag(key: "gorm", value: "primaryKey")
     createdAt:Time!
     updatedAt:Time!
     deletedAt:Time!
@@ -40,7 +40,7 @@ input ItemInput {
 }
 
 type Employee implements Gorm {
-    id: ID! @goTag(key: "gorm", value: "primaryKey;type:INTEGER;autoIncrement;")
+    id: ID! @goTag(key: "gorm", value: "primaryKey")
     createdAt:Time!
     updatedAt:Time!
     deletedAt:Time!

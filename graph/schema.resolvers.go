@@ -32,23 +32,23 @@ func (r *mutationResolver) CreateShop(ctx context.Context, input model.ShopInput
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *mutationResolver) EditItem(ctx context.Context, id string, input model.ItemInput) (*model.Item, error) {
+func (r *mutationResolver) EditItem(ctx context.Context, id int, input model.ItemInput) (*model.Item, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *mutationResolver) DeleteItem(ctx context.Context, id string) (*model.Item, error) {
+func (r *mutationResolver) DeleteItem(ctx context.Context, id int) (*model.Item, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Item(ctx context.Context, id string) (*model.Item, error) {
+func (r *queryResolver) Item(ctx context.Context, id int) (*model.Item, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Items(ctx context.Context, shopID string) ([]*model.Item, error) {
+func (r *queryResolver) Items(ctx context.Context, shopID int) ([]*model.Item, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Shop(ctx context.Context, id string) (*model.Shop, error) {
+func (r *queryResolver) Shop(ctx context.Context, id int) (*model.Shop, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
