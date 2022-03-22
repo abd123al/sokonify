@@ -18,15 +18,15 @@ func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput
 	return &order, nil
 }
 
-func (r *mutationResolver) CreateEmployee(ctx context.Context, input model.EmployeeInput) (*model.Employee, error) {
-	employee := model.Employee{
+func (r *mutationResolver) CreateStaff(ctx context.Context, input model.StaffInput) (*model.Staff, error) {
+	staff := model.Staff{
 		ShopID: input.ShopID,
 		UserID: input.UserID,
 	}
 
-	r.DB.Create(&employee)
+	r.DB.Create(&staff)
 
-	return &employee, nil
+	return &staff, nil
 }
 
 func (r *mutationResolver) CreateShop(ctx context.Context, input model.ShopInput) (*model.Shop, error) {

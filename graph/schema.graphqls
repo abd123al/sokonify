@@ -16,6 +16,13 @@ enum ItemUnitType {
     box
 }
 
+enum OrderType {
+    # order for receiving items
+    purchase
+    # order for selling items
+    sale
+}
+
 enum UserType {
     # can change system settings and assigning employers
     admin
@@ -53,8 +60,10 @@ type Item implements Gorm {
     buyingPrice: String!
     sellingPrice: String!
     expiresAt: Time!
+
     staffId: Int!
     staff: Staff! @goTag(key: "gorm", value: "foreignKey:StaffID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+
     shopId: Int!
     shop: Shop! @goTag(key: "gorm", value:  "foreignKey:ShopID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 }
@@ -73,8 +82,11 @@ type Staff implements Gorm {
     createdAt:Time!
     updatedAt:Time!
     deletedAt:Time
+    isActive: Boolean!
+
     userId: Int!
     user: User! @goTag(key: "gorm", value: "foreignKey:UserID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+
     shopId: Int!
     shop: Shop! @goTag(key: "gorm", value: "foreignKey:ShopID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 }
@@ -96,8 +108,10 @@ type Shop implements Gorm {
     updatedAt:Time!
     name: String!
     type: String
+
     ownerId: Int!
     owner: Staff! @goTag(key: "gorm", value: "foreignKey:OwnerID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+
     staffs: [Staff!]! @goTag(key: "gorm", value: "-")
 }
 
@@ -107,8 +121,15 @@ type Order implements Gorm {
     updatedAt:Time!
     deletedAt:Time
     totalPrice: String!
+    type: OrderType!
+
+    # Customer can be nullable. Since POS don't have to register customer.
+    customerId: Int
+    customer: User @goTag(key: "gorm", value: "foreignKey:CustomerID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+
     staffId: Int!
     staff: Staff! @goTag(key: "gorm", value: "foreignKey:StaffID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+
     shopId: Int!
     shop: Shop! @goTag(key: "gorm", value: "foreignKey:ShopID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 }
@@ -119,8 +140,24 @@ type OrderItem implements Gorm {
     updatedAt:Time!
     deletedAt:Time
     quantity: Int!
+
     itemId: Int!
     item: Item! @goTag(key: "gorm", value: "foreignKey:ItemID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+}
+
+type Payment implements Gorm {
+    id:ID! @goTag(key: "gorm", value: "primaryKey")
+    createdAt:Time!
+    updatedAt:Time!
+    deletedAt:Time
+    amount: String!
+    description: String
+    # Id to identify this payment
+    referenceId: String
+
+    # Payment for what order.
+    orderId: Int!
+    order: Order! @goTag(key: "gorm", value: "foreignKey:OrderID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 }
 
 type Query {
