@@ -61,8 +61,8 @@ type Item implements Gorm {
     sellingPrice: String!
     expiresAt: Time!
 
-    staffId: Int!
-    staff: Staff! @goTag(key: "gorm", value: "foreignKey:StaffID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    userId: Int!
+    user: User! @goTag(key: "gorm", value: "foreignKey:UserID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 
     shopId: Int!
     shop: Shop! @goTag(key: "gorm", value:  "foreignKey:ShopID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
@@ -110,7 +110,7 @@ type Shop implements Gorm {
     type: String
 
     ownerId: Int!
-    owner: Staff! @goTag(key: "gorm", value: "foreignKey:OwnerID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    owner: User! @goTag(key: "gorm", value: "foreignKey:OwnerID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 
     staffs: [Staff!]! @goTag(key: "gorm", value: "-")
 }
@@ -128,7 +128,7 @@ type Order implements Gorm {
     customer: User @goTag(key: "gorm", value: "foreignKey:CustomerID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 
     staffId: Int!
-    staff: Staff! @goTag(key: "gorm", value: "foreignKey:StaffID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    staff: User! @goTag(key: "gorm", value: "foreignKey:StaffID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 
     shopId: Int!
     shop: Shop! @goTag(key: "gorm", value: "foreignKey:ShopID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
