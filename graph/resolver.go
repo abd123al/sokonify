@@ -1,6 +1,6 @@
 package graph
 
-//go:generate go run github.com/99designs/gqlgen generate
+//go:generate go run -mod=mod github.com/99designs/gqlgen generate
 import (
 	"gorm.io/gorm"
 )
