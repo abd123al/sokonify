@@ -56,6 +56,21 @@ type User implements Gorm {
     type: UserType @goTag(key: "sql", value: "type:user_type")
 }
 
+
+type Category implements Gorm {
+    id:ID! @goTag(key: "gorm", value: "primaryKey;type:integer")
+    createdAt:Time!
+    updatedAt:Time!
+    deletedAt:Time
+    # tablets/syrups/
+    name: String! @goTag(key: "gorm", value: "index;size:50")
+    # unit box/each/package
+    unit: String @goTag(key: "gorm", value: "size:50;")
+
+    shopId: Int!
+    shop: Shop! @goTag(key: "gorm", value:  "foreignKey:ShopID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+}
+
 type Item implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
     createdAt:Time!
@@ -72,8 +87,8 @@ type Item implements Gorm {
     userId: Int!
     user: User! @goTag(key: "gorm", value: "foreignKey:UserID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 
-    shopId: Int!
-    shop: Shop! @goTag(key: "gorm", value:  "foreignKey:ShopID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    categoryId: Int!
+    category: Category! @goTag(key: "gorm", value:  "foreignKey:CategoryID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
 }
 
 input ItemInput {
@@ -84,7 +99,7 @@ input ItemInput {
     unit: ItemUnitType
 }
 
-# Even suppliers can be termed as staffs
+# Even suppliers/customers can be termed as staffs
 type Staff implements Gorm {
     id: ID! @goTag(key: "gorm", value: "primaryKey;type:INTEGER")
     createdAt:Time!
