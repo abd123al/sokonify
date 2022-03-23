@@ -20,8 +20,8 @@ func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput
 
 func (r *mutationResolver) CreateStaff(ctx context.Context, input model.StaffInput) (*model.Staff, error) {
 	staff := model.Staff{
-		ShopID: input.ShopID,
-		UserID: input.UserID,
+		StoreID: input.StoreID,
+		UserID:  input.UserID,
 	}
 
 	r.DB.Create(&staff)
@@ -29,7 +29,7 @@ func (r *mutationResolver) CreateStaff(ctx context.Context, input model.StaffInp
 	return &staff, nil
 }
 
-func (r *mutationResolver) CreateShop(ctx context.Context, input model.ShopInput) (*model.Shop, error) {
+func (r *mutationResolver) CreateStore(ctx context.Context, input model.StoreInput) (*model.Store, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
@@ -41,19 +41,27 @@ func (r *mutationResolver) DeleteItem(ctx context.Context, id int) (*model.Item,
 	panic(fmt.Errorf("not implemented"))
 }
 
+func (r *queryResolver) Category(ctx context.Context, id int) (*model.Category, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Categories(ctx context.Context, storeID int) ([]*model.Category, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *queryResolver) Item(ctx context.Context, id int) (*model.Item, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Items(ctx context.Context, shopID int) ([]*model.Item, error) {
+func (r *queryResolver) Items(ctx context.Context, storeID int) ([]*model.Item, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Shop(ctx context.Context, id int) (*model.Shop, error) {
+func (r *queryResolver) Store(ctx context.Context, id int) (*model.Store, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Shops(ctx context.Context) ([]*model.Shop, error) {
+func (r *queryResolver) Stores(ctx context.Context) ([]*model.Store, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 

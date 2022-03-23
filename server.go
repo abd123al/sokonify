@@ -23,7 +23,7 @@ func main() {
 	}
 
 	err = db.AutoMigrate(
-		&model.Staff{}, &model.Item{}, &model.Shop{}, &model.Order{}, model.OrderItem{},
+		&model.Staff{}, &model.Item{}, &model.Store{}, &model.Order{}, model.OrderItem{},
 		&model.User{}, &model.Payment{}, &model.Ledger{},
 	)
 	if err != nil {

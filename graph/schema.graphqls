@@ -8,14 +8,6 @@ interface Gorm {
     deletedAt:Time
 }
 
-enum ItemUnitType {
-    tablet
-    syrup
-    suspension
-    package
-    box
-}
-
 enum OrderType {
     # order for receiving items
     purchase
@@ -86,12 +78,11 @@ type Item implements Gorm {
     createdAt:Time!
     updatedAt:Time!
     deletedAt:Time
-    quantity: Int!
-    batch: String
-    unit: ItemUnitType
-    title: String!
-    buyingPrice: String!
-    sellingPrice: String!
+    quantity: Int!  @goTag(key: "gorm", value: "type:integer;")
+    batch: String @goTag(key: "gorm", value: "size:50")
+    title: String! @goTag(key: "gorm", value: "index;size:100")
+    buyingPrice: String!  @goTag(key: "gorm", value: "type:numeric;")
+    sellingPrice: String!  @goTag(key: "gorm", value: "type:numeric;")
     expiresAt: Time!
 
     userId: Int!
@@ -106,7 +97,7 @@ input ItemInput {
     title: String!
     price: String!
     batch: String
-    unit: ItemUnitType
+    categoryId: Int!
 }
 
 # Even suppliers/customers can be termed as staffs
@@ -139,7 +130,7 @@ type Store implements Gorm {
     deletedAt:Time
     createdAt:Time!
     updatedAt:Time!
-    name: String!
+    name: String! @goTag(key: "gorm", value: "index;size:50")
     type: StoreType!
 
     ownerId: Int!
@@ -153,7 +144,7 @@ type Order implements Gorm {
     createdAt:Time!
     updatedAt:Time!
     deletedAt:Time
-    totalPrice: String!
+    totalPrice: String! @goTag(key: "gorm", value: "type:numeric;")
     type: OrderType!
 
     # Customer can be nullable. Since POS don't have to register customer.
@@ -172,9 +163,9 @@ type OrderItem implements Gorm {
     createdAt:Time!
     updatedAt:Time!
     deletedAt:Time
-    quantity: Int!
+    quantity: Int! @goTag(key: "gorm", value: "type:integer;")
     # user may be given discount. This price of just one item
-    price: String!
+    price: String! @goTag(key: "gorm", value: "type:numeric;")
 
     itemId: Int!
     item: Item! @goTag(key: "gorm", value: "foreignKey:ItemID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
@@ -186,9 +177,9 @@ type Payment implements Gorm {
     updatedAt:Time!
     deletedAt:Time
     amount: String! @goTag(key: "gorm", value: "type:numeric;")
-    description: String
+    description: String @goTag(key: "gorm", value: "size:100")
     # Id to identify this payment
-    referenceId: String
+    referenceId: String @goTag(key: "gorm", value: "index;size:50")
     type: PaymentType!
 
     # Payment for what order.
