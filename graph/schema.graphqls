@@ -64,6 +64,7 @@ type Category implements Gorm {
     createdAt:Time!
     updatedAt:Time!
     deletedAt:Time
+
     # tablets/syrups/
     name: String! @goTag(key: "gorm", value: "index;size:50")
     # unit box/each/package
@@ -73,14 +74,50 @@ type Category implements Gorm {
     store: Store! @goTag(key: "gorm", value:  "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 }
 
+type Product implements Gorm {
+    id:ID! @goTag(key: "gorm", value: "primaryKey")
+    createdAt:Time!
+    updatedAt:Time!
+    deletedAt:Time
+
+    title: String! @goTag(key: "gorm", value: "index;size:100")
+
+    categoryId: Int!
+    category: Category! @goTag(key: "gorm", value:  "foreignKey:CategoryID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
+}
+
+input ProductInput {
+    title: String!
+    categoryId: Int!
+}
+
+# Product can be the same but with different brands
+type Brand implements Gorm {
+    id:ID! @goTag(key: "gorm", value: "primaryKey")
+    createdAt:Time!
+    updatedAt:Time!
+    deletedAt:Time
+
+    title: String! @goTag(key: "gorm", value: "index;size:50")
+    manufacturer: String! @goTag(key: "gorm", value: "size:50")
+
+    productId: Int!
+    product: Product! @goTag(key: "gorm", value:  "foreignKey:ProductID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
+}
+
+input BrandInput {
+    title: String!
+    productId: Int!
+}
+
 type Item implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
     createdAt:Time!
     updatedAt:Time!
     deletedAt:Time
+
     quantity: Int!  @goTag(key: "gorm", value: "type:integer;")
     batch: String @goTag(key: "gorm", value: "size:50")
-    title: String! @goTag(key: "gorm", value: "index;size:100")
     buyingPrice: String!  @goTag(key: "gorm", value: "type:numeric;")
     sellingPrice: String!  @goTag(key: "gorm", value: "type:numeric;")
     expiresAt: Time!
@@ -88,16 +125,23 @@ type Item implements Gorm {
     userId: Int!
     user: User! @goTag(key: "gorm", value: "foreignKey:UserID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 
-    categoryId: Int!
-    category: Category! @goTag(key: "gorm", value:  "foreignKey:CategoryID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
+    productId: Int!
+    product: Product! @goTag(key: "gorm", value:  "foreignKey:ProductID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
+
+    # todo make it nullable when brand is deleted
+    brandId: Int
+    brand: Brand @goTag(key: "gorm", value:  "foreignKey:BrandID;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
 }
 
 input ItemInput {
     quantity: Int!
-    title: String!
-    price: String!
+    buyingPrice: String!
+    sellingPrice: String!
     batch: String
-    categoryId: Int!
+    expiresAt: Time
+
+    brandId: Int
+    productId: Int!
 }
 
 # Even suppliers/customers can be termed as staffs

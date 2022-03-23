@@ -11,11 +11,11 @@ import (
 )
 
 func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput) (*model.Item, error) {
-	order := model.Item{
+	item := model.Item{
 		Quantity: input.Quantity,
 	}
-	r.DB.Create(&order)
-	return &order, nil
+	r.DB.Create(&item)
+	return &item, nil
 }
 
 func (r *mutationResolver) CreateStaff(ctx context.Context, input model.StaffInput) (*model.Staff, error) {
@@ -23,9 +23,7 @@ func (r *mutationResolver) CreateStaff(ctx context.Context, input model.StaffInp
 		StoreID: input.StoreID,
 		UserID:  input.UserID,
 	}
-
 	r.DB.Create(&staff)
-
 	return &staff, nil
 }
 
