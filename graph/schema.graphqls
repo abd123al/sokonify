@@ -21,6 +21,14 @@ enum OrderType {
     purchase
     # order for selling items
     sale
+    # Let's say we pay for some things eg electricity.
+    expense
+}
+
+enum PaymentType {
+    cash
+    loan
+    bank
 }
 
 enum UserType {
@@ -140,6 +148,8 @@ type OrderItem implements Gorm {
     updatedAt:Time!
     deletedAt:Time
     quantity: Int!
+    # user may be given discount
+    price: String!
 
     itemId: Int!
     item: Item! @goTag(key: "gorm", value: "foreignKey:ItemID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
@@ -154,6 +164,7 @@ type Payment implements Gorm {
     description: String
     # Id to identify this payment
     referenceId: String
+    type: PaymentType!
 
     # Payment for what order.
     orderId: Int!
