@@ -93,11 +93,6 @@ type Product implements Gorm {
     category: Category! @goTag(key: "gorm", value:  "foreignKey:CategoryID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
 }
 
-input ProductBrandInput {
-    name: String!
-    manufacturer: String
-}
-
 input ProductInput {
     name: String!
     categoryId: Int!
@@ -117,6 +112,12 @@ type Brand implements Gorm {
 
     productId: Int!
     product: Product! @goTag(key: "gorm", value:  "foreignKey:ProductID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
+}
+
+# This is used to create brand when creating product itself.
+input ProductBrandInput {
+    name: String!
+    manufacturer: String
 }
 
 input BrandInput {
@@ -216,6 +217,14 @@ type Order implements Gorm {
 
     storeId: Int!
     store: Store! @goTag(key: "gorm", value: "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+
+    items: [OrderItem!]! @goTag(key: "gorm", value: "-")
+}
+
+input OrderInput {
+    type: OrderType!
+    customerId: Int
+    items: [OrderItemInput!]!
 }
 
 type OrderItem implements Gorm {
@@ -225,10 +234,18 @@ type OrderItem implements Gorm {
     deletedAt:Time
     quantity: Int! @goTag(key: "gorm", value: "type:integer;")
     # user may be given discount. This price of just one item
-    price: String! @goTag(key: "gorm", value: "type:numeric;")
+    sellingPrice: String! @goTag(key: "gorm", value: "type:numeric;")
+    # This equals to sellingPrice * quantity
+    subTotalPrice: String! @goField(forceResolver: true) @goTag(key: "gorm", value: "-")
 
     itemId: Int!
     item: Item! @goTag(key: "gorm", value: "foreignKey:ItemID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+}
+
+input OrderItemInput {
+    quantity: Int!
+    sellingPrice: String!
+    itemId: Int!
 }
 
 type Payment implements Gorm {
@@ -265,19 +282,39 @@ type Ledger implements Gorm {
 }
 
 type Query {
+    brand(id:ID!): Brand!
+    brands(productId:ID!): [Brand!]!
     category(id:ID!): Category!
     categories(storeId:ID!): [Category!]!
     item(id: ID!): Item!
     items(storeId:ID!): [Item!]!
+    order(id: ID!): Order!
+    orders(storeId:ID!): [Order!]!
+    payment(id: ID!): Payment!
+    payments(storeId:ID!): [Payment!]!
+    product(id: ID!): Product!
+    products(storeId:ID!): [Product!]!
     store(id: ID!): Store!
     stores: [Store!]!
 }
 
 type Mutation {
+    createBrand(input: BrandInput!): Brand!
+    createCategory(input: CategoryInput!): Category!
     createItem(input: ItemInput!): Item!
+    createOrder(input: OrderInput!): Order!
+    createProduct(input: ProductInput!): Product!
     createStaff(input: StaffInput!): Staff!
     createStore(input: StoreInput!): Store!
+
+    editBrand(id: ID!,input: BrandInput!): Brand!
+    editCategory(id: ID!,input: CategoryInput!): Category!
     editItem(id: ID!,input: ItemInput!): Item!
+    editOrder(id: ID!,input: OrderInput!): Order!
+    editProduct(id: ID!,input: ProductInput!): Product!
+    editStaff(id: ID!,input: StaffInput!): Staff!
+    editStore(id: ID!,input: StoreInput!): Store!
+
     deleteItem(id: ID!): Item!
 }
 

@@ -10,12 +10,28 @@ import (
 	"mahesabu/graph/model"
 )
 
+func (r *mutationResolver) CreateBrand(ctx context.Context, input model.BrandInput) (*model.Brand, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) CreateCategory(ctx context.Context, input model.CategoryInput) (*model.Category, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput) (*model.Item, error) {
 	item := model.Item{
 		Quantity: input.Quantity,
 	}
 	r.DB.Create(&item)
 	return &item, nil
+}
+
+func (r *mutationResolver) CreateOrder(ctx context.Context, input model.OrderInput) (*model.Order, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) CreateProduct(ctx context.Context, input model.ProductInput) (*model.Product, error) {
+	panic(fmt.Errorf("not implemented"))
 }
 
 func (r *mutationResolver) CreateStaff(ctx context.Context, input model.StaffInput) (*model.Staff, error) {
@@ -31,11 +47,47 @@ func (r *mutationResolver) CreateStore(ctx context.Context, input model.StoreInp
 	panic(fmt.Errorf("not implemented"))
 }
 
+func (r *mutationResolver) EditBrand(ctx context.Context, id int, input model.BrandInput) (*model.Brand, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) EditCategory(ctx context.Context, id int, input model.CategoryInput) (*model.Category, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *mutationResolver) EditItem(ctx context.Context, id int, input model.ItemInput) (*model.Item, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
+func (r *mutationResolver) EditOrder(ctx context.Context, id int, input model.OrderInput) (*model.Order, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) EditProduct(ctx context.Context, id int, input model.ProductInput) (*model.Product, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) EditStaff(ctx context.Context, id int, input model.StaffInput) (*model.Staff, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) EditStore(ctx context.Context, id int, input model.StoreInput) (*model.Store, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *mutationResolver) DeleteItem(ctx context.Context, id int) (*model.Item, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *orderItemResolver) SubTotalPrice(ctx context.Context, obj *model.OrderItem) (string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Brand(ctx context.Context, id int) (*model.Brand, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Brands(ctx context.Context, productID int) ([]*model.Brand, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
@@ -55,6 +107,30 @@ func (r *queryResolver) Items(ctx context.Context, storeID int) ([]*model.Item, 
 	panic(fmt.Errorf("not implemented"))
 }
 
+func (r *queryResolver) Order(ctx context.Context, id int) (*model.Order, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Orders(ctx context.Context, storeID int) ([]*model.Order, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Payment(ctx context.Context, id int) (*model.Payment, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Payments(ctx context.Context, storeID int) ([]*model.Payment, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Product(ctx context.Context, id int) (*model.Product, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Products(ctx context.Context, storeID int) ([]*model.Product, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *queryResolver) Store(ctx context.Context, id int) (*model.Store, error) {
 	panic(fmt.Errorf("not implemented"))
 }
@@ -66,8 +142,12 @@ func (r *queryResolver) Stores(ctx context.Context) ([]*model.Store, error) {
 // Mutation returns generated.MutationResolver implementation.
 func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
 
+// OrderItem returns generated.OrderItemResolver implementation.
+func (r *Resolver) OrderItem() generated.OrderItemResolver { return &orderItemResolver{r} }
+
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
 type mutationResolver struct{ *Resolver }
+type orderItemResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
