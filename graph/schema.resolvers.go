@@ -10,6 +10,10 @@ import (
 	"mahesabu/graph/model"
 )
 
+func (r *itemResolver) BuyingPrice(ctx context.Context, obj *model.Item) (*string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *mutationResolver) CreateBrand(ctx context.Context, input model.BrandInput) (*model.Brand, error) {
 	panic(fmt.Errorf("not implemented"))
 }
@@ -171,6 +175,9 @@ func (r *userResolver) Password(ctx context.Context, obj *model.User) (*string, 
 	return nil, nil
 }
 
+// Item returns generated.ItemResolver implementation.
+func (r *Resolver) Item() generated.ItemResolver { return &itemResolver{r} }
+
 // Mutation returns generated.MutationResolver implementation.
 func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
 
@@ -183,6 +190,7 @@ func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 // User returns generated.UserResolver implementation.
 func (r *Resolver) User() generated.UserResolver { return &userResolver{r} }
 
+type itemResolver struct{ *Resolver }
 type mutationResolver struct{ *Resolver }
 type orderItemResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }

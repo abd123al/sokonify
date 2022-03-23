@@ -148,7 +148,8 @@ type Item implements Gorm {
 
     quantity: Int!  @goTag(key: "gorm", value: "type:integer;")
     batch: String @goTag(key: "gorm", value: "size:50")
-    buyingPrice: String!  @goTag(key: "gorm", value: "type:numeric;")
+    # nullable for non admins
+    buyingPrice: String  @goTag(key: "gorm", value: "type:numeric;") @goField(forceResolver: true)
     sellingPrice: String!  @goTag(key: "gorm", value: "type:numeric;")
     expiresAt: Time!
 
