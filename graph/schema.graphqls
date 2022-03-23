@@ -23,6 +23,10 @@ enum OrderType {
     sale
     # Let's say we pay for some things eg electricity.
     expense
+    # If things have expired they can be automatically disposed.
+    # todo we should have cron job for doing this.
+    expired
+    damaged
 }
 
 enum PaymentType {
@@ -36,15 +40,21 @@ enum UserType {
     admin
     # who buys
     customer
-    # can edit things in shop
+    # can edit things in store
     staff
-    # can assign users in shops
+    # can assign users in stores
     owner
     # who brings products in
     supplier
 }
 
-# With this user can reuse their credentials in different shops
+# Having multiple type will allow transfer between parties
+enum StoreType {
+    shop
+    warehouse
+}
+
+# With this user can reuse their credentials in different stores
 type User implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
     createdAt:Time!
@@ -67,8 +77,8 @@ type Category implements Gorm {
     # unit box/each/package
     unit: String @goTag(key: "gorm", value: "size:50;")
 
-    shopId: Int!
-    shop: Shop! @goTag(key: "gorm", value:  "foreignKey:ShopID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    storeId: Int!
+    store: Store! @goTag(key: "gorm", value:  "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 }
 
 type Item implements Gorm {
@@ -110,27 +120,27 @@ type Staff implements Gorm {
     userId: Int!
     user: User! @goTag(key: "gorm", value: "foreignKey:UserID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 
-    shopId: Int!
-    shop: Shop! @goTag(key: "gorm", value: "foreignKey:ShopID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    storeId: Int!
+    store: Store! @goTag(key: "gorm", value: "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 }
 
 input StaffInput {
-    shopId: Int!
+    storeId: Int!
     userId: Int!
 }
 
-input ShopInput {
+input StoreInput {
     title: String!
 }
 
 # add tracking type package/tabs
-type Shop implements Gorm {
+type Store implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
     deletedAt:Time
     createdAt:Time!
     updatedAt:Time!
     name: String!
-    type: String
+    type: StoreType!
 
     ownerId: Int!
     owner: User! @goTag(key: "gorm", value: "foreignKey:OwnerID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
@@ -153,8 +163,8 @@ type Order implements Gorm {
     staffId: Int!
     staff: User! @goTag(key: "gorm", value: "foreignKey:StaffID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 
-    shopId: Int!
-    shop: Shop! @goTag(key: "gorm", value: "foreignKey:ShopID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    storeId: Int!
+    store: Store! @goTag(key: "gorm", value: "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 }
 
 type OrderItem implements Gorm {
@@ -204,16 +214,18 @@ type Ledger implements Gorm {
 }
 
 type Query {
+    category(id:ID!): Category!
+    categories(storeId:ID!): [Category!]!
     item(id: ID!): Item!
-    items(shopId:ID!): [Item!]!
-    shop(id: ID!): Shop!
-    shops: [Shop!]!
+    items(storeId:ID!): [Item!]!
+    store(id: ID!): Store!
+    stores: [Store!]!
 }
 
 type Mutation {
     createItem(input: ItemInput!): Item!
     createStaff(input: StaffInput!): Staff!
-    createShop(input: ShopInput!): Shop!
+    createStore(input: StoreInput!): Store!
     editItem(id: ID!,input: ItemInput!): Item!
     deleteItem(id: ID!): Item!
 }

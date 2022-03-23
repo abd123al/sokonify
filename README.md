@@ -12,3 +12,8 @@ go run -mod=mod github.com/99designs/gqlgen generate
 
 go mod tidy
 go generate ./...
+
+
+# Todo
+- Transfer items between warehouse and store
+- 
