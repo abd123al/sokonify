@@ -74,20 +74,27 @@ type Category implements Gorm {
     store: Store! @goTag(key: "gorm", value:  "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 }
 
+input CategoryInput {
+    name: String!
+    unit: String
+
+    storeId: Int!
+}
+
 type Product implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
     createdAt:Time!
     updatedAt:Time!
     deletedAt:Time
 
-    title: String! @goTag(key: "gorm", value: "index;size:100")
+    name: String! @goTag(key: "gorm", value: "index;size:100")
 
     categoryId: Int!
     category: Category! @goTag(key: "gorm", value:  "foreignKey:CategoryID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
 }
 
 input ProductInput {
-    title: String!
+    name: String!
     categoryId: Int!
 }
 
@@ -98,7 +105,7 @@ type Brand implements Gorm {
     updatedAt:Time!
     deletedAt:Time
 
-    title: String! @goTag(key: "gorm", value: "index;size:50")
+    name: String! @goTag(key: "gorm", value: "index;size:50")
     manufacturer: String! @goTag(key: "gorm", value: "size:50")
 
     productId: Int!
@@ -106,7 +113,7 @@ type Brand implements Gorm {
 }
 
 input BrandInput {
-    title: String!
+    name: String!
     productId: Int!
 }
 
@@ -164,9 +171,6 @@ input StaffInput {
     userId: Int!
 }
 
-input StoreInput {
-    title: String!
-}
 
 # add tracking type package/tabs
 type Store implements Gorm {
@@ -181,6 +185,10 @@ type Store implements Gorm {
     owner: User! @goTag(key: "gorm", value: "foreignKey:OwnerID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 
     staffs: [Staff!]! @goTag(key: "gorm", value: "-")
+}
+
+input StoreInput {
+    name: String!
 }
 
 type Order implements Gorm {
