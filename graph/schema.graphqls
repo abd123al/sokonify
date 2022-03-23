@@ -54,8 +54,22 @@ type User implements Gorm {
     deletedAt:Time
     name: String! @goTag(key: "gorm", value: "index;size:50")
     email: String! @goTag(key: "gorm", value: "unique;size:100")
+    username: String! @goTag(key: "gorm", value: "unique;size:20")
+    password: String @goTag(key: "gorm", value: "size:100") @goField(forceResolver: true)
     # null means user has not been configured yet.
     type: UserType @goTag(key: "sql", value: "type:user_type")
+}
+
+input UserInput {
+    name : String!
+    username : String!
+    email : String!
+    password : String = password
+}
+
+input ChangePasswordInput {
+    currentPassword : String!
+    newPassword : String!
 }
 
 
@@ -294,8 +308,12 @@ type Query {
     payments(storeId:ID!): [Payment!]!
     product(id: ID!): Product!
     products(storeId:ID!): [Product!]!
+    staff(id: ID!): Staff!
+    staffs(storeId:ID!): [Staff!]!
     store(id: ID!): Store!
     stores: [Store!]!
+    user(id: ID!): User!
+    users: [User!]!
 }
 
 type Mutation {
@@ -306,6 +324,10 @@ type Mutation {
     createProduct(input: ProductInput!): Product!
     createStaff(input: StaffInput!): Staff!
     createStore(input: StoreInput!): Store!
+    # Only admins can create new user.
+    createUser(input: UserInput!): User!
+
+    changePassword(input: ChangePasswordInput!): User!
 
     editBrand(id: ID!,input: BrandInput!): Brand!
     editCategory(id: ID!,input: CategoryInput!): Category!
@@ -314,6 +336,7 @@ type Mutation {
     editProduct(id: ID!,input: ProductInput!): Product!
     editStaff(id: ID!,input: StaffInput!): Staff!
     editStore(id: ID!,input: StoreInput!): Store!
+    editUser(id: ID!,input: UserInput!): User!
 
     deleteItem(id: ID!): Item!
 }

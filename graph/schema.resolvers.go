@@ -47,6 +47,14 @@ func (r *mutationResolver) CreateStore(ctx context.Context, input model.StoreInp
 	panic(fmt.Errorf("not implemented"))
 }
 
+func (r *mutationResolver) CreateUser(ctx context.Context, input model.UserInput) (*model.User, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) ChangePassword(ctx context.Context, input model.ChangePasswordInput) (*model.User, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *mutationResolver) EditBrand(ctx context.Context, id int, input model.BrandInput) (*model.Brand, error) {
 	panic(fmt.Errorf("not implemented"))
 }
@@ -72,6 +80,10 @@ func (r *mutationResolver) EditStaff(ctx context.Context, id int, input model.St
 }
 
 func (r *mutationResolver) EditStore(ctx context.Context, id int, input model.StoreInput) (*model.Store, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) EditUser(ctx context.Context, id int, input model.UserInput) (*model.User, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
@@ -131,12 +143,32 @@ func (r *queryResolver) Products(ctx context.Context, storeID int) ([]*model.Pro
 	panic(fmt.Errorf("not implemented"))
 }
 
+func (r *queryResolver) Staff(ctx context.Context, id int) (*model.Staff, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Staffs(ctx context.Context, storeID int) ([]*model.Staff, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *queryResolver) Store(ctx context.Context, id int) (*model.Store, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
 func (r *queryResolver) Stores(ctx context.Context) ([]*model.Store, error) {
 	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) User(ctx context.Context, id int) (*model.User, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *userResolver) Password(ctx context.Context, obj *model.User) (*string, error) {
+	return nil, nil
 }
 
 // Mutation returns generated.MutationResolver implementation.
@@ -148,6 +180,10 @@ func (r *Resolver) OrderItem() generated.OrderItemResolver { return &orderItemRe
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
+// User returns generated.UserResolver implementation.
+func (r *Resolver) User() generated.UserResolver { return &userResolver{r} }
+
 type mutationResolver struct{ *Resolver }
 type orderItemResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+type userResolver struct{ *Resolver }
