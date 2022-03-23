@@ -95,6 +95,10 @@ func (r *mutationResolver) DeleteItem(ctx context.Context, id int) (*model.Item,
 	panic(fmt.Errorf("not implemented"))
 }
 
+func (r *mutationResolver) Ping(ctx context.Context) (string, error) {
+	return "pong", nil
+}
+
 func (r *orderItemResolver) SubTotalPrice(ctx context.Context, obj *model.OrderItem) (string, error) {
 	panic(fmt.Errorf("not implemented"))
 }

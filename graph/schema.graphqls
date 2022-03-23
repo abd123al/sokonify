@@ -340,6 +340,9 @@ type Mutation {
     editUser(id: ID!,input: UserInput!): User!
 
     deleteItem(id: ID!): Item!
+
+    # For testing if local ip works. Otherwise client will have to reconfigure.
+    ping: String!
 }
 
 scalar Time
