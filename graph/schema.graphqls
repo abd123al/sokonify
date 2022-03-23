@@ -93,9 +93,16 @@ type Product implements Gorm {
     category: Category! @goTag(key: "gorm", value:  "foreignKey:CategoryID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
 }
 
+input ProductBrandInput {
+    name: String!
+    manufacturer: String
+}
+
 input ProductInput {
     name: String!
     categoryId: Int!
+    # Brands can be inserted when creating product.
+    brands: [ProductBrandInput!]
 }
 
 # Product can be the same but with different brands
@@ -106,7 +113,7 @@ type Brand implements Gorm {
     deletedAt:Time
 
     name: String! @goTag(key: "gorm", value: "index;size:50")
-    manufacturer: String! @goTag(key: "gorm", value: "size:50")
+    manufacturer: String @goTag(key: "gorm", value: "size:50")
 
     productId: Int!
     product: Product! @goTag(key: "gorm", value:  "foreignKey:ProductID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
@@ -114,6 +121,7 @@ type Brand implements Gorm {
 
 input BrandInput {
     name: String!
+    manufacturer: String
     productId: Int!
 }
 
