@@ -51,11 +51,11 @@ type User implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
     createdAt:Time!
     updatedAt:Time!
-    deletedAt:Time
-    name: String! @goTag(key: "gorm", value: "index;size:50")
-    email: String! @goTag(key: "gorm", value: "unique;size:100")
-    username: String! @goTag(key: "gorm", value: "unique;size:20")
-    password: String @goTag(key: "gorm", value: "size:100") @goField(forceResolver: true)
+    deletedAt:Time # @goTag(key: "faker",value: "time")
+    name: String! @goTag(key: "gorm", value: "index;size:50") @goTag(key: "faker",value: "name")
+    email: String! @goTag(key: "gorm", value: "unique;size:100") @goTag(key: "faker",value: "email")
+    username: String! @goTag(key: "gorm", value: "unique;size:20") @goTag(key: "faker",value: "username")
+    password: String @goTag(key: "gorm", value: "size:100") @goField(forceResolver: true) @goTag(key: "faker",value: "password")
     # null means user has not been configured yet.
     type: UserType @goTag(key: "sql", value: "type:user_type")
 }
