@@ -3,12 +3,10 @@ package main
 import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 	"log"
 	"mahesabu/graph"
 	"mahesabu/graph/generated"
-	"mahesabu/graph/model"
+	"mahesabu/util"
 	"net/http"
 	"os"
 )
@@ -16,24 +14,12 @@ import (
 const defaultPort = "8080"
 
 func main() {
-	dsn := "host=localhost user=postgres password=password dbname=mahesabu port=5432 sslmode=disable TimeZone=Africa/Nairobi"
-	db, err := gorm.Open(postgres.New(postgres.Config{DSN: dsn}))
-	if err != nil {
-		panic("failed to connect database")
-	}
-
-	err = db.AutoMigrate(
-		&model.Staff{}, &model.Item{}, &model.Store{}, &model.Order{}, model.OrderItem{},
-		&model.User{}, &model.Payment{}, &model.Ledger{}, &model.Product{}, &model.Brand{},
-	)
-	if err != nil {
-		panic("failed to auto migrate")
-	}
-
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
 	}
+
+	db := util.InitDB("mahesabu")
 
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{
 		DB:     db,
