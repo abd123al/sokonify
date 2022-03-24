@@ -52,7 +52,14 @@ func (r *mutationResolver) CreateStore(ctx context.Context, input model.StoreInp
 }
 
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.UserInput) (*model.User, error) {
-	panic(fmt.Errorf("not implemented"))
+	user := model.User{
+		Name:     input.Name,
+		Email:    input.Email,
+		Username: input.Username,
+		Password: input.Password,
+	}
+	r.DB.Create(&user)
+	return &user, nil
 }
 
 func (r *mutationResolver) ChangePassword(ctx context.Context, input model.ChangePasswordInput) (*model.User, error) {

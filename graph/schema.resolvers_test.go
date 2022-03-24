@@ -3,6 +3,7 @@ package graph_test
 import (
 	"github.com/99designs/gqlgen/client"
 	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/bxcodec/faker/v3"
 	"github.com/stretchr/testify/require"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -40,5 +41,31 @@ func TestSchemaResolvers(t *testing.T) {
 		c.MustPost(`mutation { ping }`, &resp)
 
 		require.Equal(t, "pong", resp.Ping)
+	})
+
+	t.Run("createUser", func(t *testing.T) {
+		var resp struct {
+			CreateUser model.User
+		}
+		fake := model.User{}
+		_ = faker.FakeData(&fake)
+
+		input := model.UserInput{
+			Username: fake.Username,
+			Email:    fake.Email,
+			Name:     fake.Name,
+			Password: fake.Password,
+		}
+
+		c.MustPost(`
+			mutation createUser($input: UserInput!) {
+			  createUser(input: $input) {
+				username
+			  }
+			}
+			`, &resp,
+			client.Var("input", input))
+
+		require.Equal(t, input.Username, resp.CreateUser.Username)
 	})
 }
