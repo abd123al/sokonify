@@ -15,15 +15,7 @@ import (
 func TestSchemaResolvers(t *testing.T) {
 	db := util.InitDB("mahesabu_test")
 
-	//todo move to data generator
-	createUser := func() *model.User {
-		user := model.User{}
-		_ = faker.FakeData(&user)
-		db.Create(&user)
-		return &user
-	}
-
-	user := createUser()
+	user := util.CreateUser(db)
 
 	//Graphql client
 	c := client.New(handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{
