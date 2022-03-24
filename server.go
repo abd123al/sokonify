@@ -19,7 +19,7 @@ func main() {
 		port = defaultPort
 	}
 
-	db := util.InitDB("mahesabu")
+	db := util.InitDB("mahesabu", false)
 
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{
 		DB:     db,

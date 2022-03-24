@@ -13,13 +13,13 @@ import (
 )
 
 func TestSchemaResolvers(t *testing.T) {
-	db := util.InitDB("mahesabu_test")
+	DB := util.InitDB("mahesabu_test", true)
 
-	user := util.CreateUser(db)
+	user := util.CreateUser(DB)
 
 	//Graphql client
 	c := client.New(handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{
-		DB:     db,
+		DB:     DB,
 		UserId: user.ID,
 	}})))
 
