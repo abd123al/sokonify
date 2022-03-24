@@ -202,7 +202,7 @@ type Store implements Gorm {
     deletedAt:Time
     createdAt:Time!
     updatedAt:Time!
-    name: String! @goTag(key: "gorm", value: "index;size:50")
+    name: String! @goTag(key: "gorm", value: "index;size:50") @goTag(key: "faker",value: "name")
     type: StoreType!
 
     ownerId: Int!

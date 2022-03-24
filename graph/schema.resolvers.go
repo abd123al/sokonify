@@ -43,12 +43,17 @@ func (r *mutationResolver) CreateStaff(ctx context.Context, input model.StaffInp
 		StoreID: input.StoreID,
 		UserID:  input.UserID,
 	}
-	r.DB.Create(&staff)
-	return &staff, nil
+	result := r.DB.Create(&staff)
+	return &staff, result.Error
 }
 
 func (r *mutationResolver) CreateStore(ctx context.Context, input model.StoreInput) (*model.Store, error) {
-	panic(fmt.Errorf("not implemented"))
+	store := model.Store{
+		Name:    input.Name,
+		OwnerID: r.UserId,
+	}
+	result := r.DB.Create(&store)
+	return &store, result.Error
 }
 
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.UserInput) (*model.User, error) {

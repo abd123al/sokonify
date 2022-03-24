@@ -29,8 +29,21 @@ func TestSchemaResolvers(t *testing.T) {
 	if err != nil {
 		panic("failed to auto migrate")
 	}
+
+	//todo move to data generator
+	createUser := func() *model.User {
+		user := model.User{}
+		_ = faker.FakeData(&user)
+		db.Create(&user)
+		return &user
+	}
+
+	user := createUser()
+
+	//Graphql client
 	c := client.New(handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{
-		DB: db,
+		DB:     db,
+		UserId: user.ID,
 	}})))
 
 	t.Run("ping", func(t *testing.T) {
@@ -67,5 +80,26 @@ func TestSchemaResolvers(t *testing.T) {
 			client.Var("input", input))
 
 		require.Equal(t, input.Username, resp.CreateUser.Username)
+	})
+
+	t.Run("createStore", func(t *testing.T) {
+		var resp struct {
+			CreateStore model.Store
+		}
+
+		input := model.StoreInput{
+			Name: "store",
+		}
+
+		c.MustPost(`
+			mutation createUser($input: StoreInput!) {
+			  createStore(input: $input) {
+				name
+			  }
+			}
+			`, &resp,
+			client.Var("input", input))
+
+		require.Equal(t, input.Name, resp.CreateStore.Name)
 	})
 }
