@@ -45,6 +45,10 @@ func CreateProduct(DB *gorm.DB, CategoryID int) *model.Product {
 	product := model.Product{
 		Name:       "Product",
 		CategoryID: CategoryID,
+		Brands: []*model.Brand{
+			{Name: "Shells"},
+			{Name: "Brand"},
+		},
 	}
 
 	DB.Create(&product)

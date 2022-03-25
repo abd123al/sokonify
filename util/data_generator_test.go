@@ -36,7 +36,6 @@ func TestGenerator(t *testing.T) {
 	t.Run("CreateItem", func(t *testing.T) {
 		result := util.CreateItem(DB, util.CreateItemArgs{
 			ProductID: product.ID,
-			UserID:    user.ID,
 		})
 		require.Greater(t, result.ID, 0)
 	})

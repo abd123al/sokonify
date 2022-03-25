@@ -35,9 +35,9 @@ func (r *mutationResolver) CreateOrder(ctx context.Context, input model.OrderInp
 
 	for _, k := range input.Items {
 		item := model.OrderItem{
-			SellingPrice: k.SellingPrice,
-			ItemID:       k.ItemID,
-			Quantity:     k.Quantity,
+			Price:    k.Price,
+			ItemID:   k.ItemID,
+			Quantity: k.Quantity,
 		}
 
 		items = append(items, &item)

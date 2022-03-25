@@ -119,8 +119,8 @@ func TestResolvers(t *testing.T) {
 
 		input := model.OrderInput{
 			Items: []*model.OrderItemInput{
-				{Quantity: 2, SellingPrice: "74774", ItemID: item.ID},
-				{Quantity: 5, SellingPrice: "23445", ItemID: item.ID},
+				{Quantity: 2, Price: "74774", ItemID: item.ID},
+				{Quantity: 5, Price: "23445", ItemID: item.ID},
 			},
 			Type:       model.OrderTypeSale,
 			CustomerID: &user.ID,
