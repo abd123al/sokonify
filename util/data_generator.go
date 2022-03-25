@@ -55,13 +55,11 @@ func CreateProduct(DB *gorm.DB, CategoryID int) *model.Product {
 type CreateItemArgs struct {
 	BrandID   *int
 	ProductID int
-	UserID    int
 }
 
 func CreateItem(DB *gorm.DB, args CreateItemArgs) *model.Item {
 	store := model.Item{
 		SellingPrice: "777848",
-		UserID:       args.UserID,
 		BuyingPrice:  "2355",
 		//Batch:        "6363663",
 		ExpiresAt: time.Now(),

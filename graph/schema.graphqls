@@ -156,9 +156,6 @@ type Item implements Gorm {
     sellingPrice: String!  @goTag(key: "gorm", value: "type:numeric;")
     expiresAt: Time!
 
-    userId: Int!
-    user: User! @goTag(key: "gorm", value: "foreignKey:UserID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
-
     productId: Int!
     product: Product! @goTag(key: "gorm", value:  "foreignKey:ProductID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
 

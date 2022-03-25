@@ -21,7 +21,6 @@ func TestResolvers(t *testing.T) {
 	product := util.CreateProduct(DB, category.ID)
 	item := util.CreateItem(DB, util.CreateItemArgs{
 		ProductID: product.ID,
-		UserID:    user.ID,
 	})
 
 	//Graphql client
