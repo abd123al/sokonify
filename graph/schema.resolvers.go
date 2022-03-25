@@ -10,7 +10,7 @@ import (
 	"mahesabu/graph/model"
 )
 
-func (r *itemResolver) BuyingPrice(ctx context.Context, obj *model.Item) (*string, error) {
+func (r *itemResolver) BuyingPrice(ctx context.Context, obj *model.Item) (string, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
@@ -31,7 +31,32 @@ func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput
 }
 
 func (r *mutationResolver) CreateOrder(ctx context.Context, input model.OrderInput) (*model.Order, error) {
-	panic(fmt.Errorf("not implemented"))
+	var items []*model.OrderItem
+
+	for _, k := range input.Items {
+		item := model.OrderItem{
+			SellingPrice: k.SellingPrice,
+			ItemID:       k.ItemID,
+			Quantity:     k.Quantity,
+		}
+
+		items = append(items, &item)
+	}
+
+	order := model.Order{
+		ReceiverID: input.ReceiverID,
+		IssuerID:   input.IssuerID,
+		CustomerID: input.CustomerID,
+		StaffID:    r.UserId,
+		Type:       input.Type,
+		Items:      items,
+		TotalPrice: "477575",
+	}
+
+	fmt.Printf("%+v\n", order.Items[0].ItemID)
+
+	result := r.DB.Create(&order)
+	return &order, result.Error
 }
 
 func (r *mutationResolver) CreateProduct(ctx context.Context, input model.ProductInput) (*model.Product, error) {
@@ -109,6 +134,10 @@ func (r *mutationResolver) DeleteItem(ctx context.Context, id int) (*model.Item,
 
 func (r *mutationResolver) Ping(ctx context.Context) (string, error) {
 	return "pong", nil
+}
+
+func (r *orderResolver) Items(ctx context.Context, obj *model.Order) ([]*model.OrderItem, error) {
+	panic(fmt.Errorf("not implemented"))
 }
 
 func (r *orderItemResolver) SubTotalPrice(ctx context.Context, obj *model.OrderItem) (string, error) {
@@ -197,6 +226,9 @@ func (r *Resolver) Item() generated.ItemResolver { return &itemResolver{r} }
 // Mutation returns generated.MutationResolver implementation.
 func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
 
+// Order returns generated.OrderResolver implementation.
+func (r *Resolver) Order() generated.OrderResolver { return &orderResolver{r} }
+
 // OrderItem returns generated.OrderItemResolver implementation.
 func (r *Resolver) OrderItem() generated.OrderItemResolver { return &orderItemResolver{r} }
 
@@ -208,6 +240,7 @@ func (r *Resolver) User() generated.UserResolver { return &userResolver{r} }
 
 type itemResolver struct{ *Resolver }
 type mutationResolver struct{ *Resolver }
+type orderResolver struct{ *Resolver }
 type orderItemResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
 type userResolver struct{ *Resolver }
