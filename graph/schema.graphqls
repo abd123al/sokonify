@@ -151,6 +151,7 @@ type Item implements Gorm {
 
     quantity: Int!  @goTag(key: "gorm", value: "type:integer;")
     batch: String @goTag(key: "gorm", value: "size:50")
+    description: String @goTag(key: "gorm", value: "size:100")
     # empty string for non admins
     buyingPrice: String!  @goTag(key: "gorm", value: "type:numeric;") @goField(forceResolver: true)
     sellingPrice: String!  @goTag(key: "gorm", value: "type:numeric;")
@@ -169,6 +170,7 @@ input ItemInput {
     buyingPrice: String!
     sellingPrice: String!
     batch: String
+    description: String
     expiresAt: Time
 
     brandId: Int
@@ -222,6 +224,7 @@ type Order implements Gorm {
     deletedAt:Time
     totalPrice: String! @goTag(key: "gorm", value: "type:numeric;")
     type: OrderType!
+    comment: String @goTag(key: "gorm", value: "size:100")
 
     # Customer can be nullable. Since POS don't have to register customer.
     customerId: Int
@@ -246,6 +249,7 @@ input OrderInput {
     issuerId: Int!
     customerId: Int
     receiverId: Int
+    comment: String
     items: [OrderItemInput!]!
 }
 
