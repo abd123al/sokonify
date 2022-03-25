@@ -21,10 +21,15 @@ func main() {
 
 	db := util.InitDB("mahesabu", false)
 
-	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{
+	config := generated.Config{Resolvers: &graph.Resolver{
 		DB:     db,
 		UserId: 1,
-	}}))
+	}}
+
+	//Configuring directives to be used on run-time
+	config.Directives.HasRole = util.HasRole
+
+	srv := handler.NewDefaultServer(generated.NewExecutableSchema(config))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/query", srv)

@@ -23,11 +23,15 @@ func TestResolvers(t *testing.T) {
 		ProductID: product.ID,
 	})
 
-	//Graphql client
-	c := client.New(handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{
+	config := generated.Config{Resolvers: &graph.Resolver{
 		DB:     DB,
 		UserId: user.ID,
-	}})))
+	}}
+
+	config.Directives.HasRole = util.HasRole
+
+	//Graphql client
+	c := client.New(handler.NewDefaultServer(generated.NewExecutableSchema(config)))
 
 	t.Run("ping", func(t *testing.T) {
 		var resp struct {

@@ -293,6 +293,7 @@ type Payment implements Gorm {
     createdAt:Time!
     updatedAt:Time!
     deletedAt:Time
+
     amount: String! @goTag(key: "gorm", value: "type:numeric;")
     description: String @goTag(key: "gorm", value: "size:100")
     # Id to identify this payment
@@ -343,28 +344,28 @@ type Query {
 }
 
 type Mutation {
-    createBrand(input: BrandInput!): Brand!
-    createCategory(input: CategoryInput!): Category!
-    createItem(input: ItemInput!): Item!
+    createBrand(input: BrandInput!): Brand! @hasRole(role: owner)
+    createCategory(input: CategoryInput!): Category! @hasRole(role: owner)
+    createItem(input: ItemInput!): Item! @hasRole(role: owner)
     createOrder(input: OrderInput!): Order!
-    createProduct(input: ProductInput!): Product!
-    createStaff(input: StaffInput!): Staff!
-    createStore(input: StoreInput!): Store!
+    createProduct(input: ProductInput!): Product! @hasRole(role: owner)
+    createStaff(input: StaffInput!): Staff! @hasRole(role: owner)
+    createStore(input: StoreInput!): Store! @hasRole(role: admin)
     # Only admins can create new user.
     createUser(input: UserInput!): User!
 
     changePassword(input: ChangePasswordInput!): User!
 
-    editBrand(id: ID!,input: BrandInput!): Brand!
-    editCategory(id: ID!,input: CategoryInput!): Category!
-    editItem(id: ID!,input: ItemInput!): Item!
+    editBrand(id: ID!,input: BrandInput!): Brand! @hasRole(role: owner)
+    editCategory(id: ID!,input: CategoryInput!): Category! @hasRole(role: owner)
+    editItem(id: ID!,input: ItemInput!): Item! @hasRole(role: owner)
     editOrder(id: ID!,input: OrderInput!): Order!
     editProduct(id: ID!,input: ProductInput!): Product!
-    editStaff(id: ID!,input: StaffInput!): Staff!
-    editStore(id: ID!,input: StoreInput!): Store!
+    editStaff(id: ID!,input: StaffInput!): Staff! @hasRole(role: owner)
+    editStore(id: ID!,input: StoreInput!): Store! @hasRole(role: owner)
     editUser(id: ID!,input: UserInput!): User!
 
-    deleteItem(id: ID!): Item!
+    deleteItem(id: ID!): Item! @hasRole(role: owner)
 
     # For testing if local ip works. Otherwise client will have to reconfigure.
     ping: String!
@@ -386,3 +387,5 @@ directive @goTag(
     key: String!
     value: String
 ) on INPUT_FIELD_DEFINITION | FIELD_DEFINITION
+
+directive @hasRole(role: UserType!) on FIELD_DEFINITION
