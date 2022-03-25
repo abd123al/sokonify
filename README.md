@@ -16,4 +16,4 @@ go generate ./...
 
 # Todo
 - Transfer items between warehouse and store
-- 
+- db types

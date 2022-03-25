@@ -15,10 +15,10 @@ enum OrderType {
     sale
     # Let's say we pay for some things eg electricity.
     expense
-    # If things have expired they can be automatically disposed.
-    # todo we should have cron job for doing this.
-    expired
-    damaged
+    # If things have expired/damaged/stolen they can be automatically disposed.
+    loss
+    # transfer from one store to another
+    transfer
 }
 
 enum PaymentType {
@@ -74,7 +74,7 @@ input ChangePasswordInput {
 
 
 type Category implements Gorm {
-    id:ID! @goTag(key: "gorm", value: "primaryKey;type:integer")
+    id:ID! @goTag(key: "gorm", value: "primaryKey;")
     createdAt:Time!
     updatedAt:Time!
     deletedAt:Time
@@ -82,7 +82,7 @@ type Category implements Gorm {
     # tablets/syrups/
     name: String! @goTag(key: "gorm", value: "index;size:50")
     # unit box/each/package
-    unit: String @goTag(key: "gorm", value: "size:50;")
+    unit: String! @goTag(key: "gorm", value: "size:50;")
 
     storeId: Int!
     store: Store! @goTag(key: "gorm", value:  "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
@@ -140,6 +140,7 @@ input BrandInput {
     productId: Int!
 }
 
+# todo: expenses items should also come as items.
 type Item implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
     createdAt:Time!
@@ -148,8 +149,8 @@ type Item implements Gorm {
 
     quantity: Int!  @goTag(key: "gorm", value: "type:integer;")
     batch: String @goTag(key: "gorm", value: "size:50")
-    # nullable for non admins
-    buyingPrice: String  @goTag(key: "gorm", value: "type:numeric;") @goField(forceResolver: true)
+    # empty string for non admins
+    buyingPrice: String!  @goTag(key: "gorm", value: "type:numeric;") @goField(forceResolver: true)
     sellingPrice: String!  @goTag(key: "gorm", value: "type:numeric;")
     expiresAt: Time!
 
@@ -177,7 +178,7 @@ input ItemInput {
 
 # Even suppliers/customers can be termed as staffs
 type Staff implements Gorm {
-    id: ID! @goTag(key: "gorm", value: "primaryKey;type:INTEGER")
+    id: ID! @goTag(key: "gorm", value: "primaryKey")
     createdAt:Time!
     updatedAt:Time!
     deletedAt:Time
@@ -230,15 +231,22 @@ type Order implements Gorm {
     staffId: Int!
     staff: User! @goTag(key: "gorm", value: "foreignKey:StaffID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 
-    storeId: Int!
-    store: Store! @goTag(key: "gorm", value: "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    # Where products come from
+    issuerId: Int!
+    issuer: Store! @goTag(key: "gorm", value: "foreignKey:IssuerID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 
-    items: [OrderItem!]! @goTag(key: "gorm", value: "-")
+    # This is not null in transfer
+    receiverId: Int
+    receiver: Store @goTag(key: "gorm", value: "foreignKey:ReceiverID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+
+    items: [OrderItem!]! @goTag(key: "gorm", value: "-") @goField(forceResolver: true)
 }
 
 input OrderInput {
     type: OrderType!
+    issuerId: Int!
     customerId: Int
+    receiverId: Int
     items: [OrderItemInput!]!
 }
 
