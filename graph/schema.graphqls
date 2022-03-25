@@ -106,7 +106,7 @@ type Product implements Gorm {
     categoryId: Int!
     category: Category! @goTag(key: "gorm", value:  "foreignKey:CategoryID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
 
-    brands: [Brand!]! @goTag(key: "gorm", value: "constraint:OnUpdate:CASCADE,OnDelete:SET NULL;") @goField(forceResolver: true)
+    brands: [Brand!]! @goTag(key: "gorm", value: "constraint:OnUpdate:CASCADE,OnDelete:RESTRICT;") @goField(forceResolver: true)
 }
 
 input ProductInput {
@@ -127,7 +127,7 @@ type Brand implements Gorm {
     manufacturer: String @goTag(key: "gorm", value: "size:50")
 
     productId: Int!
-    product: Product! @goTag(key: "gorm", value:  "foreignKey:ProductID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
+    product: Product! @goTag(key: "gorm", value:  "foreignKey:ProductID;")
 }
 
 # This is used to create brand when creating product itself.
@@ -242,7 +242,7 @@ type Order implements Gorm {
     receiverId: Int
     receiver: Store @goTag(key: "gorm", value: "foreignKey:ReceiverID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 
-    items: [OrderItem!]! @goTag(key: "gorm", value: "constraint:OnUpdate:CASCADE,OnDelete:SET NULL;") @goField(forceResolver: true)
+    items: [OrderItem!]! @goTag(key: "gorm", value: "constraint:OnUpdate:CASCADE,OnDelete:RESTRICT;") @goField(forceResolver: true)
 }
 
 input OrderInput {
@@ -270,7 +270,7 @@ type OrderItem implements Gorm {
     item: Item! @goTag(key: "gorm", value:  "foreignKey:ItemID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
 
     orderId: Int!
-    order: Order! @goTag(key: "gorm", value:  "foreignKey:OrderID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
+    order: Order! @goTag(key: "gorm", value:  "foreignKey:OrderID;not null;")
 }
 
 input OrderItemInput {
