@@ -105,6 +105,8 @@ type Product implements Gorm {
 
     categoryId: Int!
     category: Category! @goTag(key: "gorm", value:  "foreignKey:CategoryID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
+
+    brands: [Brand!]! @goTag(key: "gorm", value: "-") @goField(forceResolver: true)
 }
 
 input ProductInput {

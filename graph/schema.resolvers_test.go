@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestSchemaResolvers(t *testing.T) {
+func TestResolvers(t *testing.T) {
 	DB := util.InitDB("mahesabu_test", true)
 
 	user := util.CreateUser(DB)
@@ -85,6 +85,32 @@ func TestSchemaResolvers(t *testing.T) {
 			client.Var("input", input))
 
 		require.Equal(t, input.Name, resp.CreateStore.Name)
+	})
+
+	t.Run("CreateProduct", func(t *testing.T) {
+		var resp struct {
+			CreateProduct model.Product
+		}
+
+		input := model.ProductInput{
+			Brands: []*model.ProductBrandInput{
+				{Name: "74774"},
+				{Name: "23445"},
+			},
+			Name:       "Product Name",
+			CategoryID: category.ID,
+		}
+
+		c.MustPost(`
+			mutation createProduct($input: ProductInput!) {
+			  createProduct(input: $input) {
+				name
+			  }
+			}
+			`, &resp,
+			client.Var("input", input))
+
+		require.Equal(t, input.Name, resp.CreateProduct.Name)
 	})
 
 	t.Run("CreateOrder", func(t *testing.T) {

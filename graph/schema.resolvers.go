@@ -53,14 +53,31 @@ func (r *mutationResolver) CreateOrder(ctx context.Context, input model.OrderInp
 		TotalPrice: "477575",
 	}
 
-	fmt.Printf("%+v\n", order.Items[0].ItemID)
+	//fmt.Printf("%+v\n", order.Items[0].ItemID)
 
 	result := r.DB.Create(&order)
 	return &order, result.Error
 }
 
 func (r *mutationResolver) CreateProduct(ctx context.Context, input model.ProductInput) (*model.Product, error) {
-	panic(fmt.Errorf("not implemented"))
+	var brands []*model.Brand
+
+	for _, k := range input.Brands {
+		brand := model.Brand{
+			Manufacturer: k.Manufacturer,
+			Name:         k.Name,
+		}
+
+		brands = append(brands, &brand)
+	}
+
+	product := model.Product{
+		Name:       input.Name,
+		CategoryID: input.CategoryID,
+		Brands:     brands,
+	}
+	result := r.DB.Create(&product)
+	return &product, result.Error
 }
 
 func (r *mutationResolver) CreateStaff(ctx context.Context, input model.StaffInput) (*model.Staff, error) {
@@ -141,6 +158,10 @@ func (r *orderResolver) Items(ctx context.Context, obj *model.Order) ([]*model.O
 }
 
 func (r *orderItemResolver) SubTotalPrice(ctx context.Context, obj *model.OrderItem) (string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *productResolver) Brands(ctx context.Context, obj *model.Product) ([]*model.Brand, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
@@ -232,6 +253,9 @@ func (r *Resolver) Order() generated.OrderResolver { return &orderResolver{r} }
 // OrderItem returns generated.OrderItemResolver implementation.
 func (r *Resolver) OrderItem() generated.OrderItemResolver { return &orderItemResolver{r} }
 
+// Product returns generated.ProductResolver implementation.
+func (r *Resolver) Product() generated.ProductResolver { return &productResolver{r} }
+
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
@@ -242,5 +266,6 @@ type itemResolver struct{ *Resolver }
 type mutationResolver struct{ *Resolver }
 type orderResolver struct{ *Resolver }
 type orderItemResolver struct{ *Resolver }
+type productResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
 type userResolver struct{ *Resolver }
