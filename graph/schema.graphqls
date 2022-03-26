@@ -8,6 +8,13 @@ interface Gorm {
     deletedAt:Time
 }
 
+enum CategoryType {
+    # default
+    products
+    # so that it will be easy to track expenses
+    expenses
+}
+
 # change of status must be reflected on ledger.
 enum OrderStatus {
     canceled
@@ -56,12 +63,14 @@ enum StoreType {
 # With this user can reuse their credentials in different stores
 type User implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
+
     createdAt:Time!
     updatedAt:Time!
-    deletedAt:Time # @goTag(key: "faker",value: "time")
-    name: String! @goTag(key: "gorm", value: "index;size:50") @goTag(key: "faker",value: "name")
-    email: String! @goTag(key: "gorm", value: "unique;size:100") @goTag(key: "faker",value: "email")
-    username: String! @goTag(key: "gorm", value: "unique;size:20") @goTag(key: "faker",value: "username")
+    deletedAt:Time
+
+    name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(50);default:null") @goTag(key: "faker",value: "name")
+    email: String! @goTag(key: "gorm", value: "unique;not null;type:varchar(100);default:null") @goTag(key: "faker",value: "email")
+    username: String! @goTag(key: "gorm", value: "unique;not null;type:varchar(100);default:null") @goTag(key: "faker",value: "username")
     password: String @goTag(key: "gorm", value: "size:100") @goField(forceResolver: true) @goTag(key: "faker",value: "password")
     # null means user has not been configured yet.
     type: UserType @goTag(key: "sql", value: "type:user_type")
@@ -82,6 +91,7 @@ input ChangePasswordInput {
 
 type Category implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey;")
+
     createdAt:Time!
     updatedAt:Time!
     deletedAt:Time
@@ -90,6 +100,7 @@ type Category implements Gorm {
     name: String! @goTag(key: "gorm", value: "index;size:50")
     # unit box/each/package
     unit: String! @goTag(key: "gorm", value: "size:50;")
+    type: CategoryType! #@goTag(key: "gorm",value: "type:enum('products', 'expenses');default:'products'")
 
     storeId: Int!
     store: Store! @goTag(key: "gorm", value:  "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
@@ -98,12 +109,14 @@ type Category implements Gorm {
 input CategoryInput {
     name: String!
     unit: String
+    type: CategoryType = products
 
     storeId: Int!
 }
 
 type Product implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
+
     createdAt:Time!
     updatedAt:Time!
     deletedAt:Time
@@ -126,6 +139,7 @@ input ProductInput {
 # Product can be the same but with different brands
 type Brand implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
+
     createdAt:Time!
     updatedAt:Time!
     deletedAt:Time
@@ -152,6 +166,7 @@ input BrandInput {
 # todo: expenses items should also come as items.
 type Item implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
+
     createdAt:Time!
     updatedAt:Time!
     deletedAt:Time
@@ -159,9 +174,10 @@ type Item implements Gorm {
     quantity: Int!  @goTag(key: "gorm", value: "type:integer;")
     batch: String @goTag(key: "gorm", value: "size:50")
     description: String @goTag(key: "gorm", value: "size:100")
+    # Prices should be zero for non expenses
     # empty string for non admins
-    buyingPrice: String!  @goTag(key: "gorm", value: "type:numeric;") @goField(forceResolver: true)
-    sellingPrice: String!  @goTag(key: "gorm", value: "type:numeric;")
+    buyingPrice: String!  @goTag(key: "gorm", value: "type:numeric;default:0") @goField(forceResolver: true)
+    sellingPrice: String!  @goTag(key: "gorm", value: "type:numeric;default:0")
     expiresAt: Time!
 
     productId: Int!
@@ -187,9 +203,11 @@ input ItemInput {
 # Even suppliers/customers can be termed as staffs
 type Staff implements Gorm {
     id: ID! @goTag(key: "gorm", value: "primaryKey")
+
     createdAt:Time!
     updatedAt:Time!
     deletedAt:Time
+
     isActive: Boolean!
 
     userId: Int!
@@ -208,9 +226,11 @@ input StaffInput {
 # add tracking type package/tabs
 type Store implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
-    deletedAt:Time
+
     createdAt:Time!
     updatedAt:Time!
+    deletedAt:Time
+
     name: String! @goTag(key: "gorm", value: "index;size:50") @goTag(key: "faker",value: "name")
     type: StoreType!
 
@@ -226,6 +246,7 @@ input StoreInput {
 
 type Order implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
+
     createdAt:Time!
     updatedAt:Time!
     deletedAt:Time
@@ -264,6 +285,7 @@ input OrderInput {
 
 type OrderItem implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
+
     createdAt:Time!
     updatedAt:Time!
     deletedAt:Time
@@ -290,6 +312,7 @@ input OrderItemInput {
 
 type Payment implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
+
     createdAt:Time!
     updatedAt:Time!
     deletedAt:Time
@@ -308,9 +331,11 @@ type Payment implements Gorm {
 # This just balances items not money
 type Ledger implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
+
     createdAt:Time!
     updatedAt:Time!
     deletedAt:Time
+
     quantity: Int! @goTag(key: "gorm", value: "type:integer;")
 
     # Payment for what order.
