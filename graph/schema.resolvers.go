@@ -6,6 +6,7 @@ package graph
 import (
 	"context"
 	"fmt"
+	"github.com/shopspring/decimal"
 	"mahesabu/graph/generated"
 	"mahesabu/graph/model"
 )
@@ -26,8 +27,8 @@ func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput
 	item := model.Item{
 		Quantity: input.Quantity,
 	}
-	r.DB.Create(&item)
-	return &item, nil
+	result := r.DB.Create(&item)
+	return &item, result.Error
 }
 
 func (r *mutationResolver) CreateOrder(ctx context.Context, input model.OrderInput) (*model.Order, error) {
@@ -57,6 +58,34 @@ func (r *mutationResolver) CreateOrder(ctx context.Context, input model.OrderInp
 
 	result := r.DB.Create(&order)
 	return &order, result.Error
+}
+
+func (r *mutationResolver) CreatePayment(_ context.Context, input model.PaymentInput) (*model.Payment, error) {
+	//todo should the order creator be the one to confirm payment.
+	var orderItems []model.OrderItem
+	var subPrice decimal.Decimal
+
+	r.DB.Where(&model.OrderItem{OrderID: input.OrderID}).Find(&orderItems)
+
+	for _, o := range orderItems {
+		price, err := decimal.NewFromString(o.Price)
+		if err != nil {
+			panic(err)
+		}
+		total := price.Mul(decimal.NewFromInt(int64(o.Quantity)))
+
+		subPrice = subPrice.Add(total)
+	}
+
+	payment := model.Payment{
+		OrderID:     input.OrderID,
+		Description: input.Description,
+		ReferenceID: input.ReferenceID,
+		Type:        input.Type,
+		Amount:      subPrice.String(),
+	}
+	result := r.DB.Create(&payment)
+	return &payment, result.Error
 }
 
 func (r *mutationResolver) CreateProduct(ctx context.Context, input model.ProductInput) (*model.Product, error) {

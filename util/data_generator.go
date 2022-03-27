@@ -63,12 +63,35 @@ type CreateItemArgs struct {
 
 func CreateItem(DB *gorm.DB, args CreateItemArgs) *model.Item {
 	store := model.Item{
-		SellingPrice: "777848",
-		BuyingPrice:  "2355",
+		SellingPrice: "5000.00",
+		BuyingPrice:  "2000.00",
 		//Batch:        "6363663",
 		ExpiresAt: time.Now(),
 		ProductID: args.ProductID,
 		BrandID:   args.BrandID,
+	}
+
+	DB.Create(&store)
+
+	return &store
+}
+
+type CreateOrderArgs struct {
+	IssuerID int
+	UserId   int
+	ItemID   int
+}
+
+func CreateOrder(DB *gorm.DB, args CreateOrderArgs) *model.Order {
+	store := model.Order{
+		IssuerID: args.IssuerID,
+		StaffID:  args.UserId,
+		Type:     model.OrderTypeSale,
+		Items: []*model.OrderItem{
+			{Quantity: 2, Price: "5000.33", ItemID: args.ItemID}, //10,000.66
+			{Quantity: 4, Price: "4000.22", ItemID: args.ItemID}, //16,000.88
+		},
+		TotalPrice: "26001.54",
 	}
 
 	DB.Create(&store)

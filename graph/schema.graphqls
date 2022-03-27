@@ -57,7 +57,8 @@ enum UserType {
 # Having multiple type will allow transfer between parties
 enum StoreType {
     shop
-    warehouse
+    warehouse #
+    storage # Pharmacy inner store
 }
 
 # With this user can reuse their credentials in different stores
@@ -251,7 +252,7 @@ type Order implements Gorm {
     updatedAt:Time!
     deletedAt:Time
 
-    totalPrice: String! @goTag(key: "gorm", value: "type:numeric;")
+    totalPrice: String! @goTag(key: "gorm", value: "type:numeric;") #todo delete
     type: OrderType!
     status: OrderStatus! @goTag(key: "gorm", value: "size:100")
     comment: String @goTag(key: "gorm", value: "size:100")
@@ -328,6 +329,13 @@ type Payment implements Gorm {
     order: Order! @goTag(key: "gorm", value: "foreignKey:OrderID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 }
 
+input PaymentInput {
+    orderId: Int!
+    description: String
+    referenceId: String
+    type: PaymentType!
+}
+
 # This just balances items not money
 type Ledger implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
@@ -373,6 +381,7 @@ type Mutation {
     createCategory(input: CategoryInput!): Category! @hasRole(role: owner)
     createItem(input: ItemInput!): Item! @hasRole(role: owner)
     createOrder(input: OrderInput!): Order!
+    createPayment(input: PaymentInput!): Payment! @hasRole(role: staff)
     createProduct(input: ProductInput!): Product! @hasRole(role: owner)
     createStaff(input: StaffInput!): Staff! @hasRole(role: owner)
     createStore(input: StoreInput!): Store! @hasRole(role: admin)

@@ -22,6 +22,11 @@ func TestResolvers(t *testing.T) {
 	item := util.CreateItem(DB, util.CreateItemArgs{
 		ProductID: product.ID,
 	})
+	order := util.CreateOrder(DB, util.CreateOrderArgs{
+		IssuerID: store.ID,
+		UserId:   user.ID,
+		ItemID:   item.ID,
+	})
 
 	config := generated.Config{Resolvers: &graph.Resolver{
 		DB:     DB,
@@ -141,5 +146,27 @@ func TestResolvers(t *testing.T) {
 			client.Var("input", input))
 
 		require.Equal(t, input.CustomerID, resp.CreateOrder.CustomerID)
+	})
+
+	t.Run("CreatePayment", func(t *testing.T) {
+		var resp struct {
+			CreatePayment model.Payment
+		}
+
+		input := model.PaymentInput{
+			Type:    model.PaymentTypeCash,
+			OrderID: order.ID,
+		}
+
+		c.MustPost(`
+			mutation createPayment($input: PaymentInput!) {
+			  createPayment(input: $input) {
+				amount
+			  }
+			}
+			`, &resp,
+			client.Var("input", input))
+
+		require.Equal(t, "26001.54", resp.CreatePayment.Amount)
 	})
 }
