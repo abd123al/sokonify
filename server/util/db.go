@@ -6,15 +6,21 @@ import (
 	"mahesabu/graph/model"
 )
 
-func InitDB(dbname string, clear bool) (DB *gorm.DB) {
-	dsn := "host=localhost user=postgres password=password dbname=" + dbname + " port=5432 sslmode=disable TimeZone=Africa/Nairobi"
+type InitDbArgs struct {
+	DbName  string
+	Clear   bool
+	Offline bool
+}
+
+func InitDB(args InitDbArgs) (DB *gorm.DB) {
+	dsn := "host=localhost user=postgres password=password dbname=" + args.DbName + " port=5432 sslmode=disable TimeZone=Africa/Nairobi"
 	db, err := gorm.Open(postgres.New(postgres.Config{DSN: dsn}))
 	if err != nil {
 		panic("failed to connect database")
 	}
 
 	// todo: Check if this is not production
-	if clear {
+	if args.Clear {
 		//Clearing db.
 		db.Exec("" +
 			"DROP SCHEMA public CASCADE; " +

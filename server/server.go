@@ -12,19 +12,23 @@ import (
 )
 
 func main() {
-	StartServer()
+	StartServer(false)
 }
 
 const defaultPort = "8080"
 
 // StartServer This way so that it can be invoked via libs
-func StartServer() {
+func StartServer(Offline bool) {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
 	}
 
-	db := util.InitDB("mahesabu", false)
+	db := util.InitDB(util.InitDbArgs{
+		DbName:  "mahesabu",
+		Clear:   false,
+		Offline: Offline,
+	})
 
 	config := generated.Config{Resolvers: &graph.Resolver{
 		DB:     db,
