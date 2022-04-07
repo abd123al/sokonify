@@ -11,9 +11,14 @@ import (
 	"os"
 )
 
+func main() {
+	StartServer()
+}
+
 const defaultPort = "8080"
 
-func main() {
+// StartServer This way so that it can be invoked via libs
+func StartServer() {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
