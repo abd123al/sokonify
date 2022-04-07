@@ -6,6 +6,9 @@
 
 #include "generated_plugin_registrant.h"
 
+#include <server/server_plugin.h>
 
 void RegisterPlugins(flutter::PluginRegistry* registry) {
+  ServerPluginRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("ServerPlugin"));
 }

@@ -1,6 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:server/server.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  if (kDebugMode) {
+    print(await Server.platformVersion);
+  }
   runApp(const MyApp());
 }
 
