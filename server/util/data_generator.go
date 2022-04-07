@@ -91,7 +91,6 @@ func CreateOrder(DB *gorm.DB, args CreateOrderArgs) *model.Order {
 			{Quantity: 2, Price: "5000.33", ItemID: args.ItemID}, //10,000.66
 			{Quantity: 4, Price: "4000.22", ItemID: args.ItemID}, //16,000.88
 		},
-		TotalPrice: "26001.54",
 	}
 
 	DB.Create(&store)

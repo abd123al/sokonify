@@ -6,13 +6,14 @@ package graph
 import (
 	"context"
 	"fmt"
-	"github.com/shopspring/decimal"
 	"mahesabu/graph/generated"
 	"mahesabu/graph/model"
+
+	"github.com/shopspring/decimal"
 )
 
 func (r *itemResolver) BuyingPrice(ctx context.Context, obj *model.Item) (string, error) {
-	panic(fmt.Errorf("not implemented"))
+	return obj.BuyingPrice, nil
 }
 
 func (r *mutationResolver) CreateBrand(ctx context.Context, input model.BrandInput) (*model.Brand, error) {
@@ -51,7 +52,6 @@ func (r *mutationResolver) CreateOrder(ctx context.Context, input model.OrderInp
 		StaffID:    r.UserId,
 		Type:       input.Type,
 		Items:      items,
-		TotalPrice: "477575",
 	}
 
 	//fmt.Printf("%+v\n", order.Items[0].ItemID)
@@ -60,7 +60,7 @@ func (r *mutationResolver) CreateOrder(ctx context.Context, input model.OrderInp
 	return &order, result.Error
 }
 
-func (r *mutationResolver) CreatePayment(_ context.Context, input model.PaymentInput) (*model.Payment, error) {
+func (r *mutationResolver) CreatePayment(ctx context.Context, input model.PaymentInput) (*model.Payment, error) {
 	//todo should the order creator be the one to confirm payment.
 	var orderItems []model.OrderItem
 	var subPrice decimal.Decimal
@@ -180,6 +180,10 @@ func (r *mutationResolver) DeleteItem(ctx context.Context, id int) (*model.Item,
 
 func (r *mutationResolver) Ping(ctx context.Context) (string, error) {
 	return "pong", nil
+}
+
+func (r *orderResolver) TotalPrice(ctx context.Context, obj *model.Order) (*string, error) {
+	panic(fmt.Errorf("not implemented"))
 }
 
 func (r *orderResolver) Items(ctx context.Context, obj *model.Order) ([]*model.OrderItem, error) {

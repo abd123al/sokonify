@@ -13,6 +13,8 @@ enum CategoryType {
     products
     # so that it will be easy to track expenses
     expenses
+    # This is for controlling salary fields
+    salary
 }
 
 # change of status must be reflected on ledger.
@@ -72,7 +74,7 @@ type User implements Gorm {
     name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(50);default:null") @goTag(key: "faker",value: "name")
     email: String! @goTag(key: "gorm", value: "unique;not null;type:varchar(100);default:null") @goTag(key: "faker",value: "email")
     username: String! @goTag(key: "gorm", value: "unique;not null;type:varchar(100);default:null") @goTag(key: "faker",value: "username")
-    password: String @goTag(key: "gorm", value: "size:100") @goField(forceResolver: true) @goTag(key: "faker",value: "password")
+    password: String @goTag(key: "gorm", value: "not null;type:varchar(100);default:null") @goField(forceResolver: true) @goTag(key: "faker",value: "password")
     # null means user has not been configured yet.
     type: UserType @goTag(key: "sql", value: "type:user_type")
 }
@@ -93,14 +95,14 @@ input ChangePasswordInput {
 type Category implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey;")
 
-    createdAt:Time!
-    updatedAt:Time!
+    createdAt:Time! #@goTag(key: "gorm", value: "not null;default:null")
+    updatedAt:Time! #@goTag(key: "gorm", value: "not null;default:null")
     deletedAt:Time
 
     # tablets/syrups/
-    name: String! @goTag(key: "gorm", value: "index;size:50")
+    name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(50);default:null")
     # unit box/each/package
-    unit: String! @goTag(key: "gorm", value: "size:50;")
+    unit: String! @goTag(key: "gorm", value: "type:varchar(50);")
     type: CategoryType! #@goTag(key: "gorm",value: "type:enum('products', 'expenses');default:'products'")
 
     storeId: Int!
@@ -118,11 +120,11 @@ input CategoryInput {
 type Product implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
 
-    createdAt:Time!
-    updatedAt:Time!
+    createdAt:Time! #@goTag(key: "gorm", value: "not null;default:null")
+    updatedAt:Time! #@goTag(key: "gorm", value: "not null;default:null")
     deletedAt:Time
 
-    name: String! @goTag(key: "gorm", value: "index;size:100")
+    name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(100);default:null")
 
     categoryId: Int!
     category: Category! @goTag(key: "gorm", value:  "foreignKey:CategoryID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
@@ -145,8 +147,8 @@ type Brand implements Gorm {
     updatedAt:Time!
     deletedAt:Time
 
-    name: String! @goTag(key: "gorm", value: "index;size:50")
-    manufacturer: String @goTag(key: "gorm", value: "size:50")
+    name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(50);default:null")
+    manufacturer: String @goTag(key: "gorm", value: "type:varchar(50);default:null")
 
     productId: Int!
     product: Product! @goTag(key: "gorm", value:  "foreignKey:ProductID;")
@@ -173,7 +175,7 @@ type Item implements Gorm {
     deletedAt:Time
 
     quantity: Int!  @goTag(key: "gorm", value: "type:integer;")
-    batch: String @goTag(key: "gorm", value: "size:50")
+    batch: String @goTag(key: "gorm", value: "index;type:varchar(50);")
     description: String @goTag(key: "gorm", value: "size:100")
     # Prices should be zero for non expenses
     # empty string for non admins
@@ -209,8 +211,6 @@ type Staff implements Gorm {
     updatedAt:Time!
     deletedAt:Time
 
-    isActive: Boolean!
-
     userId: Int!
     user: User! @goTag(key: "gorm", value: "foreignKey:UserID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 
@@ -232,7 +232,7 @@ type Store implements Gorm {
     updatedAt:Time!
     deletedAt:Time
 
-    name: String! @goTag(key: "gorm", value: "index;size:50") @goTag(key: "faker",value: "name")
+    name: String! @goTag(key: "gorm", value: "index;size:50;not null;default:null") @goTag(key: "faker",value: "name")
     type: StoreType!
 
     ownerId: Int!
@@ -252,7 +252,8 @@ type Order implements Gorm {
     updatedAt:Time!
     deletedAt:Time
 
-    totalPrice: String! @goTag(key: "gorm", value: "type:numeric;") #todo delete
+    # Here we will sum all items price
+    totalPrice: String @goTag(key: "gorm", value: "-") @goField(forceResolver: true)
     type: OrderType!
     status: OrderStatus! @goTag(key: "gorm", value: "size:100")
     comment: String @goTag(key: "gorm", value: "size:100")
