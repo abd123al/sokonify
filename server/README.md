@@ -13,6 +13,9 @@ go run -mod=mod github.com/99designs/gqlgen generate
 go mod tidy
 go generate ./...
 
+../client/packages/server/android/
+
+gomobile bind -v -o ../client/packages/server/android/server.aar -target=android ./lib
 
 # Todo
 - Transfer items between warehouse and store

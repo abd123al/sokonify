@@ -43,6 +43,9 @@ android {
     defaultConfig {
         minSdkVersion 16
     }
+
+    // For handling go bindings
+    ndkVersion "24.0.8215888"
 }
 
 dependencies {
