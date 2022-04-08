@@ -13,7 +13,7 @@ import (
 const defaultPort = "8080"
 
 // StartServer This way so that it can be invoked via libs
-func StartServer(Offline bool) {
+func StartServer(Offline bool) string {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
@@ -40,4 +40,6 @@ func StartServer(Offline bool) {
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
+
+	return port
 }
