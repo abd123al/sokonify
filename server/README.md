@@ -15,7 +15,7 @@ go generate ./...
 
 ../client/packages/server/android/
 
-gomobile bind -v -o ../client/packages/server/android/server.aar -target=android ./lib
+gomobile bind -v -o ../client/packages/server/android/libs/server.aar -target=android ./lib
 
 # Todo
 - Transfer items between warehouse and store

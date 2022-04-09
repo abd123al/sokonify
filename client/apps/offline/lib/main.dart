@@ -1,13 +1,12 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:server/server.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final port = await Server.startServer();
 
-  if (kDebugMode) {
-    print(await Server.platformVersion);
-  }
+  print('port $port');
+
   runApp(const MyApp());
 }
 

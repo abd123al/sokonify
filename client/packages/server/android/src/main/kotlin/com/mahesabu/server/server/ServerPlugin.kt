@@ -7,6 +7,7 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
+import lib.Lib.startServer
 
 /** ServerPlugin */
 class ServerPlugin: FlutterPlugin, MethodCallHandler {
@@ -22,8 +23,9 @@ class ServerPlugin: FlutterPlugin, MethodCallHandler {
   }
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-    if (call.method == "getPlatformVersion") {
-      result.success("Android ${android.os.Build.VERSION.RELEASE}")
+    if (call.method == "startServer") {
+      val port = startServer()
+      result.success("$port")
     } else {
       result.notImplemented()
     }
