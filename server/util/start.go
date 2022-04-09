@@ -23,6 +23,7 @@ func StartServer(Offline bool) string {
 		DbName:  "mahesabu",
 		Clear:   false,
 		Offline: Offline,
+		Mobile:  Offline,
 	})
 
 	config := generated.Config{Resolvers: &graph.Resolver{
