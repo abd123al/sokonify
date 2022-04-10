@@ -12,18 +12,27 @@ import (
 
 const defaultPort = "8080"
 
+type StartServerArgs struct {
+	Offline bool
+	Port    string
+}
+
 // StartServer This way so that it can be invoked via libs
-func StartServer(Offline bool) string {
+func StartServer(Args StartServerArgs) string {
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = defaultPort
+		if Args.Port == "" {
+			port = defaultPort
+		} else {
+			port = Args.Port
+		}
 	}
 
 	db := InitDB(InitDbArgs{
 		DbName:  "mahesabu",
 		Clear:   false,
-		Offline: Offline,
-		Mobile:  Offline,
+		Offline: Args.Offline,
+		Mobile:  Args.Offline,
 	})
 
 	config := generated.Config{Resolvers: &graph.Resolver{

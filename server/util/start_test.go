@@ -8,12 +8,17 @@ import (
 
 func TestStartServer(t *testing.T) {
 	t.Run("Online", func(t *testing.T) {
-		result := util.StartServer(false)
+		result := util.StartServer(util.StartServerArgs{
+			Offline: true,
+		})
 		require.Greater(t, result, 8080)
 	})
 
 	t.Run("Offline", func(t *testing.T) {
-		result := util.StartServer(true)
-		require.Greater(t, result, 8080)
+		result := util.StartServer(util.StartServerArgs{
+			Port:    "7070",
+			Offline: true,
+		})
+		require.Greater(t, result, 7070)
 	})
 }

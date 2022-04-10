@@ -5,5 +5,7 @@ import (
 )
 
 func main() {
-	util.StartServer(false)
+	util.StartServer(util.StartServerArgs{
+		Offline: false,
+	})
 }
