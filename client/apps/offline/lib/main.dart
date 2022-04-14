@@ -5,8 +5,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final port = await Server.startServer();
 
-  print('port $port');
-
   runApp(const MyApp());
 }
 
