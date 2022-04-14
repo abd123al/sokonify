@@ -86,6 +86,13 @@
             </list>
           </value>
         </entry>
+        <entry key="graph">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../packages/graph/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="js">
           <value>
             <list>
@@ -228,6 +235,7 @@
       <root url="file://C:/flutter/packages/flutter/lib" />
       <root url="file://C:/flutter/packages/flutter_test/lib" />
       <root url="file://C:/flutter/packages/flutter_web_plugins/lib" />
+      <root url="file://$PROJECT_DIR$/../packages/graph/lib" />
       <root url="file://$PROJECT_DIR$/../packages/server/lib" />
     </CLASSES>
     <JAVADOC />

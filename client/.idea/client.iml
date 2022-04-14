@@ -24,6 +24,21 @@
       <excludeFolder url="file://$MODULE_DIR$/packages/graph/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/packages/graph/build" />
       <excludeFolder url="file://$MODULE_DIR$/packages/graph/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/build" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/linux/flutter/ephemeral/.plugin_symlinks/graph/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/linux/flutter/ephemeral/.plugin_symlinks/graph/build" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/linux/flutter/ephemeral/.plugin_symlinks/graph/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/windows/flutter/ephemeral/.plugin_symlinks/graph/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/windows/flutter/ephemeral/.plugin_symlinks/graph/build" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/windows/flutter/ephemeral/.plugin_symlinks/graph/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/linux/flutter/ephemeral/.plugin_symlinks/graph/build" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/linux/flutter/ephemeral/.plugin_symlinks/graph/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/linux/flutter/ephemeral/.plugin_symlinks/graph/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/windows/flutter/ephemeral/.plugin_symlinks/graph/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/windows/flutter/ephemeral/.plugin_symlinks/graph/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/windows/flutter/ephemeral/.plugin_symlinks/graph/build" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
