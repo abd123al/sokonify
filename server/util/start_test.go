@@ -11,7 +11,7 @@ func TestStartServer(t *testing.T) {
 		result := util.StartServer(util.StartServerArgs{
 			Offline: true,
 		})
-		require.Greater(t, result, 8080)
+		require.Greater(t, result, 6060)
 	})
 
 	t.Run("Offline", func(t *testing.T) {

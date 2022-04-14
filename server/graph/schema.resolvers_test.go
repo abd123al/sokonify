@@ -99,6 +99,33 @@ func TestResolvers(t *testing.T) {
 		require.Equal(t, input.Name, resp.CreateStore.Name)
 	})
 
+	t.Run("CreateCategory", func(t *testing.T) {
+		var resp struct {
+			CreateCategory model.Category
+		}
+
+		unit := "tabs"
+		categoryType := model.CategoryTypeProducts
+
+		input := model.CategoryInput{
+			Name:    "Tablets",
+			Unit:    &unit,
+			Type:    &categoryType,
+			StoreID: store.ID,
+		}
+
+		c.MustPost(`
+			mutation createCategory($input: CategoryInput!) {
+			  createCategory(input: $input) {
+				name
+			  }
+			}
+			`, &resp,
+			client.Var("input", input))
+
+		require.Equal(t, input.Name, resp.CreateCategory.Name)
+	})
+
 	t.Run("CreateProduct", func(t *testing.T) {
 		var resp struct {
 			CreateProduct model.Product

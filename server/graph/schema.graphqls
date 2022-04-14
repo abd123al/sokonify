@@ -111,7 +111,7 @@ type Category implements Gorm {
 
 input CategoryInput {
     name: String!
-    unit: String
+    unit: String = "units"
     type: CategoryType = products
 
     storeId: Int!

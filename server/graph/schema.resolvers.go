@@ -21,7 +21,14 @@ func (r *mutationResolver) CreateBrand(ctx context.Context, input model.BrandInp
 }
 
 func (r *mutationResolver) CreateCategory(ctx context.Context, input model.CategoryInput) (*model.Category, error) {
-	panic(fmt.Errorf("not implemented"))
+	category := model.Category{
+		Name:    input.Name,
+		Unit:    *input.Unit,
+		Type:    *input.Type,
+		StoreID: input.StoreID,
+	}
+	result := r.DB.Create(&category)
+	return &category, result.Error
 }
 
 func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput) (*model.Item, error) {
