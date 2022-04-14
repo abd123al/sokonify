@@ -134,8 +134,8 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.UserInput
 		Username: input.Username,
 		Password: input.Password,
 	}
-	r.DB.Create(&user)
-	return &user, nil
+	result := r.DB.Create(&user)
+	return &user, result.Error
 }
 
 func (r *mutationResolver) ChangePassword(ctx context.Context, input model.ChangePasswordInput) (*model.User, error) {
