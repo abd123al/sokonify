@@ -1,0 +1,18 @@
+targets:
+  $default:
+    sources:
+      - lib/**
+      - lib/gql/schema.graphql
+    builders:
+      artemis:
+        options:
+          fragments_glob: lib/gql/fragments/**.graphql
+          schema_mapping:
+            - output: lib/gql/generated/graphql_api.dart
+              schema: lib/gql/schema.graphql
+              queries_glob: lib/gql/operations/**.graphql
+              custom_parser_import: 'packages:graph/gql/coercers.dart'
+          scalar_mapping:
+            - graphql_type: Time
+              dart_type: DateTime
+              use_custom_parser: true

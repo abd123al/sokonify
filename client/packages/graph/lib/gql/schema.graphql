@@ -1,0 +1,322 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+interface Gorm {
+    createdAt: Time!
+    deletedAt: Time
+    id: ID!
+    updatedAt: Time!
+}
+
+type Brand implements Gorm {
+    createdAt: Time!
+    deletedAt: Time
+    id: ID!
+    manufacturer: String
+    name: String!
+    product: Product!
+    productId: Int!
+    updatedAt: Time!
+}
+
+type Category implements Gorm {
+    createdAt: Time!
+    deletedAt: Time
+    id: ID!
+    name: String!
+    store: Store!
+    storeId: Int!
+    type: CategoryType!
+    unit: String!
+    updatedAt: Time!
+}
+
+type Item implements Gorm {
+    batch: String
+    brand: Brand
+    brandId: Int
+    buyingPrice: String!
+    createdAt: Time!
+    deletedAt: Time
+    description: String
+    expiresAt: Time!
+    id: ID!
+    product: Product!
+    productId: Int!
+    quantity: Int!
+    sellingPrice: String!
+    updatedAt: Time!
+}
+
+type Ledger implements Gorm {
+    createdAt: Time!
+    deletedAt: Time
+    id: ID!
+    item: Item!
+    itemId: Int!
+    order: Order!
+    orderId: Int!
+    quantity: Int!
+    updatedAt: Time!
+}
+
+type Mutation {
+    changePassword(input: ChangePasswordInput!): User!
+    createBrand(input: BrandInput!): Brand!
+    createCategory(input: CategoryInput!): Category!
+    createItem(input: ItemInput!): Item!
+    createOrder(input: OrderInput!): Order!
+    createPayment(input: PaymentInput!): Payment!
+    createProduct(input: ProductInput!): Product!
+    createStaff(input: StaffInput!): Staff!
+    createStore(input: StoreInput!): Store!
+    createUser(input: UserInput!): User!
+    deleteItem(id: ID!): Item!
+    editBrand(id: ID!, input: BrandInput!): Brand!
+    editCategory(id: ID!, input: CategoryInput!): Category!
+    editItem(id: ID!, input: ItemInput!): Item!
+    editOrder(id: ID!, input: OrderInput!): Order!
+    editProduct(id: ID!, input: ProductInput!): Product!
+    editStaff(id: ID!, input: StaffInput!): Staff!
+    editStore(id: ID!, input: StoreInput!): Store!
+    editUser(id: ID!, input: UserInput!): User!
+    ping: String!
+}
+
+type Order implements Gorm {
+    comment: String
+    createdAt: Time!
+    customer: User
+    customerId: Int
+    deletedAt: Time
+    id: ID!
+    issuer: Store!
+    issuerId: Int!
+    items: [OrderItem!]!
+    receiver: Store
+    receiverId: Int
+    staff: User!
+    staffId: Int!
+    status: OrderStatus!
+    totalPrice: String
+    type: OrderType!
+    updatedAt: Time!
+}
+
+type OrderItem implements Gorm {
+    createdAt: Time!
+    deletedAt: Time
+    id: ID!
+    item: Item!
+    itemId: Int!
+    order: Order!
+    orderId: Int!
+    price: String!
+    quantity: Int!
+    subTotalPrice: String!
+    updatedAt: Time!
+}
+
+type Payment implements Gorm {
+    amount: String!
+    createdAt: Time!
+    deletedAt: Time
+    description: String
+    id: ID!
+    order: Order!
+    orderId: Int!
+    referenceId: String
+    type: PaymentType!
+    updatedAt: Time!
+}
+
+type Product implements Gorm {
+    brands: [Brand!]!
+    category: Category!
+    categoryId: Int!
+    createdAt: Time!
+    deletedAt: Time
+    id: ID!
+    name: String!
+    updatedAt: Time!
+}
+
+type Query {
+    brand(id: ID!): Brand!
+    brands(productId: ID!): [Brand!]!
+    categories(storeId: ID!): [Category!]!
+    category(id: ID!): Category!
+    item(id: ID!): Item!
+    items(storeId: ID!): [Item!]!
+    order(id: ID!): Order!
+    orders(storeId: ID!): [Order!]!
+    payment(id: ID!): Payment!
+    payments(storeId: ID!): [Payment!]!
+    product(id: ID!): Product!
+    products(storeId: ID!): [Product!]!
+    staff(id: ID!): Staff!
+    staffs(storeId: ID!): [Staff!]!
+    store(id: ID!): Store!
+    stores: [Store!]!
+    user(id: ID!): User!
+    users: [User!]!
+}
+
+type Staff implements Gorm {
+    createdAt: Time!
+    deletedAt: Time
+    id: ID!
+    store: Store!
+    storeId: Int!
+    updatedAt: Time!
+    user: User!
+    userId: Int!
+}
+
+type Store implements Gorm {
+    createdAt: Time!
+    deletedAt: Time
+    id: ID!
+    name: String!
+    owner: User!
+    ownerId: Int!
+    staffs: [Staff!]!
+    type: StoreType!
+    updatedAt: Time!
+}
+
+type User implements Gorm {
+    createdAt: Time!
+    deletedAt: Time
+    email: String!
+    id: ID!
+    name: String!
+    password: String
+    type: UserType
+    updatedAt: Time!
+    username: String!
+}
+
+enum CategoryType {
+    expenses
+    products
+    salary
+}
+
+enum OrderStatus {
+    canceled
+    completed
+    pending
+}
+
+enum OrderType {
+    expense
+    loss
+    purchase
+    sale
+    transfer
+}
+
+enum PaymentType {
+    bank
+    cash
+    loan
+}
+
+enum StoreType {
+    shop
+    storage
+    warehouse
+}
+
+enum UserType {
+    admin
+    customer
+    owner
+    staff
+    supplier
+}
+
+scalar Time
+
+input BrandInput {
+    manufacturer: String
+    name: String!
+    productId: Int!
+}
+
+input CategoryInput {
+    name: String!
+    storeId: Int!
+    type: CategoryType = products
+    unit: String = "units"
+}
+
+input ChangePasswordInput {
+    currentPassword: String!
+    newPassword: String!
+}
+
+input ItemInput {
+    batch: String
+    brandId: Int
+    buyingPrice: String!
+    description: String
+    expiresAt: Time
+    productId: Int!
+    quantity: Int!
+    sellingPrice: String!
+}
+
+input OrderInput {
+    comment: String
+    customerId: Int
+    issuerId: Int!
+    items: [OrderItemInput!]!
+    receiverId: Int
+    type: OrderType!
+}
+
+input OrderItemInput {
+    itemId: Int!
+    price: String!
+    quantity: Int!
+}
+
+input PaymentInput {
+    description: String
+    orderId: Int!
+    referenceId: String
+    type: PaymentType!
+}
+
+input ProductBrandInput {
+    manufacturer: String
+    name: String!
+}
+
+input ProductInput {
+    brands: [ProductBrandInput!]
+    categoryId: Int!
+    name: String!
+}
+
+input StaffInput {
+    storeId: Int!
+    userId: Int!
+}
+
+input StoreInput {
+    name: String!
+}
+
+input UserInput {
+    email: String!
+    name: String!
+    password: String
+    username: String!
+}
