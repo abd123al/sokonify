@@ -303,6 +303,13 @@
             </list>
           </value>
         </entry>
+        <entry key="flutter_phoenix">
+          <value>
+            <list>
+              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_phoenix-1.0.0/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="flutter_test">
           <value>
             <list>
@@ -349,6 +356,13 @@
           <value>
             <list>
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/gql_dedupe_link-2.0.0/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="gql_dio_link">
+          <value>
+            <list>
+              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/gql_dio_link-0.1.0/lib" />
             </list>
           </value>
         </entry>
@@ -936,11 +950,13 @@
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/fixnum-1.0.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_bloc-8.0.1/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_lints-1.0.4/lib" />
+      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_phoenix-1.0.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/frontend_server_client-2.1.2/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/glob-2.0.2/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/gql-0.13.1-alpha+1645425888336/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/gql_code_builder2-0.3.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/gql_dedupe_link-2.0.0/lib" />
+      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/gql_dio_link-0.1.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/gql_error_link-0.2.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/gql_exec-0.3.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/gql_http_link-0.4.0/lib" />
