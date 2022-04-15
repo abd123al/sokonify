@@ -152,6 +152,28 @@ func TestResolvers(t *testing.T) {
 		require.Equal(t, input.Name, resp.CreateProduct.Name)
 	})
 
+	t.Run("CreateBrand", func(t *testing.T) {
+		var resp struct {
+			CreateBrand model.Brand
+		}
+
+		input := model.BrandInput{
+			Name:      "Product Name",
+			ProductID: product.ID,
+		}
+
+		c.MustPost(`
+			mutation createBrand($input: BrandInput!) {
+			  createBrand(input: $input) {
+				name
+			  }
+			}
+			`, &resp,
+			client.Var("input", input))
+
+		require.Equal(t, input.Name, resp.CreateBrand.Name)
+	})
+
 	t.Run("CreateOrder", func(t *testing.T) {
 		var resp struct {
 			CreateOrder model.Order
