@@ -2,6 +2,8 @@ package util
 
 import (
 	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/handler/extension"
+	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"log"
 	"mahesabu/graph"
@@ -44,9 +46,12 @@ func StartServer(Args StartServerArgs) string {
 	config.Directives.HasRole = HasRole
 
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(config))
+	srv.AddTransport(transport.Options{})
+	srv.AddTransport(transport.POST{})
+	srv.Use(extension.Introspection{}) //todo disable when live
 
-	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	http.Handle("/query", srv)
+	http.Handle("/", playground.Handler("GraphQL playground", "/graphql"))
+	http.Handle("/graphql", srv)
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
