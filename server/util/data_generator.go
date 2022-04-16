@@ -29,6 +29,21 @@ func CreateStore(DB *gorm.DB, OwnerID int) *model.Store {
 	return &store
 }
 
+type CreateStaffArgs struct {
+	UserID  int
+	StoreID int
+}
+
+func CreateStaff(DB *gorm.DB, Args CreateStaffArgs) *model.Staff {
+	staff := model.Staff{
+		StoreID: Args.StoreID,
+		UserID:  Args.UserID,
+	}
+	DB.Create(&staff)
+
+	return &staff
+}
+
 func CreateCategory(DB *gorm.DB, StoreID int) *model.Category {
 	category := model.Category{
 		Name:    "Category",

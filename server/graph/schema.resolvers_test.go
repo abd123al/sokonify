@@ -21,6 +21,10 @@ func TestResolvers(t *testing.T) {
 
 	user := util.CreateUser(DB)
 	store := util.CreateStore(DB, user.ID)
+	_ = util.CreateStaff(DB, util.CreateStaffArgs{
+		UserID:  user.ID,
+		StoreID: store.ID,
+	})
 	category := util.CreateCategory(DB, store.ID)
 	product := util.CreateProduct(DB, category.ID)
 	item := util.CreateItem(DB, util.CreateItemArgs{
@@ -97,6 +101,31 @@ func TestResolvers(t *testing.T) {
 			client.Var("input", input))
 
 		require.Equal(t, input.Name, resp.CreateStore.Name)
+	})
+
+	t.Run("CreateStaff", func(t *testing.T) {
+		//todo don't allow duplicates in store staff
+		newStore := util.CreateStore(DB, user.ID)
+
+		var resp struct {
+			CreateStaff model.Staff
+		}
+
+		input := model.StaffInput{
+			StoreID: newStore.ID,
+			UserID:  user.ID,
+		}
+
+		c.MustPost(`
+			mutation createStaff($input: StaffInput!) {
+			  createStaff(input: $input) {
+				userId
+			  }
+			}
+			`, &resp,
+			client.Var("input", input))
+
+		require.Equal(t, input.UserID, resp.CreateStaff.UserID)
 	})
 
 	t.Run("CreateCategory", func(t *testing.T) {
@@ -221,5 +250,23 @@ func TestResolvers(t *testing.T) {
 			client.Var("input", input))
 
 		require.Equal(t, "26001.54", resp.CreatePayment.Amount)
+	})
+
+	//Queries
+
+	t.Run("Stores", func(t *testing.T) {
+		var resp struct {
+			Stores []model.Store
+		}
+
+		c.MustPost(`
+				{
+				  stores {
+					name
+				  }
+				}
+			`, &resp)
+
+		require.GreaterOrEqual(t, len(resp.Stores), 1)
 	})
 }

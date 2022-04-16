@@ -43,4 +43,12 @@ func TestGenerator(t *testing.T) {
 		})
 		require.Greater(t, result.ID, 0)
 	})
+
+	t.Run("CreateStaff", func(t *testing.T) {
+		result := util.CreateStaff(DB, util.CreateStaffArgs{
+			UserID:  user.ID,
+			StoreID: store.ID,
+		})
+		require.Greater(t, result.ID, 0)
+	})
 }

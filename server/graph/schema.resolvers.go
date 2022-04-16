@@ -132,6 +132,7 @@ func (r *mutationResolver) CreateStaff(ctx context.Context, input model.StaffInp
 }
 
 func (r *mutationResolver) CreateStore(ctx context.Context, input model.StoreInput) (*model.Store, error) {
+	//todo use transaction and save user as staff.
 	store := model.Store{
 		Name:    input.Name,
 		OwnerID: r.UserId,
@@ -272,7 +273,9 @@ func (r *queryResolver) Store(ctx context.Context, id int) (*model.Store, error)
 }
 
 func (r *queryResolver) Stores(ctx context.Context) ([]*model.Store, error) {
-	panic(fmt.Errorf("not implemented"))
+	var stores []*model.Store
+	result := r.DB.Table("stores").Joins("inner join staffs on staffs.store_id = stores.id AND staffs.user_id = ?", r.UserId).Find(&stores)
+	return stores, result.Error
 }
 
 func (r *queryResolver) User(ctx context.Context, id int) (*model.User, error) {
