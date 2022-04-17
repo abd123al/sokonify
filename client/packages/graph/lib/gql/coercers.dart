@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 
 /// https://github.com/comigor/artemis/blob/master/example/graphbrainz/lib/coercers.dart
-DateTime fromGraphQLDateTimeToDartDateTime(String date) {
+DateTime fromGraphQLTimeToDartDateTime(String date) {
   try {
     return DateTime.parse(date);
   } catch (_) {
@@ -10,8 +10,9 @@ DateTime fromGraphQLDateTimeToDartDateTime(String date) {
   }
 }
 
-String fromDartDateTimeToGraphQLDateTime(DateTime date) {
+String fromDartDateTimeToGraphQLTime(DateTime date) {
   final dateFormatter = DateFormat('yyyy-MM-dd');
+
   try {
     return dateFormatter.format(date);
   } catch (_) {

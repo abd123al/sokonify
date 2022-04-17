@@ -16,3 +16,5 @@ targets:
             - graphql_type: Time
               dart_type: DateTime
               use_custom_parser: true
+            - graphql_type: ID
+              dart_type: int

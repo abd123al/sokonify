@@ -9,7 +9,7 @@ class StoresListCubit
 
   StoresListCubit(this._repository) : super();
 
-  fetchStores() {
+  fetch() {
     super.execute(
       executor: () => _repository.fetchStores(),
       parser: (r) {

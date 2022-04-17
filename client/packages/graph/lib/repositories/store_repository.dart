@@ -4,7 +4,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 class StoreRepository {
   final GraphQLClient client;
 
-  StoreRepository({required this.client});
+  StoreRepository( this.client);
 
   createStore(StoreInput input) {
     final _options = MutationOptions(

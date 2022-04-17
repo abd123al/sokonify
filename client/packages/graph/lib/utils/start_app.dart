@@ -4,7 +4,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
-import '../app.dart';
+import '../ui/app.dart';
 import '../gql/client.dart';
 
 /// Sometimes we want different behaviours for different apps

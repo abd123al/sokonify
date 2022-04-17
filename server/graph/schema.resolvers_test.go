@@ -14,7 +14,8 @@ import (
 
 func TestResolvers(t *testing.T) {
 	DB := util.InitDB(util.InitDbArgs{
-		DbName:  "mahesabu_test",
+		DbName: "mahesabu",
+		//DbName:  "mahesabu_test",
 		Clear:   true,
 		Offline: false,
 	})
