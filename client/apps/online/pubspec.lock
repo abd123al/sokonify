@@ -42,15 +42,13 @@ packages:
       name: bloc
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "8.0.3"
+    version: "7.2.1"
   blocitory:
     dependency: transitive
     description:
-      path: "."
-      ref: main
-      resolved-ref: cf1e1022e32d4123289fdb804a34dfd8588167ca
-      url: "git@github.com:kateile/blocitory.git"
-    source: git
+      path: "../../../../../_apps/blocitory"
+      relative: true
+    source: path
     version: "0.0.1"
   boolean_selector:
     dependency: transitive
@@ -266,7 +264,7 @@ packages:
       name: flutter_bloc
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "8.0.1"
+    version: "7.3.3"
   flutter_lints:
     dependency: "direct dev"
     description:

@@ -32,7 +32,7 @@ startApp(String url) async {
           }
 
           return Container(
-            color: Colors.teal,
+            color: Colors.blue,
           );
         },
       ),

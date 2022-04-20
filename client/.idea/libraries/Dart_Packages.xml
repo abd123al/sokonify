@@ -40,6 +40,7 @@
         <entry key="bloc">
           <value>
             <list>
+              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/bloc-7.2.1/lib" />
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/bloc-8.0.3/lib" />
             </list>
           </value>
@@ -47,7 +48,7 @@
         <entry key="blocitory">
           <value>
             <list>
-              <option value="C:/flutter/.pub-cache/git/blocitory-cf1e1022e32d4123289fdb804a34dfd8588167ca//lib" />
+              <option value="$PROJECT_DIR$/../../../_apps/blocitory/lib" />
             </list>
           </value>
         </entry>
@@ -292,6 +293,7 @@
         <entry key="flutter_bloc">
           <value>
             <list>
+              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_bloc-7.3.3/lib" />
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_bloc-8.0.1/lib" />
             </list>
           </value>
@@ -398,13 +400,6 @@
           <value>
             <list>
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/gql_transform_link-0.2.0/lib" />
-            </list>
-          </value>
-        </entry>
-        <entry key="graph">
-          <value>
-            <list>
-              <option value="$PROJECT_DIR$/../packages/graph/lib" />
             </list>
           </value>
         </entry>
@@ -744,13 +739,6 @@
             </list>
           </value>
         </entry>
-        <entry key="server">
-          <value>
-            <list>
-              <option value="$PROJECT_DIR$/../packages/server/lib" />
-            </list>
-          </value>
-        </entry>
         <entry key="shelf">
           <value>
             <list>
@@ -908,12 +896,12 @@
       </option>
     </properties>
     <CLASSES>
-      <root url="file://C:/flutter/.pub-cache/git/blocitory-cf1e1022e32d4123289fdb804a34dfd8588167ca//lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/_fe_analyzer_shared-31.0.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/analyzer-2.8.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/args-2.3.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/artemis-7.2.3-beta/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.8.2/lib" />
+      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/bloc-7.2.1/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/bloc-8.0.3/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/boolean_selector-2.1.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/build-2.3.0/lib" />
@@ -948,6 +936,7 @@
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/ffi-1.1.2/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/file-6.1.2/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/fixnum-1.0.0/lib" />
+      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_bloc-7.3.3/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_bloc-8.0.1/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_lints-1.0.4/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_phoenix-1.0.0/lib" />
@@ -1035,8 +1024,7 @@
       <root url="file://C:/flutter/packages/flutter/lib" />
       <root url="file://C:/flutter/packages/flutter_test/lib" />
       <root url="file://C:/flutter/packages/flutter_web_plugins/lib" />
-      <root url="file://$PROJECT_DIR$/../packages/graph/lib" />
-      <root url="file://$PROJECT_DIR$/../packages/server/lib" />
+      <root url="file://$PROJECT_DIR$/../../../_apps/blocitory/lib" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

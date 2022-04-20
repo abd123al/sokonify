@@ -1,8 +1,9 @@
 import 'package:blocitory/blocitory.dart';
 import 'package:flutter/material.dart';
 
-import '../../cubits/cubit.dart';
-import '../../gql/generated/graphql_api.graphql.dart';
+import '../../../cubits/cubit.dart';
+import '../../../gql/generated/graphql_api.graphql.dart';
+import 'create_store.dart';
 
 class StoresPage extends StatelessWidget {
   const StoresPage({Key? key}) : super(key: key);
@@ -24,13 +25,22 @@ class StoresPage extends StatelessWidget {
                     store.name,
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
+                  leading: CircleAvatar(
+                    child: Text(store.name.substring(0, 2)),
+                  ),
                 ),
               );
             },
             itemCount: stores.items.length,
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const CreateStorePage()),
+              );
+            },
             tooltip: 'Add',
             child: const Icon(Icons.add),
           ),
