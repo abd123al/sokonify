@@ -10,6 +10,7 @@ import (
 	"mahesabu/graph/model"
 
 	"github.com/shopspring/decimal"
+	"gorm.io/gorm"
 )
 
 func (r *itemResolver) BuyingPrice(ctx context.Context, obj *model.Item) (string, error) {
@@ -224,7 +225,7 @@ func (r *queryResolver) Category(ctx context.Context, id int) (*model.Category, 
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Categories(_ context.Context, storeID int) ([]*model.Category, error) {
+func (r *queryResolver) Categories(ctx context.Context, storeID int) ([]*model.Category, error) {
 	var categories []*model.Category
 	result := r.DB.Where(&model.Category{StoreID: storeID}).Find(&categories)
 	return categories, result.Error
@@ -234,10 +235,15 @@ func (r *queryResolver) Item(ctx context.Context, id int) (*model.Item, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-// Items we fetch all items at once, no pagination is done here.
-func (r *queryResolver) Items(_ context.Context, storeID int) ([]*model.Item, error) {
+func (r *queryResolver) Items(ctx context.Context, by model.ItemsBy, value int) ([]*model.Item, error) {
 	var items []*model.Item
-	result := r.DB.Table("items").Joins("inner join products on products.id = items.product_id inner join categories on categories.id = products.category_id AND categories.store_id = ?", storeID).Find(&items)
+	var result *gorm.DB
+
+	if by == model.ItemsByStore {
+		result = r.DB.Table("items").Joins("inner join products on products.id = items.product_id inner join categories on categories.id = products.category_id AND categories.store_id = ?", value).Find(&items)
+	} else {
+		panic(fmt.Errorf("not implemented"))
+	}
 	return items, result.Error
 }
 
@@ -261,7 +267,7 @@ func (r *queryResolver) Product(ctx context.Context, id int) (*model.Product, er
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Products(ctx context.Context, storeID int) ([]*model.Product, error) {
+func (r *queryResolver) Products(ctx context.Context, by model.ProductsBy, value int) ([]*model.Product, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 

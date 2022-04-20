@@ -63,6 +63,17 @@ enum StoreType {
     storage # Pharmacy inner store
 }
 
+enum ProductsBy {
+    store
+    category
+}
+
+enum ItemsBy {
+    store
+    category
+    product
+}
+
 # With this user can reuse their credentials in different stores
 type User implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
@@ -362,13 +373,13 @@ type Query {
     category(id:ID!): Category!
     categories(storeId:ID!): [Category!]!
     item(id: ID!): Item!
-    items(storeId:ID!): [Item!]!
+    items(by:ItemsBy! = store,value:ID!): [Item!]!
     order(id: ID!): Order!
     orders(storeId:ID!): [Order!]!
     payment(id: ID!): Payment!
     payments(storeId:ID!): [Payment!]!
     product(id: ID!): Product!
-    products(storeId:ID!): [Product!]!
+    products(by:ProductsBy! = store,value:ID!): [Product!]!
     staff(id: ID!): Staff!
     staffs(storeId:ID!): [Staff!]!
     store(id: ID!): Store!

@@ -293,13 +293,13 @@ func TestResolvers(t *testing.T) {
 		}
 
 		c.MustPost(`
-				query items($storeId: ID!) {
-				  items(storeId: $storeId) {
+				query items($value: ID!) {
+				  items(value: $value) {
 					id
 					quantity
 				  }
 				}
-			`, &resp, client.Var("storeId", store.ID))
+			`, &resp, client.Var("value", store.ID))
 
 		require.GreaterOrEqual(t, len(resp.Items), 1)
 	})
