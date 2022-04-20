@@ -232,8 +232,11 @@ func (r *queryResolver) Item(ctx context.Context, id int) (*model.Item, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Items(ctx context.Context, storeID int) ([]*model.Item, error) {
-	panic(fmt.Errorf("not implemented"))
+// Items we fetch all items at once, no pagination is done here.
+func (r *queryResolver) Items(_ context.Context, storeID int) ([]*model.Item, error) {
+	var items []*model.Item
+	result := r.DB.Table("items").Joins("inner join products on products.id = items.product_id inner join categories on categories.id = products.category_id AND categories.store_id = ?", storeID).Find(&items)
+	return items, result.Error
 }
 
 func (r *queryResolver) Order(ctx context.Context, id int) (*model.Order, error) {

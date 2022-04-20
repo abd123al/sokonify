@@ -39,7 +39,7 @@ func StartServer(Args StartServerArgs) string {
 
 	config := generated.Config{Resolvers: &graph.Resolver{
 		DB:     db,
-		UserId: 64,
+		UserId: 86,
 	}}
 
 	//Configuring directives to be used on run-time

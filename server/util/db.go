@@ -23,7 +23,9 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 		db, err = gorm.Open(sqlite.Open(":memory:?_pragma=foreign_keys(1)"), &gorm.Config{})
 	} else {
 		dsn := "host=localhost user=postgres password=password dbname=" + args.DbName + " port=5432 sslmode=disable TimeZone=Africa/Nairobi"
-		db, err = gorm.Open(postgres.New(postgres.Config{DSN: dsn}))
+		db, err = gorm.Open(postgres.New(postgres.Config{DSN: dsn}), &gorm.Config{
+			//Logger: logger.Default.LogMode(logger.Info),
+		})
 	}
 
 	if err != nil {

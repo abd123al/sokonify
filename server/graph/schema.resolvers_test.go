@@ -14,8 +14,7 @@ import (
 
 func TestResolvers(t *testing.T) {
 	DB := util.InitDB(util.InitDbArgs{
-		DbName: "mahesabu",
-		//DbName:  "mahesabu_test",
+		DbName:  "mahesabu_test",
 		Clear:   true,
 		Offline: false,
 	})
@@ -269,5 +268,22 @@ func TestResolvers(t *testing.T) {
 			`, &resp)
 
 		require.GreaterOrEqual(t, len(resp.Stores), 1)
+	})
+
+	t.Run("Items", func(t *testing.T) {
+		var resp struct {
+			Items []model.Item
+		}
+
+		c.MustPost(`
+				query items($storeId: ID!) {
+				  items(storeId: $storeId) {
+					id
+					quantity
+				  }
+				}
+			`, &resp, client.Var("storeId", store.ID))
+
+		require.GreaterOrEqual(t, len(resp.Items), 1)
 	})
 }
