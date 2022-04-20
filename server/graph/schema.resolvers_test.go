@@ -103,7 +103,7 @@ func TestResolvers(t *testing.T) {
 		require.Equal(t, input.Name, resp.CreateStore.Name)
 	})
 
-	t.Run("CreateStaff", func(t *testing.T) {
+	t.Run("createStaff", func(t *testing.T) {
 		//todo don't allow duplicates in store staff
 		newStore := util.CreateStore(DB, user.ID)
 
@@ -128,7 +128,7 @@ func TestResolvers(t *testing.T) {
 		require.Equal(t, input.UserID, resp.CreateStaff.UserID)
 	})
 
-	t.Run("CreateCategory", func(t *testing.T) {
+	t.Run("createCategory", func(t *testing.T) {
 		var resp struct {
 			CreateCategory model.Category
 		}
@@ -155,7 +155,7 @@ func TestResolvers(t *testing.T) {
 		require.Equal(t, input.Name, resp.CreateCategory.Name)
 	})
 
-	t.Run("CreateProduct", func(t *testing.T) {
+	t.Run("createProduct", func(t *testing.T) {
 		var resp struct {
 			CreateProduct model.Product
 		}
@@ -181,7 +181,7 @@ func TestResolvers(t *testing.T) {
 		require.Equal(t, input.Name, resp.CreateProduct.Name)
 	})
 
-	t.Run("CreateBrand", func(t *testing.T) {
+	t.Run("createBrand", func(t *testing.T) {
 		var resp struct {
 			CreateBrand model.Brand
 		}
@@ -203,7 +203,7 @@ func TestResolvers(t *testing.T) {
 		require.Equal(t, input.Name, resp.CreateBrand.Name)
 	})
 
-	t.Run("CreateOrder", func(t *testing.T) {
+	t.Run("createOrder", func(t *testing.T) {
 		var resp struct {
 			CreateOrder model.Order
 		}
@@ -230,7 +230,7 @@ func TestResolvers(t *testing.T) {
 		require.Equal(t, input.CustomerID, resp.CreateOrder.CustomerID)
 	})
 
-	t.Run("CreatePayment", func(t *testing.T) {
+	t.Run("createPayment", func(t *testing.T) {
 		var resp struct {
 			CreatePayment model.Payment
 		}
@@ -254,7 +254,7 @@ func TestResolvers(t *testing.T) {
 
 	//Queries
 
-	t.Run("Stores", func(t *testing.T) {
+	t.Run("stores", func(t *testing.T) {
 		var resp struct {
 			Stores []model.Store
 		}
@@ -270,7 +270,7 @@ func TestResolvers(t *testing.T) {
 		require.GreaterOrEqual(t, len(resp.Stores), 1)
 	})
 
-	t.Run("Categories", func(t *testing.T) {
+	t.Run("categories", func(t *testing.T) {
 		var resp struct {
 			Categories []model.Category
 		}
@@ -287,7 +287,7 @@ func TestResolvers(t *testing.T) {
 		require.GreaterOrEqual(t, len(resp.Categories), 1)
 	})
 
-	t.Run("Items", func(t *testing.T) {
+	t.Run("items", func(t *testing.T) {
 		var resp struct {
 			Items []model.Item
 		}
