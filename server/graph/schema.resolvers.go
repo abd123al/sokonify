@@ -224,8 +224,10 @@ func (r *queryResolver) Category(ctx context.Context, id int) (*model.Category, 
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Categories(ctx context.Context, storeID int) ([]*model.Category, error) {
-	panic(fmt.Errorf("not implemented"))
+func (r *queryResolver) Categories(_ context.Context, storeID int) ([]*model.Category, error) {
+	var categories []*model.Category
+	result := r.DB.Where(&model.Category{StoreID: storeID}).Find(&categories)
+	return categories, result.Error
 }
 
 func (r *queryResolver) Item(ctx context.Context, id int) (*model.Item, error) {
