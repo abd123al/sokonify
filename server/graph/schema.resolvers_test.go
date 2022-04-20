@@ -287,6 +287,33 @@ func TestResolvers(t *testing.T) {
 		require.GreaterOrEqual(t, len(resp.Categories), 1)
 	})
 
+	t.Run("products", func(t *testing.T) {
+		var resp struct {
+			Products []model.Product
+		}
+
+		c.MustPost(`
+			query products($value: ID!) {
+			  products(value: $value) {
+				id
+			  }
+			}
+			`, &resp, client.Var("value", store.ID))
+
+		require.GreaterOrEqual(t, len(resp.Products), 1)
+
+		//By category
+		c.MustPost(`
+				query products($value: ID!) {
+				  products(by: category, value: $value) {
+					id
+				  }
+				}
+			`, &resp, client.Var("value", category.ID))
+
+		require.GreaterOrEqual(t, len(resp.Products), 1)
+	})
+
 	t.Run("items", func(t *testing.T) {
 		var resp struct {
 			Items []model.Item
