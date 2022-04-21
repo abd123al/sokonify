@@ -43,9 +43,7 @@ enum PaymentType {
     bank
 }
 
-enum UserType {
-    # can change system settings and assigning employers
-    admin
+enum StaffRole {
     # who buys
     customer
     # can edit things in store
@@ -85,6 +83,19 @@ enum ItemsBy {
     product
 }
 
+# This can log via terminal
+type Admin implements Gorm {
+    id:ID! @goTag(key: "gorm", value: "primaryKey")
+
+    createdAt:Time!
+    updatedAt:Time!
+    deletedAt:Time
+
+    name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(50);default:null") @goTag(key: "faker",value: "name")
+    email: String! @goTag(key: "gorm", value: "unique;not null;type:varchar(100);default:null") @goTag(key: "faker",value: "email")
+    password: String @goTag(key: "gorm", value: "not null;type:varchar(100);default:null") @goField(forceResolver: true) @goTag(key: "faker",value: "password")
+}
+
 # With this user can reuse their credentials in different stores
 type User implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
@@ -97,8 +108,6 @@ type User implements Gorm {
     email: String! @goTag(key: "gorm", value: "unique;not null;type:varchar(100);default:null") @goTag(key: "faker",value: "email")
     username: String! @goTag(key: "gorm", value: "unique;not null;type:varchar(100);default:null") @goTag(key: "faker",value: "username")
     password: String @goTag(key: "gorm", value: "not null;type:varchar(100);default:null") @goField(forceResolver: true) @goTag(key: "faker",value: "password")
-    # null means user has not been configured yet.
-    type: UserType @goTag(key: "sql", value: "type:user_type")
 }
 
 input UserInput {
@@ -226,6 +235,7 @@ input ItemInput {
 }
 
 # Even suppliers/customers can be termed as staffs
+# todo we should allow specifying name here may be for handling customers
 type Staff implements Gorm {
     id: ID! @goTag(key: "gorm", value: "primaryKey")
 
@@ -238,6 +248,8 @@ type Staff implements Gorm {
 
     storeId: Int!
     store: Store! @goTag(key: "gorm", value: "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    # null means user has not been configured yet.
+    role: StaffRole @goTag(key: "sql", value: "type:user_type")
 }
 
 input StaffInput {
@@ -379,6 +391,8 @@ type Ledger implements Gorm {
 }
 
 type Query {
+    admin(id:ID!): Admin!
+    admins: [Admin!]!
     brand(id:ID!): Brand!
     brands(productId:ID!): [Brand!]!
     category(id:ID!): Category!
@@ -407,7 +421,7 @@ type Mutation {
     createPayment(input: PaymentInput!): Payment! @hasRole(role: staff)
     createProduct(input: ProductInput!): Product! @hasRole(role: owner)
     createStaff(input: StaffInput!): Staff! @hasRole(role: owner)
-    createStore(input: StoreInput!): Store! @hasRole(role: admin)
+    createStore(input: StoreInput!): Store! @hasRole(role: owner)
     # Only admins can create new user.
     createUser(input: UserInput!): User!
 
@@ -445,4 +459,4 @@ directive @goTag(
     value: String
 ) on INPUT_FIELD_DEFINITION | FIELD_DEFINITION
 
-directive @hasRole(role: UserType!) on FIELD_DEFINITION
+directive @hasRole(role: StaffRole!) on FIELD_DEFINITION

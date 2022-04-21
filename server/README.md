@@ -5,6 +5,8 @@
 - order status enum
 - Don't over-fetch db https://gqlgen.com/reference/field-collection/
 - Integrate Gin https://gqlgen.com/recipes/gin/
+- separate table for customers??
+- adding staff should be like adding manager on YouTube, one need to know email
 
 ```console
 

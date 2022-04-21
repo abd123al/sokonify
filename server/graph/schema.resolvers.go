@@ -13,6 +13,10 @@ import (
 	"gorm.io/gorm"
 )
 
+func (r *adminResolver) Password(ctx context.Context, obj *model.Admin) (*string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *itemResolver) BuyingPrice(ctx context.Context, obj *model.Item) (string, error) {
 	return obj.BuyingPrice, nil
 }
@@ -225,6 +229,14 @@ func (r *productResolver) Brands(ctx context.Context, obj *model.Product) ([]*mo
 	panic(fmt.Errorf("not implemented"))
 }
 
+func (r *queryResolver) Admin(ctx context.Context, id int) (*model.Admin, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Admins(ctx context.Context) ([]*model.Admin, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *queryResolver) Brand(ctx context.Context, id int) (*model.Brand, error) {
 	panic(fmt.Errorf("not implemented"))
 }
@@ -267,7 +279,7 @@ func (r *queryResolver) Order(ctx context.Context, id int) (*model.Order, error)
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Orders(_ context.Context, by model.OrdersBy, value int, limit int, offset int, sortBy model.SortBy, typeArg model.OrderType, status *model.OrderStatus) ([]*model.Order, error) {
+func (r *queryResolver) Orders(ctx context.Context, by model.OrdersBy, value int, limit int, offset int, sortBy model.SortBy, typeArg model.OrderType, status *model.OrderStatus) ([]*model.Order, error) {
 	var orders []*model.Order
 	var result *gorm.DB
 	sort := "id " + sortBy
@@ -343,6 +355,9 @@ func (r *userResolver) Password(ctx context.Context, obj *model.User) (*string, 
 	return nil, nil
 }
 
+// Admin returns generated.AdminResolver implementation.
+func (r *Resolver) Admin() generated.AdminResolver { return &adminResolver{r} }
+
 // Item returns generated.ItemResolver implementation.
 func (r *Resolver) Item() generated.ItemResolver { return &itemResolver{r} }
 
@@ -364,6 +379,7 @@ func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 // User returns generated.UserResolver implementation.
 func (r *Resolver) User() generated.UserResolver { return &userResolver{r} }
 
+type adminResolver struct{ *Resolver }
 type itemResolver struct{ *Resolver }
 type mutationResolver struct{ *Resolver }
 type orderResolver struct{ *Resolver }

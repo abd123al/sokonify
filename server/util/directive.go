@@ -6,7 +6,7 @@ import (
 	"mahesabu/graph/model"
 )
 
-var HasRole = func(ctx context.Context, obj interface{}, next graphql.Resolver, userType model.UserType) (interface{}, error) {
+var HasRole = func(ctx context.Context, obj interface{}, next graphql.Resolver, userType model.StaffRole) (interface{}, error) {
 	//if true {
 	//	// block calling the next resolver
 	//	return nil, fmt.Errorf("access denied")
