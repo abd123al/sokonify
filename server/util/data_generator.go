@@ -92,16 +92,18 @@ func CreateItem(DB *gorm.DB, args CreateItemArgs) *model.Item {
 }
 
 type CreateOrderArgs struct {
-	IssuerID int
-	UserId   int
-	ItemID   int
+	IssuerID   int
+	UserId     int
+	CustomerID int
+	ItemID     int
 }
 
 func CreateOrder(DB *gorm.DB, args CreateOrderArgs) *model.Order {
 	store := model.Order{
-		IssuerID: args.IssuerID,
-		StaffID:  args.UserId,
-		Type:     model.OrderTypeSale,
+		IssuerID:   args.IssuerID,
+		StaffID:    args.UserId,
+		CustomerID: &args.CustomerID,
+		Type:       model.OrderTypeSale,
 		Items: []*model.OrderItem{
 			{Quantity: 2, Price: "5000.33", ItemID: args.ItemID}, //10,000.66
 			{Quantity: 4, Price: "4000.22", ItemID: args.ItemID}, //16,000.88

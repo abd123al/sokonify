@@ -20,8 +20,9 @@ func TestResolvers(t *testing.T) {
 	})
 
 	user := util.CreateUser(DB)
+	customer := util.CreateUser(DB)
 	store := util.CreateStore(DB, user.ID)
-	_ = util.CreateStaff(DB, util.CreateStaffArgs{
+	staff := util.CreateStaff(DB, util.CreateStaffArgs{
 		UserID:  user.ID,
 		StoreID: store.ID,
 	})
@@ -31,9 +32,10 @@ func TestResolvers(t *testing.T) {
 		ProductID: product.ID,
 	})
 	order := util.CreateOrder(DB, util.CreateOrderArgs{
-		IssuerID: store.ID,
-		UserId:   user.ID,
-		ItemID:   item.ID,
+		IssuerID:   store.ID,
+		UserId:     user.ID,
+		ItemID:     item.ID,
+		CustomerID: customer.ID,
 	})
 
 	config := generated.Config{Resolvers: &graph.Resolver{
@@ -329,5 +331,44 @@ func TestResolvers(t *testing.T) {
 			`, &resp, client.Var("value", store.ID))
 
 		require.GreaterOrEqual(t, len(resp.Items), 1)
+	})
+
+	t.Run("orders", func(t *testing.T) {
+		var resp struct {
+			Orders []model.Order
+		}
+
+		//By store
+		c.MustPost(`
+				query orders($value: ID!) {
+				  orders(value: $value) {
+					id
+				  }
+				}
+			`, &resp, client.Var("value", store.ID))
+
+		require.GreaterOrEqual(t, len(resp.Orders), 1)
+
+		//By staff
+		c.MustPost(`
+				query orders($value: ID!) {
+				  orders(by:staff,value: $value) {
+					id
+				  }
+				}
+			`, &resp, client.Var("value", staff.UserID))
+
+		require.GreaterOrEqual(t, len(resp.Orders), 1)
+
+		//By customer
+		c.MustPost(`
+				query orders($value: ID!) {
+				  orders(by:customer,value: $value) {
+					id
+				  }
+				}
+			`, &resp, client.Var("value", customer.ID))
+
+		require.GreaterOrEqual(t, len(resp.Orders), 1)
 	})
 }

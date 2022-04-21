@@ -68,6 +68,17 @@ enum ProductsBy {
     category
 }
 
+enum OrdersBy {
+    customer # for customers
+    staff # for who completed order
+    store # for both issuers and receivers
+}
+
+enum SortBy {
+    asc
+    desc
+}
+
 enum ItemsBy {
     store
     category
@@ -375,7 +386,7 @@ type Query {
     item(id: ID!): Item!
     items(by:ItemsBy! = store,value:ID!): [Item!]!
     order(id: ID!): Order!
-    orders(storeId:ID!): [Order!]!
+    orders(by:OrdersBy! = store,value:ID!,limit: Int! =10,offset:Int! = 0,sortBy:SortBy! = desc): [Order!]!
     payment(id: ID!): Payment!
     payments(storeId:ID!): [Payment!]!
     product(id: ID!): Product!
