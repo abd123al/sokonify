@@ -241,6 +241,10 @@ func (r *queryResolver) Items(ctx context.Context, by model.ItemsBy, value int) 
 
 	if by == model.ItemsByStore {
 		result = r.DB.Table("items").Joins("inner join products on products.id = items.product_id inner join categories on categories.id = products.category_id AND categories.store_id = ?", value).Find(&items)
+	} else if by == model.ItemsByCategory {
+		result = r.DB.Table("items").Joins("inner join products on products.id = items.product_id inner join categories on categories.id = products.category_id AND categories.id = ?", value).Find(&items)
+	} else if by == model.ItemsByProduct {
+		result = r.DB.Where(&model.Item{ProductID: value}).Find(&items)
 	} else {
 		panic(fmt.Errorf("not implemented"))
 	}
