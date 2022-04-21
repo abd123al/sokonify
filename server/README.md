@@ -3,7 +3,8 @@
 - Transfer items between warehouse and store
 - db types
 - order status enum
-
+- Don't over-fetch db https://gqlgen.com/reference/field-collection/
+- Integrate Gin https://gqlgen.com/recipes/gin/
 
 ```console
 
