@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"mahesabu/graph/generated"
 	"mahesabu/graph/model"
+	"time"
 
 	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
@@ -42,7 +43,7 @@ func (r *mutationResolver) CreateCategory(ctx context.Context, input model.Categ
 	return &category, result.Error
 }
 
-func (r *mutationResolver) CreateCustomer(_ context.Context, input model.CustomerInput) (*model.Customer, error) {
+func (r *mutationResolver) CreateCustomer(ctx context.Context, input model.CustomerInput) (*model.Customer, error) {
 	var user *model.User
 	email := input.Email
 	phone := input.Phone
@@ -73,7 +74,7 @@ func (r *mutationResolver) CreateCustomer(_ context.Context, input model.Custome
 	return &customer, result.Error
 }
 
-func (r *mutationResolver) CreateItem(_ context.Context, input model.ItemInput) (*model.Item, error) {
+func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput) (*model.Item, error) {
 	item := model.Item{
 		Quantity: input.Quantity,
 	}
@@ -81,7 +82,7 @@ func (r *mutationResolver) CreateItem(_ context.Context, input model.ItemInput) 
 	return &item, result.Error
 }
 
-func (r *mutationResolver) CreateOrder(_ context.Context, input model.OrderInput) (*model.Order, error) {
+func (r *mutationResolver) CreateOrder(ctx context.Context, input model.OrderInput) (*model.Order, error) {
 	var items []*model.OrderItem
 
 	for _, k := range input.Items {
@@ -294,7 +295,7 @@ func (r *queryResolver) Customer(ctx context.Context, id int) (*model.Customer, 
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Customers(_ context.Context, storeID int) ([]*model.Customer, error) {
+func (r *queryResolver) Customers(ctx context.Context, storeID int) ([]*model.Customer, error) {
 	var customers []*model.Customer
 	result := r.DB.Where(&model.Customer{StoreID: storeID}).Order("id DESC").Find(&customers)
 	return customers, result.Error
@@ -396,6 +397,18 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
+func (r *statsResolver) Profit(ctx context.Context, obj *model.Stats, startDate time.Time, endDate time.Time) (string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *statsResolver) TotalSalesAmount(ctx context.Context, obj *model.Stats, startDate time.Time, endDate time.Time) (string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *statsResolver) TotalSalesItems(ctx context.Context, obj *model.Stats, startDate time.Time, endDate time.Time) (string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *userResolver) Password(ctx context.Context, obj *model.User) (*string, error) {
 	return nil, nil
 }
@@ -421,6 +434,9 @@ func (r *Resolver) Product() generated.ProductResolver { return &productResolver
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
+// Stats returns generated.StatsResolver implementation.
+func (r *Resolver) Stats() generated.StatsResolver { return &statsResolver{r} }
+
 // User returns generated.UserResolver implementation.
 func (r *Resolver) User() generated.UserResolver { return &userResolver{r} }
 
@@ -431,4 +447,5 @@ type orderResolver struct{ *Resolver }
 type orderItemResolver struct{ *Resolver }
 type productResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+type statsResolver struct{ *Resolver }
 type userResolver struct{ *Resolver }
