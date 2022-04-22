@@ -441,6 +441,12 @@ type Ledger implements Gorm {
     item: Item! @goTag(key: "gorm", value: "foreignKey:ItemID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 }
 
+type Stats {
+    profit(startDate:Time!,endDate:Time!): String! @goField(forceResolver: true)
+    totalSalesAmount(startDate:Time!,endDate:Time!): String! @goField(forceResolver: true)
+    totalSalesItems(startDate:Time!,endDate:Time!): String! @goField(forceResolver: true)
+}
+
 type Query {
     admin(id:ID!): Admin!
     admins: [Admin!]!
