@@ -298,17 +298,17 @@ func (r *queryResolver) Order(ctx context.Context, id int) (*model.Order, error)
 func (r *queryResolver) Orders(ctx context.Context, by model.OrdersBy, value int, limit int, offset int, sortBy model.SortBy, typeArg model.OrderType, status *model.OrderStatus) ([]*model.Order, error) {
 	var orders []*model.Order
 	var result *gorm.DB
-	sort := "id " + sortBy
+	sort := "id " + "DESC" //todo use sortBy var
 
 	//todo handle status
 	if by == model.OrdersByStore {
 		result = r.DB.Where(
-			r.DB.Where(&model.Order{IssuerID: value}).Or(&model.Order{ReceiverID: &value})).Where(&model.Order{Type: typeArg}).Limit(limit).Offset(offset).Order(sort).Find(&orders)
+			r.DB.Where(&model.Order{IssuerID: value}).Or(&model.Order{ReceiverID: &value})).Where(&model.Order{Type: typeArg}).Order(sort).Limit(limit).Offset(offset).Find(&orders)
 	} else if by == model.OrdersByStaff {
 		//Here StaffID is actually userId
-		result = r.DB.Where(&model.Order{StaffID: value, Type: typeArg}).Limit(limit).Offset(offset).Order(sort).Find(&orders)
+		result = r.DB.Where(&model.Order{StaffID: value, Type: typeArg}).Order(sort).Limit(limit).Offset(offset).Find(&orders)
 	} else if by == model.OrdersByCustomer {
-		result = r.DB.Where(&model.Order{CustomerID: &value, Type: typeArg}).Limit(limit).Offset(offset).Order(sort).Find(&orders)
+		result = r.DB.Where(&model.Order{CustomerID: &value, Type: typeArg}).Order(sort).Limit(limit).Offset(offset).Find(&orders)
 	} else {
 		panic(fmt.Errorf("not implemented"))
 	}
