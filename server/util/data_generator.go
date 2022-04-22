@@ -18,6 +18,18 @@ func CreateUser(DB *gorm.DB) *model.User {
 	return &user
 }
 
+func CreateCustomer(DB *gorm.DB, StoreId int) *model.Customer {
+	customer := model.Customer{
+		Name:    "John Doe",
+		Type:    model.CustomerTypeCustomer,
+		StoreID: StoreId,
+	}
+
+	DB.Create(&customer)
+
+	return &customer
+}
+
 func CreateStore(DB *gorm.DB, OwnerID int) *model.Store {
 	store := model.Store{
 		Name:    "shop",

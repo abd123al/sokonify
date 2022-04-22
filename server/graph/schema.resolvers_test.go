@@ -20,8 +20,8 @@ func TestResolvers(t *testing.T) {
 	})
 
 	user := util.CreateUser(DB)
-	customer := util.CreateUser(DB)
 	store := util.CreateStore(DB, user.ID)
+	customer := util.CreateCustomer(DB, store.ID)
 	staff := util.CreateStaff(DB, util.CreateStaffArgs{
 		UserID:  user.ID,
 		StoreID: store.ID,
@@ -216,7 +216,7 @@ func TestResolvers(t *testing.T) {
 				{Quantity: 5, Price: "23445", ItemID: item.ID},
 			},
 			Type:       model.OrderTypeSale,
-			CustomerID: &user.ID,
+			CustomerID: &customer.ID,
 			IssuerID:   store.ID,
 		}
 

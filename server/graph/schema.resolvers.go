@@ -42,6 +42,10 @@ func (r *mutationResolver) CreateCategory(ctx context.Context, input model.Categ
 	return &category, result.Error
 }
 
+func (r *mutationResolver) CreateCustomer(ctx context.Context, input model.CustomerInput) (*model.Customer, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput) (*model.Item, error) {
 	item := model.Item{
 		Quantity: input.Quantity,
@@ -181,6 +185,10 @@ func (r *mutationResolver) EditCategory(ctx context.Context, id int, input model
 	panic(fmt.Errorf("not implemented"))
 }
 
+func (r *mutationResolver) EditCustomer(ctx context.Context, id int, input model.CustomerInput) (*model.Customer, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *mutationResolver) EditItem(ctx context.Context, id int, input model.ItemInput) (*model.Item, error) {
 	panic(fmt.Errorf("not implemented"))
 }
@@ -253,6 +261,14 @@ func (r *queryResolver) Categories(ctx context.Context, storeID int) ([]*model.C
 	var categories []*model.Category
 	result := r.DB.Where(&model.Category{StoreID: storeID}).Find(&categories)
 	return categories, result.Error
+}
+
+func (r *queryResolver) Customer(ctx context.Context, id int) (*model.Customer, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Customers(ctx context.Context, storeID int) ([]*model.Customer, error) {
+	panic(fmt.Errorf("not implemented"))
 }
 
 func (r *queryResolver) Item(ctx context.Context, id int) (*model.Item, error) {

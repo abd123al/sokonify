@@ -17,6 +17,11 @@ enum CategoryType {
     salary
 }
 
+enum CustomerType {
+    customer
+    supplier
+}
+
 # change of status must be reflected on ledger.
 enum OrderStatus {
     canceled
@@ -107,6 +112,7 @@ type User implements Gorm {
     name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(50);default:null") @goTag(key: "faker",value: "name")
     email: String! @goTag(key: "gorm", value: "unique;not null;type:varchar(100);default:null") @goTag(key: "faker",value: "email")
     username: String! @goTag(key: "gorm", value: "unique;not null;type:varchar(100);default:null") @goTag(key: "faker",value: "username")
+    phone: String! @goTag(key: "gorm", value: "unique;null;type:varchar(20);default:null") @goTag(key: "faker",value: "username")
     password: String @goTag(key: "gorm", value: "not null;type:varchar(100);default:null") @goField(forceResolver: true) @goTag(key: "faker",value: "password")
 }
 
@@ -144,6 +150,38 @@ input CategoryInput {
     name: String!
     unit: String = "units"
     type: CategoryType = products
+
+    storeId: Int!
+}
+
+#todo find better name to reflect customer and supplier
+type Customer implements Gorm {
+    id:ID! @goTag(key: "gorm", value: "primaryKey;")
+
+    createdAt:Time!
+    updatedAt:Time!
+    deletedAt:Time
+
+    name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(50);default:null")
+    email: String @goTag(key: "gorm", value: "type:varchar(100);default:null")
+    phone: String @goTag(key: "gorm", value: "type:varchar(100);default:null")
+    comment: String @goTag(key: "gorm", value: "type:varchar(250);default:null")
+    type: CustomerType!
+
+    storeId: Int!
+    store: Store! @goTag(key: "gorm", value:  "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+
+    # todo Will be linked by searching phone/email above
+    # todo allow email/phone number edit so that users can later be linked
+    userId: Int
+    user: User @goTag(key: "gorm", value:  "foreignKey:UserID;null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+}
+
+input CustomerInput {
+    type: CustomerType!
+    name: String!
+    email: String
+    phone: String
 
     storeId: Int!
 }
@@ -292,9 +330,10 @@ type Order implements Gorm {
     status: OrderStatus! @goTag(key: "gorm", value: "size:100")
     comment: String @goTag(key: "gorm", value: "size:100")
 
+    # todo depending on order type this can be supplier
     # Customer can be nullable. Since POS don't have to register customer.
     customerId: Int
-    customer: User @goTag(key: "gorm", value: "foreignKey:CustomerID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    customer: Customer @goTag(key: "gorm", value: "foreignKey:CustomerID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 
     staffId: Int!
     staff: User! @goTag(key: "gorm", value: "foreignKey:StaffID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
@@ -303,6 +342,7 @@ type Order implements Gorm {
     issuerId: Int!
     issuer: Store! @goTag(key: "gorm", value: "foreignKey:IssuerID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 
+    # todo if we transfer to different owner's store I think approve is must before altering stock
     # This is not null in transfer
     receiverId: Int
     receiver: Store @goTag(key: "gorm", value: "foreignKey:ReceiverID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
@@ -397,6 +437,8 @@ type Query {
     brands(productId:ID!): [Brand!]!
     category(id:ID!): Category!
     categories(storeId:ID!): [Category!]!
+    customer(id:ID!): Customer!
+    customers(storeId:ID!): [Customer!]!
     item(id: ID!): Item!
     items(by:ItemsBy! = store,value:ID!): [Item!]!
     order(id: ID!): Order!
@@ -416,6 +458,7 @@ type Query {
 type Mutation {
     createBrand(input: BrandInput!): Brand! @hasRole(role: owner)
     createCategory(input: CategoryInput!): Category! @hasRole(role: owner)
+    createCustomer(input: CustomerInput!): Customer! @hasRole(role: owner)
     createItem(input: ItemInput!): Item! @hasRole(role: owner)
     createOrder(input: OrderInput!): Order!
     createPayment(input: PaymentInput!): Payment! @hasRole(role: staff)
@@ -429,6 +472,7 @@ type Mutation {
 
     editBrand(id: ID!,input: BrandInput!): Brand! @hasRole(role: owner)
     editCategory(id: ID!,input: CategoryInput!): Category! @hasRole(role: owner)
+    editCustomer(id: ID!,input: CustomerInput!): Customer! @hasRole(role: owner)
     editItem(id: ID!,input: ItemInput!): Item! @hasRole(role: owner)
     editOrder(id: ID!,input: OrderInput!): Order!
     editProduct(id: ID!,input: ProductInput!): Product!
