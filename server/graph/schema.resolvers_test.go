@@ -27,7 +27,10 @@ func TestResolvers(t *testing.T) {
 		StoreID: store.ID,
 	})
 	category := util.CreateCategory(DB, store.ID)
-	product := util.CreateProduct(DB, category.ID)
+	product := util.CreateProduct(DB, util.CreateProductArgs{
+		StoreID:    store.ID,
+		CategoryId: category.ID,
+	})
 	item := util.CreateItem(DB, util.CreateItemArgs{
 		ProductID: product.ID,
 	})
@@ -207,6 +210,7 @@ func TestResolvers(t *testing.T) {
 			Categories: []int{category.ID},
 			Unit:       "tabs",
 			Type:       model.ProductTypeProduct,
+			StoreID:    store.ID,
 		}
 
 		c.MustPost(`

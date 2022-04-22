@@ -149,24 +149,8 @@ func (r *mutationResolver) CreatePayment(ctx context.Context, input model.Paymen
 	return payment, err
 }
 
-func (r *mutationResolver) CreateProduct(ctx context.Context, input model.ProductInput) (*model.Product, error) {
-	var brands []*model.Brand
-
-	for _, k := range input.Brands {
-		brand := model.Brand{
-			Manufacturer: k.Manufacturer,
-			Name:         k.Name,
-		}
-
-		brands = append(brands, &brand)
-	}
-
-	product := model.Product{
-		Name:   input.Name,
-		Brands: brands,
-	}
-	result := r.DB.Create(&product)
-	return &product, result.Error
+func (r *mutationResolver) CreateProduct(_ context.Context, input model.ProductInput) (*model.Product, error) {
+	return repository.CreateProduct(r.DB, input)
 }
 
 func (r *mutationResolver) CreateStaff(ctx context.Context, input model.StaffInput) (*model.Staff, error) {
@@ -355,7 +339,7 @@ func (r *queryResolver) Product(ctx context.Context, id int) (*model.Product, er
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Products(_ context.Context, by model.ProductsBy, value int) ([]*model.Product, error) {
+func (r *queryResolver) Products(ctx context.Context, by model.ProductsBy, value int) ([]*model.Product, error) {
 	return repository.FindProducts(r.DB, by, value)
 }
 

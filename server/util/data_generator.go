@@ -4,6 +4,7 @@ import (
 	"github.com/bxcodec/faker/v3"
 	"gorm.io/gorm"
 	"mahesabu/graph/model"
+	"mahesabu/repository"
 	"time"
 )
 
@@ -67,26 +68,23 @@ func CreateCategory(DB *gorm.DB, StoreID int) *model.Category {
 	return &category
 }
 
-func CreateProduct(DB *gorm.DB, CategoryID int) *model.Product {
-	product := model.Product{
-		Name: "Product",
-		Brands: []*model.Brand{
+type CreateProductArgs struct {
+	CategoryId int
+	StoreID    int
+}
+
+func CreateProduct(DB *gorm.DB, Args CreateProductArgs) *model.Product {
+	product, _ := repository.CreateProduct(DB, model.ProductInput{
+		StoreID:    Args.StoreID,
+		Categories: []int{Args.CategoryId},
+		Name:       "My amazing product",
+		Brands: []*model.ProductBrandInput{
 			{Name: "Shells"},
 			{Name: "Brand"},
 		},
-	}
+	})
 
-	DB.Create(&product)
-
-	//Also saving category
-	categoryProduct := model.CategoryProduct{
-		CategoryID: CategoryID,
-		ProductID:  product.ID,
-	}
-
-	DB.Create(&categoryProduct)
-
-	return &product
+	return product
 }
 
 type CreateItemArgs struct {

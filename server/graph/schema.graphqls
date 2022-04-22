@@ -218,6 +218,9 @@ type Product implements Gorm {
     unit: String! @goTag(key: "gorm", value: "type:varchar(50);")
     type: ProductType! #@goTag(key: "gorm",value: "type:enum('products', 'expenses');default:'products'")
 
+    storeId: Int!
+    store: Store! @goTag(key: "gorm", value: "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+
     brands: [Brand!]! @goTag(key: "gorm", value: "constraint:OnUpdate:CASCADE,OnDelete:RESTRICT;") @goField(forceResolver: true)
 }
 
@@ -228,6 +231,7 @@ input ProductInput {
     # user may attach more categories for the same product.
     categories: [ID!]
     # Brands can be inserted when creating product.
+    storeId: ID!
     brands: [ProductBrandInput!]
 }
 
