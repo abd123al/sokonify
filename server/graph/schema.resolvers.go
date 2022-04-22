@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"mahesabu/graph/generated"
 	"mahesabu/graph/model"
+	"mahesabu/repository"
 	"time"
 
 	"github.com/shopspring/decimal"
@@ -354,18 +355,8 @@ func (r *queryResolver) Product(ctx context.Context, id int) (*model.Product, er
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Products(ctx context.Context, by model.ProductsBy, value int) ([]*model.Product, error) {
-	var items []*model.Product
-	var result *gorm.DB
-
-	if by == model.ProductsByStore {
-		result = r.DB.Table("products").Joins("inner join categories on categories.id = products.category_id AND categories.store_id = ?", value).Find(&items)
-	} else if by == model.ProductsByCategory {
-		result = r.DB.Table("products").Joins("inner join categories on categories.id = products.category_id AND categories.id = ?", value).Find(&items)
-	} else {
-		panic(fmt.Errorf("not implemented"))
-	}
-	return items, result.Error
+func (r *queryResolver) Products(_ context.Context, by model.ProductsBy, value int) ([]*model.Product, error) {
+	return repository.FindProducts(r.DB, by, value)
 }
 
 func (r *queryResolver) Staff(ctx context.Context, id int) (*model.Staff, error) {

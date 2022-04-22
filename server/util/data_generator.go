@@ -67,7 +67,7 @@ func CreateCategory(DB *gorm.DB, StoreID int) *model.Category {
 	return &category
 }
 
-func CreateProduct(DB *gorm.DB) *model.Product {
+func CreateProduct(DB *gorm.DB, CategoryID int) *model.Product {
 	product := model.Product{
 		Name: "Product",
 		Brands: []*model.Brand{
@@ -77,6 +77,14 @@ func CreateProduct(DB *gorm.DB) *model.Product {
 	}
 
 	DB.Create(&product)
+
+	//Also saving category
+	categoryProduct := model.CategoryProduct{
+		CategoryID: CategoryID,
+		ProductID:  product.ID,
+	}
+
+	DB.Create(&categoryProduct)
 
 	return &product
 }
