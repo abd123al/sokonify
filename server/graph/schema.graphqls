@@ -8,15 +8,6 @@ interface Gorm {
     deletedAt:Time
 }
 
-enum CategoryType {
-    # default
-    products
-    # so that it will be easy to track expenses
-    expenses
-    # This is for controlling salary fields
-    salary
-}
-
 enum CustomerType {
     customer
     supplier
@@ -143,9 +134,6 @@ type Category implements Gorm {
 
     # tablets/syrups/
     name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(50);default:null")
-    # unit box/each/package
-    unit: String! @goTag(key: "gorm", value: "type:varchar(50);")
-    type: CategoryType! #@goTag(key: "gorm",value: "type:enum('products', 'expenses');default:'products'")
 
     storeId: Int!
     store: Store! @goTag(key: "gorm", value:  "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
@@ -153,9 +141,6 @@ type Category implements Gorm {
 
 input CategoryInput {
     name: String!
-    unit: String = "units"
-    type: CategoryType = products
-
     storeId: Int!
 }
 
@@ -212,6 +197,15 @@ input CustomerInput {
     storeId: Int!
 }
 
+enum ProductType {
+    # default
+    product
+    # so that it will be easy to track expenses
+    expense
+    # This is for controlling salary fields
+    salary
+}
+
 type Product implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
 
@@ -220,16 +214,19 @@ type Product implements Gorm {
     deletedAt:Time
 
     name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(100);default:null")
-
-    categoryId: Int! #todo remove
-    category: Category! @goTag(key: "gorm", value:  "foreignKey:CategoryID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
+    # unit box/each/package
+    unit: String! @goTag(key: "gorm", value: "type:varchar(50);")
+    type: ProductType! #@goTag(key: "gorm",value: "type:enum('products', 'expenses');default:'products'")
 
     brands: [Brand!]! @goTag(key: "gorm", value: "constraint:OnUpdate:CASCADE,OnDelete:RESTRICT;") @goField(forceResolver: true)
 }
 
 input ProductInput {
     name: String!
-    categoryId: Int!
+    unit: String! # todo think of this should we have custom list?
+    type: ProductType! = product
+    # user may attach more categories for the same product.
+    categories: [ID!]
     # Brands can be inserted when creating product.
     brands: [ProductBrandInput!]
 }

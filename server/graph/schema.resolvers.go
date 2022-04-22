@@ -35,8 +35,6 @@ func (r *mutationResolver) CreateBrand(ctx context.Context, input model.BrandInp
 func (r *mutationResolver) CreateCategory(ctx context.Context, input model.CategoryInput) (*model.Category, error) {
 	category := model.Category{
 		Name:    input.Name,
-		Unit:    *input.Unit,
-		Type:    *input.Type,
 		StoreID: input.StoreID,
 	}
 	result := r.DB.Create(&category)
@@ -163,9 +161,8 @@ func (r *mutationResolver) CreateProduct(ctx context.Context, input model.Produc
 	}
 
 	product := model.Product{
-		Name:       input.Name,
-		CategoryID: input.CategoryID,
-		Brands:     brands,
+		Name:   input.Name,
+		Brands: brands,
 	}
 	result := r.DB.Create(&product)
 	return &product, result.Error
