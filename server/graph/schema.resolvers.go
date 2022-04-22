@@ -294,8 +294,10 @@ func (r *queryResolver) Customer(ctx context.Context, id int) (*model.Customer, 
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Customers(ctx context.Context, storeID int) ([]*model.Customer, error) {
-	panic(fmt.Errorf("not implemented"))
+func (r *queryResolver) Customers(_ context.Context, storeID int) ([]*model.Customer, error) {
+	var customers []*model.Customer
+	result := r.DB.Where(&model.Customer{StoreID: storeID}).Order("id DESC").Find(&customers)
+	return customers, result.Error
 }
 
 func (r *queryResolver) Item(ctx context.Context, id int) (*model.Item, error) {

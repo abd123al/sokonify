@@ -1,5 +1,5 @@
 # Todo
-- marketplace for items like wholesalers
+- marketplace for items like wholesalers where people could to orders
 - allow free port coming from android
 - Transfer items between warehouse and store
 - db types

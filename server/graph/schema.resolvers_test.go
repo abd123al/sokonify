@@ -330,6 +330,22 @@ func TestResolvers(t *testing.T) {
 		require.GreaterOrEqual(t, len(resp.Categories), 1)
 	})
 
+	t.Run("customers", func(t *testing.T) {
+		var resp struct {
+			Customers []model.Customer
+		}
+
+		c.MustPost(`
+				query customers($storeId: ID!) {
+				  customers(storeId: $storeId) {
+					id
+				  }
+				}
+			`, &resp, client.Var("storeId", store.ID))
+
+		require.GreaterOrEqual(t, len(resp.Customers), 1)
+	})
+
 	t.Run("products", func(t *testing.T) {
 		var resp struct {
 			Products []model.Product
