@@ -157,6 +157,47 @@ func TestResolvers(t *testing.T) {
 		require.Equal(t, input.Name, resp.CreateCategory.Name)
 	})
 
+	t.Run("createCustomer", func(t *testing.T) {
+		var resp struct {
+			CreateCustomer model.Customer
+		}
+
+		gender := model.GenderTypeMale
+
+		input := model.CustomerInput{
+			Name:    "Tablets",
+			Type:    model.CustomerTypeCustomer,
+			StoreID: store.ID,
+			Gender:  &gender,
+		}
+
+		var call = func(input model.CustomerInput) {
+			c.MustPost(`
+			mutation createCategory($input: CustomerInput!) {
+			  createCustomer(input: $input) {
+				name
+			  }
+			}
+			`, &resp,
+				client.Var("input", input))
+		}
+
+		//Without user email
+		call(input)
+		require.Equal(t, input.Name, resp.CreateCustomer.Name)
+
+		//With user email so user will be set
+		input.Email = &user.Email
+		call(input)
+		require.Equal(t, input.Name, resp.CreateCustomer.Name)
+
+		//Some tricks so that we may be able to find user via phone
+		input.Phone = &user.Phone
+		input.Email = nil
+		call(input)
+		require.Equal(t, input.Name, resp.CreateCustomer.Name)
+	})
+
 	t.Run("createProduct", func(t *testing.T) {
 		var resp struct {
 			CreateProduct model.Product

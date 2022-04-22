@@ -22,6 +22,11 @@ enum CustomerType {
     supplier
 }
 
+enum GenderType {
+    male
+    female
+}
+
 # change of status must be reflected on ledger.
 enum OrderStatus {
     canceled
@@ -166,7 +171,10 @@ type Customer implements Gorm {
     email: String @goTag(key: "gorm", value: "type:varchar(100);default:null")
     phone: String @goTag(key: "gorm", value: "type:varchar(100);default:null")
     comment: String @goTag(key: "gorm", value: "type:varchar(250);default:null")
+    address: String @goTag(key: "gorm", value: "type:varchar(250);default:null")
     type: CustomerType!
+    gender: GenderType
+    dob:Time
 
     storeId: Int!
     store: Store! @goTag(key: "gorm", value:  "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
@@ -179,9 +187,12 @@ type Customer implements Gorm {
 
 input CustomerInput {
     type: CustomerType!
+    gender: GenderType
+    dob:Time
     name: String!
     email: String
     phone: String
+    address: String
 
     storeId: Int!
 }

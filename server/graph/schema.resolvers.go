@@ -42,11 +42,38 @@ func (r *mutationResolver) CreateCategory(ctx context.Context, input model.Categ
 	return &category, result.Error
 }
 
-func (r *mutationResolver) CreateCustomer(ctx context.Context, input model.CustomerInput) (*model.Customer, error) {
-	panic(fmt.Errorf("not implemented"))
+func (r *mutationResolver) CreateCustomer(_ context.Context, input model.CustomerInput) (*model.Customer, error) {
+	var user *model.User
+	email := input.Email
+	phone := input.Phone
+
+	//Here we link customers to their user account directly
+	if email != nil {
+		r.DB.Where(&model.User{Email: *email}).First(&user)
+	} else if phone != nil {
+		r.DB.Where(&model.User{Phone: *phone}).First(&user)
+	}
+
+	customer := model.Customer{
+		Name:    input.Name,
+		StoreID: input.StoreID,
+		Type:    input.Type,
+		Gender:  input.Gender,
+		Dob:     input.Dob,
+		Email:   input.Email,
+		Address: input.Address,
+		Phone:   input.Phone,
+	}
+
+	if user != nil {
+		customer.UserID = &user.ID
+	}
+
+	result := r.DB.Create(&customer)
+	return &customer, result.Error
 }
 
-func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput) (*model.Item, error) {
+func (r *mutationResolver) CreateItem(_ context.Context, input model.ItemInput) (*model.Item, error) {
 	item := model.Item{
 		Quantity: input.Quantity,
 	}
@@ -54,7 +81,7 @@ func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput
 	return &item, result.Error
 }
 
-func (r *mutationResolver) CreateOrder(ctx context.Context, input model.OrderInput) (*model.Order, error) {
+func (r *mutationResolver) CreateOrder(_ context.Context, input model.OrderInput) (*model.Order, error) {
 	var items []*model.OrderItem
 
 	for _, k := range input.Items {
