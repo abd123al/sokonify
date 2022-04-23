@@ -72,25 +72,23 @@ func CreateCategory(DB *gorm.DB, StoreID int) *model.Category {
 
 type CreateProductArgs struct {
 	CategoryId *int
-	StoreID    *int
+	StoreID    int
 }
 
-func CreateProduct(DB *gorm.DB, Args CreateProductArgs) *model.Product {
+func CreateProduct(DB *gorm.DB, Args *CreateProductArgs) *model.Product {
 	var StoreID int
+	var Categories []int
 
-	//todo learn more and come to simplify this
-	if Args.StoreID == nil {
+	if Args == nil {
 		store := CreateStore(DB, nil)
 
 		StoreID = store.ID
 	} else {
-		StoreID = *Args.StoreID
-	}
+		StoreID = Args.StoreID
 
-	var Categories []int
-
-	if Args.CategoryId != nil {
-		Categories = append(Categories, *Args.CategoryId)
+		if Args.CategoryId != nil {
+			Categories = append(Categories, *Args.CategoryId)
+		}
 	}
 
 	product, _ := repository.CreateProduct(DB, model.ProductInput{

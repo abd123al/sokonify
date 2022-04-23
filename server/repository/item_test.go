@@ -10,7 +10,7 @@ import (
 
 func TestItem(t *testing.T) {
 	DB := util.InitTestDB()
-	product := util.CreateProduct(DB, util.CreateProductArgs{})
+	product := util.CreateProduct(DB, nil)
 
 	t.Run("CreateItem", func(t *testing.T) {
 		item, _ := repository.CreateItem(DB, model.ItemInput{
