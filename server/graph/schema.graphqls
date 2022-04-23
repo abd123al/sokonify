@@ -181,16 +181,6 @@ input CustomerInput {
     storeId: Int!
 }
 
-#todo add expense category so user may specify mwenyewe
-enum ExpenseType {
-    # so that it will be easy to track expenses
-    expense
-    # This is for controlling salary fields
-    salary
-    tax
-    fees
-}
-
 # todo Seed this with Tax, Salary, Electricity/ Water
 # This should be treated like expenses category user should click electricity=> add expense
 type Expense implements Gorm {
