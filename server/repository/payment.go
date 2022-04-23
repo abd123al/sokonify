@@ -6,7 +6,7 @@ import (
 	"mahesabu/graph/model"
 )
 
-func CreatePayment(DB *gorm.DB, StaffID int, input model.PaymentInput) (*model.Payment, error) {
+func CreateOrderPayment(DB *gorm.DB, StaffID int, input model.OrderPaymentInput) (*model.Payment, error) {
 	var payment *model.Payment
 
 	err := DB.Transaction(func(tx *gorm.DB) error {

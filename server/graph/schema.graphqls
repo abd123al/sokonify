@@ -192,6 +192,7 @@ enum ExpenseType {
 }
 
 # todo Seed this with Tax, Salary, Electricity/ Water
+# This should be treated like expenses category user should click electricity=> add expense
 type Expense implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
 
@@ -468,8 +469,16 @@ type Payment implements Gorm {
     expense: Expense @goTag(key: "gorm", value: "foreignKey:ExpenseID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 }
 
-input PaymentInput {
+# This is used for completing order and tracking expenses..
+input OrderPaymentInput  {
     orderId: Int!
+    description: String
+    referenceId: String
+    method: PaymentMethod!
+}
+
+input ExpensePaymentInput {
+    expenseId: Int!
     description: String
     referenceId: String
     method: PaymentMethod!
@@ -493,7 +502,7 @@ type Query {
     item(id: ID!): Item!
     items(by:ItemsBy! = store,value:ID!): [Item!]!
     expense(id: ID!): Expense!
-    expenses(by:ItemsBy! = store,value:ID!): [Expense!]! #todo by
+    expenses: [Expense!]! #for getting kinda expenses categories
     order(id: ID!): Order!
     orders(args:OrdersArgs!): [Order!]!
     payment(id: ID!): Payment!
@@ -512,9 +521,11 @@ type Mutation {
     createBrand(input: BrandInput!): Brand! @hasRole(role: owner)
     createCategory(input: CategoryInput!): Category! @hasRole(role: owner)
     createCustomer(input: CustomerInput!): Customer! @hasRole(role: owner)
+    createExpense(input: ExpenseInput!): Expense! @hasRole(role: owner)
     createItem(input: ItemInput!): Item! @hasRole(role: owner)
     createOrder(input: OrderInput!): Order!
-    createPayment(input: PaymentInput!): Payment! @hasRole(role: staff)
+    createOrderPayment(input: OrderPaymentInput!): Payment! @hasRole(role: staff)
+    createExpensePayment(input: ExpensePaymentInput!): Payment! @hasRole(role: staff)
     createProduct(input: ProductInput!): Product! @hasRole(role: owner)
     createStaff(input: StaffInput!): Staff! @hasRole(role: owner)
     createStore(input: StoreInput!): Store! @hasRole(role: owner)

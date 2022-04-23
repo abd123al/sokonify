@@ -272,24 +272,24 @@ func TestResolvers(t *testing.T) {
 
 	t.Run("createPayment", func(t *testing.T) {
 		var resp struct {
-			CreatePayment model.Payment
+			CreateOrderPayment model.Payment
 		}
 
-		input := model.PaymentInput{
+		input := model.OrderPaymentInput{
 			Method:  model.PaymentMethodCash,
 			OrderID: order.ID,
 		}
 
 		c.MustPost(`
-			mutation createPayment($input: PaymentInput!) {
-			  createPayment(input: $input) {
+			mutation createPayment($input: OrderPaymentInput!) {
+			  createOrderPayment(input: $input) {
 				amount
 			  }
 			}
 			`, &resp,
 			client.Var("input", input))
 
-		require.Equal(t, "26001.54", resp.CreatePayment.Amount)
+		require.Equal(t, "26001.54", resp.CreateOrderPayment.Amount)
 	})
 
 	//Queries
