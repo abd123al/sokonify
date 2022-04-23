@@ -20,7 +20,7 @@ func TestResolvers(t *testing.T) {
 	})
 
 	user := util.CreateUser(DB)
-	store := util.CreateStore(DB, user.ID)
+	store := util.CreateStore(DB, &user.ID)
 	customer := util.CreateCustomer(DB, store.ID)
 	staff := util.CreateStaff(DB, util.CreateStaffArgs{
 		UserID:  user.ID,
@@ -28,8 +28,8 @@ func TestResolvers(t *testing.T) {
 	})
 	category := util.CreateCategory(DB, store.ID)
 	product := util.CreateProduct(DB, util.CreateProductArgs{
-		StoreID:    store.ID,
-		CategoryId: category.ID,
+		StoreID:    &store.ID,
+		CategoryId: &category.ID,
 	})
 	item := util.CreateItem(DB, util.CreateItemArgs{
 		ProductID: product.ID,
@@ -110,7 +110,7 @@ func TestResolvers(t *testing.T) {
 
 	t.Run("createStaff", func(t *testing.T) {
 		//todo don't allow duplicates in store staff
-		newStore := util.CreateStore(DB, user.ID)
+		newStore := util.CreateStore(DB, &user.ID)
 
 		var resp struct {
 			CreateStaff model.Staff

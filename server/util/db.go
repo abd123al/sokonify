@@ -58,3 +58,13 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 
 	return db
 }
+
+func InitTestDB() *gorm.DB {
+	DB := InitDB(InitDbArgs{
+		DbName:  "mahesabu_test",
+		Clear:   true,
+		Offline: false,
+	})
+
+	return DB
+}

@@ -28,10 +28,15 @@ func CreateCustomer(DB *gorm.DB, StoreId int) *model.Customer {
 	return customer
 }
 
-func CreateStore(DB *gorm.DB, OwnerID int) *model.Store {
+func CreateStore(DB *gorm.DB, OwnerID *int) *model.Store {
+	if OwnerID == nil {
+		User := CreateUser(DB)
+		OwnerID = &User.ID
+	}
+
 	store := model.Store{
 		Name:    "shop",
-		OwnerID: OwnerID,
+		OwnerID: *OwnerID,
 	}
 
 	DB.Create(&store)
@@ -66,14 +71,31 @@ func CreateCategory(DB *gorm.DB, StoreID int) *model.Category {
 }
 
 type CreateProductArgs struct {
-	CategoryId int
-	StoreID    int
+	CategoryId *int
+	StoreID    *int
 }
 
 func CreateProduct(DB *gorm.DB, Args CreateProductArgs) *model.Product {
+	var StoreID int
+
+	//todo learn more and come to simplify this
+	if Args.StoreID == nil {
+		store := CreateStore(DB, nil)
+
+		StoreID = store.ID
+	} else {
+		StoreID = *Args.StoreID
+	}
+
+	var Categories []int
+
+	if Args.CategoryId != nil {
+		Categories = append(Categories, *Args.CategoryId)
+	}
+
 	product, _ := repository.CreateProduct(DB, model.ProductInput{
-		StoreID:    Args.StoreID,
-		Categories: []int{Args.CategoryId},
+		StoreID:    StoreID,
+		Categories: Categories,
 		Name:       "My amazing product",
 		Brands: []*model.ProductBrandInput{
 			{Name: "Shells"},
