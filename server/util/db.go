@@ -49,7 +49,7 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 	}
 
 	err = db.AutoMigrate(
-		&model.Admin{}, &model.Customer{}, &model.Staff{}, &model.Item{}, &model.Store{}, &model.Order{}, model.OrderItem{},
+		&model.Admin{}, &model.Customer{}, &model.Expense{}, &model.Staff{}, &model.Item{}, &model.Store{}, &model.Order{}, model.OrderItem{},
 		&model.User{}, &model.Payment{}, &model.Product{}, &model.ProductCategory{}, &model.Brand{},
 	)
 	if err != nil {

@@ -181,13 +181,33 @@ input CustomerInput {
     storeId: Int!
 }
 
-enum ProductType {
-    # default
-    product
+#todo add expense category so user may specify mwenyewe
+enum ExpenseType {
     # so that it will be easy to track expenses
     expense
     # This is for controlling salary fields
     salary
+    tax
+    fees
+}
+
+type Expense implements Gorm {
+    id:ID! @goTag(key: "gorm", value: "primaryKey")
+
+    createdAt:Time! #@goTag(key: "gorm", value: "not null;default:null")
+    updatedAt:Time! #@goTag(key: "gorm", value: "not null;default:null")
+    deletedAt:Time
+
+    # This will be electricity/water/salary
+    name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(100);default:null")
+
+    storeId: Int!
+    store: Store! @goTag(key: "gorm", value: "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+}
+
+input ExpenseInput {
+    name: String!
+    storeId: ID!
 }
 
 type Product implements Gorm {
@@ -200,7 +220,6 @@ type Product implements Gorm {
     name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(100);default:null")
     # unit box/each/package
     unit: String! @goTag(key: "gorm", value: "type:varchar(50);")
-    type: ProductType! #@goTag(key: "gorm",value: "type:enum('products', 'expenses');default:'products'")
 
     storeId: Int!
     store: Store! @goTag(key: "gorm", value: "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
@@ -211,7 +230,6 @@ type Product implements Gorm {
 input ProductInput {
     name: String!
     unit: String! # todo think of this should we have custom list?
-    type: ProductType! = product
     # user may attach more categories for the same product.
     categories: [ID!]
     # Brands can be inserted when creating product.
@@ -468,6 +486,8 @@ type Query {
     customers(storeId:ID!): [Customer!]!
     item(id: ID!): Item!
     items(by:ItemsBy! = store,value:ID!): [Item!]!
+    expense(id: ID!): Expense!
+    expenses(by:ItemsBy! = store,value:ID!): [Expense!]! #todo by
     order(id: ID!): Order!
     orders(args:OrdersArgs!): [Order!]!
     payment(id: ID!): Payment!

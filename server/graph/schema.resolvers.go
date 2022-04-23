@@ -199,6 +199,14 @@ func (r *queryResolver) Items(ctx context.Context, by model.ItemsBy, value int) 
 	return repository.FindItems(r.DB, by, value)
 }
 
+func (r *queryResolver) Expense(ctx context.Context, id int) (*model.Expense, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Expenses(ctx context.Context, by model.ItemsBy, value int) ([]*model.Expense, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *queryResolver) Order(ctx context.Context, id int) (*model.Order, error) {
 	panic(fmt.Errorf("not implemented"))
 }
