@@ -13,11 +13,7 @@ import (
 )
 
 func TestResolvers(t *testing.T) {
-	DB := util.InitDB(util.InitDbArgs{
-		DbName:  "mahesabu_test",
-		Clear:   true,
-		Offline: false,
-	})
+	DB := util.InitTestDB()
 
 	user := util.CreateUser(DB)
 	store := util.CreateStore(DB, &user.ID)

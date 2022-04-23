@@ -1,5 +1,6 @@
 # Todo
 
+- attach staff id in everything, so that we know who did what.
 - Easy import
 - marketplace for items like wholesalers where people could to orders
 - In marketplace,QR code scanning when ordering user should map what they order to what correlates. This way we can

@@ -64,6 +64,7 @@ func InitTestDB() *gorm.DB {
 		DbName:  "mahesabu_test",
 		Clear:   true,
 		Offline: false,
+		Mobile:  false,
 	})
 
 	return DB
