@@ -144,22 +144,6 @@ input CategoryInput {
     storeId: Int!
 }
 
-# todo rename to ProductCategory
-# User may create products category as they want and it will help them track them efficiently
-type CategoryProduct implements Gorm {
-    id:ID! @goTag(key: "gorm", value: "primaryKey")
-
-    createdAt:Time!
-    updatedAt:Time!
-    deletedAt:Time
-
-    categoryId: Int!
-    category: Category! @goTag(key: "gorm", value:  "foreignKey:CategoryID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
-
-    productId: Int!
-    product: Product! @goTag(key: "gorm", value:  "foreignKey:ProductID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
-}
-
 #todo find better name to reflect customer and supplier
 type Customer implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey;")
@@ -234,6 +218,21 @@ input ProductInput {
     # Brands can be inserted when creating product.
     storeId: ID!
     brands: [ProductBrandInput!]
+}
+
+# User may create products category as they want and it will help them track them efficiently
+type ProductCategory implements Gorm {
+    id:ID! @goTag(key: "gorm", value: "primaryKey")
+
+    createdAt:Time!
+    updatedAt:Time!
+    deletedAt:Time
+
+    categoryId: Int!
+    category: Category! @goTag(key: "gorm", value:  "foreignKey:CategoryID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
+
+    productId: Int!
+    product: Product! @goTag(key: "gorm", value:  "foreignKey:ProductID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
 }
 
 # Product can be the same but with different brands

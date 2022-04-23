@@ -10,7 +10,7 @@ import (
 func CreateProduct(DB *gorm.DB, input model.ProductInput) (*model.Product, error) {
 	//todo should this run on transaction?
 	var brands []*model.Brand
-	var productCategories []*model.CategoryProduct
+	var productCategories []*model.ProductCategory
 
 	for _, k := range input.Brands {
 		brand := model.Brand{
@@ -34,18 +34,18 @@ func CreateProduct(DB *gorm.DB, input model.ProductInput) (*model.Product, error
 
 	for _, k := range categories {
 		// First checking if there is no previous relationship.
-		var cat *model.CategoryProduct
+		var cat *model.ProductCategory
 
 		//First() causes panic, so Find works here better
-		DB.Where(&model.CategoryProduct{ProductID: product.ID, CategoryID: k}).Limit(1).Find(&cat)
+		DB.Where(&model.ProductCategory{ProductID: product.ID, CategoryID: k}).Limit(1).Find(&cat)
 
 		if cat != nil {
-			categoryProduct := model.CategoryProduct{
+			ProductCategory := model.ProductCategory{
 				ProductID:  product.ID,
 				CategoryID: k,
 			}
 
-			productCategories = append(productCategories, &categoryProduct)
+			productCategories = append(productCategories, &ProductCategory)
 		}
 	}
 
@@ -63,7 +63,7 @@ func FindProducts(DB *gorm.DB, by model.ProductsBy, value int) ([]*model.Product
 	if by == model.ProductsByStore {
 		result = DB.Table("products").Where(&model.Product{StoreID: value}).Find(&items)
 	} else if by == model.ProductsByCategory {
-		result = DB.Table("products").Joins("inner join category_products on category_products.product_id = products.id AND category_products.category_id = ?", value).Find(&items)
+		result = DB.Table("products").Joins("inner join product_categories on product_categories.product_id = products.id AND product_categories.category_id = ?", value).Find(&items)
 	} else {
 		panic(fmt.Errorf("not implemented"))
 	}
