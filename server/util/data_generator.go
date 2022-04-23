@@ -93,10 +93,8 @@ func CreateItem(DB *gorm.DB, args CreateItemArgs) *model.Item {
 	item, _ := repository.CreateItem(DB, model.ItemInput{
 		SellingPrice: "5000.00",
 		BuyingPrice:  "2000.00",
-		//Batch:        "6363663",
-		//ExpiresAt: time.Now(),
-		ProductID: args.ProductID,
-		BrandID:   args.BrandID,
+		ProductID:    args.ProductID,
+		BrandID:      args.BrandID,
 	})
 
 	return item
