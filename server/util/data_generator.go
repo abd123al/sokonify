@@ -110,18 +110,15 @@ type CreateOrderArgs struct {
 }
 
 func CreateOrder(DB *gorm.DB, args CreateOrderArgs) *model.Order {
-	store := model.Order{
+	store, _ := repository.CreateOrder(DB, args.UserId, model.OrderInput{
 		IssuerID:   args.IssuerID,
-		StaffID:    args.UserId,
 		CustomerID: &args.CustomerID,
 		Type:       model.OrderTypeSale,
-		Items: []*model.OrderItem{
+		Items: []*model.OrderItemInput{
 			{Quantity: 2, Price: "5000.33", ItemID: args.ItemID}, //10,000.66
 			{Quantity: 4, Price: "4000.22", ItemID: args.ItemID}, //16,000.88
 		},
-	}
+	})
 
-	DB.Create(&store)
-
-	return &store
+	return store
 }

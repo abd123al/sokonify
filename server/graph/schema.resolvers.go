@@ -42,40 +42,16 @@ func (r *mutationResolver) CreateCategory(ctx context.Context, input model.Categ
 	return &category, result.Error
 }
 
-func (r *mutationResolver) CreateCustomer(_ context.Context, input model.CustomerInput) (*model.Customer, error) {
+func (r *mutationResolver) CreateCustomer(ctx context.Context, input model.CustomerInput) (*model.Customer, error) {
 	return repository.CreateCustomer(r.DB, input)
 }
 
-func (r *mutationResolver) CreateItem(_ context.Context, input model.ItemInput) (*model.Item, error) {
+func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput) (*model.Item, error) {
 	return repository.CreateItem(r.DB, input)
 }
 
 func (r *mutationResolver) CreateOrder(ctx context.Context, input model.OrderInput) (*model.Order, error) {
-	var items []*model.OrderItem
-
-	for _, k := range input.Items {
-		item := model.OrderItem{
-			Price:    k.Price,
-			ItemID:   k.ItemID,
-			Quantity: k.Quantity,
-		}
-
-		items = append(items, &item)
-	}
-
-	order := model.Order{
-		ReceiverID: input.ReceiverID,
-		IssuerID:   input.IssuerID,
-		CustomerID: input.CustomerID,
-		StaffID:    r.UserId,
-		Type:       input.Type,
-		Items:      items,
-	}
-
-	//fmt.Printf("%+v\n", order.Items[0].ItemID)
-
-	result := r.DB.Create(&order)
-	return &order, result.Error
+	return repository.CreateOrder(r.DB, r.UserId, input)
 }
 
 func (r *mutationResolver) CreatePayment(ctx context.Context, input model.PaymentInput) (*model.Payment, error) {
@@ -118,7 +94,7 @@ func (r *mutationResolver) CreatePayment(ctx context.Context, input model.Paymen
 	return payment, err
 }
 
-func (r *mutationResolver) CreateProduct(_ context.Context, input model.ProductInput) (*model.Product, error) {
+func (r *mutationResolver) CreateProduct(ctx context.Context, input model.ProductInput) (*model.Product, error) {
 	return repository.CreateProduct(r.DB, input)
 }
 
@@ -200,6 +176,10 @@ func (r *mutationResolver) Ping(ctx context.Context) (string, error) {
 	return "pong", nil
 }
 
+func (r *mutationResolver) SignUp(ctx context.Context, input *model.UserInput) (*model.User, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *orderResolver) TotalPrice(ctx context.Context, obj *model.Order) (*string, error) {
 	panic(fmt.Errorf("not implemented"))
 }
@@ -254,7 +234,7 @@ func (r *queryResolver) Item(ctx context.Context, id int) (*model.Item, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Items(_ context.Context, by model.ItemsBy, value int) ([]*model.Item, error) {
+func (r *queryResolver) Items(ctx context.Context, by model.ItemsBy, value int) ([]*model.Item, error) {
 	return repository.FindItems(r.DB, by, value)
 }
 
@@ -262,24 +242,8 @@ func (r *queryResolver) Order(ctx context.Context, id int) (*model.Order, error)
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Orders(ctx context.Context, by model.OrdersBy, value int, limit int, offset int, sortBy model.SortBy, typeArg model.OrderType, status *model.OrderStatus) ([]*model.Order, error) {
-	var orders []*model.Order
-	var result *gorm.DB
-	sort := "id " + "DESC" //todo use sortBy var
-
-	//todo handle status
-	if by == model.OrdersByStore {
-		result = r.DB.Where(
-			r.DB.Where(&model.Order{IssuerID: value}).Or(&model.Order{ReceiverID: &value})).Where(&model.Order{Type: typeArg}).Order(sort).Limit(limit).Offset(offset).Find(&orders)
-	} else if by == model.OrdersByStaff {
-		//Here StaffID is actually userId
-		result = r.DB.Where(&model.Order{StaffID: value, Type: typeArg}).Order(sort).Limit(limit).Offset(offset).Find(&orders)
-	} else if by == model.OrdersByCustomer {
-		result = r.DB.Where(&model.Order{CustomerID: &value, Type: typeArg}).Order(sort).Limit(limit).Offset(offset).Find(&orders)
-	} else {
-		panic(fmt.Errorf("not implemented"))
-	}
-	return orders, result.Error
+func (r *queryResolver) Orders(_ context.Context, args model.OrdersArgs) ([]*model.Order, error) {
+	return repository.Orders(r.DB, args)
 }
 
 func (r *queryResolver) Payment(ctx context.Context, id int) (*model.Payment, error) {

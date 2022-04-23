@@ -399,7 +399,7 @@ func TestResolvers(t *testing.T) {
 		//By store
 		c.MustPost(`
 				query orders($value: ID!) {
-				  orders(value: $value) {
+				  orders(args: {value: $value}) {
 					id
 				  }
 				}
@@ -410,7 +410,7 @@ func TestResolvers(t *testing.T) {
 		//By staff
 		c.MustPost(`
 				query orders($value: ID!) {
-				  orders(by:staff,value: $value) {
+				  orders(args: {by: staff, value: $value}) {
 					id
 				  }
 				}
@@ -421,7 +421,7 @@ func TestResolvers(t *testing.T) {
 		//By customer
 		c.MustPost(`
 				query orders($value: ID!) {
-				  orders(by:customer,value: $value) {
+				  orders(args: {by: customer, value: $value}) {
 					id
 				  }
 				}

@@ -1,5 +1,9 @@
 # Todo
+
+- Easy import
 - marketplace for items like wholesalers where people could to orders
+- In marketplace,QR code scanning when ordering user should map what they order to what correlates. This way we can
+  easily update their stocks
 - allow free port coming from android
 - Transfer items between warehouse and store
 - db types
@@ -15,14 +19,11 @@ go run github.com/99designs/gqlgen init
 
 ```
 
-go run server.go
-go run server.go -mod=mod
-go run ./server.go
+go run server.go go run server.go -mod=mod go run ./server.go
 
 go run -mod=mod github.com/99designs/gqlgen generate
 
-go mod tidy
-go generate ./...
+go mod tidy go generate ./...
 
-go get -d golang.org/x/mobile/cmd/gomobile
-gomobile bind -v -o ../client/packages/server/android/libs/server.aar -target=android ./lib
+go get -d golang.org/x/mobile/cmd/gomobile gomobile bind -v -o ../client/packages/server/android/libs/server.aar
+-target=android ./lib

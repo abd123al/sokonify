@@ -144,6 +144,7 @@ input CategoryInput {
     storeId: Int!
 }
 
+# todo rename to ProductCategory
 # User may create products category as they want and it will help them track them efficiently
 type CategoryProduct implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
@@ -386,6 +387,16 @@ input OrderInput {
     items: [OrderItemInput!]!
 }
 
+input OrdersArgs {
+    by:OrdersBy! = store
+    value:ID!
+    limit: Int! =10
+    offset:Int! = 0
+    sortBy:SortBy! = DESC
+    type:OrderType! = sale
+    status:OrderStatus
+}
+
 type OrderItem implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
 
@@ -476,7 +487,7 @@ type Query {
     item(id: ID!): Item!
     items(by:ItemsBy! = store,value:ID!): [Item!]!
     order(id: ID!): Order!
-    orders(by:OrdersBy! = store,value:ID!,limit: Int! =10,offset:Int! = 0,sortBy:SortBy! = DESC,type:OrderType! = sale,status:OrderStatus): [Order!]!
+    orders(args:OrdersArgs!): [Order!]!
     payment(id: ID!): Payment!
     payments(storeId:ID!): [Payment!]!
     product(id: ID!): Product!
