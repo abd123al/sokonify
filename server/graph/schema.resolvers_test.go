@@ -254,7 +254,7 @@ func TestResolvers(t *testing.T) {
 				{Quantity: 2, Price: "74774", ItemID: item.ID},
 				{Quantity: 5, Price: "23445", ItemID: item.ID},
 			},
-			Type:       model.OrderTypeSale,
+			Type:       model.OrderTypeIn,
 			CustomerID: &customer.ID,
 			IssuerID:   store.ID,
 		}

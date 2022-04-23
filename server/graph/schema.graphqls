@@ -25,17 +25,16 @@ enum OrderStatus {
     pending
 }
 
+# Here we consider things in perception of where money goes (not items)
 enum OrderType {
-    # order for receiving items
-    purchase
-    # order for selling items
-    sale
-    # Let's say we pay for some things eg electricity.
-    expense
-    # If things have expired/damaged/stolen they can be automatically disposed.
+    # buying items/paying salary/expenses. Items may+, Money -.
+    out
+    # selling items. Items may-, Money +
+    in
+    # expired/damaged/stolen Items -, Money -
     loss
-    # transfer from one store to another
-    transfer
+    # transfer from one store to another, Items neutral, Money neutral
+    neutral
 }
 
 enum PaymentType {
@@ -392,7 +391,7 @@ input OrdersArgs {
     limit: Int! =10
     offset:Int! = 0
     sortBy:SortBy! = DESC
-    type:OrderType! = sale
+    type:OrderType! = in
     status:OrderStatus
 }
 
