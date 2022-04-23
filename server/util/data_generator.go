@@ -80,9 +80,7 @@ func CreateProduct(DB *gorm.DB, Args *CreateProductArgs) *model.Product {
 	var Categories []int
 
 	if Args == nil {
-		store := CreateStore(DB, nil)
-
-		StoreID = store.ID
+		StoreID = CreateStore(DB, nil).ID
 	} else {
 		StoreID = Args.StoreID
 
@@ -109,12 +107,24 @@ type CreateItemArgs struct {
 	ProductID int
 }
 
-func CreateItem(DB *gorm.DB, args CreateItemArgs) *model.Item {
+func CreateItem(DB *gorm.DB, args *CreateItemArgs) *model.Item {
+	var BrandID *int
+	var ProductID int
+
+	//Here what is required is ProductID
+	if args != nil {
+		BrandID = args.BrandID
+		ProductID = args.ProductID
+	} else {
+		//creating the needed product
+		ProductID = CreateProduct(DB, nil).ID
+	}
+
 	item, _ := repository.CreateItem(DB, model.ItemInput{
 		SellingPrice: "5000.00",
 		BuyingPrice:  "2000.00",
-		ProductID:    args.ProductID,
-		BrandID:      args.BrandID,
+		ProductID:    ProductID,
+		BrandID:      BrandID,
 	})
 
 	return item
