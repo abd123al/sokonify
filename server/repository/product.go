@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gorm.io/gorm"
 	"mahesabu/graph/model"
+	"mahesabu/helpers"
 )
 
 func CreateProduct(DB *gorm.DB, input model.ProductInput) (*model.Product, error) {
@@ -28,8 +29,10 @@ func CreateProduct(DB *gorm.DB, input model.ProductInput) (*model.Product, error
 
 	result := DB.Create(&product)
 
-	//todo make sure id are unique
-	for _, k := range input.Categories {
+	//making sure ids are unique
+	categories := helpers.RemoveDuplicatedInt(input.Categories)
+
+	for _, k := range categories {
 		// First checking if there is no previous relationship.
 		var cat *model.CategoryProduct
 
