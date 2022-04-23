@@ -42,35 +42,8 @@ func (r *mutationResolver) CreateCategory(ctx context.Context, input model.Categ
 	return &category, result.Error
 }
 
-func (r *mutationResolver) CreateCustomer(ctx context.Context, input model.CustomerInput) (*model.Customer, error) {
-	var user *model.User
-	email := input.Email
-	phone := input.Phone
-
-	//Here we link customers to their user account directly
-	if email != nil {
-		r.DB.Where(&model.User{Email: *email}).First(&user)
-	} else if phone != nil {
-		r.DB.Where(&model.User{Phone: *phone}).First(&user)
-	}
-
-	customer := model.Customer{
-		Name:    input.Name,
-		StoreID: input.StoreID,
-		Type:    input.Type,
-		Gender:  input.Gender,
-		Dob:     input.Dob,
-		Email:   input.Email,
-		Address: input.Address,
-		Phone:   input.Phone,
-	}
-
-	if user != nil {
-		customer.UserID = &user.ID
-	}
-
-	result := r.DB.Create(&customer)
-	return &customer, result.Error
+func (r *mutationResolver) CreateCustomer(_ context.Context, input model.CustomerInput) (*model.Customer, error) {
+	return repository.CreateCustomer(r.DB, input)
 }
 
 func (r *mutationResolver) CreateItem(_ context.Context, input model.ItemInput) (*model.Item, error) {
@@ -274,9 +247,7 @@ func (r *queryResolver) Customer(ctx context.Context, id int) (*model.Customer, 
 }
 
 func (r *queryResolver) Customers(ctx context.Context, storeID int) ([]*model.Customer, error) {
-	var customers []*model.Customer
-	result := r.DB.Where(&model.Customer{StoreID: storeID}).Order("id DESC").Find(&customers)
-	return customers, result.Error
+	return repository.Customers(r.DB, storeID)
 }
 
 func (r *queryResolver) Item(ctx context.Context, id int) (*model.Item, error) {
