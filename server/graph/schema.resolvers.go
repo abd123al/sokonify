@@ -51,8 +51,8 @@ func (r *mutationResolver) CreateOrder(ctx context.Context, input model.OrderInp
 	return repository.CreateOrder(r.DB, r.UserId, input)
 }
 
-func (r *mutationResolver) CreatePayment(ctx context.Context, input model.PaymentInput) (*model.Payment, error) {
-	return repository.CreatePayment(r.DB, input)
+func (r *mutationResolver) CreatePayment(_ context.Context, input model.PaymentInput) (*model.Payment, error) {
+	return repository.CreatePayment(r.DB, r.UserId, input)
 }
 
 func (r *mutationResolver) CreateProduct(ctx context.Context, input model.ProductInput) (*model.Product, error) {
@@ -68,7 +68,7 @@ func (r *mutationResolver) CreateStaff(ctx context.Context, input model.StaffInp
 	return &staff, result.Error
 }
 
-func (r *mutationResolver) CreateStore(_ context.Context, input model.StoreInput) (*model.Store, error) {
+func (r *mutationResolver) CreateStore(ctx context.Context, input model.StoreInput) (*model.Store, error) {
 	//todo use transaction and save user as staff.
 	store := model.Store{
 		Name:    input.Name,
@@ -203,7 +203,7 @@ func (r *queryResolver) Order(ctx context.Context, id int) (*model.Order, error)
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Orders(_ context.Context, args model.OrdersArgs) ([]*model.Order, error) {
+func (r *queryResolver) Orders(ctx context.Context, args model.OrdersArgs) ([]*model.Order, error) {
 	return repository.Orders(r.DB, args)
 }
 

@@ -438,6 +438,9 @@ type Payment implements Gorm {
     referenceId: String @goTag(key: "gorm", value: "index;size:50")
     type: PaymentType!
 
+    staffId: Int!
+    staff: User! @goTag(key: "gorm", value: "foreignKey:StaffID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+
     # Payment for what order.
     orderId: Int!
     order: Order! @goTag(key: "gorm", value: "foreignKey:OrderID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
@@ -463,6 +466,9 @@ type Ledger implements Gorm {
     # Payment for what order.
     orderId: Int!
     order: Order! @goTag(key: "gorm", value: "foreignKey:OrderID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+
+    staffId: Int!
+    staff: User! @goTag(key: "gorm", value: "foreignKey:StaffID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 
     # Payment for what order.
     itemId: Int!
