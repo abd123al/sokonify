@@ -276,7 +276,7 @@ func TestResolvers(t *testing.T) {
 		}
 
 		input := model.PaymentInput{
-			Type:    model.PaymentTypeCash,
+			Method:  model.PaymentMethodCash,
 			OrderID: order.ID,
 		}
 

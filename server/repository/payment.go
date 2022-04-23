@@ -29,11 +29,11 @@ func CreatePayment(DB *gorm.DB, StaffID int, input model.PaymentInput) (*model.P
 
 		//Saving payment
 		payment = &model.Payment{
-			OrderID:     input.OrderID,
+			OrderID:     &input.OrderID,
 			StaffID:     StaffID,
 			Description: input.Description,
 			ReferenceID: input.ReferenceID,
-			Type:        input.Type,
+			Method:      input.Method,
 			Amount:      subPrice.String(),
 		}
 

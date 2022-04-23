@@ -37,7 +37,7 @@ enum OrderType {
     neutral
 }
 
-enum PaymentType {
+enum PaymentMethod {
     cash
     loan
     bank
@@ -191,6 +191,7 @@ enum ExpenseType {
     fees
 }
 
+# todo Seed this with Tax, Salary, Electricity/ Water
 type Expense implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
 
@@ -449,24 +450,29 @@ type Payment implements Gorm {
     deletedAt:Time
 
     amount: String! @goTag(key: "gorm", value: "type:numeric;")
-    description: String @goTag(key: "gorm", value: "size:100")
+    # In expenses description will describe in details where everything goes
+    description: String @goTag(key: "gorm", value: "size:250")
     # Id to identify this payment
     referenceId: String @goTag(key: "gorm", value: "index;size:50")
-    type: PaymentType!
+    method: PaymentMethod!
 
     staffId: Int!
     staff: User! @goTag(key: "gorm", value: "foreignKey:StaffID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 
+    # We will know either it is product/expense depending on what is null
     # Payment for what order.
-    orderId: Int!
-    order: Order! @goTag(key: "gorm", value: "foreignKey:OrderID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    orderId: Int
+    order: Order @goTag(key: "gorm", value: "foreignKey:OrderID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+
+    expenseId: Int
+    expense: Expense @goTag(key: "gorm", value: "foreignKey:ExpenseID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 }
 
 input PaymentInput {
     orderId: Int!
     description: String
     referenceId: String
-    type: PaymentType!
+    method: PaymentMethod!
 }
 
 type Stats {
