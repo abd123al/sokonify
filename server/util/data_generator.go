@@ -5,7 +5,6 @@ import (
 	"gorm.io/gorm"
 	"mahesabu/graph/model"
 	"mahesabu/repository"
-	"time"
 )
 
 // CreateUser Upper case means function is exported
@@ -93,18 +92,16 @@ type CreateItemArgs struct {
 }
 
 func CreateItem(DB *gorm.DB, args CreateItemArgs) *model.Item {
-	store := model.Item{
+	item, _ := repository.CreateItem(DB, model.ItemInput{
 		SellingPrice: "5000.00",
 		BuyingPrice:  "2000.00",
 		//Batch:        "6363663",
-		ExpiresAt: time.Now(),
+		//ExpiresAt: time.Now(),
 		ProductID: args.ProductID,
 		BrandID:   args.BrandID,
-	}
+	})
 
-	DB.Create(&store)
-
-	return &store
+	return item
 }
 
 type CreateOrderArgs struct {

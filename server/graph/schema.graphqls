@@ -413,6 +413,7 @@ input OrderItemInput {
     itemId: Int!
 }
 
+# todo for tracking expenses we need to add product either here or in orders
 type Payment implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
 
@@ -499,7 +500,7 @@ type Mutation {
     createStaff(input: StaffInput!): Staff! @hasRole(role: owner)
     createStore(input: StoreInput!): Store! @hasRole(role: owner)
     # Only admins can create new user.
-    createUser(input: UserInput!): User!
+    createUser(input: UserInput!): User! @hasRole(role: owner)
 
     changePassword(input: ChangePasswordInput!): User!
 
@@ -517,6 +518,8 @@ type Mutation {
 
     # For testing if local ip works. Otherwise client will have to reconfigure.
     ping: String!
+
+    signUp(input: UserInput): User
 }
 
 scalar Time

@@ -73,12 +73,8 @@ func (r *mutationResolver) CreateCustomer(ctx context.Context, input model.Custo
 	return &customer, result.Error
 }
 
-func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput) (*model.Item, error) {
-	item := model.Item{
-		Quantity: input.Quantity,
-	}
-	result := r.DB.Create(&item)
-	return &item, result.Error
+func (r *mutationResolver) CreateItem(_ context.Context, input model.ItemInput) (*model.Item, error) {
+	return repository.CreateItem(r.DB, input)
 }
 
 func (r *mutationResolver) CreateOrder(ctx context.Context, input model.OrderInput) (*model.Order, error) {
@@ -287,20 +283,8 @@ func (r *queryResolver) Item(ctx context.Context, id int) (*model.Item, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Items(ctx context.Context, by model.ItemsBy, value int) ([]*model.Item, error) {
-	var items []*model.Item
-	var result *gorm.DB
-
-	if by == model.ItemsByStore {
-		result = r.DB.Table("items").Joins("inner join products on products.id = items.product_id inner join categories on categories.id = products.category_id AND categories.store_id = ?", value).Find(&items)
-	} else if by == model.ItemsByCategory {
-		result = r.DB.Table("items").Joins("inner join products on products.id = items.product_id inner join categories on categories.id = products.category_id AND categories.id = ?", value).Find(&items)
-	} else if by == model.ItemsByProduct {
-		result = r.DB.Where(&model.Item{ProductID: value}).Find(&items)
-	} else {
-		panic(fmt.Errorf("not implemented"))
-	}
-	return items, result.Error
+func (r *queryResolver) Items(_ context.Context, by model.ItemsBy, value int) ([]*model.Item, error) {
+	return repository.FindItems(r.DB, by, value)
 }
 
 func (r *queryResolver) Order(ctx context.Context, id int) (*model.Order, error) {
