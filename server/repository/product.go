@@ -33,9 +33,10 @@ func CreateProduct(DB *gorm.DB, input model.ProductInput) (*model.Product, error
 		// First checking if there is no previous relationship.
 		var cat *model.CategoryProduct
 
-		result := DB.Where(&model.CategoryProduct{ProductID: product.ID, CategoryID: k}).First(&cat)
+		//First() causes panic, so Find works here better
+		DB.Where(&model.CategoryProduct{ProductID: product.ID, CategoryID: k}).Limit(1).Find(&cat)
 
-		if result.Error != nil {
+		if cat != nil {
 			categoryProduct := model.CategoryProduct{
 				ProductID:  product.ID,
 				CategoryID: k,
