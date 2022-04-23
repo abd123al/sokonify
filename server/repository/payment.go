@@ -10,12 +10,13 @@ func CreatePayment(DB *gorm.DB, StaffID int, input model.PaymentInput) (*model.P
 	var payment *model.Payment
 
 	err := DB.Transaction(func(tx *gorm.DB) error {
-		//todo should the order creator be the one to confirm payment.
 		var orderItems []model.OrderItem
 		var subPrice decimal.Decimal
 
+		//Finding all items which are on order
 		tx.Where(&model.OrderItem{OrderID: input.OrderID}).Find(&orderItems)
 
+		//Summing the total price.
 		for _, o := range orderItems {
 			price, err := decimal.NewFromString(o.Price)
 			if err != nil {
@@ -26,6 +27,7 @@ func CreatePayment(DB *gorm.DB, StaffID int, input model.PaymentInput) (*model.P
 			subPrice = subPrice.Add(total)
 		}
 
+		//Saving payment
 		payment = &model.Payment{
 			OrderID:     input.OrderID,
 			StaffID:     StaffID,
@@ -39,6 +41,10 @@ func CreatePayment(DB *gorm.DB, StaffID int, input model.PaymentInput) (*model.P
 		if err := tx.Create(&payment).Error; err != nil {
 			return err
 		}
+
+		//Changing ledger
+
+		//Decreasing items' quantity depending on type
 
 		// return nil will commit the whole transaction
 		return nil

@@ -51,7 +51,7 @@ func (r *mutationResolver) CreateOrder(ctx context.Context, input model.OrderInp
 	return repository.CreateOrder(r.DB, r.UserId, input)
 }
 
-func (r *mutationResolver) CreatePayment(_ context.Context, input model.PaymentInput) (*model.Payment, error) {
+func (r *mutationResolver) CreatePayment(ctx context.Context, input model.PaymentInput) (*model.Payment, error) {
 	return repository.CreatePayment(r.DB, r.UserId, input)
 }
 
