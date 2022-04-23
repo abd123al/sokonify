@@ -68,7 +68,7 @@ func (r *mutationResolver) CreateStaff(ctx context.Context, input model.StaffInp
 	return &staff, result.Error
 }
 
-func (r *mutationResolver) CreateStore(ctx context.Context, input model.StoreInput) (*model.Store, error) {
+func (r *mutationResolver) CreateStore(_ context.Context, input model.StoreInput) (*model.Store, error) {
 	//todo use transaction and save user as staff.
 	store := model.Store{
 		Name:    input.Name,

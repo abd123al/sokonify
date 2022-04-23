@@ -4,6 +4,7 @@ import (
 	"github.com/99designs/gqlgen/client"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/bxcodec/faker/v3"
+
 	"github.com/stretchr/testify/require"
 	"mahesabu/graph"
 	"mahesabu/graph/generated"
@@ -61,14 +62,14 @@ func TestResolvers(t *testing.T) {
 		var resp struct {
 			CreateUser model.User
 		}
-		fake := model.User{}
-		_ = faker.FakeData(&fake)
+
+		password := "password"
 
 		input := model.UserInput{
-			Username: fake.Username,
-			Email:    fake.Email,
-			Name:     fake.Name,
-			Password: fake.Password,
+			Username: faker.Username(),
+			Email:    faker.Email(),
+			Name:     faker.Name(),
+			Password: &password,
 		}
 
 		c.MustPost(`

@@ -9,9 +9,14 @@ import (
 
 // CreateUser Upper case means function is exported
 func CreateUser(DB *gorm.DB) *model.User {
-	user := model.User{}
+	password := "password"
 
-	_ = faker.FakeData(&user)
+	user := model.User{
+		Name:     faker.Name(),
+		Username: faker.Username(),
+		Email:    faker.Email(),
+		Password: &password,
+	}
 
 	DB.Create(&user)
 
@@ -20,7 +25,7 @@ func CreateUser(DB *gorm.DB) *model.User {
 
 func CreateCustomer(DB *gorm.DB, StoreId int) *model.Customer {
 	customer, _ := repository.CreateCustomer(DB, model.CustomerInput{
-		Name:    "John Doe",
+		Name:    faker.Name(),
 		Type:    model.CustomerTypeCustomer,
 		StoreID: StoreId,
 	})
@@ -35,7 +40,7 @@ func CreateStore(DB *gorm.DB, OwnerID *int) *model.Store {
 	}
 
 	store := model.Store{
-		Name:    "shop",
+		Name:    faker.Name(),
 		OwnerID: *OwnerID,
 	}
 
@@ -61,7 +66,7 @@ func CreateStaff(DB *gorm.DB, Args CreateStaffArgs) *model.Staff {
 
 func CreateCategory(DB *gorm.DB, StoreID int) *model.Category {
 	category := model.Category{
-		Name:    "Category",
+		Name:    faker.Name(),
 		StoreID: StoreID,
 	}
 
@@ -92,10 +97,10 @@ func CreateProduct(DB *gorm.DB, Args *CreateProductArgs) *model.Product {
 	product, _ := repository.CreateProduct(DB, model.ProductInput{
 		StoreID:    StoreID,
 		Categories: Categories,
-		Name:       "My amazing product",
+		Name:       faker.Name(),
 		Brands: []*model.ProductBrandInput{
-			{Name: "Shells"},
-			{Name: "Brand"},
+			{Name: faker.Word()},
+			{Name: faker.Word()},
 		},
 	})
 

@@ -92,9 +92,9 @@ type Admin implements Gorm {
     updatedAt:Time!
     deletedAt:Time
 
-    name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(50);default:null") @goTag(key: "faker",value: "name")
-    email: String! @goTag(key: "gorm", value: "unique;not null;type:varchar(100);default:null") @goTag(key: "faker",value: "email")
-    password: String @goTag(key: "gorm", value: "not null;type:varchar(100);default:null") @goField(forceResolver: true) @goTag(key: "faker",value: "password")
+    name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(50);default:null")
+    email: String! @goTag(key: "gorm", value: "unique;not null;type:varchar(100);default:null")
+    password: String @goTag(key: "gorm", value: "not null;type:varchar(100);default:null") @goField(forceResolver: true)
 }
 
 # With this user can reuse their credentials in different stores
@@ -105,11 +105,11 @@ type User implements Gorm {
     updatedAt:Time!
     deletedAt:Time
 
-    name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(50);default:null") @goTag(key: "faker",value: "name")
-    email: String! @goTag(key: "gorm", value: "unique;not null;type:varchar(100);default:null") @goTag(key: "faker",value: "email")
-    username: String! @goTag(key: "gorm", value: "unique;not null;type:varchar(100);default:null") @goTag(key: "faker",value: "username")
-    phone: String! @goTag(key: "gorm", value: "unique;null;type:varchar(20);default:null") @goTag(key: "faker",value: "username")
-    password: String @goTag(key: "gorm", value: "not null;type:varchar(100);default:null") @goField(forceResolver: true) @goTag(key: "faker",value: "password")
+    name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(50);default:null")
+    email: String! @goTag(key: "gorm", value: "unique;not null;type:varchar(100);default:null")
+    username: String! @goTag(key: "gorm", value: "unique;not null;type:varchar(100);default:null")
+    phone: String! @goTag(key: "gorm", value: "unique;null;type:varchar(20);default:null")
+    password: String @goTag(key: "gorm", value: "not null;type:varchar(100);default:null") @goField(forceResolver: true)
 }
 
 input UserInput {
@@ -332,7 +332,7 @@ type Store implements Gorm {
     updatedAt:Time!
     deletedAt:Time
 
-    name: String! @goTag(key: "gorm", value: "index;size:50;not null;default:null") @goTag(key: "faker",value: "name")
+    name: String! @goTag(key: "gorm", value: "index;size:50;not null;default:null")
     type: StoreType!
 
     ownerId: Int!
