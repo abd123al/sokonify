@@ -52,3 +52,18 @@ func CreateOrderPayment(DB *gorm.DB, StaffID int, input model.OrderPaymentInput)
 
 	return payment, err
 }
+
+func CreateExpensePayment(DB *gorm.DB, StaffID int, input model.ExpensePaymentInput) (*model.Payment, error) {
+	payment := &model.Payment{
+		ExpenseID:   &input.ExpenseID,
+		StaffID:     StaffID,
+		Description: input.Description,
+		ReferenceID: input.ReferenceID,
+		Method:      input.Method,
+		Amount:      input.Amount,
+	}
+
+	result := DB.Create(&payment)
+
+	return payment, result.Error
+}

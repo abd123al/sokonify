@@ -155,3 +155,17 @@ func CreateOrder(DB *gorm.DB, args CreateOrderArgs) *model.Order {
 
 	return store
 }
+
+func CreateExpense(DB *gorm.DB, StoreID *int) *model.Expense {
+	if StoreID == nil {
+		StoreID = &CreateStore(DB, nil).ID
+	}
+
+	expense, _ := repository.CreateExpense(DB, model.ExpenseInput{
+		StoreID: *StoreID,
+		Name:    faker.Name(),
+		Type:    model.ExpenseTypeOut,
+	})
+
+	return expense
+}

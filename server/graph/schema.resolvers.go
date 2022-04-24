@@ -59,8 +59,8 @@ func (r *mutationResolver) CreateOrderPayment(ctx context.Context, input model.O
 	return repository.CreateOrderPayment(r.DB, r.UserId, input)
 }
 
-func (r *mutationResolver) CreateExpensePayment(ctx context.Context, input model.ExpensePaymentInput) (*model.Payment, error) {
-	panic(fmt.Errorf("not implemented"))
+func (r *mutationResolver) CreateExpensePayment(_ context.Context, input model.ExpensePaymentInput) (*model.Payment, error) {
+	return repository.CreateExpensePayment(r.DB, r.UserId, input)
 }
 
 func (r *mutationResolver) CreateProduct(ctx context.Context, input model.ProductInput) (*model.Product, error) {

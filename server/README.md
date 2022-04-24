@@ -1,5 +1,7 @@
 # Todo
 
+- Find a way to check permission to perform action in that store. (Solutions: use directive)
+- Create JWT when user switch store
 - attach staff id in everything, so that we know who did what.
 - Easy import
 - marketplace for items like wholesalers where people could to orders
