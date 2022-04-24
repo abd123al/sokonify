@@ -59,7 +59,7 @@ func (r *mutationResolver) CreateOrderPayment(ctx context.Context, input model.O
 	return repository.CreateOrderPayment(r.DB, r.UserId, input)
 }
 
-func (r *mutationResolver) CreateExpensePayment(_ context.Context, input model.ExpensePaymentInput) (*model.Payment, error) {
+func (r *mutationResolver) CreateExpensePayment(ctx context.Context, input model.ExpensePaymentInput) (*model.Payment, error) {
 	return repository.CreateExpensePayment(r.DB, r.UserId, input)
 }
 
@@ -211,8 +211,8 @@ func (r *queryResolver) Expense(ctx context.Context, id int) (*model.Expense, er
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Expenses(ctx context.Context) ([]*model.Expense, error) {
-	panic(fmt.Errorf("not implemented"))
+func (r *queryResolver) Expenses(ctx context.Context, args model.ExpensesArgs) ([]*model.Expense, error) {
+	return repository.FindExpenses(r.DB, args)
 }
 
 func (r *queryResolver) Order(ctx context.Context, id int) (*model.Order, error) {

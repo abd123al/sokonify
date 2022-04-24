@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"fmt"
 	"gorm.io/gorm"
 	"mahesabu/graph/model"
 )
@@ -17,17 +18,18 @@ func CreateExpense(DB *gorm.DB, input model.ExpenseInput) (*model.Expense, error
 	return &expense, result.Error
 }
 
-//func FindExpenses(DB *gorm.DB, by model.ProductsBy, value int) ([]*model.Expense, error) {
-//	var items []*model.Product
-//	var result *gorm.DB
-//
-//	if by == model.ProductsByStore {
-//		result = DB.Table("products").Where(&model.Product{StoreID: value}).Find(&items)
-//	} else if by == model.ProductsByCategory {
-//		result = DB.Table("products").Joins("inner join product_categories on product_categories.product_id = products.id AND product_categories.category_id = ?", value).Find(&items)
-//	} else {
-//		panic(fmt.Errorf("not implemented"))
-//	}
-//
-//	return items, result.Error
-//}
+func FindExpenses(DB *gorm.DB, args model.ExpensesArgs) ([]*model.Expense, error) {
+	var expenses []*model.Expense
+	var result *gorm.DB
+
+	//todo implement type and sortBy
+	if args.By == model.ExpensesByStore {
+		result = DB.Where(&model.Product{StoreID: args.Value}).Order("id DESC").Offset(args.Offset).Limit(args.Limit).Find(&expenses)
+	} else if args.By == model.ExpensesByStaff {
+		panic(fmt.Errorf("not implemented"))
+	} else {
+		panic(fmt.Errorf("not implemented"))
+	}
+
+	return expenses, result.Error
+}

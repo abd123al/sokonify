@@ -209,6 +209,20 @@ input ExpenseInput {
     storeId: ID!
 }
 
+enum ExpensesBy {
+    staff # for who created expense
+    store # all expenses
+}
+
+input ExpensesArgs {
+    by:ExpensesBy! = store
+    value:ID!
+    limit: Int! =10
+    offset:Int! = 0
+    sortBy:SortBy! = DESC
+    type:ExpenseType
+}
+
 type Product implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
 
@@ -500,11 +514,11 @@ type Query {
     item(id: ID!): Item!
     items(by:ItemsBy! = store,value:ID!): [Item!]!
     expense(id: ID!): Expense!
-    expenses: [Expense!]! #for getting kinda expenses categories
+    expenses(args:ExpensesArgs!): [Expense!]! #for getting kinda expenses categories
     order(id: ID!): Order!
-    orders(args:OrdersArgs!): [Order!]!
+    orders(args: OrdersArgs!): [Order!]!
     payment(id: ID!): Payment!
-    payments(storeId:ID!): [Payment!]!
+    payments(storeId:ID!): [Payment!]! #todo args too here
     product(id: ID!): Product!
     products(by:ProductsBy! = store,value:ID!): [Product!]!
     staff(id: ID!): Staff!
