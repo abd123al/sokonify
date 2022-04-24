@@ -181,6 +181,11 @@ input CustomerInput {
     storeId: Int!
 }
 
+enum ExpenseType {
+    out #Electucity/Water/Salary (-)
+    in #cash investment in my business (+)
+}
+
 # todo Seed this with Tax, Salary, Electricity/ Water
 # This should be treated like expenses category user should click electricity=> add expense
 type Expense implements Gorm {
@@ -192,6 +197,7 @@ type Expense implements Gorm {
 
     # This will be electricity/water/salary
     name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(100);default:null")
+    type: ExpenseType!
 
     storeId: Int!
     store: Store! @goTag(key: "gorm", value: "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
@@ -199,6 +205,7 @@ type Expense implements Gorm {
 
 input ExpenseInput {
     name: String!
+    type: ExpenseType! = out
     storeId: ID!
 }
 
