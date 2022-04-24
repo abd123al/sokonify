@@ -54,6 +54,12 @@ func CreateOrderPayment(DB *gorm.DB, StaffID int, input model.OrderPaymentInput)
 }
 
 func CreateExpensePayment(DB *gorm.DB, StaffID int, input model.ExpensePaymentInput) (*model.Payment, error) {
+	var expense *model.Expense
+
+	if err := DB.Where(&model.Expense{ID: input.ExpenseID}).First(&expense).Error; err != nil {
+		return nil, err
+	}
+
 	payment := &model.Payment{
 		ExpenseID:   &input.ExpenseID,
 		StaffID:     StaffID,
@@ -61,6 +67,12 @@ func CreateExpensePayment(DB *gorm.DB, StaffID int, input model.ExpensePaymentIn
 		ReferenceID: input.ReferenceID,
 		Method:      input.Method,
 		Amount:      input.Amount,
+	}
+
+	//Put sign depending on type of expense
+	if expense.Type == model.ExpenseTypeOut {
+		//This means money has gone out
+		payment.Amount = "-" + payment.Amount
 	}
 
 	result := DB.Create(&payment)
