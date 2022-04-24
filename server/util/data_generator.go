@@ -130,10 +130,14 @@ func CreateItem(DB *gorm.DB, args *CreateItemArgs, StoreId *int) *model.Item {
 	}
 
 	item, _ := repository.CreateItem(DB, model.ItemInput{
-		SellingPrice: "5000.00",
+		Quantity:     10,
 		BuyingPrice:  "2000.00", //todo fake all these
-		ProductID:    ProductID,
+		SellingPrice: "5000.00",
+		Batch:        nil,
+		Description:  nil,
+		ExpiresAt:    nil,
 		BrandID:      BrandID,
+		ProductID:    ProductID,
 	})
 
 	return item

@@ -68,12 +68,17 @@ func CreateOrderPayment(DB *gorm.DB, StaffID int, input model.OrderPaymentInput)
 		}
 
 		//Updating order so that it will not be later updated
-
 		if err := tx.Model(model.Order{}).Where(model.Order{ID: input.OrderID, Status: model.OrderStatusPending}).Updates(model.Order{Status: model.OrderStatusCompleted}).Error; err != nil {
 			return err
 		}
 
 		//Decreasing items' quantity depending on type
+		//todo don't allow zero
+		for _, i := range orderItems {
+			if err := tx.Model(&model.Item{}).Where(&model.Item{ID: i.ItemID}).Update("quantity", gorm.Expr("quantity - ?", i.Quantity)).Error; err != nil {
+				return err
+			}
+		}
 
 		// return nil will commit the whole transaction
 		return nil
