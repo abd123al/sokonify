@@ -26,6 +26,7 @@ func CreateOrder(DB *gorm.DB, UserId int, input model.OrderInput) (*model.Order,
 		StaffID:    UserId,
 		Type:       input.Type,
 		Items:      items,
+		Status:     model.OrderStatusPending, //Important
 	}
 
 	//fmt.Printf("%+v\n\n", order.Items[0].ItemID)

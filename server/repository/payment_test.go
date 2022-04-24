@@ -14,6 +14,32 @@ func TestPayment(t *testing.T) {
 	user := util.CreateUser(DB)
 	store := util.CreateStore(DB, &user.ID)
 
+	t.Run("CreateOrderPayment", func(t *testing.T) {
+		order := util.CreateOrder(DB, nil)
+
+		var call = func() (*model.Payment, error) {
+			p, e := repository.CreateOrderPayment(DB, user.ID, model.OrderPaymentInput{
+				OrderID:     order.ID,
+				Description: nil,
+				ReferenceID: nil,
+				Method:      model.PaymentMethodCash,
+			})
+
+			return p, e
+		}
+
+		payment, err := call()
+
+		assert.Nil(t, err)
+		assert.NotNil(t, payment)
+
+		payment2, err2 := call()
+
+		//Won't work because order is already completed
+		assert.NotNil(t, err2)
+		assert.Nil(t, payment2)
+	})
+
 	t.Run("CreateExpensePayment", func(t *testing.T) {
 		expense := util.CreateExpense(DB, &store.ID)
 

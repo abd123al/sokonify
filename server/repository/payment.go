@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
 	"mahesabu/graph/model"
@@ -10,11 +11,23 @@ func CreateOrderPayment(DB *gorm.DB, StaffID int, input model.OrderPaymentInput)
 	var payment *model.Payment
 
 	err := DB.Transaction(func(tx *gorm.DB) error {
+		var order *model.Order
 		var orderItems []model.OrderItem
 		var subPrice decimal.Decimal
 
+		//Finding order so that we know its types
+		if err := tx.Where(&model.Order{ID: input.OrderID}).First(&order).Error; err != nil {
+			return err
+		}
+
+		if order.Status != model.OrderStatusPending {
+			return errors.New(`order has already been completed..'`)
+		}
+
 		//Finding all items which are on order
-		tx.Where(&model.OrderItem{OrderID: input.OrderID}).Find(&orderItems)
+		if err := tx.Where(&model.OrderItem{OrderID: input.OrderID}).Find(&orderItems).Error; err != nil {
+			return err
+		}
 
 		//Summing the total price.
 		for _, o := range orderItems {
@@ -37,12 +50,28 @@ func CreateOrderPayment(DB *gorm.DB, StaffID int, input model.OrderPaymentInput)
 			Amount:      subPrice.String(),
 		}
 
+		//We think + and - in terms of cash movement
+		//todo we should make sure amount comes unsigned.
+		if order.Type == model.OrderTypeOut || order.Type == model.OrderTypeLoss {
+			payment.Amount = "-" + payment.Amount
+		} else if order.Type == model.OrderTypeIn {
+			payment.Amount = "+" + payment.Amount
+		} else if order.Type == model.OrderTypeNeutral {
+			return errors.New(`you can't save payment for transfer order.'`)
+		} else {
+			return errors.New(order.Type.String() + " is not implemented in payments.")
+		}
+
 		// do some database operations in the transaction (use 'tx' from this point, not 'db')
 		if err := tx.Create(&payment).Error; err != nil {
 			return err
 		}
 
-		//Changing ledger
+		//Updating order so that it will not be later updated
+
+		if err := tx.Model(model.Order{}).Where(model.Order{ID: input.OrderID, Status: model.OrderStatusPending}).Updates(model.Order{Status: model.OrderStatusCompleted}).Error; err != nil {
+			return err
+		}
 
 		//Decreasing items' quantity depending on type
 

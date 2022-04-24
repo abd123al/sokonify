@@ -1,5 +1,6 @@
 # Todo
 
+- For easier import retail could create invoice and go to wholesalers and offer that invoice to be scanned, then map it and user could enjoy seamless import
 - Find a way to check permission to perform action in that store. (Solutions: use directive)
 - Create JWT when user switch store
 - attach staff id in everything, so that we know who did what.
