@@ -112,7 +112,7 @@ type CreateItemArgs struct {
 	ProductID int
 }
 
-func CreateItem(DB *gorm.DB, args *CreateItemArgs) *model.Item {
+func CreateItem(DB *gorm.DB, args *CreateItemArgs, StoreId *int) *model.Item {
 	var BrandID *int
 	var ProductID int
 
@@ -122,7 +122,11 @@ func CreateItem(DB *gorm.DB, args *CreateItemArgs) *model.Item {
 		ProductID = args.ProductID
 	} else {
 		//creating the needed product
-		ProductID = CreateProduct(DB, nil).ID
+		if StoreId != nil {
+			ProductID = CreateProduct(DB, &CreateProductArgs{StoreID: *StoreId}).ID
+		} else {
+			ProductID = CreateProduct(DB, nil).ID
+		}
 	}
 
 	item, _ := repository.CreateItem(DB, model.ItemInput{
@@ -137,23 +141,52 @@ func CreateItem(DB *gorm.DB, args *CreateItemArgs) *model.Item {
 
 type CreateOrderArgs struct {
 	IssuerID   int
-	UserId     int
+	StaffId    int
 	CustomerID int
-	ItemID     int
+	Items      []*model.Item
 }
 
-func CreateOrder(DB *gorm.DB, args CreateOrderArgs) *model.Order {
-	store, _ := repository.CreateOrder(DB, args.UserId, model.OrderInput{
-		IssuerID:   args.IssuerID,
-		CustomerID: &args.CustomerID,
+func CreateOrder(DB *gorm.DB, args *CreateOrderArgs) *model.Order {
+	var IssuerID int
+	var StaffId int
+	var CustomerID int
+
+	var Items []*model.Item
+	var ItemsInput []*model.OrderItemInput
+
+	if args != nil {
+		IssuerID = args.IssuerID
+		StaffId = args.StaffId
+		CustomerID = args.CustomerID
+		Items = args.Items
+	} else {
+		StaffId = CreateUser(DB).ID
+		IssuerID = CreateStore(DB, &StaffId).ID
+		CustomerID = CreateCustomer(DB, IssuerID).ID
+
+		Items = []*model.Item{
+			CreateItem(DB, nil, &IssuerID),
+			CreateItem(DB, nil, &IssuerID),
+			CreateItem(DB, nil, &IssuerID),
+		}
+	}
+
+	for i, item := range Items {
+		input := model.OrderItemInput{
+			Quantity: i + 2, Price: item.SellingPrice, ItemID: item.ID,
+		}
+
+		ItemsInput = append(ItemsInput, &input)
+	}
+
+	order, _ := repository.CreateOrder(DB, StaffId, model.OrderInput{
+		IssuerID:   IssuerID,
+		CustomerID: &CustomerID,
 		Type:       model.OrderTypeIn,
-		Items: []*model.OrderItemInput{
-			{Quantity: 2, Price: "5000.33", ItemID: args.ItemID}, //10,000.66
-			{Quantity: 4, Price: "4000.22", ItemID: args.ItemID}, //16,000.88
-		},
+		Items:      ItemsInput,
 	})
 
-	return store
+	return order
 }
 
 func CreateExpense(DB *gorm.DB, StoreID *int) *model.Expense {
