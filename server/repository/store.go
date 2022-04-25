@@ -15,7 +15,7 @@ func CreateStore(db *gorm.DB, UserId int, input model.StoreInput) (*model.Store,
 	return &store, result.Error
 }
 
-func Stores(db *gorm.DB, UserId int) ([]*model.Store, error) {
+func FindStores(db *gorm.DB, UserId int) ([]*model.Store, error) {
 	var stores []*model.Store
 	result := db.Table("stores").Joins("inner join staffs on staffs.store_id = stores.id AND staffs.user_id = ?", UserId).Find(&stores)
 	return stores, result.Error

@@ -7,6 +7,7 @@ import (
 	"mahesabu/graph/model"
 )
 
+// CreateOrderPayment todo loans
 func CreateOrderPayment(DB *gorm.DB, StaffID int, input model.OrderPaymentInput) (*model.Payment, error) {
 	var payment *model.Payment
 

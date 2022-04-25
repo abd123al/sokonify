@@ -13,7 +13,7 @@ import (
 )
 
 func (r *adminResolver) Password(ctx context.Context, obj *model.Admin) (*string, error) {
-	panic(fmt.Errorf("not implemented"))
+	return nil, nil
 }
 
 func (r *itemResolver) BuyingPrice(ctx context.Context, obj *model.Item) (string, error) {
@@ -33,7 +33,7 @@ func (r *mutationResolver) CreateCustomer(ctx context.Context, input model.Custo
 }
 
 func (r *mutationResolver) CreateExpense(ctx context.Context, input model.ExpenseInput) (*model.Expense, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.CreateExpense(r.DB, input)
 }
 
 func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput) (*model.Item, error) {
@@ -145,31 +145,31 @@ func (r *queryResolver) Admins(ctx context.Context) ([]*model.Admin, error) {
 }
 
 func (r *queryResolver) Brand(ctx context.Context, id int) (*model.Brand, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.FindBrand(r.DB, id)
 }
 
 func (r *queryResolver) Brands(ctx context.Context, productID int) ([]*model.Brand, error) {
-	return repository.Brands(r.DB, productID)
+	return repository.FindBrands(r.DB, productID)
 }
 
 func (r *queryResolver) Category(ctx context.Context, id int) (*model.Category, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.FindCategory(r.DB, id)
 }
 
 func (r *queryResolver) Categories(ctx context.Context, storeID int) ([]*model.Category, error) {
-	return repository.Categories(r.DB, storeID)
+	return repository.FindCategories(r.DB, storeID)
 }
 
 func (r *queryResolver) Customer(ctx context.Context, id int) (*model.Customer, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.FindCustomer(r.DB, id)
 }
 
 func (r *queryResolver) Customers(ctx context.Context, storeID int) ([]*model.Customer, error) {
-	return repository.Customers(r.DB, storeID)
+	return repository.FindCustomers(r.DB, storeID)
 }
 
 func (r *queryResolver) Item(ctx context.Context, id int) (*model.Item, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.FindItem(r.DB, id)
 }
 
 func (r *queryResolver) Items(ctx context.Context, by model.ItemsBy, value int) ([]*model.Item, error) {
@@ -177,7 +177,7 @@ func (r *queryResolver) Items(ctx context.Context, by model.ItemsBy, value int) 
 }
 
 func (r *queryResolver) Expense(ctx context.Context, id int) (*model.Expense, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.FindExpense(r.DB, id)
 }
 
 func (r *queryResolver) Expenses(ctx context.Context, args model.ExpensesArgs) ([]*model.Expense, error) {
@@ -185,15 +185,15 @@ func (r *queryResolver) Expenses(ctx context.Context, args model.ExpensesArgs) (
 }
 
 func (r *queryResolver) Order(ctx context.Context, id int) (*model.Order, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.FindOrder(r.DB, id)
 }
 
 func (r *queryResolver) Orders(ctx context.Context, args model.OrdersArgs) ([]*model.Order, error) {
-	return repository.Orders(r.DB, args)
+	return repository.FindOrders(r.DB, args)
 }
 
 func (r *queryResolver) Payment(ctx context.Context, id int) (*model.Payment, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.FindPayment(r.DB, id)
 }
 
 func (r *queryResolver) Payments(ctx context.Context, storeID int) ([]*model.Payment, error) {
@@ -201,7 +201,7 @@ func (r *queryResolver) Payments(ctx context.Context, storeID int) ([]*model.Pay
 }
 
 func (r *queryResolver) Product(ctx context.Context, id int) (*model.Product, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.FindProduct(r.DB, id)
 }
 
 func (r *queryResolver) Products(ctx context.Context, by model.ProductsBy, value int) ([]*model.Product, error) {
@@ -209,7 +209,7 @@ func (r *queryResolver) Products(ctx context.Context, by model.ProductsBy, value
 }
 
 func (r *queryResolver) Staff(ctx context.Context, id int) (*model.Staff, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.FindStaff(r.DB, id)
 }
 
 func (r *queryResolver) Staffs(ctx context.Context, storeID int) ([]*model.Staff, error) {
@@ -217,15 +217,15 @@ func (r *queryResolver) Staffs(ctx context.Context, storeID int) ([]*model.Staff
 }
 
 func (r *queryResolver) Store(ctx context.Context, id int) (*model.Store, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.FindStore(r.DB, id)
 }
 
 func (r *queryResolver) Stores(ctx context.Context) ([]*model.Store, error) {
-	return repository.Stores(r.DB, r.UserId)
+	return repository.FindStores(r.DB, r.UserId)
 }
 
 func (r *queryResolver) User(ctx context.Context, id int) (*model.User, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.FindUser(r.DB, id)
 }
 
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {

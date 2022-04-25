@@ -35,7 +35,7 @@ func CreateOrder(DB *gorm.DB, UserId int, input model.OrderInput) (*model.Order,
 	return &order, result.Error
 }
 
-func Orders(DB *gorm.DB, args model.OrdersArgs) ([]*model.Order, error) {
+func FindOrders(DB *gorm.DB, args model.OrdersArgs) ([]*model.Order, error) {
 	var orders []*model.Order
 	var result *gorm.DB
 	sort := "id " + "DESC" //todo use sortBy var

@@ -14,7 +14,7 @@ func CreateCategory(db *gorm.DB, input model.CategoryInput) (*model.Category, er
 	return &category, result.Error
 }
 
-func Categories(db *gorm.DB, storeID int) ([]*model.Category, error) {
+func FindCategories(db *gorm.DB, storeID int) ([]*model.Category, error) {
 	var categories []*model.Category
 	result := db.Where(&model.Category{StoreID: storeID}).Find(&categories)
 	return categories, result.Error
