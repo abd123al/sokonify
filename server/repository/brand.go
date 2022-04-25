@@ -14,3 +14,9 @@ func CreateBrand(db *gorm.DB, input model.BrandInput) (*model.Brand, error) {
 	result := db.Create(&brand)
 	return &brand, result.Error
 }
+
+func Brands(db *gorm.DB, ProductID int) ([]*model.Brand, error) {
+	var brands []*model.Brand
+	result := db.Where(&model.Brand{ProductID: ProductID}).Find(&brands)
+	return brands, result.Error
+}

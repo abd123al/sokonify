@@ -293,6 +293,22 @@ func TestResolvers(t *testing.T) {
 	})
 
 	//Queries
+	t.Run("brands", func(t *testing.T) {
+		var resp struct {
+			Brands []model.Brand
+		}
+
+		c.MustPost(`
+				query brands($value: ID!) {
+				  brands(productId: $value) {
+					id
+					name
+				  }
+				}
+			`, &resp, client.Var("value", store.ID))
+
+		require.GreaterOrEqual(t, len(resp.Brands), 1)
+	})
 
 	t.Run("stores", func(t *testing.T) {
 		var resp struct {
