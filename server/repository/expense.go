@@ -24,7 +24,7 @@ func FindExpenses(DB *gorm.DB, args model.ExpensesArgs) ([]*model.Expense, error
 
 	//todo implement type and sortBy
 	if args.By == model.ExpensesByStore {
-		result = DB.Where(&model.Product{StoreID: args.Value}).Order("id DESC").Offset(args.Offset).Limit(args.Limit).Find(&expenses)
+		result = DB.Where(&model.Product{StoreID: &args.Value}).Order("id DESC").Offset(args.Offset).Limit(args.Limit).Find(&expenses)
 	} else if args.By == model.ExpensesByStaff {
 		panic(fmt.Errorf("not implemented"))
 	} else {

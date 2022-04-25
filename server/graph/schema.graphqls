@@ -134,8 +134,8 @@ type Category implements Gorm {
     # tablets/syrups/
     name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(50);default:null")
 
-    storeId: Int!
-    store: Store! @goTag(key: "gorm", value:  "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    storeId: Int
+    store: Store @goTag(key: "gorm", value:  "foreignKey:StoreID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 }
 
 input CategoryInput {
@@ -234,8 +234,9 @@ type Product implements Gorm {
     # unit box/each/package
     unit: String! @goTag(key: "gorm", value: "type:varchar(50);")
 
-    storeId: Int!
-    store: Store! @goTag(key: "gorm", value: "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    # We will add our custom items and user may choose from our list.
+    storeId: Int
+    store: Store @goTag(key: "gorm", value: "foreignKey:StoreID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 
     brands: [Brand!]! @goTag(key: "gorm", value: "constraint:OnUpdate:CASCADE,OnDelete:RESTRICT;") @goField(forceResolver: true)
 }
@@ -496,6 +497,21 @@ input ExpensePaymentInput {
     amount: String!
 }
 
+enum PaymentsBy {
+    staff # for who created expense
+    store # all expenses
+    customer
+}
+
+input PaymentsArgs {
+    by:PaymentsBy! = store
+    value:ID!
+    limit: Int! =10
+    offset:Int! = 0
+    sortBy:SortBy! = DESC
+    method:PaymentMethod
+}
+
 type Stats {
     profit(startDate:Time!,endDate:Time!): String! @goField(forceResolver: true)
     totalSalesAmount(startDate:Time!,endDate:Time!): String! @goField(forceResolver: true)
@@ -518,9 +534,9 @@ type Query {
     order(id: ID!): Order!
     orders(args: OrdersArgs!): [Order!]!
     payment(id: ID!): Payment!
-    payments(storeId:ID!): [Payment!]! #todo args too here
+    payments(args: PaymentsArgs!): [Payment!]!
     product(id: ID!): Product!
-    products(by:ProductsBy! = store,value:ID!): [Product!]!
+    products(by: ProductsBy! = store,value:ID!): [Product!]!
     staff(id: ID!): Staff!
     staffs(storeId:ID!): [Staff!]!
     store(id: ID!): Store!
