@@ -21,13 +21,7 @@ func (r *itemResolver) BuyingPrice(ctx context.Context, obj *model.Item) (string
 }
 
 func (r *mutationResolver) CreateBrand(ctx context.Context, input model.BrandInput) (*model.Brand, error) {
-	brand := model.Brand{
-		Name:         input.Name,
-		Manufacturer: input.Manufacturer,
-		ProductID:    input.ProductID,
-	}
-	result := r.DB.Create(&brand)
-	return &brand, result.Error
+	return repository.CreateBrand(r.DB, input)
 }
 
 func (r *mutationResolver) CreateCategory(ctx context.Context, input model.CategoryInput) (*model.Category, error) {
