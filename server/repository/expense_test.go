@@ -13,7 +13,7 @@ func TestFindExpenses(t *testing.T) {
 	user := util.CreateUser(DB)
 	store := util.CreateStore(DB, &user.ID)
 
-	t.Run("CreateExpensePayment", func(t *testing.T) {
+	t.Run("FindExpenses", func(t *testing.T) {
 		util.CreateExpense(DB, &store.ID)
 		util.CreateExpense(DB, &store.ID)
 		util.CreateExpense(DB, &store.ID)
@@ -27,5 +27,13 @@ func TestFindExpenses(t *testing.T) {
 		})
 
 		require.GreaterOrEqual(t, len(results), 3)
+	})
+
+	t.Run("FindExpense", func(t *testing.T) {
+		e := util.CreateExpense(DB, &store.ID)
+
+		result, _ := repository.FindExpense(DB, e.ID)
+
+		require.NotNil(t, result)
 	})
 }

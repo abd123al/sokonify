@@ -20,3 +20,9 @@ func Brands(db *gorm.DB, ProductID int) ([]*model.Brand, error) {
 	result := db.Where(&model.Brand{ProductID: ProductID}).Find(&brands)
 	return brands, result.Error
 }
+
+func FindBrand(db *gorm.DB, ID int) (*model.Brand, error) {
+	var brand *model.Brand
+	result := db.Where(&model.Brand{ID: ID}).First(&brand)
+	return brand, result.Error
+}

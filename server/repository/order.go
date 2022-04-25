@@ -54,3 +54,9 @@ func Orders(DB *gorm.DB, args model.OrdersArgs) ([]*model.Order, error) {
 	}
 	return orders, result.Error
 }
+
+func FindOrder(db *gorm.DB, ID int) (*model.Order, error) {
+	var order *model.Order
+	result := db.Where(&model.Order{ID: ID}).First(&order)
+	return order, result.Error
+}

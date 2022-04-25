@@ -33,3 +33,9 @@ func FindExpenses(DB *gorm.DB, args model.ExpensesArgs) ([]*model.Expense, error
 
 	return expenses, result.Error
 }
+
+func FindExpense(db *gorm.DB, ID int) (*model.Expense, error) {
+	var expense *model.Expense
+	result := db.Where(&model.Expense{ID: ID}).First(&expense)
+	return expense, result.Error
+}

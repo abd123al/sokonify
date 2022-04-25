@@ -15,3 +15,9 @@ func CreateUser(db *gorm.DB, input model.UserInput) (*model.User, error) {
 	result := db.Create(&user)
 	return &user, result.Error
 }
+
+func FindUser(db *gorm.DB, ID int) (*model.User, error) {
+	var store *model.User
+	result := db.Where(&model.User{ID: ID}).First(&store)
+	return store, result.Error
+}

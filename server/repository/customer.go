@@ -41,3 +41,9 @@ func Customers(DB *gorm.DB, storeID int) ([]*model.Customer, error) {
 	result := DB.Where(&model.Customer{StoreID: storeID}).Order("id DESC").Find(&customers)
 	return customers, result.Error
 }
+
+func FindCustomer(db *gorm.DB, ID int) (*model.Customer, error) {
+	var customer *model.Customer
+	result := db.Where(&model.Customer{ID: ID}).First(&customer)
+	return customer, result.Error
+}

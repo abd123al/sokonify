@@ -13,3 +13,9 @@ func CreateStaff(db *gorm.DB, input model.StaffInput) (*model.Staff, error) {
 	result := db.Create(&staff)
 	return &staff, result.Error
 }
+
+func FindStaff(db *gorm.DB, ID int) (*model.Staff, error) {
+	var staff *model.Staff
+	result := db.Where(&model.Staff{ID: ID}).First(&staff)
+	return staff, result.Error
+}

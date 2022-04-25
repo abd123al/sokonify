@@ -113,3 +113,9 @@ func CreateExpensePayment(DB *gorm.DB, StaffID int, input model.ExpensePaymentIn
 
 	return payment, result.Error
 }
+
+func FindPayment(db *gorm.DB, ID int) (*model.Payment, error) {
+	var payment *model.Payment
+	result := db.Where(&model.Payment{ID: ID}).First(&payment)
+	return payment, result.Error
+}

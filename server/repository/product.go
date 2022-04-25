@@ -70,3 +70,9 @@ func FindProducts(DB *gorm.DB, by model.ProductsBy, value int) ([]*model.Product
 
 	return items, result.Error
 }
+
+func FindProduct(db *gorm.DB, ID int) (*model.Product, error) {
+	var product *model.Product
+	result := db.Where(&model.Product{ID: ID}).First(&product)
+	return product, result.Error
+}

@@ -41,3 +41,9 @@ func FindItems(DB *gorm.DB, by model.ItemsBy, value int) ([]*model.Item, error) 
 	}
 	return items, result.Error
 }
+
+func FindItem(db *gorm.DB, ID int) (*model.Item, error) {
+	var item *model.Item
+	result := db.Where(&model.Item{ID: ID}).First(&item)
+	return item, result.Error
+}
