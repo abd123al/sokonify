@@ -61,13 +61,7 @@ func (r *mutationResolver) CreateStaff(ctx context.Context, input model.StaffInp
 }
 
 func (r *mutationResolver) CreateStore(ctx context.Context, input model.StoreInput) (*model.Store, error) {
-	//todo use transaction and save user as staff.
-	store := model.Store{
-		Name:    input.Name,
-		OwnerID: r.UserId,
-	}
-	result := r.DB.Create(&store)
-	return &store, result.Error
+	return repository.CreateStore(r.DB, r.UserId, input)
 }
 
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.UserInput) (*model.User, error) {
