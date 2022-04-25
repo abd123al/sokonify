@@ -65,14 +65,7 @@ func (r *mutationResolver) CreateStore(ctx context.Context, input model.StoreInp
 }
 
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.UserInput) (*model.User, error) {
-	user := model.User{
-		Name:     input.Name,
-		Email:    input.Email,
-		Username: input.Username,
-		Password: input.Password,
-	}
-	result := r.DB.Create(&user)
-	return &user, result.Error
+	return repository.CreateUser(r.DB, input)
 }
 
 func (r *mutationResolver) ChangePassword(ctx context.Context, input model.ChangePasswordInput) (*model.User, error) {
