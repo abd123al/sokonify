@@ -57,12 +57,7 @@ func (r *mutationResolver) CreateProduct(ctx context.Context, input model.Produc
 }
 
 func (r *mutationResolver) CreateStaff(ctx context.Context, input model.StaffInput) (*model.Staff, error) {
-	staff := model.Staff{
-		StoreID: input.StoreID,
-		UserID:  input.UserID,
-	}
-	result := r.DB.Create(&staff)
-	return &staff, result.Error
+	return repository.CreateStaff(r.DB, input)
 }
 
 func (r *mutationResolver) CreateStore(ctx context.Context, input model.StoreInput) (*model.Store, error) {
