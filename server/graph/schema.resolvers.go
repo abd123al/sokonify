@@ -25,12 +25,7 @@ func (r *mutationResolver) CreateBrand(ctx context.Context, input model.BrandInp
 }
 
 func (r *mutationResolver) CreateCategory(ctx context.Context, input model.CategoryInput) (*model.Category, error) {
-	category := model.Category{
-		Name:    input.Name,
-		StoreID: input.StoreID,
-	}
-	result := r.DB.Create(&category)
-	return &category, result.Error
+	return repository.CreateCategory(r.DB, input)
 }
 
 func (r *mutationResolver) CreateCustomer(ctx context.Context, input model.CustomerInput) (*model.Customer, error) {
@@ -180,9 +175,7 @@ func (r *queryResolver) Category(ctx context.Context, id int) (*model.Category, 
 }
 
 func (r *queryResolver) Categories(ctx context.Context, storeID int) ([]*model.Category, error) {
-	var categories []*model.Category
-	result := r.DB.Where(&model.Category{StoreID: storeID}).Find(&categories)
-	return categories, result.Error
+	return repository.Categories(r.DB, storeID)
 }
 
 func (r *queryResolver) Customer(ctx context.Context, id int) (*model.Customer, error) {
