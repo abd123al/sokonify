@@ -7,9 +7,14 @@ import (
 
 func CreateStore(db *gorm.DB, UserId int, input model.StoreInput) (*model.Store, error) {
 	//todo use transaction and save user as staff.
-	store := model.Store{
-		Name:    input.Name,
-		OwnerID: UserId,
+	var store = model.Store{
+		Address:     input.Address,
+		Description: input.Description,
+		Email:       input.Email,
+		Name:        input.Name,
+		Tin:         input.Tin,
+		Type:        input.Type,
+		OwnerID:     UserId,
 	}
 	result := db.Create(&store)
 	return &store, result.Error

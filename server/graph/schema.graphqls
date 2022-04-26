@@ -56,6 +56,7 @@ enum StaffRole {
 
 # Having multiple type will allow transfer between parties
 enum StoreType {
+    pharmacy
     shop
     warehouse #
     storage # Pharmacy inner store
@@ -151,11 +152,12 @@ type Customer implements Gorm {
     updatedAt:Time!
     deletedAt:Time
 
-    name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(50);default:null")
-    email: String @goTag(key: "gorm", value: "type:varchar(100);default:null")
-    phone: String @goTag(key: "gorm", value: "type:varchar(100);default:null")
-    comment: String @goTag(key: "gorm", value: "type:varchar(250);default:null")
     address: String @goTag(key: "gorm", value: "type:varchar(250);default:null")
+    comment: String @goTag(key: "gorm", value: "type:varchar(250);default:null")
+    email: String @goTag(key: "gorm", value: "type:varchar(100);default:null")
+    name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(50);default:null")
+    phone: String @goTag(key: "gorm", value: "type:varchar(100);default:null")
+    tin: String @goTag(key: "gorm", value: "size:50;")
     type: CustomerType!
     gender: GenderType
     dob:Time
@@ -177,6 +179,7 @@ input CustomerInput {
     email: String
     phone: String
     address: String
+    tin: String
 
     storeId: Int!
 }
@@ -362,8 +365,15 @@ type Store implements Gorm {
     updatedAt:Time!
     deletedAt:Time
 
+    address: String @goTag(key: "gorm", value: "size:100;")
+    # This will stay under title.
+    description: String @goTag(key: "gorm", value: "size:100;")
+    email: String @goTag(key: "gorm", value: "size:100;")
+    logo: String @goTag(key: "gorm", value: "size:100;")
     name: String! @goTag(key: "gorm", value: "index;size:50;not null;default:null")
-    type: StoreType!
+    #phones: [String!] @goTag(key: "gorm", value: "size:50;")
+    tin: String @goTag(key: "gorm", value: "size:50;")
+    type: StoreType
 
     ownerId: Int!
     owner: User! @goTag(key: "gorm", value: "foreignKey:OwnerID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
@@ -372,7 +382,14 @@ type Store implements Gorm {
 }
 
 input StoreInput {
+    address: String
+    # This will stay under title.
+    description: String
+    email: String
     name: String!
+    #phones: [String!] @goTag(key: "gorm", value: "size:50;")
+    tin: String
+    type: StoreType
 }
 
 type Order implements Gorm {
