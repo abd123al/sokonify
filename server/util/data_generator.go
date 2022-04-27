@@ -206,3 +206,69 @@ func CreateExpense(DB *gorm.DB, StoreID *int) *model.Expense {
 
 	return expense
 }
+
+type CreatePaymentArgs struct {
+	StoreID    int
+	StaffID    int
+	CustomerID *int
+}
+
+type CreatePaymentResult struct {
+	StoreID    int
+	StaffID    int
+	CustomerID *int
+	Payment    *model.Payment
+}
+
+func CreatePayment(DB *gorm.DB, Args *CreatePaymentArgs, Order bool) CreatePaymentResult {
+	var StoreID int
+	var StaffID int
+	var CustomerID *int
+	var payment *model.Payment
+
+	if Args == nil {
+		StaffID = CreateUser(DB).ID
+		StoreID = CreateStore(DB, nil).ID
+		_ = CreateStaff(DB, CreateStaffArgs{
+			StoreID: StoreID,
+			UserID:  StaffID,
+		}).ID
+		CustomerID = &CreateCustomer(DB, StoreID).ID
+	} else {
+		StoreID = Args.StoreID
+		StaffID = Args.StaffID
+		CustomerID = Args.CustomerID
+	}
+
+	if Order {
+		item := CreateItem(DB, nil, &StoreID)
+		order := CreateOrder(DB, &CreateOrderArgs{
+			IssuerID:   StoreID,
+			StaffId:    StaffID,
+			CustomerID: *CustomerID,
+			Items:      []*model.Item{item},
+		})
+		payment, _ = repository.CreateOrderPayment(DB, StaffID, model.OrderPaymentInput{
+			OrderID: order.ID,
+			Method:  model.PaymentMethodCash,
+		})
+
+	} else {
+		expense := CreateExpense(DB, &StoreID)
+
+		payment, _ = repository.CreateExpensePayment(DB, StaffID, model.ExpensePaymentInput{
+			ExpenseID: expense.ID,
+			Method:    model.PaymentMethodCash,
+			Amount:    "2000.00",
+		})
+	}
+
+	result := CreatePaymentResult{
+		StoreID:    StoreID,
+		StaffID:    StaffID,
+		CustomerID: CustomerID,
+		Payment:    payment,
+	}
+
+	return result
+}

@@ -62,4 +62,40 @@ func TestPayment(t *testing.T) {
 		assert.Nil(t, item)
 		assert.NotNil(t, err)
 	})
+
+	t.Run("FindPayments by store", func(t *testing.T) {
+		result := util.CreatePayment(DB, nil, false)
+
+		paymentsByCustomer, err := repository.FindPayments(DB, model.PaymentsArgs{
+			By:    model.PaymentsByStore,
+			Value: result.StoreID,
+		})
+
+		assert.Nil(t, err)
+		assert.NotEmpty(t, paymentsByCustomer)
+	})
+
+	t.Run("FindPayments by customer", func(t *testing.T) {
+		result := util.CreatePayment(DB, nil, true)
+
+		paymentsByCustomer, err := repository.FindPayments(DB, model.PaymentsArgs{
+			By:    model.PaymentsByCustomer,
+			Value: *result.CustomerID,
+		})
+
+		assert.Nil(t, err)
+		assert.NotEmpty(t, paymentsByCustomer)
+	})
+
+	t.Run("FindPayments by staff", func(t *testing.T) {
+		result := util.CreatePayment(DB, nil, false)
+
+		paymentsByCustomer, err := repository.FindPayments(DB, model.PaymentsArgs{
+			By:    model.PaymentsByStaff,
+			Value: result.StaffID,
+		})
+
+		assert.Nil(t, err)
+		assert.NotEmpty(t, paymentsByCustomer)
+	})
 }

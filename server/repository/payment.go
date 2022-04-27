@@ -2,6 +2,7 @@ package repository
 
 import (
 	"errors"
+	"fmt"
 	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
 	"mahesabu/graph/model"
@@ -119,4 +120,24 @@ func FindPayment(db *gorm.DB, ID int) (*model.Payment, error) {
 	var payment *model.Payment
 	result := db.Where(&model.Payment{ID: ID}).First(&payment)
 	return payment, result.Error
+}
+
+func FindPayments(DB *gorm.DB, args model.PaymentsArgs) ([]*model.Payment, error) {
+	var payments []*model.Payment
+	var result *gorm.DB
+
+	if args.By == model.PaymentsByStaff {
+		//This will return payments processed by a specific staff.
+		result = DB.Table("payments").Where(&model.Payment{StaffID: args.Value}).Order("id DESC").Offset(args.Offset).Limit(args.Limit).Find(&payments)
+	} else if args.By == model.PaymentsByStore {
+		//This will return all payments store processed.
+		result = DB.Table("payments").Joins("inner join staffs on payments.staff_id = staffs.user_id AND staffs.store_id = ?", args.Value).Order("id DESC").Offset(args.Offset).Limit(args.Limit).Find(&payments)
+	} else if args.By == model.PaymentsByCustomer {
+		//This will return payments by specific customer.
+		result = DB.Table("payments").Joins("inner join orders on payments.order_id = orders.id AND orders.customer_id = ?", args.Value).Order("id DESC").Offset(args.Offset).Limit(args.Limit).Find(&payments)
+	} else {
+		panic(fmt.Errorf("not implemented"))
+	}
+
+	return payments, result.Error
 }

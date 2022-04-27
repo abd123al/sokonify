@@ -197,7 +197,7 @@ func (r *queryResolver) Payment(ctx context.Context, id int) (*model.Payment, er
 }
 
 func (r *queryResolver) Payments(ctx context.Context, args model.PaymentsArgs) ([]*model.Payment, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.FindPayments(r.DB, args)
 }
 
 func (r *queryResolver) Product(ctx context.Context, id int) (*model.Product, error) {

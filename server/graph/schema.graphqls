@@ -520,13 +520,19 @@ enum PaymentsBy {
     customer
 }
 
+enum PaymentType {
+    expense
+    order
+}
+
 input PaymentsArgs {
     by:PaymentsBy! = store
-    value:ID!
+    value: ID!
     limit: Int! =10
-    offset:Int! = 0
-    sortBy:SortBy! = DESC
-    method:PaymentMethod
+    offset: Int! = 0
+    sortBy: SortBy! = DESC
+    method: PaymentMethod
+    type: PaymentType
 }
 
 type Stats {

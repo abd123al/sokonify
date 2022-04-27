@@ -17,6 +17,7 @@
 - Integrate Gin https://gqlgen.com/recipes/gin/
 - separate table for customers??
 - adding staff should be like adding manager on YouTube, one need to know email
+- Don't deploy until you can manage access to other stores
 
 ```console
 
