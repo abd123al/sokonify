@@ -204,8 +204,8 @@ func (r *queryResolver) Product(ctx context.Context, id int) (*model.Product, er
 	return repository.FindProduct(r.DB, id)
 }
 
-func (r *queryResolver) Products(ctx context.Context, by model.ProductsBy, value int) ([]*model.Product, error) {
-	return repository.FindProducts(r.DB, by, value)
+func (r *queryResolver) Products(ctx context.Context, args model.ProductsArgs) ([]*model.Product, error) {
+	return repository.FindProducts(r.DB, args)
 }
 
 func (r *queryResolver) Staff(ctx context.Context, id int) (*model.Staff, error) {

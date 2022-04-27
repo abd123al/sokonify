@@ -62,11 +62,6 @@ enum StoreType {
     storage # Pharmacy inner store
 }
 
-enum ProductsBy {
-    store
-    category
-}
-
 enum OrdersBy {
     customer # for customers
     staff # for who completed order
@@ -252,6 +247,17 @@ input ProductInput {
     # Brands can be inserted when creating product.
     storeId: ID!
     brands: [ProductBrandInput!]
+}
+
+enum ProductsBy {
+    store
+    category
+}
+
+input ProductsArgs {
+    by: ProductsBy = store,
+    value:ID
+    storeType : StoreType
 }
 
 # User may create products category as they want and it will help them track them efficiently
@@ -559,7 +565,7 @@ type Query {
     payment(id: ID!): Payment!
     payments(args: PaymentsArgs!): [Payment!]!
     product(id: ID!): Product!
-    products(by: ProductsBy! = store,value:ID!): [Product!]!
+    products(args: ProductsArgs!): [Product!]!
     staff(id: ID!): Staff!
     staffs(storeId:ID!): [Staff!]!
     store(id: ID!): Store!

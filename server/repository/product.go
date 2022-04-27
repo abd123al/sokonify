@@ -56,14 +56,18 @@ func CreateProduct(DB *gorm.DB, input model.ProductInput) (*model.Product, error
 	return &product, result.Error
 }
 
-func FindProducts(DB *gorm.DB, by model.ProductsBy, value int) ([]*model.Product, error) {
+func FindProducts(DB *gorm.DB, args model.ProductsArgs) ([]*model.Product, error) {
 	var items []*model.Product
 	var result *gorm.DB
 
-	if by == model.ProductsByStore {
-		result = DB.Table("products").Where(&model.Product{StoreID: &value}).Find(&items)
-	} else if by == model.ProductsByCategory {
-		result = DB.Table("products").Joins("inner join product_categories on product_categories.product_id = products.id AND product_categories.category_id = ?", value).Find(&items)
+	if args.By != nil {
+		if *args.By == model.ProductsByStore {
+			result = DB.Table("products").Where(&model.Product{StoreID: args.Value}).Find(&items)
+		} else if *args.By == model.ProductsByCategory {
+			result = DB.Table("products").Joins("inner join product_categories on product_categories.product_id = products.id AND product_categories.category_id = ?", args.Value).Find(&items)
+		} else {
+			panic(fmt.Errorf("not implemented"))
+		}
 	} else {
 		panic(fmt.Errorf("not implemented"))
 	}
