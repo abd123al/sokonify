@@ -26,16 +26,16 @@ func CreateItem(DB *gorm.DB, input model.ItemInput) (*model.Item, error) {
 	return &item, result.Error
 }
 
-func FindItems(DB *gorm.DB, by model.ItemsBy, value int) ([]*model.Item, error) {
+func FindItems(DB *gorm.DB, args model.ItemsArgs) ([]*model.Item, error) {
 	var items []*model.Item
 	var result *gorm.DB
 
-	if by == model.ItemsByStore {
-		result = DB.Table("items").Joins("inner join products on products.id = items.product_id AND products.store_id = ?", value).Find(&items)
-	} else if by == model.ItemsByCategory {
-		result = DB.Table("items").Joins("inner join products on products.id = items.product_id inner join categories on categories.id = products.category_id AND categories.id = ?", value).Find(&items)
-	} else if by == model.ItemsByProduct {
-		result = DB.Where(&model.Item{ProductID: value}).Find(&items)
+	if args.By == model.ItemsByStore {
+		result = DB.Table("items").Joins("inner join products on products.id = items.product_id AND products.store_id = ?", args.Value).Find(&items)
+	} else if args.By == model.ItemsByCategory {
+		result = DB.Table("items").Joins("inner join products on products.id = items.product_id inner join categories on categories.id = products.category_id AND categories.id = ?", args.Value).Find(&items)
+	} else if args.By == model.ItemsByProduct {
+		result = DB.Where(&model.Item{ProductID: args.Value}).Find(&items)
 	} else {
 		panic(fmt.Errorf("not implemented"))
 	}

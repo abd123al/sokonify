@@ -172,8 +172,8 @@ func (r *queryResolver) Item(ctx context.Context, id int) (*model.Item, error) {
 	return repository.FindItem(r.DB, id)
 }
 
-func (r *queryResolver) Items(ctx context.Context, by model.ItemsBy, value int) ([]*model.Item, error) {
-	return repository.FindItems(r.DB, by, value)
+func (r *queryResolver) Items(ctx context.Context, args model.ItemsArgs) ([]*model.Item, error) {
+	return repository.FindItems(r.DB, args)
 }
 
 func (r *queryResolver) Expense(ctx context.Context, id int) (*model.Expense, error) {

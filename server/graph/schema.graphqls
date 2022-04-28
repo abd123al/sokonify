@@ -73,12 +73,6 @@ enum SortBy {
     DESC
 }
 
-enum ItemsBy {
-    store
-    category
-    product
-}
-
 # This can log via terminal
 type Admin implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
@@ -339,6 +333,17 @@ input ItemInput {
     productId: Int!
 }
 
+enum ItemsBy {
+    store
+    category
+    product
+}
+
+input ItemsArgs {
+    by:ItemsBy! = store,
+    value:ID!
+}
+
 # Even suppliers/customers can be termed as staffs
 # todo we should allow specifying name here may be for handling customers
 type Staff implements Gorm {
@@ -557,9 +562,9 @@ type Query {
     customer(id:ID!): Customer!
     customers(storeId:ID!): [Customer!]!
     item(id: ID!): Item!
-    items(by:ItemsBy! = store,value:ID!): [Item!]!
+    items(args: ItemsArgs!): [Item!]!
     expense(id: ID!): Expense!
-    expenses(args:ExpensesArgs!): [Expense!]! #for getting kinda expenses categories
+    expenses(args: ExpensesArgs!): [Expense!]! #for getting kinda expenses categories
     order(id: ID!): Order!
     orders(args: OrdersArgs!): [Order!]!
     payment(id: ID!): Payment!
