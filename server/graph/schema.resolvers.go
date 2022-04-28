@@ -20,6 +20,10 @@ func (r *itemResolver) BuyingPrice(ctx context.Context, obj *model.Item) (string
 	return obj.BuyingPrice, nil
 }
 
+func (r *itemResolver) Name(ctx context.Context, obj *model.Item) (string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *mutationResolver) CreateBrand(ctx context.Context, input model.BrandInput) (*model.Brand, error) {
 	return repository.CreateBrand(r.DB, input)
 }
