@@ -14,7 +14,10 @@ func TestItem(t *testing.T) {
 
 	t.Run("CreateItem", func(t *testing.T) {
 		item, _ := repository.CreateItem(DB, model.ItemInput{
-			ProductID: product.ID,
+			ProductID:    product.ID,
+			Quantity:     12,
+			BuyingPrice:  "2000",
+			SellingPrice: "5000",
 		})
 
 		require.GreaterOrEqual(t, item.ID, 1)
