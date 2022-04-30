@@ -33,15 +33,15 @@ func CreateCustomer(DB *gorm.DB, StoreId int) *model.Customer {
 	return customer
 }
 
-func CreateStore(DB *gorm.DB, OwnerID *int) *model.Store {
-	if OwnerID == nil {
+func CreateStore(DB *gorm.DB, UserID *int) *model.Store {
+	if UserID == nil {
 		User := CreateUser(DB)
-		OwnerID = &User.ID
+		UserID = &User.ID
 	}
 
 	store := model.Store{
-		Name:    faker.Name(),
-		OwnerID: *OwnerID,
+		Name:   faker.Name(),
+		UserID: *UserID,
 	}
 
 	DB.Create(&store)

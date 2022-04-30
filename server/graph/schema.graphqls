@@ -386,8 +386,9 @@ type Store implements Gorm {
     tin: String @goTag(key: "gorm", value: "size:50;")
     type: StoreType
 
-    ownerId: Int!
-    owner: User! @goTag(key: "gorm", value: "foreignKey:OwnerID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    # Creator of store
+    userId: Int!
+    user: User! @goTag(key: "gorm", value: "foreignKey:UserID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 
     staffs: [Staff!]! @goTag(key: "gorm", value: "-")
 }

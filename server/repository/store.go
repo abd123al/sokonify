@@ -5,8 +5,7 @@ import (
 	"mahesabu/graph/model"
 )
 
-func CreateStore(db *gorm.DB, UserId int, input model.StoreInput) (*model.Store, error) {
-	//todo use transaction and save user as staff.
+func CreateStore(db *gorm.DB, UserID int, input model.StoreInput) (*model.Store, error) {
 	var store = model.Store{
 		Address:     input.Address,
 		Description: input.Description,
@@ -14,10 +13,28 @@ func CreateStore(db *gorm.DB, UserId int, input model.StoreInput) (*model.Store,
 		Name:        input.Name,
 		Tin:         input.Tin,
 		Type:        input.Type,
-		OwnerID:     UserId,
+		UserID:      UserID,
 	}
-	result := db.Create(&store)
-	return &store, result.Error
+
+	err := db.Transaction(func(tx *gorm.DB) error {
+		if err := db.Create(&store).Error; err != nil {
+			return err
+		}
+
+		_, err := CreateStaff(tx, model.StaffInput{
+			StoreID: store.ID,
+			UserID:  UserID,
+			Role:    model.StaffRoleOwner,
+		})
+
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	return &store, err
 }
 
 func FindStores(db *gorm.DB, UserId int) ([]*model.Store, error) {
