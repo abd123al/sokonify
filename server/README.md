@@ -2,7 +2,8 @@
 
 - brand cascade dont work
 - Users may add duplicates products, you should have a feature to merge them all
-- For easier import retail could create invoice and go to wholesalers and offer that invoice to be scanned, then map it and user could enjoy seamless import
+- For easier import retail could create invoice and go to wholesalers and offer that invoice to be scanned, then map it
+  and user could enjoy seamless import
 - Find a way to check permission to perform action in that store. (Solutions: use directive)
 - Create JWT when user switch store
 - attach staff id in everything, so that we know who did what.
@@ -32,5 +33,7 @@ go run -mod=mod github.com/99designs/gqlgen generate
 
 go mod tidy go generate ./...
 
-go get -d golang.org/x/mobile/cmd/gomobile gomobile bind -v -o ../client/packages/server/android/libs/server.aar
--target=android ./lib
+```bash
+go get -d golang.org/x/mobile/cmd/gomobile 
+gomobile bind -v -o ../client/packages/server/android/libs/server.aar -target=android ./lib
+```
