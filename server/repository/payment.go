@@ -126,15 +126,17 @@ func FindPayments(DB *gorm.DB, args model.PaymentsArgs) ([]*model.Payment, error
 	var payments []*model.Payment
 	var result *gorm.DB
 
+	Query := DB.Table("payments").Order("id DESC").Offset(args.Offset).Limit(args.Limit)
+
 	if args.By == model.PaymentsByStaff {
 		//This will return payments processed by a specific staff.
-		result = DB.Table("payments").Where(&model.Payment{StaffID: args.Value}).Order("id DESC").Offset(args.Offset).Limit(args.Limit).Find(&payments)
+		result = Query.Where(&model.Payment{StaffID: args.Value}).Find(&payments)
 	} else if args.By == model.PaymentsByStore {
 		//This will return all payments store processed.
-		result = DB.Table("payments").Joins("inner join staffs on payments.staff_id = staffs.user_id AND staffs.store_id = ?", args.Value).Order("id DESC").Offset(args.Offset).Limit(args.Limit).Find(&payments)
+		result = Query.Joins("inner join staffs on payments.staff_id = staffs.user_id AND staffs.store_id = ?", args.Value).Find(&payments)
 	} else if args.By == model.PaymentsByCustomer {
 		//This will return payments by specific customer.
-		result = DB.Table("payments").Joins("inner join orders on payments.order_id = orders.id AND orders.customer_id = ?", args.Value).Order("id DESC").Offset(args.Offset).Limit(args.Limit).Find(&payments)
+		result = Query.Joins("inner join orders on payments.order_id = orders.id AND orders.customer_id = ?", args.Value).Find(&payments)
 	} else {
 		panic(fmt.Errorf("not implemented"))
 	}

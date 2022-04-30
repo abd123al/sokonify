@@ -91,8 +91,10 @@ func TestPayment(t *testing.T) {
 		result := util.CreatePayment(DB, nil, false)
 
 		paymentsByCustomer, err := repository.FindPayments(DB, model.PaymentsArgs{
-			By:    model.PaymentsByStaff,
-			Value: result.StaffID,
+			By:     model.PaymentsByStaff,
+			Value:  result.StaffID,
+			Limit:  10,
+			Offset: 0,
 		})
 
 		assert.Nil(t, err)
