@@ -19,7 +19,7 @@ func TestResolvers(t *testing.T) {
 	user := util.CreateUser(DB)
 	store := util.CreateStore(DB, &user.ID)
 	customer := util.CreateCustomer(DB, store.ID)
-	staff := util.CreateStaff(DB, util.CreateStaffArgs{
+	staff := util.CreateStaff(DB, &util.CreateStaffArgs{
 		UserID:  user.ID,
 		StoreID: store.ID,
 	})
@@ -116,6 +116,7 @@ func TestResolvers(t *testing.T) {
 		input := model.StaffInput{
 			StoreID: newStore.ID,
 			UserID:  user.ID,
+			Role:    model.StaffRoleStaff,
 		}
 
 		c.MustPost(`

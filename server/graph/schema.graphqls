@@ -43,13 +43,6 @@ enum PaymentMethod {
     bank
 }
 
-enum StaffRole {
-    # can edit things in store
-    staff @enumInt(value: 2)
-    # can assign users in stores
-    owner @enumInt(value: 1)
-}
-
 # Having multiple type will allow transfer between parties
 enum StoreType {
     pharmacy
@@ -343,6 +336,13 @@ input ItemsArgs {
     value:ID!
 }
 
+enum StaffRole {
+    # can edit things in store
+    staff @enumInt(value: 2)
+    # can assign users in stores
+    owner @enumInt(value: 1)
+}
+
 # Even suppliers/customers can be termed as staffs
 # todo we should allow specifying name here may be for handling customers
 type Staff implements Gorm {
@@ -364,6 +364,7 @@ type Staff implements Gorm {
 input StaffInput {
     storeId: Int!
     userId: Int!
+    role: StaffRole!
 }
 
 

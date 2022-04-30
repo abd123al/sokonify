@@ -54,15 +54,25 @@ type CreateStaffArgs struct {
 	StoreID int
 }
 
-func CreateStaff(DB *gorm.DB, Args CreateStaffArgs) *model.Staff {
-	staff := model.Staff{
-		StoreID: Args.StoreID,
-		UserID:  Args.UserID,
-		Role:    model.StaffRoleOwner,
-	}
-	DB.Create(&staff)
+func CreateStaff(DB *gorm.DB, Args *CreateStaffArgs) *model.Staff {
+	var UserID int
+	var StoreID int
 
-	return &staff
+	if Args != nil {
+		UserID = Args.UserID
+		StoreID = Args.StoreID
+	} else {
+		UserID = CreateUser(DB).ID
+		StoreID = CreateStore(DB, nil).ID
+	}
+
+	staff, _ := repository.CreateStaff(DB, model.StaffInput{
+		StoreID: StoreID,
+		UserID:  UserID,
+		Role:    model.StaffRoleStaff,
+	})
+
+	return staff
 }
 
 func CreateCategory(DB *gorm.DB, StoreID int) *model.Category {
@@ -228,9 +238,9 @@ func CreatePayment(DB *gorm.DB, Args *CreatePaymentArgs, Order bool) CreatePayme
 	var payment *model.Payment
 
 	if Args == nil {
-		StaffID = CreateUser(DB).ID
+		StaffID = CreateStaff(DB, nil).UserID //Remember we use userId mostly and not staff's ID
 		StoreID = CreateStore(DB, nil).ID
-		_ = CreateStaff(DB, CreateStaffArgs{
+		_ = CreateStaff(DB, &CreateStaffArgs{
 			StoreID: StoreID,
 			UserID:  StaffID,
 		}).ID

@@ -7,8 +7,9 @@ import (
 
 func CreateStaff(db *gorm.DB, input model.StaffInput) (*model.Staff, error) {
 	staff := model.Staff{
-		StoreID: input.StoreID,
 		UserID:  input.UserID,
+		StoreID: input.StoreID,
+		Role:    input.Role,
 	}
 	result := db.Create(&staff)
 	return &staff, result.Error
