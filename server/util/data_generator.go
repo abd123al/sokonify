@@ -58,6 +58,7 @@ func CreateStaff(DB *gorm.DB, Args CreateStaffArgs) *model.Staff {
 	staff := model.Staff{
 		StoreID: Args.StoreID,
 		UserID:  Args.UserID,
+		Role:    model.StaffRoleOwner,
 	}
 	DB.Create(&staff)
 

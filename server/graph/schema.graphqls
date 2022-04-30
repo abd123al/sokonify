@@ -44,14 +44,10 @@ enum PaymentMethod {
 }
 
 enum StaffRole {
-    # who buys
-    customer
     # can edit things in store
-    staff
+    staff @enumInt(value: 2)
     # can assign users in stores
-    owner
-    # who brings products in
-    supplier
+    owner @enumInt(value: 1)
 }
 
 # Having multiple type will allow transfer between parties
@@ -356,7 +352,7 @@ type Staff implements Gorm {
     updatedAt:Time!
     deletedAt:Time
     # null means user has not been configured yet.
-    role: StaffRole @goTag(key: "sql", value: "type:user_type")
+    role: StaffRole! #@goTag(key: "gorm", value: "type:SMALLINT")
 
     userId: Int!
     user: User! @goTag(key: "gorm", value: "foreignKey:UserID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
@@ -635,3 +631,4 @@ directive @goTag(
 ) on INPUT_FIELD_DEFINITION | FIELD_DEFINITION
 
 directive @hasRole(role: StaffRole!) on FIELD_DEFINITION
+directive @E on ENUM_VALUE
