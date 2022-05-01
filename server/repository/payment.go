@@ -99,8 +99,9 @@ func CreateOrderPayment(DB *gorm.DB, StaffID int, input model.OrderPaymentInput)
 func CreateExpensePayment(DB *gorm.DB, StaffID int, input model.ExpensePaymentInput) (*model.Payment, error) {
 	var expense *model.Expense
 
-	if err := DB.Where(&model.Expense{ID: input.ExpenseID}).First(&expense).Error; err != nil {
-		return nil, err
+	res := DB.Where(&model.Expense{ID: input.ExpenseID}).Find(&expense)
+	if res.Error != nil || res.RowsAffected == 0 {
+		return nil, errors.New("expense not found")
 	}
 
 	payment := &model.Payment{
