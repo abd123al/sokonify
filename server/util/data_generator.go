@@ -149,6 +149,7 @@ func CreateItem(DB *gorm.DB, args *CreateItemArgs, StoreId *int) *model.Item {
 		ExpiresAt:    nil,
 		BrandID:      BrandID,
 		ProductID:    ProductID,
+		Unit:         "Tabs",
 	})
 
 	return item

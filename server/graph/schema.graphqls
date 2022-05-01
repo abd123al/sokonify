@@ -212,8 +212,6 @@ type Product implements Gorm {
     deletedAt:Time
 
     name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(100);default:null")
-    # unit box/each/package
-    unit: String! @goTag(key: "gorm", value: "type:varchar(50);")
 
     # We will add our custom items and user may choose from our list.
     storeId: Int
@@ -292,7 +290,8 @@ type Item implements Gorm {
     createdAt:Time!
     updatedAt:Time!
     deletedAt:Time
-
+    # unit box/each/package
+    unit: String! @goTag(key: "gorm", value: "type:varchar(50);")
     quantity: Int!  @goTag(key: "gorm", value: "type:integer;not null;unsigned;")
     batch: String @goTag(key: "gorm", value: "index;type:varchar(50);")
     description: String @goTag(key: "gorm", value: "size:100")
@@ -314,6 +313,7 @@ type Item implements Gorm {
 }
 
 input ItemInput {
+    unit: String!
     quantity: Int!
     buyingPrice: String!
     sellingPrice: String!

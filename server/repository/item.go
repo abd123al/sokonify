@@ -6,6 +6,7 @@ import (
 	"mahesabu/graph/model"
 )
 
+// CreateItem Items can have the same brand but different price and batch
 func CreateItem(DB *gorm.DB, input model.ItemInput) (*model.Item, error) {
 	item := model.Item{
 		Quantity:     input.Quantity,
@@ -15,6 +16,7 @@ func CreateItem(DB *gorm.DB, input model.ItemInput) (*model.Item, error) {
 		Batch:        input.Batch,
 		Description:  input.Description,
 		BrandID:      input.BrandID,
+		Unit:         input.Unit,
 	}
 
 	//to avoid: invalid memory address or nil pointer dereference
