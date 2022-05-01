@@ -6,6 +6,7 @@ import (
 	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
 	"mahesabu/graph/model"
+	"strconv"
 )
 
 // CreateOrderPayment todo loans
@@ -75,10 +76,16 @@ func CreateOrderPayment(DB *gorm.DB, StaffID int, input model.OrderPaymentInput)
 		}
 
 		//Decreasing items' quantity depending on type
-		//todo don't allow zero
 		for _, i := range orderItems {
-			if err := tx.Model(&model.Item{}).Where(&model.Item{ID: i.ItemID}).Update("quantity", gorm.Expr("quantity - ?", i.Quantity)).Error; err != nil {
-				return err
+			result := tx.Model(&model.Item{}).Where(&model.Item{ID: i.ItemID}).Where("quantity >= "+strconv.Itoa(i.Quantity)).Update("quantity", gorm.Expr("quantity - ?", i.Quantity))
+
+			//This will make the whole process abort since item is out of stock.
+			if result.RowsAffected == 0 {
+				return errors.New(fmt.Sprintf("Item %d is out of stock", i.ID))
+			}
+
+			if result.Error != nil {
+				return result.Error
 			}
 		}
 
