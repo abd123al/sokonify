@@ -140,6 +140,8 @@ func CreateItem(DB *gorm.DB, args *CreateItemArgs, StoreId *int) *model.Item {
 		}
 	}
 
+	unit := CreateUnit(DB, nil, nil)
+
 	item, _ := repository.CreateItem(DB, model.ItemInput{
 		Quantity:     10,
 		BuyingPrice:  "2000.00", //todo fake all these
@@ -149,10 +151,21 @@ func CreateItem(DB *gorm.DB, args *CreateItemArgs, StoreId *int) *model.Item {
 		ExpiresAt:    nil,
 		BrandID:      BrandID,
 		ProductID:    ProductID,
-		Unit:         "Tabs",
+		UnitID:       unit.ID,
 	})
 
 	return item
+}
+
+func CreateUnit(DB *gorm.DB, StoreID *int, UserID *int) *model.Unit {
+	unit, _ := repository.CreateUnit(DB, model.UnitInput{
+		Name: "Tabs",
+	}, repository.CreateUnitsArgs{
+		StoreID: StoreID,
+		UserID:  UserID,
+	})
+
+	return unit
 }
 
 type CreateOrderArgs struct {

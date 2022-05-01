@@ -28,13 +28,13 @@ enum OrderStatus {
 # Here we consider things in perception of where money goes (not items)
 enum OrderType {
     # buying items/paying salary/expenses. Items may+, Money -.
-    out
+    out #todo rename to purchase and sell
     # selling items. Items may-, Money +
     in
     # expired/damaged/stolen Items -, Money -
     loss
     # transfer from one store to another, Items neutral, Money neutral
-    neutral
+    neutral #todo transfer
 }
 
 enum PaymentMethod {
@@ -290,8 +290,7 @@ type Item implements Gorm {
     createdAt:Time!
     updatedAt:Time!
     deletedAt:Time
-    # unit box/each/package
-    unit: String! @goTag(key: "gorm", value: "type:varchar(50);")
+
     quantity: Int!  @goTag(key: "gorm", value: "type:integer;not null;unsigned;")
     batch: String @goTag(key: "gorm", value: "index;type:varchar(50);")
     description: String @goTag(key: "gorm", value: "size:100")
@@ -310,10 +309,13 @@ type Item implements Gorm {
     # todo make it nullable when brand is deleted
     brandId: Int
     brand: Brand @goTag(key: "gorm", value:  "foreignKey:BrandID;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
+
+    unitId: Int!
+    unit: Unit! @goTag(key: "gorm", value:  "foreignKey:UnitID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
 }
 
 input ItemInput {
-    unit: String!
+    unitId: Int!
     quantity: Int!
     buyingPrice: String!
     sellingPrice: String!
@@ -553,6 +555,30 @@ type Stats {
     totalSalesItems(startDate:Time!,endDate:Time!): String! @goField(forceResolver: true)
 }
 
+# We will seed common units and each store can add more units to fit their needs
+# todo add suggestions based on template
+type Unit implements Gorm {
+    id:ID! @goTag(key: "gorm", value: "primaryKey;")
+
+    createdAt:Time! #@goTag(key: "gorm", value: "not null;default:null")
+    updatedAt:Time! #@goTag(key: "gorm", value: "not null;default:null")
+    deletedAt:Time
+
+    # tablets/syrups/
+    name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(50);default:null")
+
+    storeId: Int
+    store: Store @goTag(key: "gorm", value:  "foreignKey:StoreID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+
+    userId: Int
+    user: User @goTag(key: "gorm", value:  "foreignKey:StoreID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+}
+
+input UnitInput {
+    name: String!
+}
+
+#todo remove storeId everywhere and use JWT for that.
 type Query {
     admin(id:ID!): Admin!
     admins: [Admin!]!
@@ -576,8 +602,10 @@ type Query {
     staffs(storeId:ID!): [Staff!]!
     store(id: ID!): Store!
     stores: [Store!]!
+    unit(id: ID!): Unit!
+    units(storeId:ID!): [Unit!]!
     user(id: ID!): User!
-    users: [User!]!
+    users: [User!]! #todo add args
 }
 
 type Mutation {
@@ -594,6 +622,7 @@ type Mutation {
     createStore(input: StoreInput!): Store! @hasRole(role: owner)
     # Only admins can create new user.
     createUser(input: UserInput!): User! @hasRole(role: owner)
+    createUnit(input: UnitInput!): Unit! @hasRole(role: owner)
 
     changePassword(input: ChangePasswordInput!): User!
 
@@ -606,6 +635,7 @@ type Mutation {
     editStaff(id: ID!,input: StaffInput!): Staff! @hasRole(role: owner)
     editStore(id: ID!,input: StoreInput!): Store! @hasRole(role: owner)
     editUser(id: ID!,input: UserInput!): User!
+    editUnit(id: ID!,input: UnitInput!): Unit! @hasRole(role: owner)
 
     deleteItem(id: ID!): Item! @hasRole(role: owner)
 
@@ -633,4 +663,3 @@ directive @goTag(
 ) on INPUT_FIELD_DEFINITION | FIELD_DEFINITION
 
 directive @hasRole(role: StaffRole!) on FIELD_DEFINITION
-directive @E on ENUM_VALUE

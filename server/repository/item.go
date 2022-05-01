@@ -16,7 +16,7 @@ func CreateItem(DB *gorm.DB, input model.ItemInput) (*model.Item, error) {
 		Batch:        input.Batch,
 		Description:  input.Description,
 		BrandID:      input.BrandID,
-		Unit:         input.Unit,
+		UnitID:       input.UnitID,
 	}
 
 	//to avoid: invalid memory address or nil pointer dereference

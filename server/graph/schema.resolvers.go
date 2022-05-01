@@ -72,6 +72,13 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.UserInput
 	return repository.CreateUser(r.DB, input)
 }
 
+func (r *mutationResolver) CreateUnit(ctx context.Context, input model.UnitInput) (*model.Unit, error) {
+	return repository.CreateUnit(r.DB, input, repository.CreateUnitsArgs{
+		UserID: &r.UserId,
+		//todo storeId
+	})
+}
+
 func (r *mutationResolver) ChangePassword(ctx context.Context, input model.ChangePasswordInput) (*model.User, error) {
 	panic(fmt.Errorf("not implemented"))
 }
@@ -109,6 +116,10 @@ func (r *mutationResolver) EditStore(ctx context.Context, id int, input model.St
 }
 
 func (r *mutationResolver) EditUser(ctx context.Context, id int, input model.UserInput) (*model.User, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) EditUnit(ctx context.Context, id int, input model.UnitInput) (*model.Unit, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
@@ -226,6 +237,14 @@ func (r *queryResolver) Store(ctx context.Context, id int) (*model.Store, error)
 
 func (r *queryResolver) Stores(ctx context.Context) ([]*model.Store, error) {
 	return repository.FindStores(r.DB, r.UserId)
+}
+
+func (r *queryResolver) Unit(ctx context.Context, id int) (*model.Unit, error) {
+	return repository.FindUnit(r.DB, id)
+}
+
+func (r *queryResolver) Units(ctx context.Context, storeID int) ([]*model.Unit, error) {
+	return repository.FindUnits(r.DB, storeID) //todo
 }
 
 func (r *queryResolver) User(ctx context.Context, id int) (*model.User, error) {
