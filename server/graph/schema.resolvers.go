@@ -5,6 +5,7 @@ package graph
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"mahesabu/graph/generated"
 	"mahesabu/graph/model"
@@ -228,7 +229,7 @@ func (r *queryResolver) Staff(ctx context.Context, id int) (*model.Staff, error)
 }
 
 func (r *queryResolver) Staffs(ctx context.Context, storeID int) ([]*model.Staff, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.FindStaffs(r.DB, storeID)
 }
 
 func (r *queryResolver) Store(ctx context.Context, id int) (*model.Store, error) {
@@ -267,8 +268,8 @@ func (r *statsResolver) TotalSalesItems(ctx context.Context, obj *model.Stats, s
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *userResolver) Password(ctx context.Context, obj *model.User) (*string, error) {
-	return nil, nil
+func (r *userResolver) Password(_ context.Context, obj *model.User) (*string, error) {
+	return nil, errors.New("field is accessible")
 }
 
 // Admin returns generated.AdminResolver implementation.

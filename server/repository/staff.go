@@ -20,3 +20,9 @@ func FindStaff(db *gorm.DB, ID int) (*model.Staff, error) {
 	result := db.Where(&model.Staff{ID: ID}).First(&staff)
 	return staff, result.Error
 }
+
+func FindStaffs(db *gorm.DB, StoreID int) ([]*model.Staff, error) {
+	var staffs []*model.Staff
+	result := db.Where(&model.Staff{StoreID: StoreID}).Find(&staffs)
+	return staffs, result.Error
+}
