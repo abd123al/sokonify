@@ -268,7 +268,7 @@ func (r *statsResolver) TotalSalesItems(ctx context.Context, obj *model.Stats, s
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *userResolver) Password(_ context.Context, obj *model.User) (*string, error) {
+func (r *userResolver) Password(ctx context.Context, obj *model.User) (*string, error) {
 	return nil, errors.New("field is accessible")
 }
 
