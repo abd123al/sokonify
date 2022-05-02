@@ -37,3 +37,8 @@ go mod tidy go generate ./...
 go get -d golang.org/x/mobile/cmd/gomobile 
 gomobile bind -v -o ../client/packages/server/android/libs/server.aar -target=android ./lib
 ```
+
+```bash
+go build -o server.so -buildmode=c-shared server.go
+go build -o server.so -buildmode=c-shared lib.go
+```
