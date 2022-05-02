@@ -1,8 +1,9 @@
 package main
 
+import "C"
 import "mahesabu/util"
 
-// StartServer This is used by desktops apps
+//export StartServer
 func StartServer(Port string) string {
 	return util.StartServer(util.StartServerArgs{
 		Port:    Port,
