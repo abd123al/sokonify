@@ -1,2 +1,5 @@
-x64
-.vs
+graph/generated/
+graph/model/models_gen.go
+*.exe
+*.so
+*.h
