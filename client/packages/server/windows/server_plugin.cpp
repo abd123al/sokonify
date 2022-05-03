@@ -1,4 +1,5 @@
 #include "include/server/server_plugin.h"
+#include "include/lib/lib.h"
 
 // This must be included before many other Windows headers.
 #include <windows.h>
@@ -55,7 +56,9 @@ void ServerPlugin::HandleMethodCall(
     const flutter::MethodCall<flutter::EncodableValue> &method_call,
     std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
   if (method_call.method_name().compare("startServer") == 0) {
-    result->Success(flutter::EncodableValue("8080"));
+    string port = StartServer("8080");
+    cout << "port " << port << " running.";
+    result->Success(flutter::EncodableValue(port));
   } else {
     result->NotImplemented();
   }
