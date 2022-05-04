@@ -4,11 +4,13 @@ import "C"
 import "mahesabu/util"
 
 //export StartServer
-func StartServer(Port string) string {
-	return util.StartServer(util.StartServerArgs{
-		Port:    Port,
+func StartServer() int {
+	util.StartServer(util.StartServerArgs{
+		Port:    "8080",
 		Offline: true,
 	})
+
+	return 8080
 }
 
 func main() {}
