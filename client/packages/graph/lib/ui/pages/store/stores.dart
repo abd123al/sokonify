@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../cubits/cubit.dart';
 import '../../../gql/generated/graphql_api.graphql.dart';
-import 'create_store.dart';
+import '../../../nav/nav.dart';
 
 class StoresPage extends StatelessWidget {
   const StoresPage({Key? key}) : super(key: key);
@@ -34,13 +34,7 @@ class StoresPage extends StatelessWidget {
             itemCount: stores.items.length,
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const CreateStorePage()),
-              );
-            },
+            onPressed: () => redirectTo(context, Routes.createStore),
             tooltip: 'Add',
             child: const Icon(Icons.add),
           ),
