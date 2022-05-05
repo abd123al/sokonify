@@ -50,6 +50,7 @@ class UniBlocProviderState extends State<UniBlocProvider> {
         final client = Provider.of<GraphQLClient>(context);
 
         final storeRepository = StoreRepository(client);
+        final authRepository = AuthRepository(client);
 
         return MultiBlocProvider(
           providers: [
@@ -61,6 +62,9 @@ class UniBlocProviderState extends State<UniBlocProvider> {
           ],
           child: MultiRepositoryProvider(
             providers: [
+              RepositoryProvider<AuthRepository>(
+                create: (context) => authRepository,
+              ),
               RepositoryProvider<StoreRepository>(
                 create: (context) => storeRepository,
               ),

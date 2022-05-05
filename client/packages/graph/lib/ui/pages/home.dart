@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:graph/nav/nav.dart';
 
-import 'store/stores.dart';
+import 'pages.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,6 +16,15 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Stores'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.shopping_cart),
+            tooltip: 'Open shopping cart',
+            onPressed: () {
+              redirectTo(context, Routes.login);
+            },
+          ),
+        ],
       ),
       body: const StoresPage(),
     );

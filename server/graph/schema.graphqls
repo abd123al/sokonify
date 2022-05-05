@@ -648,7 +648,7 @@ type Mutation {
     # For testing if local ip works. Otherwise client will have to reconfigure.
     ping: String!
 
-    signIn(input: SignInInput): String!
+    signIn(input: SignInInput): String! #todo use authPayload, {token and user}
     signUp(input: SignUpInput): String!
 }
 

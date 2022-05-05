@@ -5,10 +5,28 @@ schema {
     mutation: Mutation
 }
 
+directive @goField(forceResolver: Boolean, name: String) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
+
+directive @goModel(model: String, models: [String!]) on SCALAR | OBJECT | INTERFACE | UNION | ENUM | INPUT_OBJECT
+
+directive @goTag(key: String!, value: String) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
+
+directive @hasRole(role: StaffRole!) on FIELD_DEFINITION
+
 interface Gorm {
     createdAt: Time!
     deletedAt: Time
     id: ID!
+    updatedAt: Time!
+}
+
+type Admin implements Gorm {
+    createdAt: Time!
+    deletedAt: Time
+    email: String!
+    id: ID!
+    name: String!
+    password: String
     updatedAt: Time!
 }
 
@@ -28,10 +46,39 @@ type Category implements Gorm {
     deletedAt: Time
     id: ID!
     name: String!
+    store: Store
+    storeId: Int
+    updatedAt: Time!
+}
+
+type Customer implements Gorm {
+    address: String
+    comment: String
+    createdAt: Time!
+    deletedAt: Time
+    dob: Time
+    email: String
+    gender: GenderType
+    id: ID!
+    name: String!
+    phone: String
     store: Store!
     storeId: Int!
-    type: CategoryType!
-    unit: String!
+    tin: String
+    type: CustomerType!
+    updatedAt: Time!
+    user: User
+    userId: Int
+}
+
+type Expense implements Gorm {
+    createdAt: Time!
+    deletedAt: Time
+    id: ID!
+    name: String!
+    store: Store!
+    storeId: Int!
+    type: ExpenseType!
     updatedAt: Time!
 }
 
@@ -45,22 +92,13 @@ type Item implements Gorm {
     description: String
     expiresAt: Time!
     id: ID!
+    name: String!
     product: Product!
     productId: Int!
     quantity: Int!
     sellingPrice: String!
-    updatedAt: Time!
-}
-
-type Ledger implements Gorm {
-    createdAt: Time!
-    deletedAt: Time
-    id: ID!
-    item: Item!
-    itemId: Int!
-    order: Order!
-    orderId: Int!
-    quantity: Int!
+    unit: Unit!
+    unitId: Int!
     updatedAt: Time!
 }
 
@@ -68,29 +106,35 @@ type Mutation {
     changePassword(input: ChangePasswordInput!): User!
     createBrand(input: BrandInput!): Brand!
     createCategory(input: CategoryInput!): Category!
+    createCustomer(input: CustomerInput!): Customer!
+    createExpense(input: ExpenseInput!): Expense!
+    createExpensePayment(input: ExpensePaymentInput!): Payment!
     createItem(input: ItemInput!): Item!
     createOrder(input: OrderInput!): Order!
-    createPayment(input: PaymentInput!): Payment!
+    createOrderPayment(input: OrderPaymentInput!): Payment!
     createProduct(input: ProductInput!): Product!
     createStaff(input: StaffInput!): Staff!
     createStore(input: StoreInput!): Store!
-    createUser(input: UserInput!): User!
+    createUnit(input: UnitInput!): Unit!
     deleteItem(id: ID!): Item!
     editBrand(id: ID!, input: BrandInput!): Brand!
     editCategory(id: ID!, input: CategoryInput!): Category!
+    editCustomer(id: ID!, input: CustomerInput!): Customer!
     editItem(id: ID!, input: ItemInput!): Item!
     editOrder(id: ID!, input: OrderInput!): Order!
     editProduct(id: ID!, input: ProductInput!): Product!
     editStaff(id: ID!, input: StaffInput!): Staff!
     editStore(id: ID!, input: StoreInput!): Store!
-    editUser(id: ID!, input: UserInput!): User!
+    editUnit(id: ID!, input: UnitInput!): Unit!
     ping: String!
+    signIn(input: SignInInput): String!
+    signUp(input: SignUpInput): String!
 }
 
 type Order implements Gorm {
     comment: String
     createdAt: Time!
-    customer: User
+    customer: Customer
     customerId: Int
     deletedAt: Time
     id: ID!
@@ -126,50 +170,75 @@ type Payment implements Gorm {
     createdAt: Time!
     deletedAt: Time
     description: String
+    expense: Expense
+    expenseId: Int
     id: ID!
-    order: Order!
-    orderId: Int!
+    method: PaymentMethod!
+    order: Order
+    orderId: Int
     referenceId: String
-    type: PaymentType!
+    staff: User!
+    staffId: Int!
     updatedAt: Time!
 }
 
 type Product implements Gorm {
     brands: [Brand!]!
+    createdAt: Time!
+    deletedAt: Time
+    id: ID!
+    name: String!
+    store: Store
+    storeId: Int
+    updatedAt: Time!
+}
+
+type ProductCategory implements Gorm {
     category: Category!
     categoryId: Int!
     createdAt: Time!
     deletedAt: Time
     id: ID!
-    name: String!
+    product: Product!
+    productId: Int!
     updatedAt: Time!
 }
 
 type Query {
+    admin(id: ID!): Admin!
+    admins: [Admin!]!
     brand(id: ID!): Brand!
     brands(productId: ID!): [Brand!]!
     categories(storeId: ID!): [Category!]!
     category(id: ID!): Category!
+    customer(id: ID!): Customer!
+    customers(storeId: ID!): [Customer!]!
+    expense(id: ID!): Expense!
+    expenses(args: ExpensesArgs!): [Expense!]!
     item(id: ID!): Item!
-    items(storeId: ID!): [Item!]!
+    items(args: ItemsArgs!): [Item!]!
     order(id: ID!): Order!
-    orders(storeId: ID!): [Order!]!
+    orders(args: OrdersArgs!): [Order!]!
     payment(id: ID!): Payment!
-    payments(storeId: ID!): [Payment!]!
+    payments(args: PaymentsArgs!): [Payment!]!
     product(id: ID!): Product!
-    products(storeId: ID!): [Product!]!
+    products(args: ProductsArgs!): [Product!]!
     staff(id: ID!): Staff!
     staffs(storeId: ID!): [Staff!]!
     store(id: ID!): Store!
     stores: [Store!]!
+    unit(id: ID!): Unit!
+    units(storeId: ID!): [Unit!]!
     user(id: ID!): User!
     users: [User!]!
 }
 
 type Staff implements Gorm {
     createdAt: Time!
+    default: Boolean!
     deletedAt: Time
     id: ID!
+    role: StaffRole!
     store: Store!
     storeId: Int!
     updatedAt: Time!
@@ -177,16 +246,39 @@ type Staff implements Gorm {
     userId: Int!
 }
 
+type Stats {
+    profit(endDate: Time!, startDate: Time!): String!
+    totalSalesAmount(endDate: Time!, startDate: Time!): String!
+    totalSalesItems(endDate: Time!, startDate: Time!): String!
+}
+
 type Store implements Gorm {
+    address: String
+    createdAt: Time!
+    deletedAt: Time
+    description: String
+    email: String
+    id: ID!
+    logo: String
+    name: String!
+    staffs: [Staff!]!
+    tin: String
+    type: StoreType
+    updatedAt: Time!
+    user: User!
+    userId: Int!
+}
+
+type Unit implements Gorm {
     createdAt: Time!
     deletedAt: Time
     id: ID!
     name: String!
-    owner: User!
-    ownerId: Int!
-    staffs: [Staff!]!
-    type: StoreType!
+    store: Store
+    storeId: Int
     updatedAt: Time!
+    user: User
+    userId: Int
 }
 
 type User implements Gorm {
@@ -196,15 +288,35 @@ type User implements Gorm {
     id: ID!
     name: String!
     password: String
-    type: UserType
+    phone: String!
     updatedAt: Time!
     username: String!
 }
 
-enum CategoryType {
-    expenses
-    products
-    salary
+enum CustomerType {
+    customer
+    supplier
+}
+
+enum ExpenseType {
+    in
+    out
+}
+
+enum ExpensesBy {
+    staff
+    store
+}
+
+enum GenderType {
+    female
+    male
+}
+
+enum ItemsBy {
+    category
+    product
+    store
 }
 
 enum OrderStatus {
@@ -214,31 +326,55 @@ enum OrderStatus {
 }
 
 enum OrderType {
-    expense
+    in
     loss
-    purchase
-    sale
-    transfer
+    neutral
+    out
 }
 
-enum PaymentType {
+enum OrdersBy {
+    customer
+    staff
+    store
+}
+
+enum PaymentMethod {
     bank
     cash
     loan
 }
 
+enum PaymentType {
+    expense
+    order
+}
+
+enum PaymentsBy {
+    customer
+    staff
+    store
+}
+
+enum ProductsBy {
+    category
+    store
+}
+
+enum SortBy {
+    ASC
+    DESC
+}
+
+enum StaffRole {
+    owner
+    staff
+}
+
 enum StoreType {
+    pharmacy
     shop
     storage
     warehouse
-}
-
-enum UserType {
-    admin
-    customer
-    owner
-    staff
-    supplier
 }
 
 scalar Time
@@ -252,13 +388,46 @@ input BrandInput {
 input CategoryInput {
     name: String!
     storeId: Int!
-    type: CategoryType = products
-    unit: String = "units"
 }
 
 input ChangePasswordInput {
     currentPassword: String!
     newPassword: String!
+}
+
+input CustomerInput {
+    address: String
+    dob: Time
+    email: String
+    gender: GenderType
+    name: String!
+    phone: String
+    storeId: Int!
+    tin: String
+    type: CustomerType!
+}
+
+input ExpenseInput {
+    name: String!
+    storeId: ID!
+    type: ExpenseType! = out
+}
+
+input ExpensePaymentInput {
+    amount: String!
+    description: String
+    expenseId: Int!
+    method: PaymentMethod!
+    referenceId: String
+}
+
+input ExpensesArgs {
+    by: ExpensesBy! = store
+    limit: Int! = 10
+    offset: Int! = 0
+    sortBy: SortBy! = DESC
+    type: ExpenseType
+    value: ID!
 }
 
 input ItemInput {
@@ -270,6 +439,12 @@ input ItemInput {
     productId: Int!
     quantity: Int!
     sellingPrice: String!
+    unitId: Int!
+}
+
+input ItemsArgs {
+    by: ItemsBy! = store
+    value: ID!
 }
 
 input OrderInput {
@@ -287,11 +462,31 @@ input OrderItemInput {
     quantity: Int!
 }
 
-input PaymentInput {
+input OrderPaymentInput {
     description: String
+    method: PaymentMethod!
     orderId: Int!
     referenceId: String
-    type: PaymentType!
+}
+
+input OrdersArgs {
+    by: OrdersBy! = store
+    limit: Int! = 10
+    offset: Int! = 0
+    sortBy: SortBy! = DESC
+    status: OrderStatus
+    type: OrderType! = in
+    value: ID!
+}
+
+input PaymentsArgs {
+    by: PaymentsBy! = store
+    limit: Int! = 10
+    method: PaymentMethod
+    offset: Int! = 0
+    sortBy: SortBy! = DESC
+    type: PaymentType
+    value: ID!
 }
 
 input ProductBrandInput {
@@ -301,22 +496,45 @@ input ProductBrandInput {
 
 input ProductInput {
     brands: [ProductBrandInput!]
-    categoryId: Int!
+    categories: [ID!]
     name: String!
+    storeId: ID!
+    unit: String!
+}
+
+input ProductsArgs {
+    by: ProductsBy = store
+    storeType: StoreType
+    value: ID
+}
+
+input SignInInput {
+    email: String!
+    password: String!
+}
+
+input SignUpInput {
+    email: String!
+    name: String!
+    password: String
+    username: String!
 }
 
 input StaffInput {
+    role: StaffRole!
     storeId: Int!
     userId: Int!
 }
 
 input StoreInput {
+    address: String
+    description: String
+    email: String
     name: String!
+    tin: String
+    type: StoreType
 }
 
-input UserInput {
-    email: String!
+input UnitInput {
     name: String!
-    password: String
-    username: String!
 }
