@@ -62,19 +62,19 @@ void ServerPlugin::HandleMethodCall(
       HINSTANCE  hModule = LoadLibrary(TEXT("E:\\_Projects\\mahesabu\\client\\packages\\server\\windows\\include\\lib\\lib.dll"));
 
       if (!hModule) {
-          std::cout << "could not load the dynamic library" << std::endl;
-      }
-
+          result->Error("could not load the dynamic library", "load");
+      } else {
       // resolve function address here
       f_StartServer fn = (f_StartServer)GetProcAddress(hModule, "StartServer");
 
       if (!fn) {
-          std::cout << "could not locate the function" << std::endl;
+          result->Error("could not locate the function", "execute");
+      } else {
+          fn();
+          std::string port = "8080";
+          result->Success(flutter::EncodableValue(port));
       }
-
-    std::cout << "StartServer() port: " << fn() << std::endl;
-    std::string port = "8080";
-    result->Success(flutter::EncodableValue(port));
+      }
   } else {
     result->NotImplemented();
   }
