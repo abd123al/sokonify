@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import '../nav/routes.dart';
 import '../utils/application.dart';
-import 'helpers/helpers.dart';
 import 'pages/pages.dart';
 
 class App extends StatelessWidget {
@@ -22,9 +21,7 @@ class App extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       onGenerateRoute: Application.router?.generator,
-      home: const UniBlocProvider(
-        child: HomePage(),
-      ),
+      home: const HomePage(),
       debugShowCheckedModeBanner: false,
     );
   }

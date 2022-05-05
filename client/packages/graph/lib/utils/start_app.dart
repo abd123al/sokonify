@@ -4,8 +4,9 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
-import '../ui/app.dart';
 import '../gql/client.dart';
+import '../ui/app.dart';
+import '../ui/helpers/uni_bloc_provider.dart';
 
 /// Sometimes we want different behaviours for different apps
 startApp(String url) async {
@@ -27,7 +28,9 @@ startApp(String url) async {
 
             return Provider<GraphQLClient>(
               create: (_) => snapshot.data!,
-              child: const App(),
+              child: const UniBlocProvider(
+                child: App(),
+              ),
             );
           }
 
