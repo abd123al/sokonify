@@ -5,7 +5,7 @@ import (
 	"mahesabu/graph/model"
 )
 
-func CreateUser(db *gorm.DB, input model.UserInput) (*model.User, error) {
+func CreateUser(db *gorm.DB, input model.SignUpInput) (*model.User, error) {
 	user := model.User{
 		Name:     input.Name,
 		Email:    input.Email,

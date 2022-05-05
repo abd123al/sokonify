@@ -69,10 +69,6 @@ func (r *mutationResolver) CreateStore(ctx context.Context, input model.StoreInp
 	return repository.CreateStore(r.DB, r.UserId, input)
 }
 
-func (r *mutationResolver) CreateUser(ctx context.Context, input model.UserInput) (*model.User, error) {
-	return repository.CreateUser(r.DB, input)
-}
-
 func (r *mutationResolver) CreateUnit(ctx context.Context, input model.UnitInput) (*model.Unit, error) {
 	return repository.CreateUnit(r.DB, input, repository.CreateUnitsArgs{
 		UserID: &r.UserId,
@@ -116,10 +112,6 @@ func (r *mutationResolver) EditStore(ctx context.Context, id int, input model.St
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *mutationResolver) EditUser(ctx context.Context, id int, input model.UserInput) (*model.User, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
 func (r *mutationResolver) EditUnit(ctx context.Context, id int, input model.UnitInput) (*model.Unit, error) {
 	panic(fmt.Errorf("not implemented"))
 }
@@ -132,7 +124,11 @@ func (r *mutationResolver) Ping(ctx context.Context) (string, error) {
 	return "pong", nil
 }
 
-func (r *mutationResolver) SignUp(ctx context.Context, input *model.UserInput) (*model.User, error) {
+func (r *mutationResolver) SignIn(ctx context.Context, input *model.SignInInput) (string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) SignUp(ctx context.Context, input *model.SignUpInput) (string, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 

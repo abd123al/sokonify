@@ -90,7 +90,7 @@ type User implements Gorm {
     password: String @goTag(key: "gorm", value: "not null;type:varchar(100);default:null") @goField(forceResolver: true)
 }
 
-input UserInput {
+input SignUpInput {
     name : String!
     username : String!
     email : String!
@@ -552,6 +552,11 @@ input PaymentsArgs {
     type: PaymentType
 }
 
+input SignInInput {
+    email: String!
+    password: String!
+}
+
 type Stats {
     profit(startDate:Time!,endDate:Time!): String! @goField(forceResolver: true)
     totalSalesAmount(startDate:Time!,endDate:Time!): String! @goField(forceResolver: true)
@@ -624,7 +629,6 @@ type Mutation {
     createStaff(input: StaffInput!): Staff! @hasRole(role: owner)
     createStore(input: StoreInput!): Store! @hasRole(role: owner)
     # Only admins can create new user.
-    createUser(input: UserInput!): User! @hasRole(role: owner)
     createUnit(input: UnitInput!): Unit! @hasRole(role: owner)
 
     changePassword(input: ChangePasswordInput!): User!
@@ -637,7 +641,6 @@ type Mutation {
     editProduct(id: ID!,input: ProductInput!): Product!
     editStaff(id: ID!,input: StaffInput!): Staff! @hasRole(role: owner)
     editStore(id: ID!,input: StoreInput!): Store! @hasRole(role: owner)
-    editUser(id: ID!,input: UserInput!): User!
     editUnit(id: ID!,input: UnitInput!): Unit! @hasRole(role: owner)
 
     deleteItem(id: ID!): Item! @hasRole(role: owner)
@@ -645,7 +648,8 @@ type Mutation {
     # For testing if local ip works. Otherwise client will have to reconfigure.
     ping: String!
 
-    signUp(input: UserInput): User
+    signIn(input: SignInInput): String!
+    signUp(input: SignUpInput): String!
 }
 
 scalar Time
