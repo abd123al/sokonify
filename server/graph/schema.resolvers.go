@@ -124,11 +124,15 @@ func (r *mutationResolver) Ping(ctx context.Context) (string, error) {
 	return "pong", nil
 }
 
-func (r *mutationResolver) SignIn(ctx context.Context, input *model.SignInInput) (string, error) {
+func (r *mutationResolver) SignIn(ctx context.Context, input model.SignInInput) (string, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *mutationResolver) SignUp(ctx context.Context, input *model.SignUpInput) (string, error) {
+func (r *mutationResolver) SignUp(ctx context.Context, input model.SignUpInput) (string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) SwitchStore(ctx context.Context, storeID int) (string, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
