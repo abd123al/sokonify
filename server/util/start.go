@@ -13,8 +13,6 @@ import (
 	"os"
 )
 
-const defaultPort = "8080"
-
 type StartServerArgs struct {
 	Offline bool
 	Port    string
@@ -23,9 +21,10 @@ type StartServerArgs struct {
 // StartServer This way so that it can be invoked via libs
 func StartServer(Args StartServerArgs) string {
 	port := os.Getenv("PORT")
+
 	if port == "" {
 		if Args.Port == "" {
-			port = defaultPort
+			port = "8080"
 		} else {
 			port = Args.Port
 		}
