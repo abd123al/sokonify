@@ -5,6 +5,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/extension"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/go-chi/chi"
 	"log"
 	"mahesabu/graph"
 	"mahesabu/graph/generated"
@@ -37,6 +38,9 @@ func StartServer(Args StartServerArgs) string {
 		Mobile:  Args.Offline,
 	})
 
+	router := chi.NewRouter()
+	router.Use(AuthMiddleware())
+
 	config := generated.Config{Resolvers: &graph.Resolver{
 		DB:     db,
 		UserId: 1,
@@ -44,17 +48,18 @@ func StartServer(Args StartServerArgs) string {
 
 	//Configuring directives to be used on run-time
 	config.Directives.HasRole = HasRole
+	config.Directives.IsAuthenticated = IsAuthenticated
 
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(config))
 	srv.AddTransport(transport.Options{})
 	srv.AddTransport(transport.POST{})
 	srv.Use(extension.Introspection{}) //todo disable when live
 
-	http.Handle("/", playground.Handler("GraphQL playground", "/graphql"))
-	http.Handle("/graphql", srv)
+	router.Handle("/", playground.Handler("GraphQL playground", "/graphql"))
+	router.Handle("/graphql", srv)
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	log.Fatal(http.ListenAndServe(":"+port, router))
 
 	return port
 }

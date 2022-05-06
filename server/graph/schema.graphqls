@@ -593,64 +593,64 @@ type Query {
     brand(id:ID!): Brand!
     brands(productId:ID!): [Brand!]!
     category(id:ID!): Category!
-    categories(storeId:ID!): [Category!]!
+    categories(storeId:ID!): [Category!]! @isAuthenticated
     customer(id:ID!): Customer!
-    customers(storeId:ID!): [Customer!]!
+    customers(storeId:ID!): [Customer!]! @isAuthenticated
     item(id: ID!): Item!
-    items(args: ItemsArgs!): [Item!]!
+    items(args: ItemsArgs!): [Item!]! @isAuthenticated
     expense(id: ID!): Expense!
-    expenses(args: ExpensesArgs!): [Expense!]! #for getting kinda expenses categories
-    order(id: ID!): Order!
-    orders(args: OrdersArgs!): [Order!]!
-    payment(id: ID!): Payment!
-    payments(args: PaymentsArgs!): [Payment!]!
+    expenses(args: ExpensesArgs!): [Expense!]! @isAuthenticated  #for getting kinda expenses categories
+    order(id: ID!): Order! @isAuthenticated
+    orders(args: OrdersArgs!): [Order!]! @isAuthenticated
+    payment(id: ID!): Payment! @isAuthenticated
+    payments(args: PaymentsArgs!): [Payment!]! @isAuthenticated
     product(id: ID!): Product!
     products(args: ProductsArgs!): [Product!]!
-    staff(id: ID!): Staff!
-    staffs(storeId:ID!): [Staff!]!
-    store(id: ID!): Store!
-    stores: [Store!]!
+    staff(id: ID!): Staff! @isAuthenticated
+    staffs(storeId:ID!): [Staff!]! @isAuthenticated
+    store(id: ID!): Store! @isAuthenticated
+    stores: [Store!]! @isAuthenticated
     unit(id: ID!): Unit!
-    units(storeId:ID!): [Unit!]!
+    units(storeId:ID!): [Unit!]! @isAuthenticated
     user(id: ID!): User!
-    users: [User!]! #todo add args
+    users: [User!]! #todo add args  @isAuthenticated
 }
 
 type Mutation {
-    createBrand(input: BrandInput!): Brand! @hasRole(role: owner)
-    createCategory(input: CategoryInput!): Category! @hasRole(role: owner)
-    createCustomer(input: CustomerInput!): Customer! @hasRole(role: owner)
-    createExpense(input: ExpenseInput!): Expense! @hasRole(role: owner)
-    createItem(input: ItemInput!): Item! @hasRole(role: owner)
-    createOrder(input: OrderInput!): Order!
-    createOrderPayment(input: OrderPaymentInput!): Payment! @hasRole(role: staff)
-    createExpensePayment(input: ExpensePaymentInput!): Payment! @hasRole(role: staff)
-    createProduct(input: ProductInput!): Product! @hasRole(role: owner)
-    createStaff(input: StaffInput!): Staff! @hasRole(role: owner)
-    createStore(input: StoreInput!): Store! @hasRole(role: owner)
+    createBrand(input: BrandInput!): Brand! @isAuthenticated @hasRole(role: owner)
+    createCategory(input: CategoryInput!): Category! @isAuthenticated @hasRole(role: owner)
+    createCustomer(input: CustomerInput!): Customer! @isAuthenticated  @hasRole(role: owner)
+    createExpense(input: ExpenseInput!): Expense! @isAuthenticated  @hasRole(role: owner)
+    createItem(input: ItemInput!): Item! @isAuthenticated  @hasRole(role: owner)
+    createOrder(input: OrderInput!): Order! @isAuthenticated
+    createOrderPayment(input: OrderPaymentInput!): Payment! @isAuthenticated  @hasRole(role: staff)
+    createExpensePayment(input: ExpensePaymentInput!): Payment! @isAuthenticated  @hasRole(role: staff)
+    createProduct(input: ProductInput!): Product! @isAuthenticated  @hasRole(role: owner)
+    createStaff(input: StaffInput!): Staff! @isAuthenticated  @hasRole(role: owner)
+    createStore(input: StoreInput!): Store! @isAuthenticated  @hasRole(role: owner)
     # Only admins can create new user.
-    createUnit(input: UnitInput!): Unit! @hasRole(role: owner)
+    createUnit(input: UnitInput!): Unit! @isAuthenticated  @hasRole(role: owner)
 
-    changePassword(input: ChangePasswordInput!): User!
+    changePassword(input: ChangePasswordInput!): User! @isAuthenticated
 
-    editBrand(id: ID!,input: BrandInput!): Brand! @hasRole(role: owner)
-    editCategory(id: ID!,input: CategoryInput!): Category! @hasRole(role: owner)
-    editCustomer(id: ID!,input: CustomerInput!): Customer! @hasRole(role: owner)
-    editItem(id: ID!,input: ItemInput!): Item! @hasRole(role: owner)
-    editOrder(id: ID!,input: OrderInput!): Order!
-    editProduct(id: ID!,input: ProductInput!): Product!
-    editStaff(id: ID!,input: StaffInput!): Staff! @hasRole(role: owner)
-    editStore(id: ID!,input: StoreInput!): Store! @hasRole(role: owner)
-    editUnit(id: ID!,input: UnitInput!): Unit! @hasRole(role: owner)
+    editBrand(id: ID!,input: BrandInput!): Brand! @isAuthenticated  @hasRole(role: owner)
+    editCategory(id: ID!,input: CategoryInput!): Category! @isAuthenticated  @hasRole(role: owner)
+    editCustomer(id: ID!,input: CustomerInput!): Customer! @isAuthenticated  @hasRole(role: owner)
+    editItem(id: ID!,input: ItemInput!): Item! @isAuthenticated  @hasRole(role: owner)
+    editOrder(id: ID!,input: OrderInput!): Order!  @isAuthenticated
+    editProduct(id: ID!,input: ProductInput!): Product!  @isAuthenticated
+    editStaff(id: ID!,input: StaffInput!): Staff! @isAuthenticated  @hasRole(role: owner)
+    editStore(id: ID!,input: StoreInput!): Store! @isAuthenticated  @hasRole(role: owner)
+    editUnit(id: ID!,input: UnitInput!): Unit! @isAuthenticated  @hasRole(role: owner)
 
-    deleteItem(id: ID!): Item! @hasRole(role: owner)
+    deleteItem(id: ID!): Item!  @isAuthenticated @hasRole(role: owner)
 
     # For testing if local ip works. Otherwise client will have to reconfigure.
     ping: String!
 
     signIn(input: SignInInput!): String! #todo use authPayload, {token and user}
     signUp(input: SignUpInput!): String!
-    switchStore(storeId: ID!): String!
+    switchStore(storeId: ID!): String! @isAuthenticated
 }
 
 scalar Time
@@ -671,3 +671,4 @@ directive @goTag(
 ) on INPUT_FIELD_DEFINITION | FIELD_DEFINITION
 
 directive @hasRole(role: StaffRole!) on FIELD_DEFINITION
+directive @isAuthenticated on FIELD_DEFINITION
