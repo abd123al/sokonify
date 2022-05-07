@@ -1,5 +1,6 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:graph/ui/widgets/widgets.dart';
 
 import '../nav/routes.dart';
 import '../utils/application.dart';
@@ -21,7 +22,9 @@ class App extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       onGenerateRoute: Application.router?.generator,
-      home: const HomePage(),
+      home: const AuthWrapper(
+        child: HomePage(),
+      ),
       debugShowCheckedModeBanner: false,
     );
   }

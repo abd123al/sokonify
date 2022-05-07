@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:graph/nav/nav.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'auth/auth_cubit.dart';
 import 'pages.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,7 +22,7 @@ class _HomePageState extends State<HomePage> {
             icon: const Icon(Icons.shopping_cart),
             tooltip: 'Open shopping cart',
             onPressed: () {
-              redirectTo(context, Routes.login);
+              BlocProvider.of<AuthCubit>(context).logOut();
             },
           ),
         ],

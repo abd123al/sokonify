@@ -1,10 +1,12 @@
 import 'package:blocitory/helpers/resource_mutation_widget.dart';
 import 'package:blocitory/widgets/button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../nav/nav.dart';
 import '../../../repositories/auth_repository.dart';
+import 'auth_cubit.dart';
 import 'signup_cubit.dart';
 
 class SignupPage extends StatefulWidget {
@@ -25,7 +27,8 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      body: MutationBuilder<SignUp$Mutation$AuthPayload, SignupCubit, AuthRepository>(
+      body: MutationBuilder<SignUp$Mutation$AuthPayload, SignupCubit,
+          AuthRepository>(
         blocCreator: (r) => SignupCubit(r),
         onSuccess: (context, data) {
           //BlocProvider.of<AuthCubit>(context).loginIn();
@@ -135,11 +138,7 @@ class _SignupPageState extends State<SignupPage> {
                         ),
                         TextButton(
                           onPressed: () {
-                            redirectTo(
-                              context,
-                              Routes.login,
-                              replace: true,
-                            );
+                            BlocProvider.of<AuthCubit>(context).logOut();
                           },
                           child: const Text(
                             'Have an account? Click here to sign in',
