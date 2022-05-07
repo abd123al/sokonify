@@ -36,12 +36,13 @@ func TestUser(t *testing.T) {
 	})
 
 	t.Run("login with valid username", func(t *testing.T) {
-		user, _ := repository.Login(DB, model.SignInInput{
+		user, err := repository.Login(DB, model.SignInInput{
 			Login:    *User.Username,
 			Password: "password",
 		})
 
 		require.NotNil(t, user)
+		require.Nil(t, err)
 	})
 
 	t.Run("login with invalid login", func(t *testing.T) {

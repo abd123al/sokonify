@@ -32,9 +32,9 @@ func Login(db *gorm.DB, input model.SignInInput) (*model.User, error) {
 	var user *model.User
 	var err = errors.New("incorrect username or password")
 
-	result := db.Where(db.Where(&model.User{Email: input.Login}).Or(&model.User{Username: &input.Login})).First(&user)
+	result := db.Where(db.Where(&model.User{Email: input.Login}).Or(&model.User{Username: &input.Login})).Find(&user)
 
-	if result.Error != nil {
+	if result.RowsAffected == 0 {
 		return nil, err
 	} else if user.Password != nil {
 		if helpers.VerifyPassword(input.Password, *user.Password) {
