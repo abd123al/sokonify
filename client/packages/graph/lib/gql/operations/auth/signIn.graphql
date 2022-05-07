@@ -1,3 +1,5 @@
 mutation signIn($input:SignInInput!) {
-    signIn(input: $input)
+    signIn(input: $input){
+        ...AuthParts
+    }
 }

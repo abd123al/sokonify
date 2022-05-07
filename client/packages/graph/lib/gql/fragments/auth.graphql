@@ -1,0 +1,6 @@
+fragment AuthParts on AuthPayload {
+    accessToken
+    user {
+        id
+    }
+}

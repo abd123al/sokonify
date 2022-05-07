@@ -3,7 +3,7 @@ import 'package:graph/gql/generated/graphql_api.dart';
 
 import '../../../repositories/repositories.dart';
 
-class LoginCubit extends ResourceCubit<String> {
+class LoginCubit extends ResourceCubit<SignIn$Mutation$AuthPayload> {
   LoginCubit(this._authRepository) : super();
 
   final AuthRepository _authRepository;

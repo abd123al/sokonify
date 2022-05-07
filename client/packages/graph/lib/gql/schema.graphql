@@ -32,6 +32,18 @@ type Admin implements Gorm {
     updatedAt: Time!
 }
 
+type AuthParams {
+    role: StaffRole
+    storeId: Int
+    userId: Int!
+}
+
+type AuthPayload {
+    accessToken: String!
+    store: Store
+    user: User!
+}
+
 type Brand implements Gorm {
     createdAt: Time!
     deletedAt: Time
@@ -129,9 +141,9 @@ type Mutation {
     editStore(id: ID!, input: StoreInput!): Store!
     editUnit(id: ID!, input: UnitInput!): Unit!
     ping: String!
-    signIn(input: SignInInput!): String!
-    signUp(input: SignUpInput!): String!
-    switchStore(storeId: ID!): String!
+    signIn(input: SignInInput!): AuthPayload!
+    signUp(input: SignUpInput!): AuthPayload!
+    switchStore(storeId: ID!): AuthPayload!
 }
 
 type Order implements Gorm {
@@ -293,7 +305,7 @@ type User implements Gorm {
     password: String
     phone: String!
     updatedAt: Time!
-    username: String!
+    username: String
 }
 
 enum CustomerType {
@@ -512,15 +524,15 @@ input ProductsArgs {
 }
 
 input SignInInput {
-    email: String!
+    login: String!
     password: String!
 }
 
 input SignUpInput {
     email: String!
     name: String!
-    password: String
-    username: String!
+    password: String!
+    username: String
 }
 
 input StaffInput {

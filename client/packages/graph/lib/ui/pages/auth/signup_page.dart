@@ -25,7 +25,7 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      body: MutationBuilder<String, SignupCubit, AuthRepository>(
+      body: MutationBuilder<SignUp$Mutation$AuthPayload, SignupCubit, AuthRepository>(
         blocCreator: (r) => SignupCubit(r),
         onSuccess: (context, data) {
           //BlocProvider.of<AuthCubit>(context).loginIn();
@@ -112,7 +112,6 @@ class _SignupPageState extends State<SignupPage> {
                                 password: _passwordController.text,
                                 email: _emailController.text,
                                 name: _nameController.text,
-                                username: '',
                               ),
                             );
                           },

@@ -24,7 +24,7 @@ class _LoginInPageState extends State<LoginInPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      body: MutationBuilder<String, LoginCubit, AuthRepository>(
+      body: MutationBuilder<SignIn$Mutation$AuthPayload, LoginCubit, AuthRepository>(
         blocCreator: (r) => LoginCubit(r),
         onSuccess: (context, data) {
           //BlocProvider.of<AuthCubit>(context).loginIn();
@@ -93,7 +93,7 @@ class _LoginInPageState extends State<LoginInPage> {
                             cubit.login(
                               SignInInput(
                                 password: _passwordController.text,
-                                email: _emailController.text,
+                                login: _emailController.text,
                               ),
                             );
                           },
