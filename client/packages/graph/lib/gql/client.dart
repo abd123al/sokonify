@@ -17,10 +17,10 @@ Future<GraphQLClient> graphQLClient(String baseUrl) async {
   if (kDebugMode) {
     dio.interceptors.add(
       PrettyDioLogger(
-        requestBody: true,
-        responseBody: true,
+        requestBody: false,
+        responseBody: false,
         requestHeader: true,
-        responseHeader: true,
+        responseHeader: false,
         error: true,
         compact: true,
         maxWidth: 90,
@@ -33,7 +33,6 @@ Future<GraphQLClient> graphQLClient(String baseUrl) async {
   final AuthLink _authLink = AuthLink(
     getToken: () {
       final token = box.get(tokenHiveKey);
-      print('token $token');
 
       if (token != null) {
         return 'Bearer $token';

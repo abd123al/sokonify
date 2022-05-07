@@ -1,4 +1,3 @@
-import 'package:blocitory/blocitory.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -26,8 +25,13 @@ class AuthWrapper extends StatelessWidget {
         } else if (state == AuthState.isLoggedIn) {
           return child;
         } else {
-          return const Scaffold(
-            body: LoadingIndicator(),
+          return Scaffold(
+            backgroundColor: Theme.of(context).primaryColorDark,
+            body: Center(
+              child: CircularProgressIndicator(
+                backgroundColor: Theme.of(context).backgroundColor,
+              ),
+            ),
           );
         }
       },
