@@ -9,10 +9,13 @@ import (
 
 // CreateUser Upper case means function is exported
 func CreateUser(DB *gorm.DB) *model.User {
+	username := faker.Username()
+
 	user, _ := repository.CreateUser(DB, model.SignUpInput{
 		Name:     faker.Name(),
 		Email:    faker.Email(),
-		Password: faker.Password(),
+		Password: "password",
+		Username: &username,
 	})
 
 	return user

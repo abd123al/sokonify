@@ -90,6 +90,11 @@ type User implements Gorm {
     password: String @goTag(key: "gorm", value: "type:varchar(100);default:null") @goField(forceResolver: true)
 }
 
+input SignInInput {
+    login: String!
+    password: String!
+}
+
 input SignUpInput {
     name : String!
     username : String
@@ -550,11 +555,6 @@ input PaymentsArgs {
     sortBy: SortBy! = DESC
     method: PaymentMethod
     type: PaymentType
-}
-
-input SignInInput {
-    email: String!
-    password: String!
 }
 
 type Stats {
