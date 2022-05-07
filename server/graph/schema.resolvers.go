@@ -120,19 +120,19 @@ func (r *mutationResolver) DeleteItem(ctx context.Context, id int) (*model.Item,
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *mutationResolver) Ping(ctx context.Context) (string, error) {
+func (r *mutationResolver) Ping(_ context.Context) (string, error) {
 	return "pong", nil
 }
 
-func (r *mutationResolver) SignIn(ctx context.Context, input model.SignInInput) (string, error) {
-	panic(fmt.Errorf("not implemented"))
+func (r *mutationResolver) SignIn(_ context.Context, input model.SignInInput) (*model.AuthPayload, error) {
+	return repository.SignIn(r.DB, input)
 }
 
-func (r *mutationResolver) SignUp(ctx context.Context, input model.SignUpInput) (string, error) {
-	panic(fmt.Errorf("not implemented"))
+func (r *mutationResolver) SignUp(_ context.Context, input model.SignUpInput) (*model.AuthPayload, error) {
+	return repository.SignUp(r.DB, input)
 }
 
-func (r *mutationResolver) SwitchStore(ctx context.Context, storeID int) (string, error) {
+func (r *mutationResolver) SwitchStore(ctx context.Context, storeID int) (*model.AuthPayload, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 

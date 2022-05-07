@@ -102,6 +102,12 @@ input SignUpInput {
     password : String!
 }
 
+type AuthPayload {
+    accessToken : String!
+    user: User!
+    store: Store
+}
+
 input ChangePasswordInput {
     currentPassword : String!
     newPassword : String!
@@ -648,9 +654,9 @@ type Mutation {
     # For testing if local ip works. Otherwise client will have to reconfigure.
     ping: String!
 
-    signIn(input: SignInInput!): String! #todo use authPayload, {token and user}
-    signUp(input: SignUpInput!): String!
-    switchStore(storeId: ID!): String! @isAuthenticated
+    signIn(input: SignInInput!): AuthPayload! #todo use authPayload, {token and user}
+    signUp(input: SignUpInput!): AuthPayload!
+    switchStore(storeId: ID!): AuthPayload! @isAuthenticated
 }
 
 scalar Time

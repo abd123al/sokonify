@@ -13,55 +13,55 @@ func TestUser(t *testing.T) {
 	DB := util.InitTestDB()
 	User := util.CreateUser(DB)
 
-	t.Run("CreateUser", func(t *testing.T) {
+	t.Run("SignUp", func(t *testing.T) {
 		Username := faker.Username()
 
-		user, _ := repository.CreateUser(DB, model.SignUpInput{
+		payload, _ := repository.SignUp(DB, model.SignUpInput{
 			Name:     faker.Word(),
 			Username: &Username,
 			Email:    faker.Email(),
 			Password: faker.Password(),
 		})
 
-		require.NotNil(t, user.Password)
+		require.NotNil(t, payload.User.Password)
 	})
 
 	t.Run("login with valid email", func(t *testing.T) {
-		user, _ := repository.Login(DB, model.SignInInput{
+		payload, _ := repository.SignIn(DB, model.SignInInput{
 			Login:    User.Email,
 			Password: "password",
 		})
 
-		require.NotNil(t, user)
+		require.NotNil(t, payload)
 	})
 
 	t.Run("login with valid username", func(t *testing.T) {
-		user, err := repository.Login(DB, model.SignInInput{
+		payload, err := repository.SignIn(DB, model.SignInInput{
 			Login:    *User.Username,
 			Password: "password",
 		})
 
-		require.NotNil(t, user)
+		require.NotNil(t, payload)
 		require.Nil(t, err)
 	})
 
 	t.Run("login with invalid login", func(t *testing.T) {
-		user, err := repository.Login(DB, model.SignInInput{
+		payload, err := repository.SignIn(DB, model.SignInInput{
 			Login:    faker.Email(),
 			Password: "password",
 		})
 
 		require.NotNil(t, err)
-		require.Nil(t, user)
+		require.Nil(t, payload)
 	})
 
 	t.Run("login with wrong password", func(t *testing.T) {
-		user, err := repository.Login(DB, model.SignInInput{
+		payload, err := repository.SignIn(DB, model.SignInInput{
 			Login:    User.Email,
 			Password: faker.Password(),
 		})
 
 		require.NotNil(t, err)
-		require.Nil(t, user)
+		require.Nil(t, payload)
 	})
 }

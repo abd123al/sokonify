@@ -11,14 +11,14 @@ import (
 func CreateUser(DB *gorm.DB) *model.User {
 	username := faker.Username()
 
-	user, _ := repository.CreateUser(DB, model.SignUpInput{
+	payload, _ := repository.SignUp(DB, model.SignUpInput{
 		Name:     faker.Name(),
 		Email:    faker.Email(),
 		Password: "password",
 		Username: &username,
 	})
 
-	return user
+	return payload.User
 }
 
 func CreateCustomer(DB *gorm.DB, StoreId int) *model.Customer {
