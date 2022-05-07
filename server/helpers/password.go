@@ -1,4 +1,4 @@
-package util
+package helpers
 
 import (
 	"github.com/alexedwards/argon2id"

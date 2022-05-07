@@ -85,16 +85,16 @@ type User implements Gorm {
 
     name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(50);default:null")
     email: String! @goTag(key: "gorm", value: "unique;not null;type:varchar(100);default:null")
-    username: String! @goTag(key: "gorm", value: "unique;not null;type:varchar(100);default:null")
+    username: String @goTag(key: "gorm", value: "unique;type:varchar(100);default:null")
     phone: String! @goTag(key: "gorm", value: "unique;null;type:varchar(20);default:null")
-    password: String @goTag(key: "gorm", value: "not null;type:varchar(100);default:null") @goField(forceResolver: true)
+    password: String @goTag(key: "gorm", value: "type:varchar(100);default:null") @goField(forceResolver: true)
 }
 
 input SignUpInput {
     name : String!
-    username : String!
+    username : String
     email : String!
-    password : String = password
+    password : String!
 }
 
 input ChangePasswordInput {
