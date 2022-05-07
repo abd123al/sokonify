@@ -1,1 +1,1 @@
-export 'uni_bloc_provider.dart';
+export '../widgets/uni_bloc_provider.dart';

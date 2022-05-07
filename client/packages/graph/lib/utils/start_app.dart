@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../gql/client.dart';
 import '../ui/app.dart';
-import '../ui/helpers/uni_bloc_provider.dart';
+import '../ui/widgets/uni_bloc_provider.dart';
 
 /// Sometimes we want different behaviours for different apps
 startApp(String url) async {

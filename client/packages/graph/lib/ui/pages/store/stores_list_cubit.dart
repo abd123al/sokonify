@@ -1,7 +1,7 @@
 import 'package:blocitory/blocitory.dart';
 
-import '../../gql/generated/graphql_api.graphql.dart';
-import '../../repositories/store_repository.dart';
+import '../../../gql/generated/graphql_api.graphql.dart';
+import '../../../repositories/store_repository.dart';
 
 class StoresListCubit
     extends ResourceCubit<ResourceListData<Stores$Query$Store>> {

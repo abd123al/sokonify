@@ -1,4 +1,4 @@
 export 'auth/login_page.dart';
 export 'home.dart';
-export 'store/create_store.dart';
+export 'store/create_store_page.dart';
 export 'store/stores.dart';

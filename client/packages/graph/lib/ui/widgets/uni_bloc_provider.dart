@@ -5,8 +5,8 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:provider/provider.dart';
 
-import '../../cubits/cubit.dart';
 import '../../repositories/repositories.dart';
+import '../pages/store/stores_list_cubit.dart';
 
 class UniBlocProvider extends StatefulWidget {
   final Widget child;

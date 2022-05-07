@@ -1,7 +1,7 @@
 import 'package:blocitory/blocitory.dart';
 import 'package:flutter/material.dart';
+import 'package:graph/ui/pages/store/stores_list_cubit.dart';
 
-import '../../../cubits/cubit.dart';
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../nav/nav.dart';
 
