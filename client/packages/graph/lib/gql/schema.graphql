@@ -13,6 +13,8 @@ directive @goTag(key: String!, value: String) on FIELD_DEFINITION | INPUT_FIELD_
 
 directive @hasRole(role: StaffRole!) on FIELD_DEFINITION
 
+directive @isAuthenticated on FIELD_DEFINITION
+
 interface Gorm {
     createdAt: Time!
     deletedAt: Time
@@ -127,8 +129,9 @@ type Mutation {
     editStore(id: ID!, input: StoreInput!): Store!
     editUnit(id: ID!, input: UnitInput!): Unit!
     ping: String!
-    signIn(input: SignInInput): String!
-    signUp(input: SignUpInput): String!
+    signIn(input: SignInInput!): String!
+    signUp(input: SignUpInput!): String!
+    switchStore(storeId: ID!): String!
 }
 
 type Order implements Gorm {

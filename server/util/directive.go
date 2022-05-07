@@ -18,9 +18,9 @@ var HasRole = func(ctx context.Context, obj interface{}, next graphql.Resolver, 
 }
 
 var IsAuthenticated = func(ctx context.Context, obj interface{}, next graphql.Resolver) (res interface{}, err error) {
-	ctxUserID := ctx.Value(userCtxKey)
+	payload := ForContext(ctx)
 
-	if ctxUserID == nil {
+	if payload == nil {
 		return nil, fmt.Errorf("access denied")
 	}
 

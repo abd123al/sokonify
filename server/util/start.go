@@ -6,6 +6,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/go-chi/chi"
+	"github.com/go-chi/jwtauth"
 	"log"
 	"mahesabu/graph"
 	"mahesabu/graph/generated"
@@ -38,7 +39,10 @@ func StartServer(Args StartServerArgs) string {
 	})
 
 	router := chi.NewRouter()
-	router.Use(AuthMiddleware())
+
+	//jwt: Seek, verify and validate JWT tokens
+	router.Use(jwtauth.Verifier(TokenAuth))
+	router.Use(Authenticator)
 
 	config := generated.Config{Resolvers: &graph.Resolver{
 		DB:     db,

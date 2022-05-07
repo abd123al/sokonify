@@ -2,6 +2,8 @@ package util
 
 import (
 	"context"
+	"github.com/go-chi/jwtauth"
+	"github.com/lestrrat-go/jwx/jwt"
 	"mahesabu/graph/model"
 	"net/http"
 )
@@ -14,32 +16,45 @@ type contextKey struct {
 	userId string
 }
 
-// Auth A stand-in for our database backed user object
+// AuthPayload A stand-in for our database backed user object
 // todo inject this to every resolver.
-type Auth struct {
+type AuthPayload struct {
 	UserId  int
-	StoreId int
-	Role    model.StaffRole
+	StoreId *int
+	Role    *model.StaffRole
+}
+
+func Authenticator(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		token, _, _ := jwtauth.FromContext(r.Context())
+
+		//If token is available validate it.
+		if token != nil {
+			if err := jwt.Validate(token); err != nil {
+				http.Error(w, err.Error(), 401)
+				return
+			}
+		}
+
+		// Token is authenticated, pass it through
+		next.ServeHTTP(w, r)
+	})
 }
 
 // AuthMiddleware decodes the share session cookie and packs the session into context
 func AuthMiddleware() func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			c, err := r.Cookie("Authorization")
+			c := r.Header["Authorization"][0]
 
 			// Allow unauthenticated users in
-			if err != nil || c == nil {
+			if c == "" {
 				next.ServeHTTP(w, r)
 				return
 			}
 
-			//token := c.Value
-
-			auth := Auth{
-				UserId:  1,
-				StoreId: 1,
-				Role:    model.StaffRoleStaff,
+			auth := AuthPayload{
+				UserId: 1,
 			}
 
 			// put it in context
@@ -53,7 +68,7 @@ func AuthMiddleware() func(http.Handler) http.Handler {
 }
 
 // ForContext finds the user from the context. REQUIRES Middleware to have run.
-func ForContext(ctx context.Context) *Auth {
-	raw, _ := ctx.Value(userCtxKey).(*Auth)
+func ForContext(ctx context.Context) *AuthPayload {
+	raw, _ := ctx.Value(jwtauth.TokenCtxKey).(*AuthPayload)
 	return raw
 }
