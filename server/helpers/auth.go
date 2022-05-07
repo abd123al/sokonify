@@ -1,12 +1,9 @@
-package util
+package helpers
 
 import (
 	"encoding/json"
-	"github.com/go-chi/jwtauth"
 	"mahesabu/graph/model"
 )
-
-var TokenAuth = jwtauth.New("HS256", []byte("secret"), nil)
 
 func GenerateAuthToken(user model.User) string {
 	var myMap map[string]interface{}
@@ -14,9 +11,11 @@ func GenerateAuthToken(user model.User) string {
 	StoreId := 2
 	role := model.StaffRoleStaff
 
-	payload := AuthParams{
-		UserId:  user.ID,
-		StoreId: &StoreId,
+	// AuthParams A stand-in for our database backed user object
+	// todo inject this to every resolver.
+	payload := model.AuthParams{
+		UserID:  user.ID,
+		StoreID: &StoreId,
 		Role:    &role,
 	}
 

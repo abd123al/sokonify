@@ -108,6 +108,12 @@ type AuthPayload {
     store: Store
 }
 
+type AuthParams {
+    userId: Int!
+    storeId: Int
+    role : StaffRole
+}
+
 input ChangePasswordInput {
     currentPassword : String!
     newPassword : String!

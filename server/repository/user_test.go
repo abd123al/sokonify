@@ -23,6 +23,7 @@ func TestUser(t *testing.T) {
 			Password: faker.Password(),
 		})
 
+		require.NotNil(t, payload.AccessToken)
 		require.NotNil(t, payload.User.Password)
 		require.Nil(t, err)
 	})
@@ -33,7 +34,8 @@ func TestUser(t *testing.T) {
 			Password: "password",
 		})
 
-		require.NotNil(t, payload)
+		require.NotNil(t, payload.AccessToken)
+		require.NotNil(t, payload.User)
 		require.Nil(t, err)
 	})
 
@@ -43,7 +45,8 @@ func TestUser(t *testing.T) {
 			Password: "password",
 		})
 
-		require.NotNil(t, payload)
+		require.NotNil(t, payload.AccessToken)
+		require.NotNil(t, payload.User)
 		require.Nil(t, err)
 	})
 

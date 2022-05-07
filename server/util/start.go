@@ -10,6 +10,7 @@ import (
 	"log"
 	"mahesabu/graph"
 	"mahesabu/graph/generated"
+	"mahesabu/helpers"
 	"net/http"
 	"os"
 )
@@ -41,7 +42,7 @@ func StartServer(Args StartServerArgs) string {
 	router := chi.NewRouter()
 
 	//jwt: Seek, verify and validate JWT tokens
-	router.Use(jwtauth.Verifier(TokenAuth))
+	router.Use(jwtauth.Verifier(helpers.TokenAuth))
 	router.Use(Authenticator)
 
 	config := generated.Config{Resolvers: &graph.Resolver{
