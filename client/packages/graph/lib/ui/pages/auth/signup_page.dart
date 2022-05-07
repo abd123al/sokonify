@@ -5,27 +5,28 @@ import 'package:flutter/material.dart';
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../nav/nav.dart';
 import '../../../repositories/auth_repository.dart';
-import 'login_cubit.dart';
+import 'signup_cubit.dart';
 
-class LoginInPage extends StatefulWidget {
-  const LoginInPage({Key? key}) : super(key: key);
+class SignupPage extends StatefulWidget {
+  const SignupPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _LoginInPageState();
+    return _SignupPageState();
   }
 }
 
-class _LoginInPageState extends State<LoginInPage> {
+class _SignupPageState extends State<SignupPage> {
   final _passwordController = TextEditingController();
   final _emailController = TextEditingController();
+  final _nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      body: MutationBuilder<String, LoginCubit, AuthRepository>(
-        blocCreator: (r) => LoginCubit(r),
+      body: MutationBuilder<String, SignupCubit, AuthRepository>(
+        blocCreator: (r) => SignupCubit(r),
         onSuccess: (context, data) {
           //BlocProvider.of<AuthCubit>(context).loginIn();
         },
@@ -51,11 +52,6 @@ class _LoginInPageState extends State<LoginInPage> {
                     child: ListView(
                       shrinkWrap: true,
                       children: [
-                        // Image.asset(
-                        //   'images/logo.png',
-                        //   width: 150,
-                        //   height: 150,
-                        // ),
                         Text(
                           'Welcome to Sokonify',
                           style: Theme.of(context).textTheme.headline5,
@@ -63,7 +59,7 @@ class _LoginInPageState extends State<LoginInPage> {
                         ),
                         const Divider(),
                         Text(
-                          'To get started please sign in',
+                          'To get started please sign up',
                           style: Theme.of(context).textTheme.subtitle1,
                           textAlign: TextAlign.center,
                         ),
@@ -71,7 +67,17 @@ class _LoginInPageState extends State<LoginInPage> {
                           padding: padding,
                           child: TextFormField(
                             decoration: const InputDecoration(
-                              labelText: 'Email or Username',
+                              labelText: 'Full name',
+                            ),
+                            controller: _nameController,
+                            keyboardType: TextInputType.text,
+                          ),
+                        ),
+                        Padding(
+                          padding: padding,
+                          child: TextFormField(
+                            decoration: const InputDecoration(
+                              labelText: 'Email',
                             ),
                             controller: _emailController,
                             keyboardType: TextInputType.emailAddress,
@@ -81,7 +87,18 @@ class _LoginInPageState extends State<LoginInPage> {
                           padding: padding,
                           child: TextFormField(
                             decoration: const InputDecoration(
-                              labelText: 'Password',
+                              labelText: 'New Password',
+                            ),
+                            controller: _passwordController,
+                            keyboardType: TextInputType.visiblePassword,
+                            obscureText: true,
+                          ),
+                        ),
+                        Padding(
+                          padding: padding,
+                          child: TextFormField(
+                            decoration: const InputDecoration(
+                              labelText: 'Confirm Password',
                             ),
                             controller: _passwordController,
                             keyboardType: TextInputType.visiblePassword,
@@ -91,13 +108,15 @@ class _LoginInPageState extends State<LoginInPage> {
                         Button(
                           callback: () {
                             cubit.login(
-                              SignInInput(
+                              SignUpInput(
                                 password: _passwordController.text,
                                 email: _emailController.text,
+                                name: _nameController.text,
+                                username: '',
                               ),
                             );
                           },
-                          title: 'Sign In',
+                          title: 'Sign Up',
                         ),
                         const Divider(),
                         // Button(
@@ -119,12 +138,12 @@ class _LoginInPageState extends State<LoginInPage> {
                           onPressed: () {
                             redirectTo(
                               context,
-                              Routes.signup,
+                              Routes.login,
                               replace: true,
                             );
                           },
                           child: const Text(
-                            'New here? Click here to sign up',
+                            'Have an account? Click here to sign in',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w900,
@@ -147,6 +166,7 @@ class _LoginInPageState extends State<LoginInPage> {
   void dispose() {
     _passwordController.dispose();
     _emailController.dispose();
+    _nameController.dispose();
 
     super.dispose();
   }
