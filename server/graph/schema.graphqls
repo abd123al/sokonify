@@ -95,15 +95,15 @@ type User implements Gorm {
 }
 
 input SignInInput {
-    login: String!
-    password: String!
+    login: String! @validate(constraint: "required")
+    password: String! @validate(constraint: "required")
 }
 
 input SignUpInput {
-    name : String!
-    username : String
-    email : String!
-    password : String!
+    name : String! @validate(constraint: "required")
+    username : String #@validate(constraint: "optional")
+    email : String! @validate(constraint: "required,email")
+    password : String! @validate(constraint: "required")
 }
 
 # We are not using cookies because most apps won't be browser based apps
@@ -689,3 +689,5 @@ directive @goTag(
 
 directive @hasRole(role: StaffRole!) on FIELD_DEFINITION
 directive @isAuthenticated on FIELD_DEFINITION
+
+directive @validate(constraint: String!) on INPUT_FIELD_DEFINITION | ARGUMENT_DEFINITION

@@ -53,6 +53,7 @@ func StartServer(Args StartServerArgs) string {
 	//Configuring directives to be used on run-time
 	config.Directives.HasRole = HasRole
 	config.Directives.IsAuthenticated = IsAuthenticated
+	config.Directives.Validate = Validator
 
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(config))
 	srv.AddTransport(transport.Options{})

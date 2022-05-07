@@ -4,8 +4,33 @@ import (
 	"context"
 	"fmt"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/go-playground/validator/v10"
 	"mahesabu/graph/model"
 )
+
+var (
+	validate *validator.Validate
+)
+
+func init() {
+	validate = validator.New()
+}
+
+// Validator https://david-yappeter.medium.com/gqlgen-custom-data-validation-part-1-7de8ef92de4c
+var Validator = func(ctx context.Context, obj interface{}, next graphql.Resolver, constraint string) (res interface{}, err error) {
+	val, err := next(ctx)
+	if err != nil {
+		panic(err)
+	}
+
+	err = validate.Var(val, constraint)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return val, nil
+}
 
 var HasRole = func(ctx context.Context, obj interface{}, next graphql.Resolver, userType model.StaffRole) (interface{}, error) {
 	//if true {

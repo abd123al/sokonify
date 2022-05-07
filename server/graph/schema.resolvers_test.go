@@ -44,6 +44,7 @@ func TestResolvers(t *testing.T) {
 	}}
 
 	config.Directives.HasRole = util.HasRole
+	config.Directives.Validate = util.Validator
 
 	//Graphql client
 	c := client.New(handler.NewDefaultServer(generated.NewExecutableSchema(config)))
@@ -58,30 +59,27 @@ func TestResolvers(t *testing.T) {
 		require.Equal(t, "pong", resp.Ping)
 	})
 
-	t.Run("createUser", func(t *testing.T) {
+	t.Run("signup", func(t *testing.T) {
 		var resp struct {
-			CreateUser model.User
+			SignUp model.AuthPayload
 		}
 
-		password := "password"
-
-		input := model.UserInput{
-			Username: faker.Username(),
-			Email:    faker.Email(),
+		input := model.SignUpInput{
+			Email:    "faker.Email()",
 			Name:     faker.Name(),
-			Password: &password,
+			Password: "password",
 		}
 
 		c.MustPost(`
-			mutation createUser($input: UserInput!) {
-			  createUser(input: $input) {
-				username
+			mutation signUp($input: SignUpInput!) {
+			  signUp(input: $input) {
+				user{username}
 			  }
 			}
 			`, &resp,
 			client.Var("input", input))
 
-		require.Equal(t, input.Username, resp.CreateUser.Username)
+		require.Equal(t, input.Username, resp.SignUp.User.Username)
 	})
 
 	t.Run("createStore", func(t *testing.T) {
