@@ -16,9 +16,9 @@ type contextKey struct {
 	userId string
 }
 
-// AuthPayload A stand-in for our database backed user object
+// AuthParams A stand-in for our database backed user object
 // todo inject this to every resolver.
-type AuthPayload struct {
+type AuthParams struct {
 	UserId  int
 	StoreId *int
 	Role    *model.StaffRole
@@ -53,7 +53,7 @@ func AuthMiddleware() func(http.Handler) http.Handler {
 				return
 			}
 
-			auth := AuthPayload{
+			auth := AuthParams{
 				UserId: 1,
 			}
 
@@ -68,7 +68,7 @@ func AuthMiddleware() func(http.Handler) http.Handler {
 }
 
 // ForContext finds the user from the context. REQUIRES Middleware to have run.
-func ForContext(ctx context.Context) *AuthPayload {
-	raw, _ := ctx.Value(jwtauth.TokenCtxKey).(*AuthPayload)
+func ForContext(ctx context.Context) *AuthParams {
+	raw, _ := ctx.Value(jwtauth.TokenCtxKey).(*AuthParams)
 	return raw
 }

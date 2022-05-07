@@ -14,7 +14,7 @@ func GenerateAuthToken(user model.User) string {
 	StoreId := 2
 	role := model.StaffRoleStaff
 
-	payload := AuthPayload{
+	payload := AuthParams{
 		UserId:  user.ID,
 		StoreId: &StoreId,
 		Role:    &role,
