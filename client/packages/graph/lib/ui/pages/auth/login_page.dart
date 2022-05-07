@@ -30,7 +30,7 @@ class _LoginInPageState extends State<LoginInPage> {
           AuthRepository>(
         blocCreator: (r) => LoginCubit(r),
         onSuccess: (context, data) {
-          //BlocProvider.of<AuthCubit>(context).loginIn();
+          BlocProvider.of<AuthCubit>(context).login(data);
         },
         loadingWidget: const Center(
           child: CircularProgressIndicator(

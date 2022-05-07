@@ -1,8 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:gql_dio_link/gql_dio_link.dart';
+import 'package:graph/gql/token_box.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+
+import '../utils/consts.dart';
 
 Future<GraphQLClient> graphQLClient(String baseUrl) async {
   final dio = Dio(
@@ -25,10 +28,46 @@ Future<GraphQLClient> graphQLClient(String baseUrl) async {
     );
   }
 
+  final box = await tokenBox();
+
+  final AuthLink _authLink = AuthLink(
+    getToken: () {
+      final token = box.get(tokenHiveKey);
+      print('token $token');
+
+      if (token != null) {
+        return 'Bearer $token';
+      }
+
+      return null;
+    },
+  );
+
+  final _errorLink = ErrorLink(
+    onException: (
+      Request request,
+      NextLink forward,
+      LinkException exception,
+    ) async* {
+      if (exception is HttpLinkServerException &&
+          exception.response.statusCode == 401) {
+        // BlocProvider.of<AuthStateCubit>(
+        //     Application.navigatorKey.currentContext!)
+        //     .logout();
+        //
+        // Phoenix.rebirth(Application.navigatorKey.currentContext!);
+      }
+
+      yield* forward(request);
+    },
+  );
+
   final Link _dioLink = DioLink(
     baseUrl,
     client: dio,
   );
+
+  final Link _link = _authLink.concat(_errorLink).concat(_dioLink);
 
   return GraphQLClient(
     cache: GraphQLCache(),
@@ -37,6 +76,6 @@ Future<GraphQLClient> graphQLClient(String baseUrl) async {
         fetch: FetchPolicy.noCache, //so refresh works
       ),
     ),
-    link: _dioLink,
+    link: _link,
   );
 }

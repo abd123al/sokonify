@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
-import '../../../nav/nav.dart';
 import '../../../repositories/auth_repository.dart';
 import 'auth_cubit.dart';
 import 'signup_cubit.dart';
@@ -31,7 +30,7 @@ class _SignupPageState extends State<SignupPage> {
           AuthRepository>(
         blocCreator: (r) => SignupCubit(r),
         onSuccess: (context, data) {
-          //BlocProvider.of<AuthCubit>(context).loginIn();
+          BlocProvider.of<AuthCubit>(context).login(data);
         },
         loadingWidget: const Center(
           child: CircularProgressIndicator(

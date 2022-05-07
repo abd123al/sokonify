@@ -26,7 +26,9 @@ class AuthWrapper extends StatelessWidget {
         } else if (state == AuthState.isLoggedIn) {
           return child;
         } else {
-          return const LoadingIndicator();
+          return const Scaffold(
+            body: LoadingIndicator(),
+          );
         }
       },
     );
