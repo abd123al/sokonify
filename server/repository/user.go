@@ -22,9 +22,9 @@ func SignUp(db *gorm.DB, input model.SignUpInput) (*model.AuthPayload, error) {
 	result := db.Create(&user)
 
 	payload = &model.AuthPayload{
-		AccessToken: "",
-		User:        &user,
-		Store:       nil,
+		//AccessToken: util.GenerateAuthToken(user),
+		User:  &user,
+		Store: nil,
 	}
 
 	return payload, result.Error

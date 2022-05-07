@@ -16,7 +16,7 @@ func TestUser(t *testing.T) {
 	t.Run("SignUp", func(t *testing.T) {
 		Username := faker.Username()
 
-		payload, _ := repository.SignUp(DB, model.SignUpInput{
+		payload, err := repository.SignUp(DB, model.SignUpInput{
 			Name:     faker.Word(),
 			Username: &Username,
 			Email:    faker.Email(),
@@ -24,15 +24,17 @@ func TestUser(t *testing.T) {
 		})
 
 		require.NotNil(t, payload.User.Password)
+		require.Nil(t, err)
 	})
 
 	t.Run("login with valid email", func(t *testing.T) {
-		payload, _ := repository.SignIn(DB, model.SignInInput{
+		payload, err := repository.SignIn(DB, model.SignInInput{
 			Login:    User.Email,
 			Password: "password",
 		})
 
 		require.NotNil(t, payload)
+		require.Nil(t, err)
 	})
 
 	t.Run("login with valid username", func(t *testing.T) {
