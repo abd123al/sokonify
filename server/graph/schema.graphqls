@@ -102,6 +102,7 @@ input SignUpInput {
     password : String!
 }
 
+# We are not using cookies because most apps won't be browser based apps
 type AuthPayload {
     accessToken : String!
     user: User!

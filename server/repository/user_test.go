@@ -16,16 +16,30 @@ func TestUser(t *testing.T) {
 	t.Run("SignUp", func(t *testing.T) {
 		Username := faker.Username()
 
-		payload, err := repository.SignUp(DB, model.SignUpInput{
+		input := model.SignUpInput{
 			Name:     faker.Word(),
 			Username: &Username,
 			Email:    faker.Email(),
 			Password: faker.Password(),
-		})
+		}
+
+		payload, err := repository.SignUp(DB, input)
 
 		require.NotNil(t, payload.AccessToken)
 		require.NotNil(t, payload.User.Password)
 		require.Nil(t, err)
+
+		//using same email
+		payload2, err2 := repository.SignUp(DB, input)
+		require.ErrorContains(t, err2, "email")
+		require.Nil(t, payload2)
+
+		//using same username
+		input.Email = faker.Email() //changing the current one
+
+		payload3, err3 := repository.SignUp(DB, input)
+		require.ErrorContains(t, err3, "username")
+		require.Nil(t, payload3)
 	})
 
 	t.Run("login with valid email", func(t *testing.T) {
