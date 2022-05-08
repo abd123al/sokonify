@@ -15,10 +15,9 @@ func TestStaff(t *testing.T) {
 
 	t.Run("CreateStaff", func(t *testing.T) {
 		staff, err := repository.CreateStaff(DB, model.StaffInput{
-			StoreID: StoreID,
-			UserID:  UserID,
-			Role:    model.StaffRoleStaff,
-		})
+			UserID: UserID,
+			Role:   model.StaffRoleStaff,
+		}, StoreID)
 
 		assert.Nil(t, err)
 		assert.NotNil(t, staff)

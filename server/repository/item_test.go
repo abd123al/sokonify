@@ -11,10 +11,12 @@ import (
 func TestItem(t *testing.T) {
 	DB := util.InitTestDB()
 	product := util.CreateProduct(DB, nil)
+	unit := util.CreateUnit(DB, product.StoreID, nil)
 
 	t.Run("CreateItem", func(t *testing.T) {
 		item, _ := repository.CreateItem(DB, model.ItemInput{
 			ProductID:    product.ID,
+			UnitID:       unit.ID,
 			Quantity:     12,
 			BuyingPrice:  "2000",
 			SellingPrice: "5000",
@@ -27,6 +29,7 @@ func TestItem(t *testing.T) {
 		_, _ = repository.CreateItem(DB, model.ItemInput{
 			Quantity:     12,
 			BuyingPrice:  "2000",
+			UnitID:       unit.ID,
 			SellingPrice: "5000",
 			ProductID:    product.ID,
 		})
@@ -36,9 +39,8 @@ func TestItem(t *testing.T) {
 		create()
 
 		items, _ := repository.FindItems(DB, model.ItemsArgs{
-			By:    model.ItemsByStore,
-			Value: *product.StoreID,
-		})
+			By: model.ItemsByStore,
+		}, *product.StoreID)
 
 		require.NotEmpty(t, items)
 	})
@@ -49,7 +51,7 @@ func TestItem(t *testing.T) {
 		items, _ := repository.FindItems(DB, model.ItemsArgs{
 			By:    model.ItemsByProduct,
 			Value: product.ID,
-		})
+		}, *product.StoreID)
 
 		require.NotEmpty(t, items)
 	})

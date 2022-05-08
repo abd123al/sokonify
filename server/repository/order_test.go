@@ -25,7 +25,7 @@ func TestOrders(t *testing.T) {
 					ItemID:   item.ID,
 				},
 			},
-		})
+		}, store.ID)
 
 		require.Nil(t, err)
 		require.NotNil(t, order)
@@ -42,7 +42,7 @@ func TestOrders(t *testing.T) {
 					ItemID:   item.ID,
 				},
 			},
-		})
+		}, store.ID)
 
 		require.Nil(t, order)
 		require.NotNil(t, err)

@@ -5,10 +5,10 @@ import (
 	"mahesabu/graph/model"
 )
 
-func CreateCategory(db *gorm.DB, input model.CategoryInput) (*model.Category, error) {
+func CreateCategory(db *gorm.DB, input model.CategoryInput, StoreID *int) (*model.Category, error) {
 	category := model.Category{
 		Name:    input.Name,
-		StoreID: &input.StoreID,
+		StoreID: StoreID,
 	}
 	result := db.Create(&category)
 	return &category, result.Error

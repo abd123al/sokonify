@@ -115,8 +115,8 @@ type AuthPayload {
 
 type AuthParams {
     userId: Int!
-    storeId: Int
-    role : StaffRole
+    storeId: Int! #ensure 0 is not used
+    role : StaffRole!
 }
 
 input ChangePasswordInput {
@@ -141,7 +141,6 @@ type Category implements Gorm {
 
 input CategoryInput {
     name: String!
-    storeId: Int!
 }
 
 #todo find better name to reflect customer and supplier
@@ -180,8 +179,6 @@ input CustomerInput {
     phone: String
     address: String
     tin: String
-
-    storeId: Int!
 }
 
 enum ExpenseType {
@@ -209,7 +206,6 @@ type Expense implements Gorm {
 input ExpenseInput {
     name: String!
     type: ExpenseType! = out
-    storeId: ID!
 }
 
 enum ExpensesBy {
@@ -248,7 +244,6 @@ input ProductInput {
     # user may attach more categories for the same product.
     categories: [ID!]
     # Brands can be inserted when creating product.
-    storeId: ID!
     brands: [ProductBrandInput!]
 }
 
@@ -389,7 +384,6 @@ type Staff implements Gorm {
 }
 
 input StaffInput {
-    storeId: Int!
     userId: Int!
     role: StaffRole!
 }
@@ -610,9 +604,9 @@ type Query {
     brand(id:ID!): Brand!
     brands(productId:ID!): [Brand!]!
     category(id:ID!): Category!
-    categories(storeId:ID!): [Category!]! @isAuthenticated
+    categories: [Category!]! @isAuthenticated
     customer(id:ID!): Customer!
-    customers(storeId:ID! @id): [Customer!]! @isAuthenticated
+    customers: [Customer!]! @isAuthenticated
     item(id: ID!): Item!
     items(args: ItemsArgs!): [Item!]! @isAuthenticated
     expense(id: ID!): Expense!
@@ -624,11 +618,11 @@ type Query {
     product(id: ID!): Product!
     products(args: ProductsArgs!): [Product!]!
     staff(id: ID!): Staff! @isAuthenticated
-    staffs(storeId:ID!): [Staff!]! @isAuthenticated
+    staffs: [Staff!]! @isAuthenticated
     store(id: ID!): Store! @isAuthenticated
     stores: [Store!]! @isAuthenticated
     unit(id: ID!): Unit!
-    units(storeId:ID!): [Unit!]! @isAuthenticated
+    units: [Unit!]! @isAuthenticated
     user(id: ID!): User!
     users: [User!]! #todo add args  @isAuthenticated
 }

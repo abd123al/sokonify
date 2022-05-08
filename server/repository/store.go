@@ -22,10 +22,9 @@ func CreateStore(db *gorm.DB, UserID int, input model.StoreInput) (*model.Store,
 		}
 
 		_, err := CreateStaff(tx, model.StaffInput{
-			StoreID: store.ID,
-			UserID:  UserID,
-			Role:    model.StaffRoleOwner,
-		})
+			UserID: UserID,
+			Role:   model.StaffRoleOwner,
+		}, store.ID)
 
 		if err != nil {
 			return err

@@ -28,12 +28,12 @@ func CreateItem(DB *gorm.DB, input model.ItemInput) (*model.Item, error) {
 	return &item, result.Error
 }
 
-func FindItems(DB *gorm.DB, args model.ItemsArgs) ([]*model.Item, error) {
+func FindItems(DB *gorm.DB, args model.ItemsArgs, StoreID int) ([]*model.Item, error) {
 	var items []*model.Item
 	var result *gorm.DB
 
 	if args.By == model.ItemsByStore {
-		result = DB.Table("items").Joins("inner join products on products.id = items.product_id AND products.store_id = ?", args.Value).Find(&items)
+		result = DB.Table("items").Joins("inner join products on products.id = items.product_id AND products.store_id = ?", StoreID).Find(&items)
 	} else if args.By == model.ItemsByCategory {
 		result = DB.Table("items").Joins("inner join products on products.id = items.product_id inner join categories on categories.id = products.category_id AND categories.id = ?", args.Value).Find(&items)
 	} else if args.By == model.ItemsByProduct {

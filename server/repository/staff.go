@@ -5,10 +5,10 @@ import (
 	"mahesabu/graph/model"
 )
 
-func CreateStaff(db *gorm.DB, input model.StaffInput) (*model.Staff, error) {
+func CreateStaff(db *gorm.DB, input model.StaffInput, StoreID int) (*model.Staff, error) {
 	staff := model.Staff{
 		UserID:  input.UserID,
-		StoreID: input.StoreID,
+		StoreID: StoreID,
 		Role:    input.Role,
 	}
 	result := db.Create(&staff)

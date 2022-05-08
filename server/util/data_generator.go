@@ -23,10 +23,9 @@ func CreateUser(DB *gorm.DB) *model.User {
 
 func CreateCustomer(DB *gorm.DB, StoreId int) *model.Customer {
 	customer, _ := repository.CreateCustomer(DB, model.CustomerInput{
-		Name:    faker.Name(),
-		Type:    model.CustomerTypeCustomer,
-		StoreID: StoreId,
-	})
+		Name: faker.Name(),
+		Type: model.CustomerTypeCustomer,
+	}, StoreId)
 
 	return customer
 }
@@ -65,10 +64,9 @@ func CreateStaff(DB *gorm.DB, Args *CreateStaffArgs) *model.Staff {
 	}
 
 	staff, _ := repository.CreateStaff(DB, model.StaffInput{
-		StoreID: StoreID,
-		UserID:  UserID,
-		Role:    model.StaffRoleStaff,
-	})
+		UserID: UserID,
+		Role:   model.StaffRoleStaff,
+	}, StoreID)
 
 	return staff
 }
@@ -104,14 +102,13 @@ func CreateProduct(DB *gorm.DB, Args *CreateProductArgs) *model.Product {
 	}
 
 	product, _ := repository.CreateProduct(DB, model.ProductInput{
-		StoreID:    StoreID,
 		Categories: Categories,
 		Name:       faker.Name(),
 		Brands: []*model.ProductBrandInput{
 			{Name: faker.Word()},
 			{Name: faker.Word()},
 		},
-	})
+	}, &StoreID)
 
 	return product
 }
@@ -211,7 +208,7 @@ func CreateOrder(DB *gorm.DB, args *CreateOrderArgs) *model.Order {
 		CustomerID: &CustomerID,
 		Type:       model.OrderTypeIn,
 		Items:      ItemsInput,
-	})
+	}, IssuerID)
 
 	return order
 }
@@ -222,10 +219,9 @@ func CreateExpense(DB *gorm.DB, StoreID *int) *model.Expense {
 	}
 
 	expense, _ := repository.CreateExpense(DB, model.ExpenseInput{
-		StoreID: *StoreID,
-		Name:    faker.Name(),
-		Type:    model.ExpenseTypeOut,
-	})
+		Name: faker.Name(),
+		Type: model.ExpenseTypeOut,
+	}, *StoreID)
 
 	return expense
 }

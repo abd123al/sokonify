@@ -5,7 +5,7 @@ import (
 	"mahesabu/graph/model"
 )
 
-func CreateCustomer(DB *gorm.DB, input model.CustomerInput) (*model.Customer, error) {
+func CreateCustomer(DB *gorm.DB, input model.CustomerInput, StoreID int) (*model.Customer, error) {
 	var user *model.User
 	email := input.Email
 	phone := input.Phone
@@ -19,7 +19,7 @@ func CreateCustomer(DB *gorm.DB, input model.CustomerInput) (*model.Customer, er
 
 	customer := model.Customer{
 		Name:    input.Name,
-		StoreID: input.StoreID,
+		StoreID: StoreID,
 		Type:    input.Type,
 		Gender:  input.Gender,
 		Dob:     input.Dob,

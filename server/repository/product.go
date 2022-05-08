@@ -7,7 +7,7 @@ import (
 	"mahesabu/helpers"
 )
 
-func CreateProduct(DB *gorm.DB, input model.ProductInput) (*model.Product, error) {
+func CreateProduct(DB *gorm.DB, input model.ProductInput, StoreID *int) (*model.Product, error) {
 	//todo should this run on transaction?
 	var brands []*model.Brand
 	var productCategories []*model.ProductCategory
@@ -24,7 +24,7 @@ func CreateProduct(DB *gorm.DB, input model.ProductInput) (*model.Product, error
 	product := model.Product{
 		Name:    input.Name,
 		Brands:  brands,
-		StoreID: &input.StoreID,
+		StoreID: StoreID,
 	}
 
 	result := DB.Create(&product)
@@ -56,13 +56,13 @@ func CreateProduct(DB *gorm.DB, input model.ProductInput) (*model.Product, error
 	return &product, result.Error
 }
 
-func FindProducts(DB *gorm.DB, args model.ProductsArgs) ([]*model.Product, error) {
+func FindProducts(DB *gorm.DB, args model.ProductsArgs, StoreID int) ([]*model.Product, error) {
 	var items []*model.Product
 	var result *gorm.DB
 
 	if args.By != nil {
 		if *args.By == model.ProductsByStore {
-			result = DB.Table("products").Where(&model.Product{StoreID: args.Value}).Find(&items)
+			result = DB.Table("products").Where(&model.Product{StoreID: &StoreID}).Find(&items)
 		} else if *args.By == model.ProductsByCategory {
 			result = DB.Table("products").Joins("inner join product_categories on product_categories.product_id = products.id AND product_categories.category_id = ?", args.Value).Find(&items)
 		} else {

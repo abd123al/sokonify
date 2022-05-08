@@ -24,7 +24,7 @@ func TestFindExpenses(t *testing.T) {
 		results, _ := repository.FindExpenses(DB, model.ExpensesArgs{
 			By:    model.ExpensesByStore,
 			Value: store.ID,
-		})
+		}, store.ID)
 
 		require.GreaterOrEqual(t, len(results), 3)
 	})

@@ -96,17 +96,16 @@ func TestResolvers(t *testing.T) {
 	})
 
 	t.Run("createStaff", func(t *testing.T) {
-		//todo don't allow duplicates in store staff
-		newStore := util.CreateStore(DB, &user.ID)
+		////todo don't allow duplicates in store staff
+		//newStore := util.CreateStore(DB, &user.ID)
 
 		var resp struct {
 			CreateStaff model.Staff
 		}
 
 		input := model.StaffInput{
-			StoreID: newStore.ID,
-			UserID:  user.ID,
-			Role:    model.StaffRoleStaff,
+			UserID: user.ID,
+			Role:   model.StaffRoleStaff,
 		}
 
 		c.MustPost(`
@@ -127,8 +126,7 @@ func TestResolvers(t *testing.T) {
 		}
 
 		input := model.CategoryInput{
-			Name:    "Tablets",
-			StoreID: store.ID,
+			Name: "Tablets",
 		}
 
 		c.MustPost(`
@@ -151,10 +149,9 @@ func TestResolvers(t *testing.T) {
 		gender := model.GenderTypeMale
 
 		input := model.CustomerInput{
-			Name:    "Tablets",
-			Type:    model.CustomerTypeCustomer,
-			StoreID: store.ID,
-			Gender:  &gender,
+			Name:   "Tablets",
+			Type:   model.CustomerTypeCustomer,
+			Gender: &gender,
 		}
 
 		var call = func(input model.CustomerInput) {
@@ -197,7 +194,6 @@ func TestResolvers(t *testing.T) {
 			Name:       "Product Name",
 			Categories: []int{category.ID, category.ID},
 			Unit:       "tabs",
-			StoreID:    store.ID,
 		}
 
 		c.MustPost(`

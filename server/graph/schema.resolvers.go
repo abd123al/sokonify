@@ -31,15 +31,15 @@ func (r *mutationResolver) CreateBrand(ctx context.Context, input model.BrandInp
 }
 
 func (r *mutationResolver) CreateCategory(ctx context.Context, input model.CategoryInput) (*model.Category, error) {
-	return repository.CreateCategory(r.DB, input)
+	return repository.CreateCategory(r.DB, input, &helpers.ForContext(ctx).StoreID)
 }
 
 func (r *mutationResolver) CreateCustomer(ctx context.Context, input model.CustomerInput) (*model.Customer, error) {
-	return repository.CreateCustomer(r.DB, input)
+	return repository.CreateCustomer(r.DB, input, helpers.ForContext(ctx).StoreID)
 }
 
 func (r *mutationResolver) CreateExpense(ctx context.Context, input model.ExpenseInput) (*model.Expense, error) {
-	return repository.CreateExpense(r.DB, input)
+	return repository.CreateExpense(r.DB, input, helpers.ForContext(ctx).StoreID)
 }
 
 func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput) (*model.Item, error) {
@@ -47,7 +47,7 @@ func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput
 }
 
 func (r *mutationResolver) CreateOrder(ctx context.Context, input model.OrderInput) (*model.Order, error) {
-	return repository.CreateOrder(r.DB, helpers.ForContext(ctx).UserID, input)
+	return repository.CreateOrder(r.DB, helpers.ForContext(ctx).UserID, input, helpers.ForContext(ctx).StoreID)
 }
 
 func (r *mutationResolver) CreateOrderPayment(ctx context.Context, input model.OrderPaymentInput) (*model.Payment, error) {
@@ -59,11 +59,11 @@ func (r *mutationResolver) CreateExpensePayment(ctx context.Context, input model
 }
 
 func (r *mutationResolver) CreateProduct(ctx context.Context, input model.ProductInput) (*model.Product, error) {
-	return repository.CreateProduct(r.DB, input)
+	return repository.CreateProduct(r.DB, input, &helpers.ForContext(ctx).StoreID)
 }
 
 func (r *mutationResolver) CreateStaff(ctx context.Context, input model.StaffInput) (*model.Staff, error) {
-	return repository.CreateStaff(r.DB, input)
+	return repository.CreateStaff(r.DB, input, helpers.ForContext(ctx).StoreID)
 }
 
 func (r *mutationResolver) CreateStore(ctx context.Context, input model.StoreInput) (*model.Store, error) {
@@ -73,7 +73,7 @@ func (r *mutationResolver) CreateStore(ctx context.Context, input model.StoreInp
 func (r *mutationResolver) CreateUnit(ctx context.Context, input model.UnitInput) (*model.Unit, error) {
 	return repository.CreateUnit(r.DB, input, repository.CreateUnitsArgs{
 		UserID:  &helpers.ForContext(ctx).UserID,
-		StoreID: helpers.ForContext(ctx).StoreID,
+		StoreID: &helpers.ForContext(ctx).StoreID,
 	})
 }
 
@@ -173,16 +173,16 @@ func (r *queryResolver) Category(ctx context.Context, id int) (*model.Category, 
 	return repository.FindCategory(r.DB, id)
 }
 
-func (r *queryResolver) Categories(ctx context.Context, storeID int) ([]*model.Category, error) {
-	return repository.FindCategories(r.DB, storeID)
+func (r *queryResolver) Categories(ctx context.Context) ([]*model.Category, error) {
+	return repository.FindCategories(r.DB, helpers.ForContext(ctx).StoreID)
 }
 
 func (r *queryResolver) Customer(ctx context.Context, id int) (*model.Customer, error) {
 	return repository.FindCustomer(r.DB, id)
 }
 
-func (r *queryResolver) Customers(ctx context.Context, storeID int) ([]*model.Customer, error) {
-	return repository.FindCustomers(r.DB, storeID)
+func (r *queryResolver) Customers(ctx context.Context) ([]*model.Customer, error) {
+	return repository.FindCustomers(r.DB, helpers.ForContext(ctx).StoreID)
 }
 
 func (r *queryResolver) Item(ctx context.Context, id int) (*model.Item, error) {
@@ -190,7 +190,7 @@ func (r *queryResolver) Item(ctx context.Context, id int) (*model.Item, error) {
 }
 
 func (r *queryResolver) Items(ctx context.Context, args model.ItemsArgs) ([]*model.Item, error) {
-	return repository.FindItems(r.DB, args)
+	return repository.FindItems(r.DB, args, helpers.ForContext(ctx).StoreID)
 }
 
 func (r *queryResolver) Expense(ctx context.Context, id int) (*model.Expense, error) {
@@ -198,7 +198,7 @@ func (r *queryResolver) Expense(ctx context.Context, id int) (*model.Expense, er
 }
 
 func (r *queryResolver) Expenses(ctx context.Context, args model.ExpensesArgs) ([]*model.Expense, error) {
-	return repository.FindExpenses(r.DB, args)
+	return repository.FindExpenses(r.DB, args, helpers.ForContext(ctx).StoreID)
 }
 
 func (r *queryResolver) Order(ctx context.Context, id int) (*model.Order, error) {
@@ -206,7 +206,7 @@ func (r *queryResolver) Order(ctx context.Context, id int) (*model.Order, error)
 }
 
 func (r *queryResolver) Orders(ctx context.Context, args model.OrdersArgs) ([]*model.Order, error) {
-	return repository.FindOrders(r.DB, args)
+	return repository.FindOrders(r.DB, args, helpers.ForContext(ctx).StoreID)
 }
 
 func (r *queryResolver) Payment(ctx context.Context, id int) (*model.Payment, error) {
@@ -222,15 +222,15 @@ func (r *queryResolver) Product(ctx context.Context, id int) (*model.Product, er
 }
 
 func (r *queryResolver) Products(ctx context.Context, args model.ProductsArgs) ([]*model.Product, error) {
-	return repository.FindProducts(r.DB, args)
+	return repository.FindProducts(r.DB, args, helpers.ForContext(ctx).StoreID)
 }
 
 func (r *queryResolver) Staff(ctx context.Context, id int) (*model.Staff, error) {
 	return repository.FindStaff(r.DB, id)
 }
 
-func (r *queryResolver) Staffs(ctx context.Context, storeID int) ([]*model.Staff, error) {
-	return repository.FindStaffs(r.DB, storeID)
+func (r *queryResolver) Staffs(ctx context.Context) ([]*model.Staff, error) {
+	return repository.FindStaffs(r.DB, helpers.ForContext(ctx).StoreID)
 }
 
 func (r *queryResolver) Store(ctx context.Context, id int) (*model.Store, error) {
@@ -245,8 +245,8 @@ func (r *queryResolver) Unit(ctx context.Context, id int) (*model.Unit, error) {
 	return repository.FindUnit(r.DB, id)
 }
 
-func (r *queryResolver) Units(ctx context.Context, storeID int) ([]*model.Unit, error) {
-	return repository.FindUnits(r.DB, storeID) //todo
+func (r *queryResolver) Units(ctx context.Context) ([]*model.Unit, error) {
+	return repository.FindUnits(r.DB, helpers.ForContext(ctx).StoreID)
 }
 
 func (r *queryResolver) User(ctx context.Context, id int) (*model.User, error) {

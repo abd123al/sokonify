@@ -17,8 +17,8 @@ func GenerateAuthToken(user model.User) string {
 	// todo inject this to every resolver.
 	payload := model.AuthParams{
 		UserID:  user.ID,
-		StoreID: &StoreId,
-		Role:    &role,
+		StoreID: StoreId,
+		Role:    role,
 	}
 
 	data, _ := json.Marshal(payload)
@@ -53,8 +53,8 @@ func ForContext(ctx context.Context) *model.AuthParams {
 
 	params := model.AuthParams{
 		UserID:  userId,
-		StoreID: &StoreID,
-		Role:    &Role,
+		StoreID: StoreID,
+		Role:    Role,
 	}
 
 	return &params
