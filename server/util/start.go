@@ -7,6 +7,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/jwtauth"
+	"gorm.io/gorm"
 	"log"
 	"mahesabu/graph"
 	"mahesabu/graph/generated"
@@ -39,6 +40,15 @@ func StartServer(Args StartServerArgs) string {
 		Mobile:  Args.Offline,
 	})
 
+	router := ConfigureGraphql(db)
+
+	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
+	log.Fatal(http.ListenAndServe(":"+port, router))
+
+	return port
+}
+
+func ConfigureGraphql(DB *gorm.DB) *chi.Mux {
 	router := chi.NewRouter()
 
 	//jwt: Seek, verify and validate JWT tokens
@@ -46,7 +56,7 @@ func StartServer(Args StartServerArgs) string {
 	router.Use(Authenticator)
 
 	config := generated.Config{Resolvers: &graph.Resolver{
-		DB:     db,
+		DB:     DB,
 		UserId: 1,
 	}}
 
@@ -63,8 +73,5 @@ func StartServer(Args StartServerArgs) string {
 	router.Handle("/", playground.Handler("GraphQL playground", "/graphql"))
 	router.Handle("/graphql", srv)
 
-	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
-	log.Fatal(http.ListenAndServe(":"+port, router))
-
-	return port
+	return router
 }

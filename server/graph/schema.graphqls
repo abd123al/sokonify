@@ -644,7 +644,7 @@ type Mutation {
     createExpensePayment(input: ExpensePaymentInput!): Payment! @isAuthenticated  @hasRole(role: staff)
     createProduct(input: ProductInput!): Product! @isAuthenticated  @hasRole(role: owner)
     createStaff(input: StaffInput!): Staff! @isAuthenticated  @hasRole(role: owner)
-    createStore(input: StoreInput!): Store! @isAuthenticated  @hasRole(role: owner)
+    createStore(input: StoreInput!): Store! @isAuthenticated
     # Only admins can create new user.
     createUnit(input: UnitInput!): Unit! @isAuthenticated  @hasRole(role: owner)
 

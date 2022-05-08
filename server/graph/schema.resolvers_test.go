@@ -1,14 +1,12 @@
 package graph_test
 
 import (
+	"fmt"
 	"github.com/99designs/gqlgen/client"
-	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/bxcodec/faker/v3"
-
 	"github.com/stretchr/testify/require"
-	"mahesabu/graph"
-	"mahesabu/graph/generated"
 	"mahesabu/graph/model"
+	"mahesabu/helpers"
 	"mahesabu/util"
 	"testing"
 )
@@ -38,16 +36,10 @@ func TestResolvers(t *testing.T) {
 		CustomerID: customer.ID,
 	})
 
-	config := generated.Config{Resolvers: &graph.Resolver{
-		DB:     DB,
-		UserId: user.ID,
-	}}
-
-	config.Directives.HasRole = util.HasRole
-	config.Directives.Validate = util.Validator
-
 	//Graphql client
-	c := client.New(handler.NewDefaultServer(generated.NewExecutableSchema(config)))
+	router := util.ConfigureGraphql(DB)
+	token := helpers.GenerateAuthToken(*user)
+	c := client.New(router, client.AddHeader("Authorization", fmt.Sprintf("Bearer %s", token)))
 
 	t.Run("ping", func(t *testing.T) {
 		var resp struct {
@@ -65,7 +57,7 @@ func TestResolvers(t *testing.T) {
 		}
 
 		input := model.SignUpInput{
-			Email:    "faker.Email()",
+			Email:    faker.Email(),
 			Name:     faker.Name(),
 			Password: "password",
 		}

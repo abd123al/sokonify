@@ -2,6 +2,7 @@ package util
 
 import (
 	"context"
+	"fmt"
 	"github.com/go-chi/jwtauth"
 	"github.com/lestrrat-go/jwx/jwt"
 	"mahesabu/graph/model"
@@ -19,6 +20,8 @@ type contextKey struct {
 func Authenticator(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		token, _, _ := jwtauth.FromContext(r.Context())
+		fmt.Println("r: ", r)
+		fmt.Println("token: ", token)
 
 		//If token is available validate it.
 		if token != nil {
@@ -61,6 +64,9 @@ func AuthMiddleware() func(http.Handler) http.Handler {
 
 // ForContext finds the user from the context. REQUIRES Middleware to have run.
 func ForContext(ctx context.Context) *model.AuthParams {
-	raw, _ := ctx.Value(jwtauth.TokenCtxKey).(*model.AuthParams)
+	raw, e := ctx.Value(jwtauth.TokenCtxKey).(*model.AuthParams)
+	fmt.Println("raw: ", raw)
+	fmt.Println("e: ", e)
+
 	return raw
 }
