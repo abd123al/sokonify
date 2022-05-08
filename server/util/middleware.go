@@ -64,9 +64,29 @@ func AuthMiddleware() func(http.Handler) http.Handler {
 
 // ForContext finds the user from the context. REQUIRES Middleware to have run.
 func ForContext(ctx context.Context) *model.AuthParams {
-	raw, e := ctx.Value(jwtauth.TokenCtxKey).(*model.AuthParams)
-	fmt.Println("raw: ", raw)
-	fmt.Println("e: ", e)
+	_, claims, _ := jwtauth.FromContext(ctx)
 
-	return raw
+	userId := int(claims["userId"].(float64))
+	StoreID := int(claims["storeId"].(float64))
+	roleStr := claims["role"].(string)
+
+	var Role model.StaffRole
+
+	if len(roleStr) != 0 {
+		if roleStr == model.StaffRoleOwner.String() {
+			Role = model.StaffRoleOwner
+		} else {
+			Role = model.StaffRoleStaff
+		}
+	}
+
+	params := model.AuthParams{
+		UserID:  userId,
+		StoreID: &StoreID,
+		Role:    &Role,
+	}
+
+	fmt.Println("params: ", params)
+
+	return &params
 }
