@@ -10,6 +10,5 @@ import (
 // It serves as dependency injection for your app, add any dependencies you require here.
 
 type Resolver struct {
-	DB     *gorm.DB
-	UserId int
+	DB *gorm.DB
 }

@@ -56,8 +56,7 @@ func ConfigureGraphql(DB *gorm.DB) *chi.Mux {
 	router.Use(Authenticator)
 
 	config := generated.Config{Resolvers: &graph.Resolver{
-		DB:     DB,
-		UserId: 1,
+		DB: DB,
 	}}
 
 	//Configuring directives to be used on run-time

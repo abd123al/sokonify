@@ -612,7 +612,7 @@ type Query {
     category(id:ID!): Category!
     categories(storeId:ID!): [Category!]! @isAuthenticated
     customer(id:ID!): Customer!
-    customers(storeId:ID!): [Customer!]! @isAuthenticated
+    customers(storeId:ID! @id): [Customer!]! @isAuthenticated
     item(id: ID!): Item!
     items(args: ItemsArgs!): [Item!]! @isAuthenticated
     expense(id: ID!): Expense!
@@ -691,3 +691,4 @@ directive @hasRole(role: StaffRole!) on FIELD_DEFINITION
 directive @isAuthenticated on FIELD_DEFINITION
 
 directive @validate(constraint: String!) on INPUT_FIELD_DEFINITION | ARGUMENT_DEFINITION
+directive @id on INPUT_FIELD_DEFINITION | ARGUMENT_DEFINITION

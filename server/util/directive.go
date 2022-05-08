@@ -6,6 +6,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/go-playground/validator/v10"
 	"mahesabu/graph/model"
+	"mahesabu/helpers"
 )
 
 var (
@@ -43,9 +44,7 @@ var HasRole = func(ctx context.Context, obj interface{}, next graphql.Resolver, 
 }
 
 var IsAuthenticated = func(ctx context.Context, obj interface{}, next graphql.Resolver) (res interface{}, err error) {
-	payload := ForContext(ctx)
-
-	fmt.Println("payload: ", payload)
+	payload := helpers.ForContext(ctx)
 
 	if payload == nil {
 		return nil, fmt.Errorf("access denied")

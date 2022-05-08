@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"mahesabu/graph/generated"
 	"mahesabu/graph/model"
+	"mahesabu/helpers"
 	"mahesabu/repository"
 	"time"
 )
@@ -46,15 +47,15 @@ func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput
 }
 
 func (r *mutationResolver) CreateOrder(ctx context.Context, input model.OrderInput) (*model.Order, error) {
-	return repository.CreateOrder(r.DB, r.UserId, input)
+	return repository.CreateOrder(r.DB, helpers.ForContext(ctx).UserID, input)
 }
 
 func (r *mutationResolver) CreateOrderPayment(ctx context.Context, input model.OrderPaymentInput) (*model.Payment, error) {
-	return repository.CreateOrderPayment(r.DB, r.UserId, input)
+	return repository.CreateOrderPayment(r.DB, helpers.ForContext(ctx).UserID, input)
 }
 
 func (r *mutationResolver) CreateExpensePayment(ctx context.Context, input model.ExpensePaymentInput) (*model.Payment, error) {
-	return repository.CreateExpensePayment(r.DB, r.UserId, input)
+	return repository.CreateExpensePayment(r.DB, helpers.ForContext(ctx).UserID, input)
 }
 
 func (r *mutationResolver) CreateProduct(ctx context.Context, input model.ProductInput) (*model.Product, error) {
@@ -66,13 +67,13 @@ func (r *mutationResolver) CreateStaff(ctx context.Context, input model.StaffInp
 }
 
 func (r *mutationResolver) CreateStore(ctx context.Context, input model.StoreInput) (*model.Store, error) {
-	return repository.CreateStore(r.DB, r.UserId, input)
+	return repository.CreateStore(r.DB, helpers.ForContext(ctx).UserID, input)
 }
 
 func (r *mutationResolver) CreateUnit(ctx context.Context, input model.UnitInput) (*model.Unit, error) {
 	return repository.CreateUnit(r.DB, input, repository.CreateUnitsArgs{
-		UserID: &r.UserId,
-		//todo storeId
+		UserID:  &helpers.ForContext(ctx).UserID,
+		StoreID: helpers.ForContext(ctx).StoreID,
 	})
 }
 
@@ -237,7 +238,7 @@ func (r *queryResolver) Store(ctx context.Context, id int) (*model.Store, error)
 }
 
 func (r *queryResolver) Stores(ctx context.Context) ([]*model.Store, error) {
-	return repository.FindStores(r.DB, r.UserId)
+	return repository.FindStores(r.DB, helpers.ForContext(ctx).UserID)
 }
 
 func (r *queryResolver) Unit(ctx context.Context, id int) (*model.Unit, error) {
