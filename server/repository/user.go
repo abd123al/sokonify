@@ -52,10 +52,10 @@ func SignIn(db *gorm.DB, input model.SignInInput) (*model.AuthPayload, error) {
 		return nil, err
 	} else if user.Password != nil {
 		if helpers.VerifyPassword(input.Password, *user.Password) {
+			args, _ := FindDefaultStoreAndRole(db, user.ID)
 			payload = &model.AuthPayload{
-				AccessToken: helpers.GenerateAuthToken(user.ID, nil), //todo
+				AccessToken: helpers.GenerateAuthToken(user.ID, args),
 				User:        user,
-				Store:       nil, //todo default store
 			}
 
 			return payload, nil

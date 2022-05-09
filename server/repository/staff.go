@@ -4,6 +4,7 @@ import (
 	"errors"
 	"gorm.io/gorm"
 	"mahesabu/graph/model"
+	"mahesabu/helpers"
 )
 
 func CreateStaff(db *gorm.DB, input model.StaffInput, StoreID int) (*model.Staff, error) {
@@ -57,4 +58,15 @@ func FindMyMemberships(db *gorm.DB, UserID int) ([]*model.Staff, error) {
 	var staffs []*model.Staff
 	result := db.Where(&model.Staff{UserID: UserID}).Find(&staffs)
 	return staffs, result.Error
+}
+
+// FindDefaultStoreAndRole When users log in we assign them to their preferred default store
+// This is used in generating token only
+func FindDefaultStoreAndRole(db *gorm.DB, UserID int) (*helpers.FindDefaultStoreAndRoleResult, error) {
+	var roleResult *helpers.FindDefaultStoreAndRoleResult
+	if err := db.Model(&model.Staff{}).Where(&model.Staff{UserID: UserID, Default: true}).First(&roleResult).Error; err != nil {
+		return nil, err
+	}
+
+	return roleResult, nil
 }
