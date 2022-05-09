@@ -44,13 +44,14 @@ func ForContext(ctx context.Context) *model.AuthParams {
 	StoreID := int(claims["storeId"].(float64))
 	roleStr := claims["role"].(string)
 
-	var Role model.StaffRole
+	var Role = model.StaffRoleStaff //Default since without StoreId it is still useless.
 
-	if len(roleStr) != 0 {
-		if roleStr == model.StaffRoleOwner.String() {
-			Role = model.StaffRoleOwner
-		} else {
-			Role = model.StaffRoleStaff
+	if len(roleStr) > 0 {
+		for _, role := range model.AllStaffRole {
+			if role.String() == roleStr {
+				Role = role
+				break
+			}
 		}
 	}
 

@@ -1,5 +1,6 @@
 # Todo
 
+- if server is embedded use different jwt key
 - brand cascade dont work
 - Users may add duplicates products, you should have a feature to merge them all
 - For easier import retail could create invoice and go to wholesalers and offer that invoice to be scanned, then map it
