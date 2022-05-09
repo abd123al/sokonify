@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graph/ui/pages/auth/auth.dart';
 
-import '../widgets/auth_wrapper_cubit.dart';
 import '../widgets/widgets.dart';
 import 'pages.dart';
 
@@ -34,24 +33,23 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: UserBuilder(
+        title: StoreBuilder(
           builder: (context, u) {
-            final name = u.store?.name ?? "Sokonify";
-
             return InkWell(
-              child: Text(name),
-              onTap: u.store != null
-                  ? () {
-                      showModalBottomSheet(
-                        elevation: 16.0,
-                        context: context,
-                        builder: (context) {
-                          return const StoreSwitcher();
-                        },
-                      );
-                    }
-                  : null,
+              child: Text(u.name),
+              onTap: () {
+                showModalBottomSheet(
+                  elevation: 16.0,
+                  context: context,
+                  builder: (context) {
+                    return const StoreSwitcher();
+                  },
+                );
+              },
             );
+          },
+          noBuilder: (BuildContext ctx) {
+            return const Text("Sokonify");
           },
           loadingWidget: const Text("Connecting..."),
         ),
@@ -66,14 +64,11 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: UserBuilder(
+      body: StoreBuilder(
+        noBuilder: (BuildContext ctx) {
+          return const Text("Sokonify");
+        },
         builder: (context, u) {
-          if (u.store == null) {
-            return const Center(
-              child: Text("hi"),
-            );
-          }
-
           return _buildBody();
         },
       ),

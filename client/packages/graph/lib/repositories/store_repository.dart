@@ -22,4 +22,12 @@ class StoreRepository {
 
     return client.query(_options);
   }
+
+  fetchCurrentStore() {
+    final _options = QueryOptions(
+      document: CurrentStoreQuery().document,
+    );
+
+    return client.query(_options);
+  }
 }

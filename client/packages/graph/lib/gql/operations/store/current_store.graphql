@@ -1,0 +1,5 @@
+query currentStore {
+    currentStore {
+        ...StoreParts
+    }
+}

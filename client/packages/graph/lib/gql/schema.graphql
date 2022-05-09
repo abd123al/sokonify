@@ -230,6 +230,7 @@ type Query {
     brands(productId: ID!): [Brand!]!
     categories: [Category!]!
     category(id: ID!): Category!
+    currentStore: Store
     customer(id: ID!): Customer!
     customers: [Customer!]!
     expense(id: ID!): Expense!
@@ -313,7 +314,6 @@ type User implements Gorm {
     name: String!
     password: String
     phone: String!
-    store: Store
     updatedAt: Time!
     username: String
 }

@@ -1,14 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:graph/ui/widgets/widgets.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:provider/provider.dart';
 
 import '../../repositories/repositories.dart';
 import '../pages/store/stores_list_cubit.dart';
-import 'auth_wrapper_cubit.dart';
-import 'user_builder_cubit.dart';
 
 class UniBlocProvider extends StatefulWidget {
   final Widget child;
@@ -68,6 +67,11 @@ class UniBlocProviderState extends State<UniBlocProvider> {
             BlocProvider<UserBuilderCubit>(
               create: (context) {
                 return UserBuilderCubit(userRepository)..fetch();
+              },
+            ),
+            BlocProvider<StoreBuilderCubit>(
+              create: (context) {
+                return StoreBuilderCubit(storeRepository)..fetch();
               },
             ),
           ],

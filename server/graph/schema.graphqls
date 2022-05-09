@@ -121,7 +121,7 @@ input SwitchStoreInput {
 type AuthPayload {
     accessToken : String!
     user: User! @goField(forceResolver: true)
-    # This returns the default store
+    # This returns the default store todo remove it it's just confusing
     store: Store @goField(forceResolver: true)
 }
 
