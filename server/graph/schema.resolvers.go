@@ -18,6 +18,18 @@ func (r *adminResolver) Password(ctx context.Context, obj *model.Admin) (*string
 	return nil, nil
 }
 
+func (r *authPayloadResolver) User(ctx context.Context, obj *model.AuthPayload) (*model.User, error) {
+	//In signIn and signUp we have user object, so we just resolve that.
+	if obj.User != nil {
+		return obj.User, nil
+	}
+
+	//You may wonder how can we use jwt while user is just login.
+	//Since this is only used in switch store there is no problem
+	//Because it requires user to be logged in
+	return repository.FindUser(r.DB, helpers.ForContext(ctx).UserID)
+}
+
 func (r *authPayloadResolver) Store(ctx context.Context, obj *model.AuthPayload) (*model.Store, error) {
 	return repository.FindDefaultStore(r.DB, helpers.ForContext(ctx).UserID)
 }

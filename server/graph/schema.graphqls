@@ -112,7 +112,7 @@ input SignUpInput {
 # We are not using cookies because most apps won't be browser based apps
 type AuthPayload {
     accessToken : String!
-    user: User!
+    user: User! @goField(forceResolver: true)
     # This returns the default store
     store: Store @goField(forceResolver: true)
 }
@@ -663,7 +663,7 @@ type Mutation {
     # For testing if local ip works. Otherwise client will have to reconfigure.
     ping: String!
 
-    signIn(input: SignInInput!): AuthPayload! #todo use authPayload, {token and user}
+    signIn(input: SignInInput!): AuthPayload!
     signUp(input: SignUpInput!): AuthPayload!
     switchStore(storeId: ID!): AuthPayload! @isAuthenticated
 }
