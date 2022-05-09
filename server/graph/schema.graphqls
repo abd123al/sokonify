@@ -628,6 +628,7 @@ type Query {
     items(args: ItemsArgs!): [Item!]! @isAuthenticated
     expense(id: ID!): Expense!
     expenses(args: ExpensesArgs!): [Expense!]! @isAuthenticated  #for getting kinda expenses categories
+    me: User! @isAuthenticated
     order(id: ID!): Order! @isAuthenticated
     orders(args: OrdersArgs!): [Order!]! @isAuthenticated
     payment(id: ID!): Payment! @isAuthenticated

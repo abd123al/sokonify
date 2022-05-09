@@ -220,6 +220,10 @@ func (r *queryResolver) Expenses(ctx context.Context, args model.ExpensesArgs) (
 	return repository.FindExpenses(r.DB, args, helpers.ForContext(ctx).StoreID)
 }
 
+func (r *queryResolver) Me(ctx context.Context) (*model.User, error) {
+	return repository.FindUser(r.DB, helpers.ForContext(ctx).UserID)
+}
+
 func (r *queryResolver) Order(ctx context.Context, id int) (*model.Order, error) {
 	return repository.FindOrder(r.DB, id)
 }

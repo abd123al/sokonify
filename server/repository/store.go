@@ -13,7 +13,6 @@ func CreateStore(db *gorm.DB, UserID int, input model.StoreInput) (*model.Store,
 		Email:       input.Email,
 		Name:        input.Name,
 		Tin:         input.Tin,
-		Type:        input.Type,
 		UserID:      UserID,
 	}
 
