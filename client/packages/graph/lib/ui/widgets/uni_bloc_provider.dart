@@ -6,8 +6,9 @@ import 'package:in_app_update/in_app_update.dart';
 import 'package:provider/provider.dart';
 
 import '../../repositories/repositories.dart';
-import 'auth_wrapper_cubit.dart';
 import '../pages/store/stores_list_cubit.dart';
+import 'auth_wrapper_cubit.dart';
+import 'user_builder_cubit.dart';
 
 class UniBlocProvider extends StatefulWidget {
   final Widget child;
@@ -52,6 +53,7 @@ class UniBlocProviderState extends State<UniBlocProvider> {
 
         final storeRepository = StoreRepository(client);
         final authRepository = AuthRepository(client);
+        final userRepository = UserRepository(client);
 
         return MultiBlocProvider(
           providers: [
@@ -63,6 +65,11 @@ class UniBlocProviderState extends State<UniBlocProvider> {
                 return StoresListCubit(storeRepository)..fetch();
               },
             ),
+            BlocProvider<UserBuilderCubit>(
+              create: (context) {
+                return UserBuilderCubit(userRepository)..fetch();
+              },
+            ),
           ],
           child: MultiRepositoryProvider(
             providers: [
@@ -71,6 +78,9 @@ class UniBlocProviderState extends State<UniBlocProvider> {
               ),
               RepositoryProvider<StoreRepository>(
                 create: (context) => storeRepository,
+              ),
+              RepositoryProvider<UserRepository>(
+                create: (context) => userRepository,
               ),
             ],
             child: widget.child,

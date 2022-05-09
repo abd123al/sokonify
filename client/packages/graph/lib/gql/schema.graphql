@@ -13,7 +13,11 @@ directive @goTag(key: String!, value: String) on FIELD_DEFINITION | INPUT_FIELD_
 
 directive @hasRole(role: StaffRole!) on FIELD_DEFINITION
 
+directive @id on ARGUMENT_DEFINITION | INPUT_FIELD_DEFINITION
+
 directive @isAuthenticated on FIELD_DEFINITION
+
+directive @validate(constraint: String!) on ARGUMENT_DEFINITION | INPUT_FIELD_DEFINITION
 
 interface Gorm {
     createdAt: Time!
@@ -33,8 +37,8 @@ type Admin implements Gorm {
 }
 
 type AuthParams {
-    role: StaffRole
-    storeId: Int
+    role: StaffRole!
+    storeId: Int!
     userId: Int!
 }
 
@@ -143,7 +147,7 @@ type Mutation {
     ping: String!
     signIn(input: SignInInput!): AuthPayload!
     signUp(input: SignUpInput!): AuthPayload!
-    switchStore(storeId: ID!): AuthPayload!
+    switchStore(input: SwitchStoreInput): AuthPayload!
 }
 
 type Order implements Gorm {
@@ -224,14 +228,15 @@ type Query {
     admins: [Admin!]!
     brand(id: ID!): Brand!
     brands(productId: ID!): [Brand!]!
-    categories(storeId: ID!): [Category!]!
+    categories: [Category!]!
     category(id: ID!): Category!
     customer(id: ID!): Customer!
-    customers(storeId: ID!): [Customer!]!
+    customers: [Customer!]!
     expense(id: ID!): Expense!
     expenses(args: ExpensesArgs!): [Expense!]!
     item(id: ID!): Item!
     items(args: ItemsArgs!): [Item!]!
+    me: User!
     order(id: ID!): Order!
     orders(args: OrdersArgs!): [Order!]!
     payment(id: ID!): Payment!
@@ -239,11 +244,11 @@ type Query {
     product(id: ID!): Product!
     products(args: ProductsArgs!): [Product!]!
     staff(id: ID!): Staff!
-    staffs(storeId: ID!): [Staff!]!
+    staffs: [Staff!]!
     store(id: ID!): Store!
     stores: [Store!]!
     unit(id: ID!): Unit!
-    units(storeId: ID!): [Unit!]!
+    units: [Unit!]!
     user(id: ID!): User!
     users: [User!]!
 }
@@ -269,6 +274,7 @@ type Stats {
 
 type Store implements Gorm {
     address: String
+    businessType: BusinessType!
     createdAt: Time!
     deletedAt: Time
     description: String
@@ -277,8 +283,8 @@ type Store implements Gorm {
     logo: String
     name: String!
     staffs: [Staff!]!
+    storeType: StoreType!
     tin: String
-    type: StoreType
     updatedAt: Time!
     user: User!
     userId: Int!
@@ -301,11 +307,21 @@ type User implements Gorm {
     deletedAt: Time
     email: String!
     id: ID!
+    isEmailVerified: Boolean!
+    isPhoneVerified: Boolean!
+    isVerified: Boolean!
     name: String!
     password: String
     phone: String!
+    store: Store
     updatedAt: Time!
     username: String
+}
+
+enum BusinessType {
+    both
+    retail
+    wholesale
 }
 
 enum CustomerType {
@@ -386,6 +402,7 @@ enum StaffRole {
 }
 
 enum StoreType {
+    other
     pharmacy
     shop
     storage
@@ -402,7 +419,6 @@ input BrandInput {
 
 input CategoryInput {
     name: String!
-    storeId: Int!
 }
 
 input ChangePasswordInput {
@@ -417,14 +433,12 @@ input CustomerInput {
     gender: GenderType
     name: String!
     phone: String
-    storeId: Int!
     tin: String
     type: CustomerType!
 }
 
 input ExpenseInput {
     name: String!
-    storeId: ID!
     type: ExpenseType! = out
 }
 
@@ -513,7 +527,6 @@ input ProductInput {
     brands: [ProductBrandInput!]
     categories: [ID!]
     name: String!
-    storeId: ID!
     unit: String!
 }
 
@@ -537,17 +550,21 @@ input SignUpInput {
 
 input StaffInput {
     role: StaffRole!
-    storeId: Int!
     userId: Int!
 }
 
 input StoreInput {
     address: String
+    businessType: BusinessType!
     description: String
     email: String
     name: String!
+    storeType: StoreType = other
     tin: String
-    type: StoreType
+}
+
+input SwitchStoreInput {
+    storeId: Int!
 }
 
 input UnitInput {

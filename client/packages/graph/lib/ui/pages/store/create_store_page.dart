@@ -60,6 +60,7 @@ class _CreateStorePageState extends State<CreateStorePage> {
                         cubit.submit(
                           StoreInput(
                             name: passwordController.text,
+                            businessType: BusinessType.both,
                           ),
                         );
                       },

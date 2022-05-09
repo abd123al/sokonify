@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../widgets/auth_wrapper_cubit.dart';
+import '../widgets/widgets.dart';
 import 'pages.dart';
 
 class HomePage extends StatefulWidget {
@@ -32,11 +33,18 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: InkWell(
-          child: const Text("Mwanana Pharmacy"),
-          onTap: () {
-            //todo show store picker.
+        title: UserBuilder(
+          builder: (context, u) {
+            final name = u.store?.name ?? "Sokonify";
+
+            return InkWell(
+              child: Text(name),
+              onTap: () {
+                //todo show store picker.
+              },
+            );
           },
+          loadingWidget: const Text("Connecting..."),
         ),
         centerTitle: true,
         actions: [
@@ -49,6 +57,22 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
+      body: UserBuilder(
+        builder: (context, u) {
+          if (u.store == null) {
+            return const Center(
+              child: Text("hi"),
+            );
+          }
+
+          return _buildBody();
+        },
+      ),
+    );
+  }
+
+  Widget _buildBody() {
+    return Scaffold(
       body: SizedBox.expand(
         child: PageView(
           controller: _pageController,
@@ -69,24 +93,28 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavyBar(
-        selectedIndex: _currentIndex,
-        onItemSelected: (index) {
-          setState(() => _currentIndex = index);
-          _pageController.jumpToPage(index);
-        },
-        items: <BottomNavyBarItem>[
-          BottomNavyBarItem(
-              title: const Text('Item One'), icon: const Icon(Icons.home)),
-          BottomNavyBarItem(
-              title: const Text('Item Two'), icon: const Icon(Icons.apps)),
-          BottomNavyBarItem(
-              title: const Text('Item Three'),
-              icon: const Icon(Icons.chat_bubble)),
-          BottomNavyBarItem(
-              title: const Text('Item Four'), icon: const Icon(Icons.settings)),
-        ],
-      ),
+      bottomNavigationBar: _buildBottomNav(),
+    );
+  }
+
+  Widget _buildBottomNav() {
+    return BottomNavyBar(
+      selectedIndex: _currentIndex,
+      onItemSelected: (index) {
+        setState(() => _currentIndex = index);
+        _pageController.jumpToPage(index);
+      },
+      items: <BottomNavyBarItem>[
+        BottomNavyBarItem(
+            title: const Text('Item One'), icon: const Icon(Icons.home)),
+        BottomNavyBarItem(
+            title: const Text('Item Two'), icon: const Icon(Icons.apps)),
+        BottomNavyBarItem(
+            title: const Text('Item Three'),
+            icon: const Icon(Icons.chat_bubble)),
+        BottomNavyBarItem(
+            title: const Text('Item Four'), icon: const Icon(Icons.settings)),
+      ],
     );
   }
 }

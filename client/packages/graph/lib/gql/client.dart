@@ -54,10 +54,10 @@ Future<GraphQLClient> graphQLClient(String baseUrl) async {
   if (kDebugMode) {
     dio.interceptors.add(
       PrettyDioLogger(
-        requestBody: false,
-        responseBody: false,
+        requestBody: true,
+        responseBody: true,
         requestHeader: true,
-        responseHeader: false,
+        responseHeader: true,
         error: true,
         compact: true,
         maxWidth: 90,
