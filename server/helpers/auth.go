@@ -7,18 +7,21 @@ import (
 	"mahesabu/graph/model"
 )
 
-func GenerateAuthToken(user model.User) string {
+type FindDefaultStoreAndRoleResult struct {
+	StoreID int
+	Role    model.StaffRole
+}
+
+func GenerateAuthToken(UserID int, args *FindDefaultStoreAndRoleResult) string {
 	var myMap map[string]interface{}
 
-	StoreId := 2
-	role := model.StaffRoleStaff
-
-	// AuthParams A stand-in for our database backed user object
-	// todo inject this to every resolver.
 	payload := model.AuthParams{
-		UserID:  user.ID,
-		StoreID: StoreId,
-		Role:    role,
+		UserID: UserID,
+	}
+
+	if args != nil {
+		payload.StoreID = args.StoreID
+		payload.Role = args.Role
 	}
 
 	data, _ := json.Marshal(payload)

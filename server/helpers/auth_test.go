@@ -9,11 +9,19 @@ import (
 )
 
 func TestGenerateAuthToken(t *testing.T) {
-	t.Run("GenerateAuthToken", func(t *testing.T) {
-		user := model.User{
-			ID: 1,
-		}
-		result := helpers.GenerateAuthToken(user)
+	t.Run("GenerateAuthToken with store", func(t *testing.T) {
+		result := helpers.GenerateAuthToken(1, &helpers.FindDefaultStoreAndRoleResult{
+			StoreID: 1,
+			Role:    model.StaffRoleOwner,
+		})
+
+		fmt.Printf("%s\n\n", result)
+
+		require.NotNil(t, result)
+	})
+
+	t.Run("GenerateAuthToken with no store", func(t *testing.T) {
+		result := helpers.GenerateAuthToken(1, nil)
 
 		fmt.Printf("%s\n\n", result)
 

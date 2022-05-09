@@ -38,7 +38,10 @@ func TestResolvers(t *testing.T) {
 
 	//Graphql client
 	router := util.ConfigureGraphql(DB)
-	token := helpers.GenerateAuthToken(*user)
+	token := helpers.GenerateAuthToken(user.ID, &helpers.FindDefaultStoreAndRoleResult{
+		StoreID: store.ID,
+		Role:    model.StaffRoleOwner,
+	})
 	c := client.New(router, client.AddHeader("Authorization", fmt.Sprintf("Bearer %s", token)))
 
 	t.Run("ping", func(t *testing.T) {
