@@ -70,3 +70,14 @@ func FindDefaultStoreAndRole(db *gorm.DB, UserID int) (*helpers.FindDefaultStore
 
 	return roleResult, nil
 }
+
+// FindStoreAndRole When users switch to other store
+// This is also used in generating token only
+func FindStoreAndRole(db *gorm.DB, Args helpers.UserAndStoreArgs) (*helpers.FindDefaultStoreAndRoleResult, error) {
+	var roleResult *helpers.FindDefaultStoreAndRoleResult
+	if err := db.Model(&model.Staff{}).Where(&model.Staff{UserID: Args.UserID, StoreID: Args.StoreID}).First(&roleResult).Error; err != nil {
+		return nil, err
+	}
+
+	return roleResult, nil
+}

@@ -4,6 +4,7 @@ import (
 	"github.com/bxcodec/faker/v3"
 	"github.com/stretchr/testify/require"
 	"mahesabu/graph/model"
+	"mahesabu/helpers"
 	"mahesabu/repository"
 	"mahesabu/util"
 	"testing"
@@ -82,5 +83,32 @@ func TestUser(t *testing.T) {
 
 		require.NotNil(t, err)
 		require.Nil(t, payload)
+	})
+
+	t.Run("switch store", func(t *testing.T) {
+		staff := util.CreateStaff(DB, nil)
+
+		payload, err := repository.SwitchStore(DB, helpers.UserAndStoreArgs{
+			StoreID: staff.StoreID,
+			UserID:  staff.UserID,
+		})
+
+		require.NotNil(t, payload.AccessToken)
+		require.Nil(t, payload.User)
+		require.Nil(t, err)
+	})
+
+	t.Run("switch to unemployed store", func(t *testing.T) {
+		store := util.CreateStore(DB, nil)
+
+		args := helpers.UserAndStoreArgs{
+			StoreID: store.ID,
+			UserID:  User.ID,
+		}
+
+		payload, err := repository.SwitchStore(DB, args)
+
+		require.Nil(t, payload)
+		require.NotNil(t, err)
 	})
 }

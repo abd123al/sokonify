@@ -64,6 +64,23 @@ func SignIn(db *gorm.DB, input model.SignInInput) (*model.AuthPayload, error) {
 	return nil, err
 }
 
+func SwitchStore(db *gorm.DB, args helpers.UserAndStoreArgs) (*model.AuthPayload, error) {
+	var payload *model.AuthPayload
+	var err = errors.New("switch to other store failed")
+
+	result, e := FindStoreAndRole(db, args)
+	if e != nil {
+		return nil, err
+	}
+
+	payload = &model.AuthPayload{
+		AccessToken: helpers.GenerateAuthToken(args.UserID, result),
+		//todo if nill resolve
+	}
+
+	return payload, nil
+}
+
 func FindUser(db *gorm.DB, ID int) (*model.User, error) {
 	var user *model.User
 	result := db.Where(&model.User{ID: ID}).First(&user)

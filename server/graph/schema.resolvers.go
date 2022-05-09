@@ -138,7 +138,10 @@ func (r *mutationResolver) SignUp(ctx context.Context, input model.SignUpInput) 
 }
 
 func (r *mutationResolver) SwitchStore(ctx context.Context, storeID int) (*model.AuthPayload, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.SwitchStore(r.DB, helpers.UserAndStoreArgs{
+		StoreID: storeID,
+		UserID:  helpers.ForContext(ctx).UserID,
+	})
 }
 
 func (r *orderResolver) TotalPrice(ctx context.Context, obj *model.Order) (*string, error) {

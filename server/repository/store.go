@@ -3,6 +3,7 @@ package repository
 import (
 	"gorm.io/gorm"
 	"mahesabu/graph/model"
+	"mahesabu/helpers"
 )
 
 func CreateStore(db *gorm.DB, UserID int, input model.StoreInput) (*model.Store, error) {
@@ -50,7 +51,7 @@ func FindStore(db *gorm.DB, ID int) (*model.Store, error) {
 }
 
 // FindStaffStore When user wants to change store we have to make sure that they are member of that store
-func FindStaffStore(db *gorm.DB, Args UserAndStoreArgs) (*model.Store, error) {
+func FindStaffStore(db *gorm.DB, Args helpers.UserAndStoreArgs) (*model.Store, error) {
 	var store *model.Store
 	result := db.Table("stores").Joins("inner join staffs on staffs.store_id = stores.id AND staffs.user_id = ? AND staffs.store_id", Args.UserID, Args.StoreID).Find(&store)
 	return store, result.Error

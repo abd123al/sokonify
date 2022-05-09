@@ -1,4 +1,4 @@
-package repository
+package helpers
 
 type UserAndStoreArgs struct {
 	UserID  int

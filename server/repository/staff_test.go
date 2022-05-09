@@ -3,6 +3,7 @@ package repository_test
 import (
 	"github.com/stretchr/testify/require"
 	"mahesabu/graph/model"
+	"mahesabu/helpers"
 	"mahesabu/repository"
 	"mahesabu/util"
 	"testing"
@@ -53,6 +54,35 @@ func TestStaff(t *testing.T) {
 		UserID := util.CreateUser(DB).ID
 
 		result, err := repository.FindDefaultStoreAndRole(DB, UserID)
+
+		require.NotNil(t, err)
+		require.Nil(t, result)
+	})
+
+	t.Run("FindStoreAndRole", func(t *testing.T) {
+		UserID := util.CreateUser(DB).ID
+
+		staff := util.CreateStaff(DB, &util.CreateStaffArgs{
+			UserID:  UserID,
+			StoreID: StoreID,
+		})
+
+		result, err := repository.FindStoreAndRole(DB, helpers.UserAndStoreArgs{
+			UserID:  UserID,
+			StoreID: StoreID,
+		})
+
+		require.Nil(t, err)
+		require.Equal(t, staff.StoreID, result.StoreID)
+	})
+
+	t.Run("FindStoreAndRole with non staff", func(t *testing.T) {
+		storeId := util.CreateStore(DB, nil).ID //user is not staff here
+
+		result, err := repository.FindStoreAndRole(DB, helpers.UserAndStoreArgs{
+			UserID:  UserID,
+			StoreID: storeId,
+		})
 
 		require.NotNil(t, err)
 		require.Nil(t, result)
