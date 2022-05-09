@@ -35,7 +35,6 @@ func SignUp(db *gorm.DB, input model.SignUpInput) (*model.AuthPayload, error) {
 	payload = &model.AuthPayload{
 		AccessToken: helpers.GenerateAuthToken(user.ID, nil),
 		User:        &user,
-		Store:       nil,
 	}
 
 	return payload, result.Error
