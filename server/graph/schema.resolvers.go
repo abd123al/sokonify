@@ -30,7 +30,7 @@ func (r *authPayloadResolver) User(ctx context.Context, obj *model.AuthPayload) 
 	return repository.FindUser(r.DB, helpers.ForContext(ctx).UserID)
 }
 
-func (r *authPayloadResolver) Store(ctx context.Context, obj *model.AuthPayload) (*model.Store, error) {
+func (r *authPayloadResolver) Store(ctx context.Context, _ *model.AuthPayload) (*model.Store, error) {
 	return repository.FindDefaultStore(r.DB, helpers.ForContext(ctx).UserID)
 }
 
@@ -292,12 +292,12 @@ func (r *statsResolver) TotalSalesItems(ctx context.Context, obj *model.Stats, s
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *userResolver) Password(ctx context.Context, obj *model.User) (*string, error) {
+func (r *userResolver) Password(_ context.Context, _ *model.User) (*string, error) {
 	return nil, errors.New("field is accessible")
 }
 
-func (r *userResolver) Store(ctx context.Context, obj *model.User) (*model.Store, error) {
-	return repository.FindDefaultStore(r.DB, helpers.ForContext(ctx).UserID)
+func (r *userResolver) Store(_ context.Context, obj *model.User) (*model.Store, error) {
+	return repository.FindDefaultStore(r.DB, obj.ID)
 }
 
 // Admin returns generated.AdminResolver implementation.

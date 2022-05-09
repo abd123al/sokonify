@@ -81,3 +81,12 @@ func FindStoreAndRole(db *gorm.DB, Args helpers.UserAndStoreArgs) (*helpers.Find
 
 	return roleResult, nil
 }
+
+func FindDefaultStore(db *gorm.DB, UserID int) (*model.Store, error) {
+	var store *model.Store
+	if err := db.Table("stores").Joins("inner join staffs on staffs.store_id = stores.id AND staffs.user_id = ? AND staffs.default = ?", UserID, true).First(&store).Error; err != nil {
+		//We don't want error here. We just need null
+		return nil, nil
+	}
+	return store, nil
+}

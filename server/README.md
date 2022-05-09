@@ -1,5 +1,6 @@
 # Todo
 
+- `return store, result.Error` this is bad idea because it returns object with zero values.
 - if server is embedded use different jwt key
 - brand cascade dont work
 - Users may add duplicates products, you should have a feature to merge them all

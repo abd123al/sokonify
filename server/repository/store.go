@@ -55,9 +55,3 @@ func FindStaffStore(db *gorm.DB, Args helpers.UserAndStoreArgs) (*model.Store, e
 	result := db.Table("stores").Joins("inner join staffs on staffs.store_id = stores.id AND staffs.user_id = ? AND staffs.store_id", Args.UserID, Args.StoreID).Find(&store)
 	return store, result.Error
 }
-
-func FindDefaultStore(db *gorm.DB, UserID int) (*model.Store, error) {
-	var store *model.Store
-	result := db.Table("stores").Joins("inner join staffs on staffs.store_id = stores.id AND staffs.user_id = ? AND staffs.default = ?", UserID, true).Find(&store)
-	return store, result.Error
-}

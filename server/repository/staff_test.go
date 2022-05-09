@@ -87,4 +87,28 @@ func TestStaff(t *testing.T) {
 		require.NotNil(t, err)
 		require.Nil(t, result)
 	})
+
+	t.Run("FindDefaultStore with default store", func(t *testing.T) {
+		UserID := util.CreateUser(DB).ID
+
+		staff := util.CreateStaff(DB, &util.CreateStaffArgs{
+			UserID:  UserID,
+			StoreID: StoreID,
+		})
+
+		result, err := repository.FindDefaultStore(DB, UserID)
+
+		require.Nil(t, err)
+		require.Equal(t, staff.StoreID, result.ID)
+		require.Equal(t, staff.Default, true)
+	})
+
+	t.Run("FindDefaultStore with no store", func(t *testing.T) {
+		UserID := util.CreateUser(DB).ID
+
+		result, err := repository.FindDefaultStore(DB, UserID)
+
+		require.Nil(t, err)
+		require.Nil(t, result)
+	})
 }
