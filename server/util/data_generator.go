@@ -36,14 +36,12 @@ func CreateStore(DB *gorm.DB, UserID *int) *model.Store {
 		UserID = &User.ID
 	}
 
-	store := model.Store{
-		Name:   faker.Name(),
-		UserID: *UserID,
-	}
+	store, _ := repository.CreateStore(DB, *UserID, model.StoreInput{
+		Name:         faker.Name(),
+		BusinessType: model.BusinessTypeBoth,
+	})
 
-	DB.Create(&store)
-
-	return &store
+	return store
 }
 
 type CreateStaffArgs struct {

@@ -196,6 +196,13 @@ func (r *queryResolver) Categories(ctx context.Context) ([]*model.Category, erro
 	return repository.FindCategories(r.DB, helpers.ForContext(ctx).StoreID)
 }
 
+func (r *queryResolver) CurrentStore(ctx context.Context) (*model.Store, error) {
+	return repository.FindStaffStore(r.DB, helpers.UserAndStoreArgs{
+		UserID:  helpers.ForContext(ctx).UserID,
+		StoreID: helpers.ForContext(ctx).StoreID,
+	})
+}
+
 func (r *queryResolver) Customer(ctx context.Context, id int) (*model.Customer, error) {
 	return repository.FindCustomer(r.DB, id)
 }
@@ -256,15 +263,8 @@ func (r *queryResolver) Staffs(ctx context.Context) ([]*model.Staff, error) {
 	return repository.FindStaffs(r.DB, helpers.ForContext(ctx).StoreID)
 }
 
-func (r *queryResolver) Store(ctx context.Context, id *int) (*model.Store, error) {
-	var storeId int
-	if id != nil {
-		//todo only admins should have this access
-		storeId = *id
-	} else {
-		storeId = helpers.ForContext(ctx).StoreID
-	}
-	return repository.FindStore(r.DB, storeId)
+func (r *queryResolver) Store(_ context.Context, id int) (*model.Store, error) {
+	return repository.FindStore(r.DB, id)
 }
 
 func (r *queryResolver) Stores(ctx context.Context) ([]*model.Store, error) {

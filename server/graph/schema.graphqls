@@ -619,6 +619,7 @@ type Query {
     brands(productId:ID!): [Brand!]!
     category(id:ID!): Category!
     categories: [Category!]! @isAuthenticated
+    currentStore: Store @isAuthenticated
     customer(id:ID!): Customer!
     customers: [Customer!]! @isAuthenticated
     item(id: ID!): Item!
@@ -634,8 +635,7 @@ type Query {
     products(args: ProductsArgs!): [Product!]!
     staff(id: ID!): Staff! @isAuthenticated
     staffs: [Staff!]! @isAuthenticated
-    #if id is null we return current store
-    store(id: ID): Store! @isAuthenticated
+    store(id: ID!): Store! @isAuthenticated
     stores: [Store!]! @isAuthenticated
     unit(id: ID!): Unit!
     units: [Unit!]! @isAuthenticated
