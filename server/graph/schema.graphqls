@@ -679,7 +679,7 @@ type Mutation {
 
     signIn(input: SignInInput!): AuthPayload!
     signUp(input: SignUpInput!): AuthPayload!
-    switchStore(input: SwitchStoreInput): AuthPayload! @isAuthenticated
+    switchStore(input: SwitchStoreInput!): AuthPayload! @isAuthenticated
 }
 
 scalar Time
