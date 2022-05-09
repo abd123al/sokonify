@@ -296,10 +296,6 @@ func (r *userResolver) Password(ctx context.Context, obj *model.User) (*string, 
 	return nil, errors.New("field is accessible")
 }
 
-func (r *userResolver) Store(ctx context.Context, obj *model.User) (*model.Store, error) {
-	return repository.FindDefaultStore(r.DB, obj.ID)
-}
-
 // Admin returns generated.AdminResolver implementation.
 func (r *Resolver) Admin() generated.AdminResolver { return &adminResolver{r} }
 

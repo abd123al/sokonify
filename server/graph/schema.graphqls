@@ -99,9 +99,6 @@ type User implements Gorm {
     isVerified: Boolean! @goTag(key: "gorm", value: "not null;default:false")
     isEmailVerified: Boolean! @goTag(key: "gorm", value: "not null;default:false")
     isPhoneVerified: Boolean! @goTag(key: "gorm", value: "not null;default:false")
-
-    # This returns the default store
-    store: Store @goField(forceResolver: true)
 }
 
 input SignInInput {
