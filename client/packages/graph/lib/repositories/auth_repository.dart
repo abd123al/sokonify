@@ -23,4 +23,13 @@ class AuthRepository {
 
     return client.mutate(_options);
   }
+
+  switchStore(SwitchStoreInput input) {
+    final _options = MutationOptions(
+      document: SWITCH_STORE_MUTATION_DOCUMENT,
+      variables: SwitchStoreArguments(input: input).toJson(),
+    );
+
+    return client.mutate(_options);
+  }
 }

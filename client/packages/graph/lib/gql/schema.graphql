@@ -147,7 +147,7 @@ type Mutation {
     ping: String!
     signIn(input: SignInInput!): AuthPayload!
     signUp(input: SignUpInput!): AuthPayload!
-    switchStore(input: SwitchStoreInput): AuthPayload!
+    switchStore(input: SwitchStoreInput!): AuthPayload!
 }
 
 type Order implements Gorm {

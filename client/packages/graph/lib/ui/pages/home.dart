@@ -1,6 +1,7 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:graph/ui/pages/auth/auth.dart';
 
 import '../widgets/auth_wrapper_cubit.dart';
 import '../widgets/widgets.dart';
@@ -39,9 +40,17 @@ class _HomePageState extends State<HomePage> {
 
             return InkWell(
               child: Text(name),
-              onTap: () {
-                //todo show store picker.
-              },
+              onTap: u.store != null
+                  ? () {
+                      showModalBottomSheet(
+                        elevation: 16.0,
+                        context: context,
+                        builder: (context) {
+                          return const StoreSwitcher();
+                        },
+                      );
+                    }
+                  : null,
             );
           },
           loadingWidget: const Text("Connecting..."),

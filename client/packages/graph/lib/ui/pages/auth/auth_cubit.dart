@@ -10,7 +10,7 @@ class LoginCubit extends ResourceCubit<AuthPartsMixin> {
 
   signIn(SignInInput input) {
     super.execute(
-      executor: ()  => _authRepository.signIn(input),
+      executor: () => _authRepository.signIn(input),
       parser: (r) {
         return SignIn$Mutation.fromJson(r).signIn;
       },
@@ -19,9 +19,18 @@ class LoginCubit extends ResourceCubit<AuthPartsMixin> {
 
   signUp(SignUpInput input) {
     super.execute(
-      executor: ()  => _authRepository.signUp(input),
+      executor: () => _authRepository.signUp(input),
       parser: (r) {
         return SignUp$Mutation.fromJson(r).signUp;
+      },
+    );
+  }
+
+  switchStore(SwitchStoreInput input) {
+    super.execute(
+      executor: () => _authRepository.switchStore(input),
+      parser: (r) {
+        return SwitchStore$Mutation.fromJson(r).switchStore;
       },
     );
   }
