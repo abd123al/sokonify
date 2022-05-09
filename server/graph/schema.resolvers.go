@@ -149,9 +149,9 @@ func (r *mutationResolver) SignUp(ctx context.Context, input model.SignUpInput) 
 	return repository.SignUp(r.DB, input)
 }
 
-func (r *mutationResolver) SwitchStore(ctx context.Context, storeID int) (*model.AuthPayload, error) {
+func (r *mutationResolver) SwitchStore(ctx context.Context, input *model.SwitchStoreInput) (*model.AuthPayload, error) {
 	return repository.SwitchStore(r.DB, helpers.UserAndStoreArgs{
-		StoreID: storeID,
+		StoreID: input.StoreID,
 		UserID:  helpers.ForContext(ctx).UserID,
 	})
 }

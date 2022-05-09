@@ -109,6 +109,10 @@ input SignUpInput {
     password : String! @validate(constraint: "required")
 }
 
+input SwitchStoreInput {
+    storeId: Int!
+}
+
 # We are not using cookies because most apps won't be browser based apps
 type AuthPayload {
     accessToken : String!
@@ -665,7 +669,7 @@ type Mutation {
 
     signIn(input: SignInInput!): AuthPayload!
     signUp(input: SignUpInput!): AuthPayload!
-    switchStore(storeId: ID!): AuthPayload! @isAuthenticated
+    switchStore(input: SwitchStoreInput): AuthPayload! @isAuthenticated
 }
 
 scalar Time
