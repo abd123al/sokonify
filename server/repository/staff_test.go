@@ -1,7 +1,7 @@
 package repository_test
 
 import (
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"mahesabu/graph/model"
 	"mahesabu/repository"
 	"mahesabu/util"
@@ -14,12 +14,23 @@ func TestStaff(t *testing.T) {
 	StoreID := util.CreateStore(DB, nil).ID
 
 	t.Run("CreateStaff", func(t *testing.T) {
-		staff, err := repository.CreateStaff(DB, model.StaffInput{
-			UserID: UserID,
-			Role:   model.StaffRoleStaff,
-		}, StoreID)
+		fn := func() (*model.Staff, error) {
+			input := model.StaffInput{
+				UserID: UserID,
+				Role:   model.StaffRoleStaff,
+			}
+			return repository.CreateStaff(DB, input, StoreID)
+		}
 
-		assert.Nil(t, err)
-		assert.NotNil(t, staff)
+		staff, err := fn()
+
+		require.Nil(t, err)
+		require.NotNil(t, staff)
+
+		//We shouldn't allow duplicates
+		staff1, err1 := fn()
+
+		require.Nil(t, staff1)
+		require.NotNil(t, err1)
 	})
 }
