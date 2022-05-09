@@ -18,6 +18,10 @@ func (r *adminResolver) Password(ctx context.Context, obj *model.Admin) (*string
 	return nil, nil
 }
 
+func (r *authPayloadResolver) Store(ctx context.Context, obj *model.AuthPayload) (*model.Store, error) {
+	return repository.FindDefaultStore(r.DB, helpers.ForContext(ctx).UserID)
+}
+
 func (r *itemResolver) BuyingPrice(ctx context.Context, obj *model.Item) (string, error) {
 	return obj.BuyingPrice, nil
 }
@@ -273,8 +277,15 @@ func (r *userResolver) Password(ctx context.Context, obj *model.User) (*string, 
 	return nil, errors.New("field is accessible")
 }
 
+func (r *userResolver) Store(ctx context.Context, obj *model.User) (*model.Store, error) {
+	return repository.FindDefaultStore(r.DB, helpers.ForContext(ctx).UserID)
+}
+
 // Admin returns generated.AdminResolver implementation.
 func (r *Resolver) Admin() generated.AdminResolver { return &adminResolver{r} }
+
+// AuthPayload returns generated.AuthPayloadResolver implementation.
+func (r *Resolver) AuthPayload() generated.AuthPayloadResolver { return &authPayloadResolver{r} }
 
 // Item returns generated.ItemResolver implementation.
 func (r *Resolver) Item() generated.ItemResolver { return &itemResolver{r} }
@@ -301,6 +312,7 @@ func (r *Resolver) Stats() generated.StatsResolver { return &statsResolver{r} }
 func (r *Resolver) User() generated.UserResolver { return &userResolver{r} }
 
 type adminResolver struct{ *Resolver }
+type authPayloadResolver struct{ *Resolver }
 type itemResolver struct{ *Resolver }
 type mutationResolver struct{ *Resolver }
 type orderResolver struct{ *Resolver }
