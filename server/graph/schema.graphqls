@@ -630,10 +630,10 @@ type Query {
 type Mutation {
     createBrand(input: BrandInput!): Brand! @isAuthenticated @hasRole(role: owner)
     createCategory(input: CategoryInput!): Category! @isAuthenticated @hasRole(role: owner)
-    createCustomer(input: CustomerInput!): Customer! @isAuthenticated  @hasRole(role: owner)
+    createCustomer(input: CustomerInput!): Customer! @isAuthenticated  @hasRole(role: staff)
     createExpense(input: ExpenseInput!): Expense! @isAuthenticated  @hasRole(role: owner)
     createItem(input: ItemInput!): Item! @isAuthenticated  @hasRole(role: owner)
-    createOrder(input: OrderInput!): Order! @isAuthenticated
+    createOrder(input: OrderInput!): Order! @isAuthenticated @hasRole(role: staff)
     createOrderPayment(input: OrderPaymentInput!): Payment! @isAuthenticated  @hasRole(role: staff)
     createExpensePayment(input: ExpensePaymentInput!): Payment! @isAuthenticated  @hasRole(role: staff)
     createProduct(input: ProductInput!): Product! @isAuthenticated  @hasRole(role: owner)
@@ -646,7 +646,7 @@ type Mutation {
 
     editBrand(id: ID!,input: BrandInput!): Brand! @isAuthenticated  @hasRole(role: owner)
     editCategory(id: ID!,input: CategoryInput!): Category! @isAuthenticated  @hasRole(role: owner)
-    editCustomer(id: ID!,input: CustomerInput!): Customer! @isAuthenticated  @hasRole(role: owner)
+    editCustomer(id: ID!,input: CustomerInput!): Customer! @isAuthenticated  @hasRole(role: staff)
     editItem(id: ID!,input: ItemInput!): Item! @isAuthenticated  @hasRole(role: owner)
     editOrder(id: ID!,input: OrderInput!): Order!  @isAuthenticated
     editProduct(id: ID!,input: ProductInput!): Product!  @isAuthenticated

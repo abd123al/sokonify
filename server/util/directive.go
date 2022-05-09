@@ -2,7 +2,7 @@ package util
 
 import (
 	"context"
-	"fmt"
+	"errors"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/go-playground/validator/v10"
 	"mahesabu/graph/model"
@@ -10,7 +10,9 @@ import (
 )
 
 var (
-	validate *validator.Validate
+	validate          *validator.Validate
+	NoAccessError     = errors.New("no access")
+	NoPermissionError = errors.New("you have no permission to perform this action")
 )
 
 func init() {
@@ -33,21 +35,28 @@ var Validator = func(ctx context.Context, obj interface{}, next graphql.Resolver
 	return val, nil
 }
 
-var HasRole = func(ctx context.Context, obj interface{}, next graphql.Resolver, userType model.StaffRole) (interface{}, error) {
-	//if true {
-	//	// block calling the next resolver
-	//	return nil, fmt.Errorf("access denied")
-	//}
+var HasRole = func(ctx context.Context, obj interface{}, next graphql.Resolver, role model.StaffRole) (interface{}, error) {
+	payload := helpers.ForContext(ctx)
 
-	// or let it pass through
-	return next(ctx)
+	if payload == nil {
+		return nil, NoAccessError
+	}
+
+	//owner can do anything that other staffs can.
+	//we check for store id because roles requires valid store
+	if payload.StoreID != 0 && (payload.Role == role || payload.Role == model.StaffRoleOwner) {
+		return next(ctx)
+	} else {
+		return nil, NoPermissionError
+	}
 }
 
 var IsAuthenticated = func(ctx context.Context, obj interface{}, next graphql.Resolver) (res interface{}, err error) {
 	payload := helpers.ForContext(ctx)
 
+	//todo status code
 	if payload == nil {
-		return nil, fmt.Errorf("access denied")
+		return nil, NoAccessError
 	}
 
 	return next(ctx)

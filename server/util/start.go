@@ -60,8 +60,8 @@ func ConfigureGraphql(DB *gorm.DB) *chi.Mux {
 	}}
 
 	//Configuring directives to be used on run-time
-	config.Directives.HasRole = HasRole
 	config.Directives.IsAuthenticated = IsAuthenticated
+	config.Directives.HasRole = HasRole
 	config.Directives.Validate = Validator
 
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(config))
