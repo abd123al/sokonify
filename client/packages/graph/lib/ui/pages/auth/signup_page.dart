@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/auth_repository.dart';
+import '../../widgets/auth_wrapper_cubit.dart';
 import 'auth_cubit.dart';
-import 'signup_cubit.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({Key? key}) : super(key: key);
@@ -26,11 +26,10 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      body: MutationBuilder<SignUp$Mutation$AuthPayload, SignupCubit,
-          AuthRepository>(
-        blocCreator: (r) => SignupCubit(r),
+      body: MutationBuilder<AuthPartsMixin, LoginCubit, AuthRepository>(
+        blocCreator: (r) => LoginCubit(r),
         onSuccess: (context, data) {
-          BlocProvider.of<AuthCubit>(context).login(data);
+          BlocProvider.of<AuthWrapperCubit>(context).login(data);
         },
         loadingWidget: const Center(
           child: CircularProgressIndicator(
@@ -109,7 +108,7 @@ class _SignupPageState extends State<SignupPage> {
                         ),
                         Button(
                           callback: () {
-                            cubit.login(
+                            cubit.signUp(
                               SignUpInput(
                                 password: _passwordController.text,
                                 email: _emailController.text,
@@ -137,7 +136,7 @@ class _SignupPageState extends State<SignupPage> {
                         ),
                         TextButton(
                           onPressed: () {
-                            BlocProvider.of<AuthCubit>(context).logOut();
+                            BlocProvider.of<AuthWrapperCubit>(context).logOut();
                           },
                           child: const Text(
                             'Have an account? Click here to sign in',

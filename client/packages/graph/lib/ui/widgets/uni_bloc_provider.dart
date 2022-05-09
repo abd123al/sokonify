@@ -6,7 +6,7 @@ import 'package:in_app_update/in_app_update.dart';
 import 'package:provider/provider.dart';
 
 import '../../repositories/repositories.dart';
-import '../pages/auth/auth_cubit.dart';
+import 'auth_wrapper_cubit.dart';
 import '../pages/store/stores_list_cubit.dart';
 
 class UniBlocProvider extends StatefulWidget {
@@ -55,8 +55,8 @@ class UniBlocProviderState extends State<UniBlocProvider> {
 
         return MultiBlocProvider(
           providers: [
-            BlocProvider<AuthCubit>(
-              create: (context) => AuthCubit()..check(),
+            BlocProvider<AuthWrapperCubit>(
+              create: (context) => AuthWrapperCubit()..check(),
             ),
             BlocProvider<StoresListCubit>(
               create: (context) {

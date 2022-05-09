@@ -2,7 +2,7 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'auth/auth_cubit.dart';
+import '../widgets/auth_wrapper_cubit.dart';
 import 'pages.dart';
 
 class HomePage extends StatefulWidget {
@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
             icon: const Icon(Icons.qr_code_outlined),
             tooltip: 'Open shopping cart',
             onPressed: () {
-              BlocProvider.of<AuthCubit>(context).logOut();
+              BlocProvider.of<AuthWrapperCubit>(context).logOut();
             },
           ),
         ],

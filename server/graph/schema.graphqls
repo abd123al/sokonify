@@ -49,6 +49,13 @@ enum StoreType {
     shop
     warehouse #
     storage # Pharmacy inner store
+    other
+}
+
+enum BusinessType {
+    retail
+    wholesale
+    both
 }
 
 enum OrdersBy {
@@ -413,7 +420,8 @@ type Store implements Gorm {
     name: String! @goTag(key: "gorm", value: "index;size:50;not null;default:null")
     #phones: [String!] @goTag(key: "gorm", value: "size:50;")
     tin: String @goTag(key: "gorm", value: "size:50;")
-    type: StoreType
+    storeType: StoreType!
+    businessType: BusinessType!
 
     # Creator of store
     userId: Int!
@@ -430,7 +438,8 @@ input StoreInput {
     name: String!
     #phones: [String!] @goTag(key: "gorm", value: "size:50;")
     tin: String
-    type: StoreType
+    storeType: StoreType = other
+    businessType: BusinessType!
 }
 
 type Order implements Gorm {

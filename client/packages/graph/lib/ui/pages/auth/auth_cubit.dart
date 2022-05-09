@@ -1,60 +1,28 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:blocitory/helpers/resource_cubit.dart';
 import 'package:graph/gql/generated/graphql_api.dart';
 
-import '../../../gql/token_box.dart';
-import '../../../utils/consts.dart';
+import '../../../repositories/repositories.dart';
 
-enum AuthState {
-  loading,
-  isLoggedIn,
-  isLoggedOut,
-  isSigningUp,
-}
+class LoginCubit extends ResourceCubit<AuthPartsMixin> {
+  LoginCubit(this._authRepository) : super();
 
-/// todo should we use different box?? which is un encrypted?
-class AuthCubit extends Cubit<AuthState> {
-  AuthCubit() : super(AuthState.loading);
+  final AuthRepository _authRepository;
 
-  login(AuthPartsMixin parts) async {
-    emit(AuthState.loading);
-
-    final box = await tokenBox();
-    box.put(tokenHiveKey, parts.accessToken);
-
-    emit(AuthState.isLoggedIn);
+  signIn(SignInInput input) {
+    super.execute(
+      executor: ()  => _authRepository.signIn(input),
+      parser: (r) {
+        return SignIn$Mutation.fromJson(r).signIn;
+      },
+    );
   }
 
-  check() async {
-    emit(AuthState.loading);
-
-    final box = await tokenBox();
-    final result = box.get(tokenHiveKey, defaultValue: "") as String;
-
-    if (result.isEmpty) {
-      emit(AuthState.isLoggedOut);
-    } else {
-      emit(AuthState.isLoggedIn);
-    }
-  }
-
-  logOut() async {
-    emit(AuthState.loading);
-
-    await _clear();
-
-    emit(AuthState.isLoggedOut);
-  }
-
-  signUp() async {
-    emit(AuthState.loading);
-
-    await _clear();
-
-    emit(AuthState.isSigningUp);
-  }
-
-  _clear() async {
-    final box = await tokenBox();
-    await box.delete(tokenHiveKey);
+  signUp(SignUpInput input) {
+    super.execute(
+      executor: ()  => _authRepository.signUp(input),
+      parser: (r) {
+        return SignUp$Mutation.fromJson(r).signUp;
+      },
+    );
   }
 }
