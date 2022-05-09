@@ -1,6 +1,7 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:graph/ui/pages/auth/auth.dart';
 
 import '../widgets/widgets.dart';
@@ -60,6 +61,8 @@ class _HomePageState extends State<HomePage> {
             tooltip: 'Open shopping cart',
             onPressed: () {
               BlocProvider.of<AuthWrapperCubit>(context).logOut();
+              //Restart app.
+              Phoenix.rebirth(context);
             },
           ),
         ],

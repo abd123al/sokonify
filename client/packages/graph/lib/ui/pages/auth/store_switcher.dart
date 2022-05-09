@@ -1,6 +1,7 @@
 import 'package:blocitory/helpers/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/auth_repository.dart';
@@ -20,6 +21,9 @@ class StoreSwitcher extends StatelessWidget {
           blocCreator: (r) => LoginCubit(r),
           onSuccess: (context, data) {
             BlocProvider.of<AuthWrapperCubit>(context).login(data);
+
+            //Restart app.
+            Phoenix.rebirth(context);
           },
           loadingWidget: const Center(
             child: CircularProgressIndicator(
