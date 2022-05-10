@@ -23,6 +23,15 @@
 - adding staff should be like adding manager on YouTube, one need to know email
 - Don't deploy until you can manage access to other stores
 
+## Types of app
+
+### Offline
+
+- Community Edition (For device powered by SQLite)
+- Enterprise Edition (For multiple users powered by postgres)
+- Dedicated Edition (Run on your own server)
+- Cloud Edition (Everything on us)
+
 ```console
 
 go run github.com/99designs/gqlgen init

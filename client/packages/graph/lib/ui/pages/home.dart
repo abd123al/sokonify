@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:graph/ui/pages/auth/auth.dart';
 
+import '../../gql/generated/graphql_api.graphql.dart';
 import '../widgets/widgets.dart';
 import 'pages.dart';
 
@@ -69,7 +70,22 @@ class _HomePageState extends State<HomePage> {
       ),
       body: StoreBuilder(
         noBuilder: (BuildContext ctx) {
-          return const Text("Sokonify");
+          return StoreSwitcher(
+            builder: (context, cubit) {
+              /// Here user will be switched to the new store on success.
+              return CreateStoreWidget(
+                message: "Seems like you are new here! Why don't you create "
+                    "a new facility.",
+                onSuccess: (context, store) {
+                  cubit.switchStore(
+                    SwitchStoreInput(
+                      storeId: store.id,
+                    ),
+                  );
+                },
+              );
+            },
+          );
         },
         builder: (context, u) {
           return _buildBody();
