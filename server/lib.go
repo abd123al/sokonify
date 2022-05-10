@@ -1,16 +1,24 @@
 package main
 
 import "C"
-import "mahesabu/util"
+import (
+	"mahesabu/util"
+	"strconv"
+)
 
 //export StartServer
-func StartServer() int {
-	util.StartServer(util.StartServerArgs{
-		Port:    "8080",
+func StartServer(Port int) int {
+	result := util.StartServer(util.StartServerArgs{
+		Port:    strconv.Itoa(Port),
 		Offline: true,
 	})
 
-	return 8080
+	port, err := strconv.Atoi(result)
+	if err != nil {
+		return 8080
+	}
+
+	return port
 }
 
 func main() {}
