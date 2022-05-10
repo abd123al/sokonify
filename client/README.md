@@ -1,4 +1,4 @@
-- use C-shared file `.so` for every OS
+- use C-shared file `.so` for every OS because building `.jar` will need ndk
 
 flutter run --release
 flutter build appbundle --obfuscate --split-debug-info=./build/app/outputs/symbols

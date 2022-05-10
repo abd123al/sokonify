@@ -20,5 +20,6 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE flutter flutter_wrapper_plugin)
 # List of absolute paths to libraries that should be bundled with the plugin
 set(server_bundled_libraries
   ""
+  "E:/_Projects/mahesabu/client/packages/server/windows/lib.dll"
   PARENT_SCOPE
 )

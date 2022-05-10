@@ -17,3 +17,7 @@ x86/
 !*.[Cc]ache/
 
 .vs
+
+#Nux golang build files
+*.dll
+lib.h
