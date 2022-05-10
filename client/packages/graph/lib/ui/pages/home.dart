@@ -113,14 +113,30 @@ class _HomePageState extends State<HomePage> {
       },
       items: <BottomNavyBarItem>[
         BottomNavyBarItem(
-            title: const Text('Item One'), icon: const Icon(Icons.home)),
+          title: const Text('POS'),
+          icon: const Icon(Icons.point_of_sale_outlined),
+          activeColor: Colors.black,
+        ),
         BottomNavyBarItem(
-            title: const Text('Item Two'), icon: const Icon(Icons.apps)),
+          title: const Text('Inventory'),
+          icon: const Icon(Icons.inventory_outlined),
+          activeColor: Colors.brown,
+        ),
         BottomNavyBarItem(
-            title: const Text('Item Three'),
-            icon: const Icon(Icons.chat_bubble)),
+          title: const Text('Expenses'),
+          icon: const Icon(Icons.explicit_outlined),
+          activeColor: Colors.blueGrey,
+        ),
         BottomNavyBarItem(
-            title: const Text('Item Four'), icon: const Icon(Icons.settings)),
+          title: const Text('Orders'),
+          icon: const Icon(Icons.reorder_sharp),
+          activeColor: Colors.red,
+        ),
+        BottomNavyBarItem(
+          title: const Text('Settings'),
+          icon: const Icon(Icons.settings),
+          activeColor: Colors.blue,
+        ),
       ],
     );
   }
