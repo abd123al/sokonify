@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
+import '../../../nav/nav.dart';
 import '../../../repositories/auth_repository.dart';
 import '../../widgets/auth_wrapper_cubit.dart';
 import '../store/stores_list_cubit.dart';
@@ -85,7 +86,9 @@ class StoreSwitcher extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    redirectTo(context, Routes.createStore);
+                  },
                 )
               ],
             );

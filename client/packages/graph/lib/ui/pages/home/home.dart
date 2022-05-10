@@ -1,12 +1,11 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:graph/ui/pages/auth/auth.dart';
 
-import '../../gql/generated/graphql_api.graphql.dart';
-import '../widgets/widgets.dart';
-import 'pages.dart';
+import '../../../gql/generated/graphql_api.graphql.dart';
+import '../../widgets/widgets.dart';
+import '../pages.dart';
+import 'drawer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -59,15 +58,12 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.qr_code_outlined),
-            tooltip: 'Open shopping cart',
-            onPressed: () {
-              BlocProvider.of<AuthWrapperCubit>(context).logOut();
-              //Restart app.
-              Phoenix.rebirth(context);
-            },
+            tooltip: 'Open QR Code Scanner',
+            onPressed: () {},
           ),
         ],
       ),
+      drawer: const SokonifyDrawer(),
       body: StoreBuilder(
         noBuilder: (BuildContext ctx) {
           return StoreSwitcher(

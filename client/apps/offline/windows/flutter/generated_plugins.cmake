@@ -8,6 +8,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   graph
   permission_handler_windows
   server
+  url_launcher_windows
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)
