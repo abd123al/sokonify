@@ -1,13 +1,14 @@
 # graph
 
-# Todo
+## Todo
+
+- In items show stats on top too like near expired items etc
 
 ## UI
 
 ### Orders
 
 Show tabs for cancelled, pending and completed transactions
-
 
 ### Admins
 

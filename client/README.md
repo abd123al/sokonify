@@ -1,4 +1,5 @@
 - use C-shared file `.so` for every OS because building `.jar` will need ndk
+- add option for configure server during auth so users may
 
 flutter run --release
 flutter build appbundle --obfuscate --split-debug-info=./build/app/outputs/symbols

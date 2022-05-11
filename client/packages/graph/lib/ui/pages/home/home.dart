@@ -6,6 +6,8 @@ import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../widgets/widgets.dart';
 import '../pages.dart';
 import 'drawer.dart';
+import 'pos.dart';
+import 'stats.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -99,6 +101,7 @@ class _HomePageState extends State<HomePage> {
             setState(() => _currentIndex = index);
           },
           children: <Widget>[
+            const POS(),
             const StoresPage(),
             Container(
               color: Colors.red,
