@@ -20,7 +20,7 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 
 	// We are using sqlite in offline mobile apps
 	if args.Offline && args.Mobile {
-		db, err = gorm.Open(sqlite.Open(":memory:?_pragma=foreign_keys(1)"), &gorm.Config{})
+		db, err = gorm.Open(sqlite.Open("db.db"), &gorm.Config{})
 	} else {
 		dsn := "host=localhost user=postgres password=password dbname=" + args.DbName + " port=5432 sslmode=disable TimeZone=Africa/Nairobi"
 		db, err = gorm.Open(postgres.New(postgres.Config{DSN: dsn}), &gorm.Config{

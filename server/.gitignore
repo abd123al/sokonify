@@ -3,3 +3,4 @@ graph/model/models_gen.go
 *.exe
 *.so
 *.h
+*.db
