@@ -8,3 +8,5 @@
 /captures
 *.aar
 *.jar
+*.so
+*.h

@@ -42,8 +42,8 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.mahesabu.offline"
-        minSdkVersion flutter.minSdkVersion
+        applicationId "com.sokonify.offline"
+        minSdkVersion 18 //flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
