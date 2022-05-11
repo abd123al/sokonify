@@ -11,7 +11,10 @@ import '../store/stores_list_cubit.dart';
 import 'auth_cubit.dart';
 
 class StoreSwitcher extends StatelessWidget {
-  const StoreSwitcher({Key? key, this.builder}) : super(key: key);
+  const StoreSwitcher({
+    Key? key,
+    this.builder,
+  }) : super(key: key);
 
   /// Sometimes we wanna use something else as a switcher
   /// eg when user creates defaults store

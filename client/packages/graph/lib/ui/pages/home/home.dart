@@ -1,13 +1,12 @@
-import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:graph/ui/pages/auth/auth.dart';
+import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../widgets/widgets.dart';
 import '../pages.dart';
 import 'drawer.dart';
 import 'pos.dart';
-import 'stats.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -120,37 +119,32 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildBottomNav() {
-    return BottomNavyBar(
-      selectedIndex: _currentIndex,
-      onItemSelected: (index) {
+   return TitledBottomNavigationBar(
+      currentIndex: _currentIndex,
+      onTap: (index) {
         setState(() => _currentIndex = index);
         _pageController.jumpToPage(index);
       },
-      items: <BottomNavyBarItem>[
-        BottomNavyBarItem(
+      items: [
+        TitledNavigationBarItem(
           title: const Text('POS'),
           icon: const Icon(Icons.point_of_sale_outlined),
-          activeColor: Colors.black,
         ),
-        BottomNavyBarItem(
+        TitledNavigationBarItem(
+          title: const Text('Orders'),
+          icon: const Icon(Icons.shopping_cart),
+        ),
+        TitledNavigationBarItem(
           title: const Text('Inventory'),
           icon: const Icon(Icons.inventory_outlined),
-          activeColor: Colors.brown,
         ),
-        BottomNavyBarItem(
+        TitledNavigationBarItem(
           title: const Text('Expenses'),
           icon: const Icon(Icons.explicit_outlined),
-          activeColor: Colors.blueGrey,
         ),
-        BottomNavyBarItem(
-          title: const Text('Orders'),
-          icon: const Icon(Icons.reorder_sharp),
-          activeColor: Colors.red,
-        ),
-        BottomNavyBarItem(
+        TitledNavigationBarItem(
           title: const Text('Settings'),
           icon: const Icon(Icons.settings),
-          activeColor: Colors.blue,
         ),
       ],
     );
