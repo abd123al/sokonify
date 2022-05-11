@@ -58,11 +58,11 @@ class ServerPlugin : FlutterPlugin, MethodCallHandler {
      * 1. https://developer.android.com/guide/background/threading
      */
     private fun start(
-        callback: (Resource<String>) -> Unit
+        callback: (Resource<Int>) -> Unit
     ) {
         executorService.execute {
             try {
-                val port = startServer("")
+                val port = startServer(8080).toInt()
                 val result = Resource.Success(port)
                 threadHandler.post { callback(result) }
             } catch (e: Exception) {
