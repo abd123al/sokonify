@@ -290,19 +290,19 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *statsResolver) NetProfit(ctx context.Context, _ *model.Stats, args model.StatsArgs) (string, error) {
+func (r *statsResolver) NetProfit(ctx context.Context, obj *model.Stats, args model.StatsArgs) (string, error) {
 	return repository.SumNetProfit(r.DB, helpers.ForContext(ctx).StoreID, args)
 }
 
-func (r *statsResolver) TotalExpensesAmount(ctx context.Context, _ *model.Stats, args model.StatsArgs) (string, error) {
+func (r *statsResolver) TotalExpensesAmount(ctx context.Context, obj *model.Stats, args model.StatsArgs) (string, error) {
 	return repository.SumExpensePayment(r.DB, helpers.ForContext(ctx).StoreID, args)
 }
 
-func (r *statsResolver) TotalSalesAmount(ctx context.Context, _ *model.Stats, args model.StatsArgs) (string, error) {
+func (r *statsResolver) TotalSalesAmount(ctx context.Context, obj *model.Stats, args model.StatsArgs) (string, error) {
 	return repository.SumOrderPayments(r.DB, helpers.ForContext(ctx).StoreID, args)
 }
 
-func (r *statsResolver) TotalSoldItems(ctx context.Context, _ *model.Stats, args model.StatsArgs) (string, error) {
+func (r *statsResolver) TotalSoldItems(ctx context.Context, obj *model.Stats, args model.StatsArgs) (string, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 

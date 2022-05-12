@@ -149,7 +149,7 @@ func TestPayment(t *testing.T) {
 		res1, err1 := repository.SumNetProfit(DB, storeId, model.StatsArgs{
 			StartDate: &startDate,
 			EndDate:   &endDate,
-			Duration:  nil,
+			Period:    nil,
 		})
 
 		total, _ := decimal.NewFromString(res1)
@@ -163,7 +163,7 @@ func TestPayment(t *testing.T) {
 		res2, err2 := repository.SumExpensePayment(DB, storeId, model.StatsArgs{
 			StartDate: &startDate,
 			EndDate:   &endDate,
-			Duration:  nil,
+			Period:    nil,
 		})
 
 		total2, _ := decimal.NewFromString(res2)
@@ -177,7 +177,7 @@ func TestPayment(t *testing.T) {
 		res3, err3 := repository.SumOrderPayments(DB, storeId, model.StatsArgs{
 			StartDate: &startDate,
 			EndDate:   &endDate,
-			Duration:  nil,
+			Period:    nil,
 		})
 
 		total3, _ := decimal.NewFromString(res3)
@@ -198,7 +198,7 @@ func TestPayment(t *testing.T) {
 		res, err := repository.SumNetProfit(DB, staff.StoreID, model.StatsArgs{
 			StartDate: &startDate,
 			EndDate:   &endDate,
-			Duration:  nil,
+			Period:    nil,
 		})
 
 		assert.Nil(t, err)
