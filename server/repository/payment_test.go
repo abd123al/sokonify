@@ -107,43 +107,101 @@ func TestPayment(t *testing.T) {
 		startDate := time.Now()
 		endDate := time.Now().Add(time.Hour * 1)
 
-		var generate = func(length int) (decimal.Decimal, int) {
+		var generate = func(length int) (decimal.Decimal, int, decimal.Decimal, decimal.Decimal) {
 			staff := util.CreateStaff(DB, nil)
 			customer := util.CreateCustomer(DB, staff.StoreID)
 
 			var sum decimal.Decimal
+			var orders decimal.Decimal
+			var expenses decimal.Decimal
 
 			i := 1
 			for i < length+1 {
-				payment1 := util.CreatePayment(DB, &util.CreatePaymentArgs{
+				result := util.CreatePayment(DB, &util.CreatePaymentArgs{
 					StoreID:    staff.StoreID,
 					StaffID:    staff.UserID,
 					CustomerID: &customer.ID,
 				}, i%2 == 0)
 
-				amount, _ := decimal.NewFromString(payment1.Payment.Amount)
+				amount, _ := decimal.NewFromString(result.Payment.Amount)
 				sum = sum.Add(amount)
+
+				if result.Payment.ExpenseID != nil {
+					expenses = expenses.Add(amount)
+				} else {
+					orders = orders.Add(amount)
+				}
 
 				//Increase
 				i += 1
 			}
 
-			return sum, staff.StoreID
+			return sum, staff.StoreID, orders, expenses
 		}
 
 		//These are payments for other store
-		_, _ = generate(2)
-		sum, storeId := generate(6)
+		_, _, _, _ = generate(2)
+		sum, storeId, orders, expenses := generate(6)
 
-		res, err := repository.SumNetProfit(DB, storeId, model.StatsArgs{
+		/**
+		Validating sum for all.
+		*/
+		res1, err1 := repository.SumNetProfit(DB, storeId, model.StatsArgs{
 			StartDate: &startDate,
 			EndDate:   &endDate,
 			Duration:  nil,
 		})
 
-		total, _ := decimal.NewFromString(res)
+		total, _ := decimal.NewFromString(res1)
+
+		assert.Nil(t, err1)
+		assert.Equal(t, total.String(), sum.String())
+
+		/**
+		Validating expenses for expenses.
+		*/
+		res2, err2 := repository.SumExpensePayment(DB, storeId, model.StatsArgs{
+			StartDate: &startDate,
+			EndDate:   &endDate,
+			Duration:  nil,
+		})
+
+		total2, _ := decimal.NewFromString(res2)
+
+		assert.Nil(t, err2)
+		assert.Equal(t, total2.String(), expenses.String())
+
+		/**
+		Validating expenses for orders.
+		*/
+		res3, err3 := repository.SumOrderPayments(DB, storeId, model.StatsArgs{
+			StartDate: &startDate,
+			EndDate:   &endDate,
+			Duration:  nil,
+		})
+
+		total3, _ := decimal.NewFromString(res3)
+
+		assert.Nil(t, err3)
+		assert.Equal(t, total3.String(), orders.String())
+
+		//Overall
+		assert.Equal(t, sum.String(), orders.Add(expenses).String())
+	})
+
+	t.Run("sum payments should not raise error for 0 amount", func(t *testing.T) {
+		staff := util.CreateStaff(DB, nil)
+
+		startDate := time.Now()
+		endDate := time.Now().Add(time.Hour * 1)
+
+		res, err := repository.SumNetProfit(DB, staff.StoreID, model.StatsArgs{
+			StartDate: &startDate,
+			EndDate:   &endDate,
+			Duration:  nil,
+		})
 
 		assert.Nil(t, err)
-		assert.Equal(t, total.String(), sum.String())
+		assert.Equal(t, res, "0.00")
 	})
 }

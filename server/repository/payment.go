@@ -168,7 +168,35 @@ func SumNetProfit(db *gorm.DB, StoreID int, args model.StatsArgs) (string, error
 	}
 
 	if err := db.Debug().Table("payments").Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate).Joins("inner join staffs on payments.staff_id = staffs.user_id AND staffs.store_id = ?", StoreID).Select("sum(amount)").Row().Scan(&amount); err != nil {
-		return "0.00", err
+		return "0.00", nil
+	}
+
+	return amount, nil
+}
+
+func SumExpensePayment(db *gorm.DB, StoreID int, args model.StatsArgs) (string, error) {
+	return sumPaymentType(db, StoreID, args, model.PaymentTypeExpense)
+}
+
+func SumOrderPayments(db *gorm.DB, StoreID int, args model.StatsArgs) (string, error) {
+	return sumPaymentType(db, StoreID, args, model.PaymentTypeOrder)
+}
+
+func sumPaymentType(db *gorm.DB, StoreID int, args model.StatsArgs, t model.PaymentType) (string, error) {
+	var amount string
+	StartDate := args.StartDate
+	EndDate := args.EndDate
+
+	var column string
+
+	if t == model.PaymentTypeExpense {
+		column = "expense_id"
+	} else {
+		column = "order_id"
+	}
+
+	if err := db.Debug().Table("payments").Where(fmt.Sprintf("%s is not null", column)).Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate).Joins("inner join staffs on payments.staff_id = staffs.user_id AND staffs.store_id = ?", StoreID).Select("sum(amount)").Row().Scan(&amount); err != nil {
+		return "0.00", nil
 	}
 
 	return amount, nil
