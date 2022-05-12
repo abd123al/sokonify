@@ -152,11 +152,22 @@ func FindPayments(DB *gorm.DB, args model.PaymentsArgs) ([]*model.Payment, error
 	return payments, result.Error
 }
 
-func SumPaymentTotalSales(db *gorm.DB, StoreID int) (string, error) {
+func SumNetProfit(db *gorm.DB, StoreID int, args model.StatsArgs) (string, error) {
 	var amount string
+	StartDate := args.StartDate
+	EndDate := args.EndDate
 
-	err := db.Debug().Table("payments").Joins("inner join staffs on payments.staff_id = staffs.user_id AND staffs.store_id = ?", StoreID).Select("sum(amount)").Row().Scan(&amount)
-	if err != nil {
+	//todo use duration to determine start and end date.
+	//Default time is always 24 hours
+	if StartDate != nil {
+
+	}
+
+	if EndDate != nil {
+
+	}
+
+	if err := db.Debug().Table("payments").Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate).Joins("inner join staffs on payments.staff_id = staffs.user_id AND staffs.store_id = ?", StoreID).Select("sum(amount)").Row().Scan(&amount); err != nil {
 		return "0.00", err
 	}
 

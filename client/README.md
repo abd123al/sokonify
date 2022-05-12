@@ -1,3 +1,5 @@
+- add QR code for app linking in the same localhost
+- Put expire date in CI so that when app is build only lives for certain amount of days (3 months is a life time)
 - use C-shared file `.so` for every OS because building `.jar` will need ndk
 - add option for configure server during auth so users may
 
@@ -5,4 +7,3 @@ flutter run --release
 flutter build appbundle --obfuscate --split-debug-info=./build/app/outputs/symbols
 flutter build apk --obfuscate --split-debug-info=./build/app/outputs/symbols --release
 flutter build apk --obfuscate --split-debug-info=./build/app/outputs/symbols --release --split-per-abi
-

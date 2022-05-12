@@ -8,6 +8,7 @@ import (
 	"mahesabu/repository"
 	"mahesabu/util"
 	"testing"
+	"time"
 )
 
 func TestPayment(t *testing.T) {
@@ -103,6 +104,9 @@ func TestPayment(t *testing.T) {
 	})
 
 	t.Run("sum payments", func(t *testing.T) {
+		startDate := time.Now()
+		endDate := time.Now().Add(time.Hour * 1)
+
 		var generate = func(length int) (decimal.Decimal, int) {
 			staff := util.CreateStaff(DB, nil)
 			customer := util.CreateCustomer(DB, staff.StoreID)
@@ -131,7 +135,11 @@ func TestPayment(t *testing.T) {
 		_, _ = generate(2)
 		sum, storeId := generate(6)
 
-		res, err := repository.SumPaymentTotalSales(DB, storeId)
+		res, err := repository.SumNetProfit(DB, storeId, model.StatsArgs{
+			StartDate: &startDate,
+			EndDate:   &endDate,
+			Duration:  nil,
+		})
 
 		total, _ := decimal.NewFromString(res)
 

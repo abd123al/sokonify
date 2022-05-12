@@ -583,9 +583,24 @@ input PaymentsArgs {
 }
 
 type Stats {
-    profit(startDate:Time!,endDate:Time!): String! @goField(forceResolver: true)
-    totalSalesAmount(startDate:Time!,endDate:Time!): String! @goField(forceResolver: true)
-    totalSalesItems(startDate:Time!,endDate:Time!): String! @goField(forceResolver: true)
+    netProfit(args:StatsArgs!): String! @goField(forceResolver: true)
+    totalExpensesAmount(args:StatsArgs!): String! @goField(forceResolver: true)
+    totalSalesAmount(args:StatsArgs!): String! @goField(forceResolver: true)
+    totalSoldItems(args:StatsArgs!): String! @goField(forceResolver: true)
+}
+
+enum DurationType {
+    day
+    week
+    month
+    year
+}
+
+# We may use duration
+input StatsArgs {
+    startDate:Time
+    endDate:Time
+    duration: DurationType
 }
 
 # We will seed common units and each store can add more units to fit their needs
@@ -635,6 +650,7 @@ type Query {
     products(args: ProductsArgs!): [Product!]!
     staff(id: ID!): Staff! @isAuthenticated
     staffs: [Staff!]! @isAuthenticated
+    stats: Stats! @isAuthenticated
     store(id: ID!): Store! @isAuthenticated
     stores: [Store!]! @isAuthenticated
     unit(id: ID!): Unit!

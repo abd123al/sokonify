@@ -11,7 +11,6 @@ import (
 	"mahesabu/graph/model"
 	"mahesabu/helpers"
 	"mahesabu/repository"
-	"time"
 )
 
 func (r *adminResolver) Password(ctx context.Context, obj *model.Admin) (*string, error) {
@@ -263,7 +262,11 @@ func (r *queryResolver) Staffs(ctx context.Context) ([]*model.Staff, error) {
 	return repository.FindStaffs(r.DB, helpers.ForContext(ctx).StoreID)
 }
 
-func (r *queryResolver) Store(_ context.Context, id int) (*model.Store, error) {
+func (r *queryResolver) Stats(ctx context.Context) (*model.Stats, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Store(ctx context.Context, id int) (*model.Store, error) {
 	return repository.FindStore(r.DB, id)
 }
 
@@ -287,15 +290,19 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *statsResolver) Profit(ctx context.Context, obj *model.Stats, startDate time.Time, endDate time.Time) (string, error) {
+func (r *statsResolver) NetProfit(ctx context.Context, obj *model.Stats, args model.StatsArgs) (string, error) {
+	return repository.SumNetProfit(r.DB, helpers.ForContext(ctx).StoreID, args)
+}
+
+func (r *statsResolver) TotalExpensesAmount(ctx context.Context, obj *model.Stats, args model.StatsArgs) (string, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *statsResolver) TotalSalesAmount(ctx context.Context, obj *model.Stats, startDate time.Time, endDate time.Time) (string, error) {
+func (r *statsResolver) TotalSalesAmount(ctx context.Context, obj *model.Stats, args model.StatsArgs) (string, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *statsResolver) TotalSalesItems(ctx context.Context, obj *model.Stats, startDate time.Time, endDate time.Time) (string, error) {
+func (r *statsResolver) TotalSoldItems(ctx context.Context, obj *model.Stats, args model.StatsArgs) (string, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
