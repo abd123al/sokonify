@@ -19,6 +19,7 @@ import (
 type StartServerArgs struct {
 	Offline bool
 	Port    string
+	Dsn     string //Especially for android
 }
 
 // StartServer This way so that it can be invoked via libs
@@ -38,6 +39,7 @@ func StartServer(Args StartServerArgs) string {
 		Clear:   false,
 		Offline: Args.Offline,
 		Mobile:  Args.Offline,
+		Dsn:     Args.Dsn,
 	})
 
 	router := ConfigureGraphql(db)

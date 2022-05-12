@@ -2,8 +2,8 @@ package util
 
 import (
 	"fmt"
-	"github.com/glebarez/sqlite"
 	"gorm.io/driver/postgres"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"mahesabu/graph/model"
 )
@@ -13,6 +13,7 @@ type InitDbArgs struct {
 	Clear   bool
 	Offline bool
 	Mobile  bool
+	Dsn     string
 }
 
 func InitDB(args InitDbArgs) (DB *gorm.DB) {
@@ -21,7 +22,12 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 
 	// We are using sqlite in offline mobile apps
 	if args.Offline && args.Mobile {
-		db, err = gorm.Open(sqlite.Open("db.db"), &gorm.Config{})
+		dsn := "db.db"
+		if args.Dsn != "" {
+			//In android, we need full path
+			dsn = args.Dsn
+		}
+		db, err = gorm.Open(sqlite.Open(dsn), &gorm.Config{})
 	} else {
 		dsn := "host=localhost user=postgres password=password dbname=" + args.DbName + " port=5432 sslmode=disable TimeZone=Africa/Nairobi"
 		db, err = gorm.Open(postgres.New(postgres.Config{DSN: dsn}), &gorm.Config{
