@@ -6,6 +6,7 @@ import (
 	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
 	"mahesabu/graph/model"
+	"mahesabu/helpers"
 	"strconv"
 )
 
@@ -154,20 +155,9 @@ func FindPayments(DB *gorm.DB, args model.PaymentsArgs) ([]*model.Payment, error
 
 func SumNetProfit(db *gorm.DB, StoreID int, args model.StatsArgs) (string, error) {
 	var amount string
-	StartDate := args.StartDate
-	EndDate := args.EndDate
+	StartDate, EndDate := helpers.HandleStatsDates(args)
 
-	//todo use duration to determine start and end date.
-	//Default time is always 24 hours
-	if StartDate != nil {
-
-	}
-
-	if EndDate != nil {
-
-	}
-
-	if err := db.Debug().Table("payments").Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate).Joins("inner join staffs on payments.staff_id = staffs.user_id AND staffs.store_id = ?", StoreID).Select("sum(amount)").Row().Scan(&amount); err != nil {
+	if err := db.Table("payments").Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate).Joins("inner join staffs on payments.staff_id = staffs.user_id AND staffs.store_id = ?", StoreID).Select("sum(amount)").Row().Scan(&amount); err != nil {
 		return "0.00", nil
 	}
 
@@ -184,8 +174,7 @@ func SumOrderPayments(db *gorm.DB, StoreID int, args model.StatsArgs) (string, e
 
 func sumPaymentType(db *gorm.DB, StoreID int, args model.StatsArgs, t model.PaymentType) (string, error) {
 	var amount string
-	StartDate := args.StartDate
-	EndDate := args.EndDate
+	StartDate, EndDate := helpers.HandleStatsDates(args)
 
 	var column string
 

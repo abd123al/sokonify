@@ -2,7 +2,6 @@ package repository_test
 
 import (
 	"github.com/shopspring/decimal"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"mahesabu/graph/model"
 	"mahesabu/repository"
@@ -32,14 +31,14 @@ func TestPayment(t *testing.T) {
 
 		payment, err := call()
 
-		assert.Nil(t, err)
-		assert.NotNil(t, payment)
+		require.Nil(t, err)
+		require.NotNil(t, payment)
 
 		payment2, err2 := call()
 
 		//Won't work because order is already completed
-		assert.NotNil(t, err2)
-		assert.Nil(t, payment2)
+		require.NotNil(t, err2)
+		require.Nil(t, payment2)
 	})
 
 	t.Run("CreateExpensePayment", func(t *testing.T) {
@@ -61,8 +60,8 @@ func TestPayment(t *testing.T) {
 			Method:    model.PaymentMethodCash,
 		})
 
-		assert.Nil(t, item)
-		assert.NotNil(t, err)
+		require.Nil(t, item)
+		require.NotNil(t, err)
 	})
 
 	t.Run("FindPayments by store", func(t *testing.T) {
@@ -73,8 +72,8 @@ func TestPayment(t *testing.T) {
 			Value: result.StoreID,
 		})
 
-		assert.Nil(t, err)
-		assert.NotEmpty(t, paymentsByCustomer)
+		require.Nil(t, err)
+		require.NotEmpty(t, paymentsByCustomer)
 	})
 
 	t.Run("FindPayments by customer", func(t *testing.T) {
@@ -85,8 +84,8 @@ func TestPayment(t *testing.T) {
 			Value: *result.CustomerID,
 		})
 
-		assert.Nil(t, err)
-		assert.NotEmpty(t, paymentsByCustomer)
+		require.Nil(t, err)
+		require.NotEmpty(t, paymentsByCustomer)
 	})
 
 	t.Run("FindPayments by staff", func(t *testing.T) {
@@ -99,13 +98,14 @@ func TestPayment(t *testing.T) {
 			Offset: 0,
 		})
 
-		assert.Nil(t, err)
-		assert.NotEmpty(t, paymentsByCustomer)
+		require.Nil(t, err)
+		require.NotEmpty(t, paymentsByCustomer)
 	})
 
-	t.Run("sum payments", func(t *testing.T) {
+	t.Run("sum payments by dates", func(t *testing.T) {
 		startDate := time.Now()
 		endDate := time.Now().Add(time.Hour * 1)
+		period := model.PeriodTypeYear
 
 		var generate = func(length int) (decimal.Decimal, int, decimal.Decimal, decimal.Decimal) {
 			staff := util.CreateStaff(DB, nil)
@@ -152,10 +152,18 @@ func TestPayment(t *testing.T) {
 			Period:    nil,
 		})
 
+		//using period
+		res1a, err1a := repository.SumNetProfit(DB, storeId, model.StatsArgs{
+			Period: &period,
+		})
+
+		require.Nil(t, err1a)
+		require.Equal(t, res1, res1a)
+
 		total, _ := decimal.NewFromString(res1)
 
-		assert.Nil(t, err1)
-		assert.Equal(t, total.String(), sum.String())
+		require.Nil(t, err1)
+		require.Equal(t, total.String(), sum.String())
 
 		/**
 		Validating expenses for expenses.
@@ -168,8 +176,8 @@ func TestPayment(t *testing.T) {
 
 		total2, _ := decimal.NewFromString(res2)
 
-		assert.Nil(t, err2)
-		assert.Equal(t, total2.String(), expenses.String())
+		require.Nil(t, err2)
+		require.Equal(t, total2.String(), expenses.String())
 
 		/**
 		Validating expenses for orders.
@@ -182,11 +190,11 @@ func TestPayment(t *testing.T) {
 
 		total3, _ := decimal.NewFromString(res3)
 
-		assert.Nil(t, err3)
-		assert.Equal(t, total3.String(), orders.String())
+		require.Nil(t, err3)
+		require.Equal(t, total3.String(), orders.String())
 
 		//Overall
-		assert.Equal(t, sum.String(), orders.Add(expenses).String())
+		require.Equal(t, sum.String(), orders.Add(expenses).String())
 	})
 
 	t.Run("sum payments should not raise error for 0 amount", func(t *testing.T) {
@@ -201,7 +209,7 @@ func TestPayment(t *testing.T) {
 			Period:    nil,
 		})
 
-		assert.Nil(t, err)
-		assert.Equal(t, res, "0.00")
+		require.Nil(t, err)
+		require.Equal(t, res, "0.00")
 	})
 }
