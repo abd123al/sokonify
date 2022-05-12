@@ -21,6 +21,10 @@ rootProject.allprojects {
         flatDir {
             dirs project(':server').file('libs')
         }
+//        flatDir {
+//            //This is what works when you want to see libs definitions
+//            dirs 'libs'
+//        }
     }
 }
 
