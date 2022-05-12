@@ -105,7 +105,7 @@ func TestPayment(t *testing.T) {
 	t.Run("sum payments by dates", func(t *testing.T) {
 		startDate := time.Now()
 		endDate := time.Now().Add(time.Hour * 1)
-		period := model.PeriodTypeYear
+		period := model.TimeframeTypeThisMonth
 
 		var generate = func(length int) (decimal.Decimal, int, decimal.Decimal, decimal.Decimal) {
 			staff := util.CreateStaff(DB, nil)
@@ -149,12 +149,12 @@ func TestPayment(t *testing.T) {
 		res1, err1 := repository.SumNetProfit(DB, storeId, model.StatsArgs{
 			StartDate: &startDate,
 			EndDate:   &endDate,
-			Period:    nil,
+			Timeframe: nil,
 		})
 
 		//using period
 		res1a, err1a := repository.SumNetProfit(DB, storeId, model.StatsArgs{
-			Period: &period,
+			Timeframe: &period,
 		})
 
 		require.Nil(t, err1a)
@@ -171,7 +171,7 @@ func TestPayment(t *testing.T) {
 		res2, err2 := repository.SumExpensePayment(DB, storeId, model.StatsArgs{
 			StartDate: &startDate,
 			EndDate:   &endDate,
-			Period:    nil,
+			Timeframe: nil,
 		})
 
 		total2, _ := decimal.NewFromString(res2)
@@ -185,7 +185,7 @@ func TestPayment(t *testing.T) {
 		res3, err3 := repository.SumOrderPayments(DB, storeId, model.StatsArgs{
 			StartDate: &startDate,
 			EndDate:   &endDate,
-			Period:    nil,
+			Timeframe: nil,
 		})
 
 		total3, _ := decimal.NewFromString(res3)
@@ -206,7 +206,7 @@ func TestPayment(t *testing.T) {
 		res, err := repository.SumNetProfit(DB, staff.StoreID, model.StatsArgs{
 			StartDate: &startDate,
 			EndDate:   &endDate,
-			Period:    nil,
+			Timeframe: nil,
 		})
 
 		require.Nil(t, err)

@@ -589,18 +589,21 @@ type Stats {
     totalSoldItems(args:StatsArgs!): String! @goField(forceResolver: true)
 }
 
-enum PeriodType {
-    day
-    week
-    month
-    year
+enum TimeframeType {
+    today
+    yesterday
+    thisWeek
+    lastWeek
+    thisMonth
+    lastMonth
+    thisYear
 }
 
 # We may use duration
 input StatsArgs {
     startDate:Time
     endDate:Time
-    period: PeriodType
+    timeframe: TimeframeType
 }
 
 # We will seed common units and each store can add more units to fit their needs

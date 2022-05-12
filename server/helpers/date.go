@@ -33,16 +33,16 @@ func HandleStatsDates(args model.StatsArgs) (time.Time, time.Time) {
 	var StartDate, EndDate time.Time
 
 	//This will override defaults date if set
-	if args.Period != nil {
-		//todo week
-		if *args.Period == model.PeriodTypeMonth {
+	if args.Timeframe != nil {
+		//todo other time frames
+		if *args.Timeframe == model.TimeframeTypeThisMonth {
 			StartDate = BeginningOfMonth(time.Now())
 			EndDate = EndOfMonth(time.Now())
-		} else if *args.Period == model.PeriodTypeYear {
+		} else if *args.Timeframe == model.TimeframeTypeThisYear {
 			StartDate = BeginningOfYear(time.Now())
 			EndDate = EndOfYear(time.Now())
 		} else {
-			//Default
+			//Default is today
 			StartDate = BeginningOfDay(time.Now())
 			EndDate = EndOfDay(time.Now())
 		}
