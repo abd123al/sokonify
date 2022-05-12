@@ -151,3 +151,14 @@ func FindPayments(DB *gorm.DB, args model.PaymentsArgs) ([]*model.Payment, error
 
 	return payments, result.Error
 }
+
+func SumPaymentTotalSales(db *gorm.DB, StoreID int) (string, error) {
+	var amount string
+
+	err := db.Debug().Table("payments").Joins("inner join staffs on payments.staff_id = staffs.user_id AND staffs.store_id = ?", StoreID).Select("sum(amount)").Row().Scan(&amount)
+	if err != nil {
+		return "0.00", err
+	}
+
+	return amount, nil
+}

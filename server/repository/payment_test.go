@@ -1,6 +1,7 @@
 package repository_test
 
 import (
+	"github.com/shopspring/decimal"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"mahesabu/graph/model"
@@ -99,5 +100,42 @@ func TestPayment(t *testing.T) {
 
 		assert.Nil(t, err)
 		assert.NotEmpty(t, paymentsByCustomer)
+	})
+
+	t.Run("sum payments", func(t *testing.T) {
+		var generate = func(length int) (decimal.Decimal, int) {
+			staff := util.CreateStaff(DB, nil)
+			customer := util.CreateCustomer(DB, staff.StoreID)
+
+			var sum decimal.Decimal
+
+			i := 1
+			for i < length+1 {
+				payment1 := util.CreatePayment(DB, &util.CreatePaymentArgs{
+					StoreID:    staff.StoreID,
+					StaffID:    staff.UserID,
+					CustomerID: &customer.ID,
+				}, i%2 == 0)
+
+				amount, _ := decimal.NewFromString(payment1.Payment.Amount)
+				sum = sum.Add(amount)
+
+				//Increase
+				i += 1
+			}
+
+			return sum, staff.StoreID
+		}
+
+		//These are payments for other store
+		_, _ = generate(2)
+		sum, storeId := generate(6)
+
+		res, err := repository.SumPaymentTotalSales(DB, storeId)
+
+		total, _ := decimal.NewFromString(res)
+
+		assert.Nil(t, err)
+		assert.Equal(t, total.String(), sum.String())
 	})
 }
