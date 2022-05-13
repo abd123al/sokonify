@@ -143,8 +143,8 @@ class _HomePageState extends State<HomePage> {
           icon: const Icon(Icons.explicit_outlined),
         ),
         TitledNavigationBarItem(
-          title: const Text('Settings'),
-          icon: const Icon(Icons.settings),
+          title: const Text('Customers'),
+          icon: const Icon(Icons.people_outlined),
         ),
       ],
     );

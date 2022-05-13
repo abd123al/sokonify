@@ -42,21 +42,34 @@ class SimpleStats extends StatelessWidget {
                 ),
               ),
             ),
-            StatTile(
-              title: 'Total Sales',
-              value: data.totalSalesAmount,
-              color: Colors.green,
-            ),
-            StatTile(
-              title: 'Expenses',
-              value: data.totalExpensesAmount,
-              color: Colors.red,
-            ),
-            const StatTile(
-              title: 'Net Profit',
-              value: "783783.00 TZS",
-              color: Colors.blue,
-            ),
+            GridView(
+              shrinkWrap: true,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+              ),
+              children: [
+                StatTile(
+                  title: 'Total Sales',
+                  value: data.totalSalesAmount,
+                  color: Colors.brown,
+                ),
+                StatTile(
+                  title: 'Expenses',
+                  value: data.totalExpensesAmount,
+                  color: Colors.red,
+                ),
+                const StatTile(
+                  title: 'Gross Income',
+                  value: "783783.00 TZS",
+                  color: Colors.blue,
+                ),
+                StatTile(
+                  title: 'Net Income',
+                  value: data.netIncome,
+                  color: Colors.green,
+                ),
+              ],
+            )
           ],
         );
       },

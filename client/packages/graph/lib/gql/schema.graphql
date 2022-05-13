@@ -3,6 +3,7 @@
 schema {
     query: Query
     mutation: Mutation
+    subscription: Subscription
 }
 
 directive @goField(forceResolver: Boolean, name: String) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
@@ -226,6 +227,7 @@ type ProductCategory implements Gorm {
 type Query {
     admin(id: ID!): Admin!
     admins: [Admin!]!
+    averageDailySalesAmount(args: StatsArgs!): String!
     brand(id: ID!): Brand!
     brands(productId: ID!): [Brand!]!
     categories: [Category!]!
@@ -235,10 +237,12 @@ type Query {
     customers: [Customer!]!
     expense(id: ID!): Expense!
     expenses(args: ExpensesArgs!): [Expense!]!
+    grossIncome(args: StatsArgs!): String!
     item(id: ID!): Item!
     items(args: ItemsArgs!): [Item!]!
     me: User!
-    netProfit(args: StatsArgs!): String!
+    netIncome(args: StatsArgs!): String!
+    netItemsIncome: String!
     order(id: ID!): Order!
     orders(args: OrdersArgs!): [Order!]!
     payment(id: ID!): Payment!
@@ -250,8 +254,9 @@ type Query {
     store(id: ID!): Store!
     stores: [Store!]!
     totalExpensesAmount(args: StatsArgs!): String!
+    totalItemsCost: String!
+    totalItemsRevenue: String!
     totalSalesAmount(args: StatsArgs!): String!
-    totalSoldItems(args: StatsArgs!): String!
     unit(id: ID!): Unit!
     units: [Unit!]!
     user(id: ID!): User!
@@ -287,6 +292,15 @@ type Store implements Gorm {
     updatedAt: Time!
     user: User!
     userId: Int!
+}
+
+type Subscription {
+    item: Item!
+    netProfit(args: StatsArgs!): String!
+    order: Order!
+    payment: Payment!
+    totalExpensesAmount(args: StatsArgs!): String!
+    totalSalesAmount(args: StatsArgs!): String!
 }
 
 type Unit implements Gorm {

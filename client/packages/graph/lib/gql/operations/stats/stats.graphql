@@ -1,4 +1,5 @@
 query stats($args:StatsArgs!) {
     totalExpensesAmount(args: $args)
     totalSalesAmount(args: $args)
+    netIncome(args: $args)
 }
