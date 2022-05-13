@@ -22,7 +22,7 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 
 	// We are using sqlite in offline mobile apps
 	if args.Offline && args.Mobile {
-		dsn := "db.db"
+		dsn := "sokonify.db"
 		if args.Dsn != "" {
 			//In android, we need full path
 			dsn = args.Dsn
