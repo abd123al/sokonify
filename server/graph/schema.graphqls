@@ -654,10 +654,18 @@ type Query {
     users: [User!]! #todo add args  @isAuthenticated
 
     # stats
-    netProfit(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
+    netIncome(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
+    grossIncome(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
     totalExpensesAmount(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
     totalSalesAmount(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
-    totalSoldItems(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
+    # Daily sales
+    averageDailySalesAmount(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
+    #cost of buying goods
+    totalItemsCost: String! @goField(forceResolver: true) @isAuthenticated
+    #how much will you make when sell all
+    totalItemsRevenue: String! @goField(forceResolver: true) @isAuthenticated
+    #money will you make when sell all
+    netItemsIncome: String! @goField(forceResolver: true) @isAuthenticated
 }
 
 type Mutation {
@@ -695,6 +703,16 @@ type Mutation {
     signIn(input: SignInInput!): AuthPayload!
     signUp(input: SignUpInput!): AuthPayload!
     switchStore(input: SwitchStoreInput!): AuthPayload! @isAuthenticated
+}
+
+type Subscription {
+    item: Item! # When we edit/add item
+    order: Order! @isAuthenticated #when order is edited/created
+    payment: Payment! @isAuthenticated #when new payment is made
+
+    netProfit(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
+    totalExpensesAmount(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
+    totalSalesAmount(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
 }
 
 scalar Time

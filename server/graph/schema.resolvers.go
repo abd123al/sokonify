@@ -286,7 +286,11 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) NetProfit(ctx context.Context, args model.StatsArgs) (string, error) {
+func (r *queryResolver) NetIncome(ctx context.Context, args model.StatsArgs) (string, error) {
+	return repository.SumNetProfit(r.DB, helpers.ForContext(ctx).StoreID, args)
+}
+
+func (r *queryResolver) GrossIncome(ctx context.Context, args model.StatsArgs) (string, error) {
 	return repository.SumNetProfit(r.DB, helpers.ForContext(ctx).StoreID, args)
 }
 
@@ -298,7 +302,43 @@ func (r *queryResolver) TotalSalesAmount(ctx context.Context, args model.StatsAr
 	return repository.SumOrderPayments(r.DB, helpers.ForContext(ctx).StoreID, args)
 }
 
-func (r *queryResolver) TotalSoldItems(ctx context.Context, args model.StatsArgs) (string, error) {
+func (r *queryResolver) AverageDailySalesAmount(ctx context.Context, args model.StatsArgs) (string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) TotalItemsCost(ctx context.Context) (string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) TotalItemsRevenue(ctx context.Context) (string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) NetItemsIncome(ctx context.Context) (string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *subscriptionResolver) Item(ctx context.Context) (<-chan *model.Item, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *subscriptionResolver) Order(ctx context.Context) (<-chan *model.Order, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *subscriptionResolver) Payment(ctx context.Context) (<-chan *model.Payment, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *subscriptionResolver) NetProfit(ctx context.Context, args model.StatsArgs) (<-chan string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *subscriptionResolver) TotalExpensesAmount(ctx context.Context, args model.StatsArgs) (<-chan string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *subscriptionResolver) TotalSalesAmount(ctx context.Context, args model.StatsArgs) (<-chan string, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
@@ -330,6 +370,9 @@ func (r *Resolver) Product() generated.ProductResolver { return &productResolver
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
+// Subscription returns generated.SubscriptionResolver implementation.
+func (r *Resolver) Subscription() generated.SubscriptionResolver { return &subscriptionResolver{r} }
+
 // User returns generated.UserResolver implementation.
 func (r *Resolver) User() generated.UserResolver { return &userResolver{r} }
 
@@ -341,4 +384,5 @@ type orderResolver struct{ *Resolver }
 type orderItemResolver struct{ *Resolver }
 type productResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+type subscriptionResolver struct{ *Resolver }
 type userResolver struct{ *Resolver }
