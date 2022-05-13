@@ -52,6 +52,7 @@ class SimpleStats extends StatelessWidget {
                   title: 'Total Sales',
                   value: data.totalSalesAmount,
                   color: Colors.brown,
+                  onTap: () {},
                 ),
                 StatTile(
                   title: 'Expenses',
