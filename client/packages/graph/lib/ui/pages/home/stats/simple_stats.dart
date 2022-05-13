@@ -1,5 +1,6 @@
 import 'package:blocitory/blocitory.dart';
 import 'package:flutter/material.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 import '../../../../gql/generated/graphql_api.graphql.dart';
 import 'simple_stats_cubit.dart';
@@ -17,6 +18,39 @@ class SimpleStats extends StatelessWidget {
     return QueryBuilder<Stats$Query, SimpleStatsCubit>(
       retry: (cubit) => cubit.fetch(),
       builder: (context, data, _) {
+        //Function which returns list builder
+        Widget _buildGrid(int crossAxisCount) {
+          return GridView(
+            shrinkWrap: true,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxisCount,
+            ),
+            children: [
+              StatTile(
+                title: 'Total Sales',
+                value: data.totalSalesAmount,
+                color: Colors.brown,
+                onTap: () {},
+              ),
+              StatTile(
+                title: 'Expenses',
+                value: data.totalExpensesAmount,
+                color: Colors.red,
+              ),
+              const StatTile(
+                title: 'Gross Income',
+                value: "783783.00 TZS",
+                color: Colors.blue,
+              ),
+              StatTile(
+                title: 'Net Income',
+                value: data.netIncome,
+                color: Colors.green,
+              ),
+            ],
+          );
+        }
+
         return ListView(
           shrinkWrap: true,
           children: [
@@ -38,35 +72,15 @@ class SimpleStats extends StatelessWidget {
                 ),
               ),
             ),
-            GridView(
-              shrinkWrap: true,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
+            ScreenTypeLayout.builder(
+              mobile: (BuildContext context) => OrientationLayoutBuilder(
+                portrait: (context) => _buildGrid(2),
+                landscape: (context) => _buildGrid(4),
               ),
-              children: [
-                StatTile(
-                  title: 'Total Sales',
-                  value: data.totalSalesAmount,
-                  color: Colors.brown,
-                  onTap: () {},
-                ),
-                StatTile(
-                  title: 'Expenses',
-                  value: data.totalExpensesAmount,
-                  color: Colors.red,
-                ),
-                const StatTile(
-                  title: 'Gross Income',
-                  value: "783783.00 TZS",
-                  color: Colors.blue,
-                ),
-                StatTile(
-                  title: 'Net Income',
-                  value: data.netIncome,
-                  color: Colors.green,
-                ),
-              ],
-            )
+              tablet: (BuildContext context) => _buildGrid(4),
+              desktop: (BuildContext context) => _buildGrid(4),
+              watch: (BuildContext context) => _buildGrid(1),
+            ),
           ],
         );
       },
