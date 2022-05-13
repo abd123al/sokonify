@@ -582,13 +582,6 @@ input PaymentsArgs {
     type: PaymentType
 }
 
-type Stats {
-    netProfit(args:StatsArgs!): String! @goField(forceResolver: true)
-    totalExpensesAmount(args:StatsArgs!): String! @goField(forceResolver: true)
-    totalSalesAmount(args:StatsArgs!): String! @goField(forceResolver: true)
-    totalSoldItems(args:StatsArgs!): String! @goField(forceResolver: true)
-}
-
 enum TimeframeType {
     today
     yesterday
@@ -653,13 +646,18 @@ type Query {
     products(args: ProductsArgs!): [Product!]!
     staff(id: ID!): Staff! @isAuthenticated
     staffs: [Staff!]! @isAuthenticated
-    stats: Stats! @isAuthenticated
     store(id: ID!): Store! @isAuthenticated
     stores: [Store!]! @isAuthenticated
     unit(id: ID!): Unit!
     units: [Unit!]! @isAuthenticated
     user(id: ID!): User!
     users: [User!]! #todo add args  @isAuthenticated
+
+    # stats
+    netProfit(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
+    totalExpensesAmount(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
+    totalSalesAmount(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
+    totalSoldItems(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
 }
 
 type Mutation {

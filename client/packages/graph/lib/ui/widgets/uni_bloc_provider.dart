@@ -6,7 +6,9 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:provider/provider.dart';
 
+import '../../gql/generated/graphql_api.graphql.dart';
 import '../../repositories/repositories.dart';
+import '../pages/home/stats/stats_cubit.dart';
 import '../pages/store/stores_list_cubit.dart';
 
 class UniBlocProvider extends StatefulWidget {
@@ -53,6 +55,7 @@ class UniBlocProviderState extends State<UniBlocProvider> {
         final storeRepository = StoreRepository(client);
         final authRepository = AuthRepository(client);
         final userRepository = UserRepository(client);
+        final statsRepository = StatsRepository(client);
 
         return MultiBlocProvider(
           providers: [
@@ -72,6 +75,12 @@ class UniBlocProviderState extends State<UniBlocProvider> {
             BlocProvider<StoreBuilderCubit>(
               create: (context) {
                 return StoreBuilderCubit(storeRepository)..fetch();
+              },
+            ),
+            BlocProvider<StatsCubit>(
+              create: (context) {
+                return StatsCubit(statsRepository)
+                  ..fetch(StatsArgs(timeframe: TimeframeType.today));
               },
             ),
           ],

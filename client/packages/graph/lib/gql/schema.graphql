@@ -238,6 +238,7 @@ type Query {
     item(id: ID!): Item!
     items(args: ItemsArgs!): [Item!]!
     me: User!
+    netProfit(args: StatsArgs!): String!
     order(id: ID!): Order!
     orders(args: OrdersArgs!): [Order!]!
     payment(id: ID!): Payment!
@@ -248,6 +249,9 @@ type Query {
     staffs: [Staff!]!
     store(id: ID!): Store!
     stores: [Store!]!
+    totalExpensesAmount(args: StatsArgs!): String!
+    totalSalesAmount(args: StatsArgs!): String!
+    totalSoldItems(args: StatsArgs!): String!
     unit(id: ID!): Unit!
     units: [Unit!]!
     user(id: ID!): User!
@@ -265,12 +269,6 @@ type Staff implements Gorm {
     updatedAt: Time!
     user: User!
     userId: Int!
-}
-
-type Stats {
-    profit(endDate: Time!, startDate: Time!): String!
-    totalSalesAmount(endDate: Time!, startDate: Time!): String!
-    totalSalesItems(endDate: Time!, startDate: Time!): String!
 }
 
 type Store implements Gorm {
@@ -407,6 +405,16 @@ enum StoreType {
     shop
     storage
     warehouse
+}
+
+enum TimeframeType {
+    lastMonth
+    lastWeek
+    thisMonth
+    thisWeek
+    thisYear
+    today
+    yesterday
 }
 
 scalar Time
@@ -551,6 +559,12 @@ input SignUpInput {
 input StaffInput {
     role: StaffRole!
     userId: Int!
+}
+
+input StatsArgs {
+    endDate: Time
+    startDate: Time
+    timeframe: TimeframeType
 }
 
 input StoreInput {

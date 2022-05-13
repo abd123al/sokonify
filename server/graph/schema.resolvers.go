@@ -262,10 +262,6 @@ func (r *queryResolver) Staffs(ctx context.Context) ([]*model.Staff, error) {
 	return repository.FindStaffs(r.DB, helpers.ForContext(ctx).StoreID)
 }
 
-func (r *queryResolver) Stats(ctx context.Context) (*model.Stats, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
 func (r *queryResolver) Store(ctx context.Context, id int) (*model.Store, error) {
 	return repository.FindStore(r.DB, id)
 }
@@ -290,19 +286,19 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *statsResolver) NetProfit(ctx context.Context, obj *model.Stats, args model.StatsArgs) (string, error) {
+func (r *queryResolver) NetProfit(ctx context.Context, args model.StatsArgs) (string, error) {
 	return repository.SumNetProfit(r.DB, helpers.ForContext(ctx).StoreID, args)
 }
 
-func (r *statsResolver) TotalExpensesAmount(ctx context.Context, obj *model.Stats, args model.StatsArgs) (string, error) {
+func (r *queryResolver) TotalExpensesAmount(ctx context.Context, args model.StatsArgs) (string, error) {
 	return repository.SumExpensePayment(r.DB, helpers.ForContext(ctx).StoreID, args)
 }
 
-func (r *statsResolver) TotalSalesAmount(ctx context.Context, obj *model.Stats, args model.StatsArgs) (string, error) {
+func (r *queryResolver) TotalSalesAmount(ctx context.Context, args model.StatsArgs) (string, error) {
 	return repository.SumOrderPayments(r.DB, helpers.ForContext(ctx).StoreID, args)
 }
 
-func (r *statsResolver) TotalSoldItems(ctx context.Context, obj *model.Stats, args model.StatsArgs) (string, error) {
+func (r *queryResolver) TotalSoldItems(ctx context.Context, args model.StatsArgs) (string, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
@@ -334,9 +330,6 @@ func (r *Resolver) Product() generated.ProductResolver { return &productResolver
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
-// Stats returns generated.StatsResolver implementation.
-func (r *Resolver) Stats() generated.StatsResolver { return &statsResolver{r} }
-
 // User returns generated.UserResolver implementation.
 func (r *Resolver) User() generated.UserResolver { return &userResolver{r} }
 
@@ -348,5 +341,4 @@ type orderResolver struct{ *Resolver }
 type orderItemResolver struct{ *Resolver }
 type productResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
-type statsResolver struct{ *Resolver }
 type userResolver struct{ *Resolver }
