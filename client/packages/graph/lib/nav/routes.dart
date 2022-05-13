@@ -4,6 +4,7 @@ import './route_handlers.dart';
 
 class Routes {
   static String root = "/";
+  static String createItem = "/createItem";
   static String createStore = "/createStore";
 
   /// [:params] should be defined here.
@@ -13,6 +14,12 @@ class Routes {
     // });
 
     router.define(root, handler: rootHandler);
+
+    router.define(
+      createItem,
+      handler: createItemRouterHandler,
+      transitionType: TransitionType.materialFullScreenDialog,
+    );
 
     router.define(
       createStore,

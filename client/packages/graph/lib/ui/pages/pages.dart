@@ -3,3 +3,4 @@ export 'auth/signup_page.dart';
 export 'home/home.dart';
 export 'store/create_store_page.dart';
 export 'store/stores.dart';
+export 'inventory/inventory.dart';

@@ -11,7 +11,7 @@ class Inventory extends StatelessWidget {
     return Scaffold(
       body: const ItemsList(),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => redirectTo(context, Routes.createStore),
+        onPressed: () => redirectTo(context, Routes.createItem),
         tooltip: 'Add',
         icon: const Icon(Icons.add),
         label: const Text("New Item"),
