@@ -6,7 +6,6 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:provider/provider.dart';
 
-import '../../gql/generated/graphql_api.graphql.dart';
 import '../../repositories/repositories.dart';
 import '../pages/home/stats/stats_cubit.dart';
 import '../pages/store/stores_list_cubit.dart';
@@ -79,8 +78,7 @@ class UniBlocProviderState extends State<UniBlocProvider> {
             ),
             BlocProvider<StatsCubit>(
               create: (context) {
-                return StatsCubit(statsRepository)
-                  ..fetch(StatsArgs(timeframe: TimeframeType.today));
+                return StatsCubit(statsRepository);
               },
             ),
           ],

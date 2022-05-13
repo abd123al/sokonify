@@ -6,13 +6,20 @@ import 'stat_tile.dart';
 import 'stats_cubit.dart';
 
 class SimpleStats extends StatelessWidget {
-  const SimpleStats({Key? key}) : super(key: key);
+  const SimpleStats({
+    Key? key,
+    this.timeframe = TimeframeType.today,
+  }) : super(key: key);
+
+  final TimeframeType timeframe;
 
   @override
   Widget build(BuildContext context) {
+    final args = StatsArgs(timeframe: timeframe);
     //todo in large display use Grid/ but in phones ListView
     return QueryBuilder<Stats$Query, StatsCubit>(
-      retry: (cubit) => cubit.fetch(StatsArgs(timeframe: TimeframeType.today)),
+      initializer: (cubit) => cubit.fetch(args),
+      retry: (cubit) => cubit.fetch(args),
       builder: (context, data, _) {
         return ListView(
           shrinkWrap: true,
