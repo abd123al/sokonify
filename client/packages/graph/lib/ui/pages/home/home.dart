@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:graph/ui/pages/auth/auth.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
@@ -113,12 +114,16 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(),
+      bottomNavigationBar: OrientationLayoutBuilder(
+        portrait: (context) => _buildBottomNav(true),
+        landscape: (context) => _buildBottomNav(false),
+      ),
     );
   }
 
-  Widget _buildBottomNav() {
+  Widget _buildBottomNav(bool reverse) {
     return TitledBottomNavigationBar(
+      reverse: reverse,
       currentIndex: _currentIndex,
       onTap: (index) {
         setState(() => _currentIndex = index);
