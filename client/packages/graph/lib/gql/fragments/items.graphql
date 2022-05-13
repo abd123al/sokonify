@@ -1,0 +1,4 @@
+fragment ItemParts on Item {
+    id
+    name
+}

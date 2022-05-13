@@ -1,0 +1,5 @@
+query items($args: ItemsArgs!) {
+    items(args: $args) {
+        ...ItemParts
+    }
+}

@@ -13,6 +13,7 @@ class POS extends StatelessWidget {
           SimpleStats(),
         ],
       ),
+      //todo here we just open window for single item
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {},
         icon: const Icon(Icons.new_label),

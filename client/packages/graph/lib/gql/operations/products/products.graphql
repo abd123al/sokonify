@@ -1,0 +1,5 @@
+query products($args: ProductsArgs!) {
+    products(args: $args) {
+        ...ProductParts
+    }
+}

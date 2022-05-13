@@ -25,8 +25,8 @@ flutter:
   uses-material-design: true
 
 msix_config:
-  display_name: Sokonfity
-  publisher_display_name: Sylivanus Kateile
+  display_name: Sokonify
+  publisher_display_name: Sylvanus Kateile
   identity_name: sokonify.offline.app
   msix_version: 1.0.0.0
   #logo_path: C:\path\to\logo.png

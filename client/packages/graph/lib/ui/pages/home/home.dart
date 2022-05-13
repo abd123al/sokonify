@@ -6,6 +6,7 @@ import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../widgets/widgets.dart';
 import '../pages.dart';
 import 'drawer.dart';
+import 'inventory.dart';
 import 'pos.dart';
 
 class HomePage extends StatefulWidget {
@@ -102,9 +103,7 @@ class _HomePageState extends State<HomePage> {
           children: <Widget>[
             const POS(),
             const StoresPage(),
-            Container(
-              color: Colors.red,
-            ),
+            const Inventory(),
             Container(
               color: Colors.green,
             ),
@@ -119,7 +118,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildBottomNav() {
-   return TitledBottomNavigationBar(
+    return TitledBottomNavigationBar(
       currentIndex: _currentIndex,
       onTap: (index) {
         setState(() => _currentIndex = index);
