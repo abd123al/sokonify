@@ -19,6 +19,16 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.1
+  msix: ^3.6.2
 
 flutter:
   uses-material-design: true
+
+msix_config:
+  display_name: Sokonfity
+  publisher_display_name: Sylivanus Kateile
+  identity_name: sokonify.offline.app
+  msix_version: 1.0.0.0
+  #logo_path: C:\path\to\logo.png
+  capabilities: internetClient, location, webcam
+  enable_at_startup: true
