@@ -31,6 +31,43 @@ class SokonifyDrawer extends StatelessWidget {
             },
           ),
           ListTile(
+            title: const Text('Units'),
+            trailing: const Icon(Icons.brightness_1_rounded),
+            onTap: () {},
+          ),
+          ListTile(
+            title: const Text('Categories'),
+            trailing: const Icon(Icons.category_outlined),
+            onTap: () {},
+          ),
+          ListTile(
+            title: const Text('Products'),
+            trailing: const Icon(Icons.dashboard_outlined),
+            onTap: () {},
+          ),
+          ListTile(
+            title: const Text('Staffs'),
+            trailing: const Icon(Icons.people_outlined),
+            onTap: () {},
+          ),
+          ListTile(
+            title: const Text('Stats'),
+            trailing: const Icon(Icons.query_stats_outlined),
+            onTap: () {},
+          ),
+          ListTile(
+            title: const Text('Stores'),
+            trailing: const Icon(Icons.store),
+            onTap: () {},
+          ),
+          const Divider(),
+          ListTile(
+            title: const Text('Settings'),
+            trailing: const Icon(Icons.settings_outlined),
+            onTap: () {},
+          ),
+          const Divider(),
+          ListTile(
             title: const Text('Help/Feedback'),
             trailing: const Icon(Icons.help),
             onTap: () {},
