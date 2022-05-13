@@ -2,24 +2,20 @@ import 'package:blocitory/blocitory.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../gql/generated/graphql_api.graphql.dart';
+import 'simple_stats_cubit.dart';
 import 'stat_tile.dart';
-import 'stats_cubit.dart';
 
+/// This is used in home page only
 class SimpleStats extends StatelessWidget {
   const SimpleStats({
     Key? key,
-    this.timeframe = TimeframeType.today,
   }) : super(key: key);
-
-  final TimeframeType timeframe;
 
   @override
   Widget build(BuildContext context) {
-    final args = StatsArgs(timeframe: timeframe);
     //todo in large display use Grid/ but in phones ListView
-    return QueryBuilder<Stats$Query, StatsCubit>(
-      initializer: (cubit) => cubit.fetch(args),
-      retry: (cubit) => cubit.fetch(args),
+    return QueryBuilder<Stats$Query, SimpleStatsCubit>(
+      retry: (cubit) => cubit.fetch(),
       builder: (context, data, _) {
         return ListView(
           shrinkWrap: true,

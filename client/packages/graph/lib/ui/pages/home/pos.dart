@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'stats/stats.dart';
+import 'stats/simple_stats.dart';
 
 class POS extends StatelessWidget {
   const POS({Key? key}) : super(key: key);

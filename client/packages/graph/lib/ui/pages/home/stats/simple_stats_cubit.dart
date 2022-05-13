@@ -3,14 +3,16 @@ import 'package:blocitory/blocitory.dart';
 import '../../../../gql/generated/graphql_api.graphql.dart';
 import '../../../../repositories/stats_repository.dart';
 
-class StatsCubit extends ResourceCubit<Stats$Query> {
+/// This holds simple stat sata
+/// todo create detailed stats cubit
+class SimpleStatsCubit extends ResourceCubit<Stats$Query> {
   final StatsRepository _repository;
 
-  StatsCubit(this._repository) : super();
+  SimpleStatsCubit(this._repository) : super();
 
-  fetch(StatsArgs args) {
+  fetch() {
     super.execute(
-      executor: () => _repository.fetch(args),
+      executor: () => _repository.fetch(StatsArgs()),
       parser: (r) => Stats$Query.fromJson(r),
     );
   }
