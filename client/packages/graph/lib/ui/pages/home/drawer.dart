@@ -106,26 +106,22 @@ class SokonifyDrawer extends StatelessWidget {
             },
           ),
           const Divider(),
-          UserBuilder(
-            builder: (context, _) {
-              return ListTile(
-                title: const Text(
-                  'Sign Out',
-                  style: TextStyle(
-                    color: Colors.red,
-                  ),
-                ),
-                trailing: const Icon(
-                  Icons.logout,
-                  color: Colors.red,
-                ),
-                onTap: () {
-                  BlocProvider.of<AuthWrapperCubit>(context).logOut();
+          ListTile(
+            title: const Text(
+              'Sign Out',
+              style: TextStyle(
+                color: Colors.red,
+              ),
+            ),
+            trailing: const Icon(
+              Icons.logout,
+              color: Colors.red,
+            ),
+            onTap: () {
+              BlocProvider.of<AuthWrapperCubit>(context).logOut();
 
-                  //Restart app.
-                  Phoenix.rebirth(context);
-                },
-              );
+              //Restart app.
+              Phoenix.rebirth(context);
             },
           ),
         ],
