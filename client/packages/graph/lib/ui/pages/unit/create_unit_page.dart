@@ -35,7 +35,7 @@ class CreateUnitWidget extends StatefulWidget {
 
   /// When users have no default store we are going to switch to this
   /// one automatically
-  final Function(BuildContext, UnitsPartsMixin)? onSuccess;
+  final Function(BuildContext, CreateUnit$Mutation$Unit)? onSuccess;
 
   @override
   State<StatefulWidget> createState() {
@@ -73,11 +73,11 @@ class _CreateUnitPageState extends State<CreateUnitWidget> {
               const SizedBox(
                 height: 8,
               ),
-              MutationBuilder<UnitsPartsMixin, CreateUnitCubit, UnitRepository>(
+              MutationBuilder<CreateUnit$Mutation$Unit, CreateUnitCubit, UnitRepository>(
                 blocCreator: (r) => CreateUnitCubit(r),
                 onSuccess: widget.onSuccess ??
                     (context, data) {
-                      BlocProvider.of<UnitsListCubit>(context).addUnit(data);
+                      BlocProvider.of<UnitsListCubit>(context).addUnit(Units$Query$Unit.fromJson(data.toJson()));
                     },
                 pop: widget.onSuccess == null,
                 builder: (context, cubit) {

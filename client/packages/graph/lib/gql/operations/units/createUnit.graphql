@@ -1,5 +1,5 @@
 mutation createUnit($input:UnitInput!) {
     createUnit(input: $input){
-        ...UnitsParts
+        ...UnitParts
     }
 }

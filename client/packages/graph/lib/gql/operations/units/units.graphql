@@ -1,5 +1,5 @@
 query units {
     units {
-        ...UnitsParts
+        ...UnitParts
     }
 }

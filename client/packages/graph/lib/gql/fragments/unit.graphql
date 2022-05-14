@@ -1,4 +1,4 @@
-fragment UnitsParts on Unit {
+fragment UnitParts on Unit {
     id
     name
 }

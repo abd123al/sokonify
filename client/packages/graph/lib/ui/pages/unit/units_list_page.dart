@@ -25,7 +25,7 @@ class UnitsListPage extends StatelessWidget {
   }
 
   Widget _buildListView() {
-    return QueryBuilder<ResourceListData<UnitsPartsMixin>, UnitsListCubit>(
+    return QueryBuilder<ResourceListData<Units$Query$Unit>, UnitsListCubit>(
       retry: (cubit) => cubit.fetch(),
       builder: (context, units, _) {
         if (units.items.isEmpty) {

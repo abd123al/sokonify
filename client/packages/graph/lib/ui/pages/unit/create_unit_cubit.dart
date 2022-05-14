@@ -3,7 +3,7 @@ import 'package:blocitory/blocitory.dart';
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/unit_repository.dart';
 
-class CreateUnitCubit extends ResourceCubit<UnitsPartsMixin> {
+class CreateUnitCubit extends ResourceCubit<CreateUnit$Mutation$Unit> {
   CreateUnitCubit(this._repository) : super();
   final UnitRepository _repository;
 
