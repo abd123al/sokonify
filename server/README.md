@@ -1,5 +1,6 @@
 # Todo
 
+- use `DESC` for all lists.
 - add currency to store
 - `return store, result.Error` this is bad idea because it returns object with zero values.
 - if server is embedded use different jwt key

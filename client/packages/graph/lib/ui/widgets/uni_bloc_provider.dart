@@ -7,6 +7,7 @@ import 'package:in_app_update/in_app_update.dart';
 import 'package:provider/provider.dart';
 
 import '../../repositories/repositories.dart';
+import '../pages/category/categories_list_cubit.dart';
 import '../pages/home/stats/simple_stats_cubit.dart';
 import '../pages/inventory/inventory.dart';
 import '../pages/store/stores_list_cubit.dart';
@@ -55,6 +56,7 @@ class UniBlocProviderState extends State<UniBlocProvider> {
 
         final storeRepository = StoreRepository(client);
         final authRepository = AuthRepository(client);
+        final categoryRepository = CategoryRepository(client);
         final userRepository = UserRepository(client);
         final statsRepository = StatsRepository(client);
         final itemRepository = ItemRepository(client);
@@ -101,6 +103,11 @@ class UniBlocProviderState extends State<UniBlocProvider> {
                 return UnitsListCubit(unitRepository)..fetch();
               },
             ),
+            BlocProvider<CategoriesListCubit>(
+              create: (context) {
+                return CategoriesListCubit(categoryRepository)..fetch();
+              },
+            ),
           ],
           child: MultiRepositoryProvider(
             providers: [
@@ -121,6 +128,9 @@ class UniBlocProviderState extends State<UniBlocProvider> {
               ),
               RepositoryProvider<UnitRepository>(
                 create: (context) => unitRepository,
+              ),
+              RepositoryProvider<CategoryRepository>(
+                create: (context) => categoryRepository,
               ),
             ],
             child: widget.child,

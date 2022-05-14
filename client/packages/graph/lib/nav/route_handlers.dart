@@ -10,6 +10,14 @@ var createStoreRouterHandler = Handler(handlerFunc: (_, __) {
   return const CreateStorePage();
 });
 
+var createCategoryRouterHandler = Handler(handlerFunc: (_, __) {
+  return const CreateCategoryPage();
+});
+
+var categoriesListRouterHandler = Handler(handlerFunc: (_, __) {
+  return const CategoriesListPage();
+});
+
 var createItemRouterHandler = Handler(handlerFunc: (_, __) {
   return const CreateItemPage();
 });
