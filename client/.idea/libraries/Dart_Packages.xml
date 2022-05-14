@@ -128,6 +128,7 @@
           <value>
             <list>
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/cached_network_image-3.2.0/lib" />
+              <option value="C:/flutter/.pub-cache/git/flutter_cached_network_image-ff72f00f142f13d889d7549e013af91cb0b523ab/cached_network_image/lib" />
             </list>
           </value>
         </entry>
@@ -1205,6 +1206,7 @@
       </option>
     </properties>
     <CLASSES>
+      <root url="file://C:/flutter/.pub-cache/git/flutter_cached_network_image-ff72f00f142f13d889d7549e013af91cb0b523ab/cached_network_image/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/_fe_analyzer_shared-38.0.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/analyzer-3.4.1/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/archive-3.3.0/lib" />
