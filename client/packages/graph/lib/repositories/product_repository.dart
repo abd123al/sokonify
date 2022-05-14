@@ -17,7 +17,7 @@ class ProductRepository {
 
   fetchProducts(ProductsArgs args) {
     final options = QueryOptions(
-      document: ITEMS_QUERY_DOCUMENT,
+      document: PRODUCTS_QUERY_DOCUMENT,
       variables: ProductsArguments(args: args).toJson(),
     );
 

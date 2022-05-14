@@ -4,7 +4,7 @@ import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/product_repository.dart';
 
 class ProductsListCubit
-    extends ResourceCubit<ResourceListData<ProductPartsMixin>> {
+    extends ResourceCubit<ResourceListData<Products$Query$Product>> {
   final ProductRepository _repository;
 
   ProductsListCubit(this._repository) : super();
@@ -24,7 +24,7 @@ class ProductsListCubit
     );
   }
 
-  addProduct(ProductPartsMixin item) {
+  addProduct(Products$Query$Product item) {
     final list = state.data?.items;
     list?.insert(0, item);
 

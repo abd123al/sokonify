@@ -10,6 +10,7 @@ import '../../repositories/repositories.dart';
 import '../pages/category/categories_list_cubit.dart';
 import '../pages/home/stats/simple_stats_cubit.dart';
 import '../pages/inventory/inventory.dart';
+import '../pages/product/products_list_cubit.dart';
 import '../pages/store/stores_list_cubit.dart';
 import '../pages/unit/units_list_cubit.dart';
 

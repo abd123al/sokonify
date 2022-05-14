@@ -6,3 +6,4 @@ export 'inventory/inventory.dart';
 export 'store/create_store_page.dart';
 export 'store/stores.dart';
 export 'unit/unit.dart';
+export 'product/product.dart';

@@ -29,3 +29,11 @@ var unitsListPageRouterHandler = Handler(handlerFunc: (_, __) {
 var createUnitRouterHandler = Handler(handlerFunc: (_, __) {
   return const CreateUnitPage();
 });
+
+var createProductRouterHandler = Handler(handlerFunc: (_, __) {
+  return const CreateProductPage();
+});
+
+var productsListRouterHandler = Handler(handlerFunc: (_, __) {
+  return const ProductsListPage();
+});

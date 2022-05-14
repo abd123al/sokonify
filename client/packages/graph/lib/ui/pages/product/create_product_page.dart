@@ -7,10 +7,34 @@ import '../../../repositories/product_repository.dart';
 import 'create_product_cubit.dart';
 import 'products_list_cubit.dart';
 
+class CreateProductPage extends StatelessWidget {
+  const CreateProductPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("New Product"),
+      ),
+      body: const CreateProductWidget(),
+    );
+  }
+}
+
 class CreateProductWidget extends StatefulWidget {
   const CreateProductWidget({
     Key? key,
+    this.message,
+    this.onSuccess,
   }) : super(key: key);
+
+  /// If users have no stores, they will be greeted by this msg
+  /// which will aid them in creating new store.
+  final String? message;
+
+  /// When users have no default store we are going to switch to this
+  /// one automatically
+  final Function(BuildContext, CreateProduct$Mutation$Product)? onSuccess;
 
   @override
   State<StatefulWidget> createState() {
@@ -19,7 +43,7 @@ class CreateProductWidget extends StatefulWidget {
 }
 
 class _CreateProductPageState extends State<CreateProductWidget> {
-  final passwordController = TextEditingController();
+  final _nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +54,15 @@ class _CreateProductPageState extends State<CreateProductWidget> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
+              if (widget.message != null)
+                Text(
+                  widget.message!,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              const Divider(),
               TextField(
                 autofocus: true,
-                controller: passwordController,
+                controller: _nameController,
                 keyboardType: TextInputType.text,
                 decoration: const InputDecoration(
                   labelText: 'Facility name',
@@ -42,19 +72,22 @@ class _CreateProductPageState extends State<CreateProductWidget> {
               const SizedBox(
                 height: 8,
               ),
-              MutationBuilder<ProductPartsMixin, CreateProductCubit,
-                  ProductRepository>(
+              MutationBuilder<CreateProduct$Mutation$Product,
+                  CreateProductCubit, ProductRepository>(
                 blocCreator: (r) => CreateProductCubit(r),
                 onSuccess: (context, data) {
-                  BlocProvider.of<ProductsListCubit>(context).addProduct(data);
+                  BlocProvider.of<ProductsListCubit>(context).addProduct(
+                      Products$Query$Product.fromJson(data.toJson()));
                 },
-                pop: true,
+                pop: widget.onSuccess == null,
                 builder: (context, cubit) {
                   return Button(
                     padding: EdgeInsets.zero,
                     callback: () {
                       cubit.submit(
-                        ProductInput(unit: '', name: ''),
+                        ProductInput(
+                          name: _nameController.text,
+                        ),
                       );
                     },
                     title: 'Submit',
@@ -70,7 +103,7 @@ class _CreateProductPageState extends State<CreateProductWidget> {
 
   @override
   void dispose() {
-    passwordController.dispose();
+    _nameController.dispose();
     super.dispose();
   }
 }

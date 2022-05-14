@@ -252,7 +252,6 @@ type Product implements Gorm {
 
 input ProductInput {
     name: String!
-    unit: String! # todo think of this should we have custom list?
     # user may attach more categories for the same product.
     categories: [ID!]
     # Brands can be inserted when creating product.

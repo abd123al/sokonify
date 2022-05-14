@@ -7,8 +7,10 @@ class Routes {
   static String categories = "/categories";
   static String createCategory = "/createCategory";
   static String createItem = "/createItem";
+  static String createProduct = "/createProduct";
   static String createStore = "/createStore";
   static String createUnit = "/createUnit";
+  static String products = "/products";
   static String units = "/units";
 
   /// [:params] should be defined here.
@@ -38,6 +40,12 @@ class Routes {
     );
 
     router.define(
+      createProduct,
+      handler: createProductRouterHandler,
+      transitionType: TransitionType.materialFullScreenDialog,
+    );
+
+    router.define(
       createStore,
       handler: createStoreRouterHandler,
       transitionType: TransitionType.materialFullScreenDialog,
@@ -47,6 +55,12 @@ class Routes {
       createUnit,
       handler: createUnitRouterHandler,
       transitionType: TransitionType.materialFullScreenDialog,
+    );
+
+    router.define(
+      products,
+      handler: productsListRouterHandler,
+      transitionType: TransitionType.inFromLeft,
     );
 
     router.define(

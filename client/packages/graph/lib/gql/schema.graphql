@@ -553,7 +553,6 @@ input ProductInput {
     brands: [ProductBrandInput!]
     categories: [ID!]
     name: String!
-    unit: String!
 }
 
 input ProductsArgs {
