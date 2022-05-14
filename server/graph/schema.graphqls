@@ -312,6 +312,10 @@ input BrandInput {
     productId: Int!
 }
 
+input BrandsArgs {
+    productId: Int!
+}
+
 # todo: expenses items should also come as items.
 type Item implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
@@ -627,7 +631,7 @@ type Query {
     admin(id:ID!): Admin!
     admins: [Admin!]!
     brand(id:ID!): Brand!
-    brands(productId:ID!): [Brand!]!
+    brands(args:BrandsArgs!): [Brand!]!
     category(id:ID!): Category!
     categories: [Category!]! @isAuthenticated
     currentStore: Store @isAuthenticated
