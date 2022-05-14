@@ -13,3 +13,11 @@ var createStoreRouterHandler = Handler(handlerFunc: (_, __) {
 var createItemRouterHandler = Handler(handlerFunc: (_, __) {
   return const CreateItemPage();
 });
+
+var unitsListPageRouterHandler = Handler(handlerFunc: (_, __) {
+  return const UnitsListPage();
+});
+
+var createUnitRouterHandler = Handler(handlerFunc: (_, __) {
+  return const CreateUnitPage();
+});

@@ -10,6 +10,7 @@ import '../../repositories/repositories.dart';
 import '../pages/home/stats/simple_stats_cubit.dart';
 import '../pages/inventory/inventory.dart';
 import '../pages/store/stores_list_cubit.dart';
+import '../pages/unit/units_list_cubit.dart';
 
 class UniBlocProvider extends StatefulWidget {
   final Widget child;
@@ -58,6 +59,7 @@ class UniBlocProviderState extends State<UniBlocProvider> {
         final statsRepository = StatsRepository(client);
         final itemRepository = ItemRepository(client);
         final productRepository = ProductRepository(client);
+        final unitRepository = UnitRepository(client);
 
         return MultiBlocProvider(
           providers: [
@@ -94,6 +96,11 @@ class UniBlocProviderState extends State<UniBlocProvider> {
                 return SimpleStatsCubit(statsRepository)..fetch();
               },
             ),
+            BlocProvider<UnitsListCubit>(
+              create: (context) {
+                return UnitsListCubit(unitRepository)..fetch();
+              },
+            ),
           ],
           child: MultiRepositoryProvider(
             providers: [
@@ -111,6 +118,9 @@ class UniBlocProviderState extends State<UniBlocProvider> {
               ),
               RepositoryProvider<ProductRepository>(
                 create: (context) => productRepository,
+              ),
+              RepositoryProvider<UnitRepository>(
+                create: (context) => unitRepository,
               ),
             ],
             child: widget.child,

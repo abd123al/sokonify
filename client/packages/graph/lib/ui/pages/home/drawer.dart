@@ -5,6 +5,7 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../nav/nav.dart';
 import '../../widgets/widgets.dart';
 
 class SokonifyDrawer extends StatelessWidget {
@@ -27,9 +28,16 @@ class SokonifyDrawer extends StatelessWidget {
         },
       ),
       ListTile(
+        title: const Text('Brands'),
+        trailing: const Icon(Icons.branding_watermark_outlined),
+        onTap: () {},
+      ),
+      ListTile(
         title: const Text('Units'),
         trailing: const Icon(Icons.brightness_1_rounded),
-        onTap: () {},
+        onTap: () {
+          redirectTo(context, Routes.units);
+        },
       ),
       ListTile(
         title: const Text('Categories'),

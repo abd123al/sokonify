@@ -1,0 +1,4 @@
+fragment UnitsParts on Unit {
+    id
+    name
+}

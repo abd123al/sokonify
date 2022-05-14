@@ -6,6 +6,8 @@ class Routes {
   static String root = "/";
   static String createItem = "/createItem";
   static String createStore = "/createStore";
+  static String createUnit = "/createUnit";
+  static String units = "/units";
 
   /// [:params] should be defined here.
   static void configureRoutes(FluroRouter router) {
@@ -25,6 +27,18 @@ class Routes {
       createStore,
       handler: createStoreRouterHandler,
       transitionType: TransitionType.materialFullScreenDialog,
+    );
+
+    router.define(
+      createUnit,
+      handler: createUnitRouterHandler,
+      transitionType: TransitionType.materialFullScreenDialog,
+    );
+
+    router.define(
+      units,
+      handler: unitsListPageRouterHandler,
+      transitionType: TransitionType.inFromLeft,
     );
   }
 }
