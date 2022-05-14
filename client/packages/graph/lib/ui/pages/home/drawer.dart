@@ -28,11 +28,6 @@ class SokonifyDrawer extends StatelessWidget {
         },
       ),
       ListTile(
-        title: const Text('Brands'),
-        trailing: const Icon(Icons.branding_watermark_outlined),
-        onTap: () {},
-      ),
-      ListTile(
         title: const Text('Units'),
         trailing: const Icon(Icons.brightness_1_rounded),
         onTap: () {
@@ -49,6 +44,12 @@ class SokonifyDrawer extends StatelessWidget {
         trailing: const Icon(Icons.dashboard_outlined),
         onTap: () {},
       ),
+      ListTile(
+        title: const Text('Brands'),
+        trailing: const Icon(Icons.branding_watermark_outlined),
+        onTap: () {},
+      ),
+      const Divider(),
       ListTile(
         title: const Text('Staffs'),
         trailing: const Icon(Icons.people_outlined),
