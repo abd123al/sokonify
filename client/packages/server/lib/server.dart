@@ -4,6 +4,7 @@ import 'dart:ffi';
 import 'dart:io';
 import 'dart:isolate';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 class Server {
@@ -13,15 +14,16 @@ class Server {
     if (Platform.isWindows) {
       call(int port) async {
         final DynamicLibrary lib = DynamicLibrary.open("lib.dll");
-        final int Function(int) startServer = lib
-            .lookup<NativeFunction<Int32 Function(Int32)>>('StartServer')
+        final int Function(int, bool) startServer = lib
+            .lookup<NativeFunction<Int32 Function(Int32, Bool)>>('StartServer')
             .asFunction();
 
-        final result = startServer(port);
+        //kReleaseMode will help deciding which db to use.
+        final result = startServer(port, kReleaseMode);
         return "$result";
       }
 
-      const port = 9090;
+      const port = kReleaseMode ? 8081 : 9091;
       Isolate.spawn(call, port);
 
       return "$port";

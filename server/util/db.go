@@ -9,11 +9,12 @@ import (
 )
 
 type InitDbArgs struct {
-	DbName  string
-	Clear   bool
-	Offline bool
-	Mobile  bool
-	Dsn     string
+	DbName    string
+	Clear     bool
+	Offline   bool
+	Mobile    bool
+	Dsn       string
+	IsRelease bool
 }
 
 func InitDB(args InitDbArgs) (DB *gorm.DB) {
@@ -29,7 +30,15 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 		}
 		db, err = gorm.Open(sqlite.Open(dsn), &gorm.Config{})
 	} else {
-		dsn := "host=localhost user=postgres password=password dbname=" + args.DbName + " port=5432 sslmode=disable TimeZone=Africa/Nairobi"
+		password := "password"
+		port := "5432"
+
+		//These will be used for enterprise edition
+		if args.IsRelease {
+			password = "#$0k0n1fy@5433"
+			port = "5433"
+		}
+		dsn := fmt.Sprintf("host=localhost user=postgres password=%s dbname=%s port=%s sslmode=disable TimeZone=Africa/Nairobi", password, args.DbName, port)
 		db, err = gorm.Open(postgres.New(postgres.Config{DSN: dsn}), &gorm.Config{
 			//Logger: logger.Default.LogMode(logger.Info),
 		})

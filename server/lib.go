@@ -7,7 +7,7 @@ import (
 )
 
 //export StartServer
-func StartServer(Port int) int {
+func StartServer(Port int, isRelease bool) int {
 	result := util.StartServer(util.StartServerArgs{
 		Port:    strconv.Itoa(Port),
 		Offline: true,
