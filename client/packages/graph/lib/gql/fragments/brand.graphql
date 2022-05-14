@@ -1,0 +1,5 @@
+fragment BrandParts on Brand {
+    id
+    name
+    manufacturer
+}

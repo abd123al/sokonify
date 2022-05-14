@@ -1,0 +1,5 @@
+query brands($args:BrandsArgs!) {
+    brands(args: $args) {
+        ...BrandParts
+    }
+}

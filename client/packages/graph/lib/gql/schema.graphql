@@ -229,7 +229,7 @@ type Query {
     admins: [Admin!]!
     averageDailySalesAmount(args: StatsArgs!): String!
     brand(id: ID!): Brand!
-    brands(productId: ID!): [Brand!]!
+    brands(args: BrandsArgs!): [Brand!]!
     categories: [Category!]!
     category(id: ID!): Category!
     currentStore: Store
@@ -436,6 +436,10 @@ scalar Time
 input BrandInput {
     manufacturer: String
     name: String!
+    productId: Int!
+}
+
+input BrandsArgs {
     productId: Int!
 }
 
