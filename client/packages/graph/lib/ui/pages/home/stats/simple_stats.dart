@@ -42,20 +42,13 @@ class SimpleStats extends StatelessWidget {
           ),
         ];
 
-        _buildRow() {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: children,
-          );
-        }
-
         //Function which returns list builder
-        _buildGrid() {
+        _buildGrid(int crossAxisCount, double childAspectRatio) {
           return GridView(
             shrinkWrap: true,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 2,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxisCount,
+              childAspectRatio: childAspectRatio,
             ),
             children: children,
           );
@@ -84,12 +77,12 @@ class SimpleStats extends StatelessWidget {
             ),
             ScreenTypeLayout.builder(
               mobile: (BuildContext context) => OrientationLayoutBuilder(
-                portrait: (context) => _buildGrid(),
-                landscape: (context) => _buildRow(),
+                portrait: (context) => _buildGrid(2, 2.6),
+                landscape: (context) => _buildGrid(4, 3),
               ),
-              tablet: (BuildContext context) => _buildRow(),
-              desktop: (BuildContext context) => _buildRow(),
-              watch: (BuildContext context) => _buildGrid(),
+              tablet: (BuildContext context) => _buildGrid(4, 3),
+              desktop: (BuildContext context) => _buildGrid(4, 3),
+              watch: (BuildContext context) => _buildGrid(2, 2.6),
             ),
           ],
         );
