@@ -18,36 +18,46 @@ class SimpleStats extends StatelessWidget {
     return QueryBuilder<Stats$Query, SimpleStatsCubit>(
       retry: (cubit) => cubit.fetch(),
       builder: (context, data, _) {
+        final List<StatTile> children = [
+          StatTile(
+            title: 'Total Sales',
+            value: data.totalSalesAmount,
+            color: Colors.brown,
+            onTap: () {},
+          ),
+          StatTile(
+            title: 'Expenses',
+            value: data.totalExpensesAmount,
+            color: Colors.red,
+          ),
+          const StatTile(
+            title: 'Gross Income',
+            value: "783783.00 TZS",
+            color: Colors.blue,
+          ),
+          StatTile(
+            title: 'Net Income',
+            value: data.netIncome,
+            color: Colors.green,
+          ),
+        ];
+
+        _buildRow() {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: children,
+          );
+        }
+
         //Function which returns list builder
-        Widget _buildGrid(int crossAxisCount) {
+        _buildGrid() {
           return GridView(
             shrinkWrap: true,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: crossAxisCount,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 2,
             ),
-            children: [
-              StatTile(
-                title: 'Total Sales',
-                value: data.totalSalesAmount,
-                color: Colors.brown,
-                onTap: () {},
-              ),
-              StatTile(
-                title: 'Expenses',
-                value: data.totalExpensesAmount,
-                color: Colors.red,
-              ),
-              const StatTile(
-                title: 'Gross Income',
-                value: "783783.00 TZS",
-                color: Colors.blue,
-              ),
-              StatTile(
-                title: 'Net Income',
-                value: data.netIncome,
-                color: Colors.green,
-              ),
-            ],
+            children: children,
           );
         }
 
@@ -74,12 +84,12 @@ class SimpleStats extends StatelessWidget {
             ),
             ScreenTypeLayout.builder(
               mobile: (BuildContext context) => OrientationLayoutBuilder(
-                portrait: (context) => _buildGrid(2),
-                landscape: (context) => _buildGrid(4),
+                portrait: (context) => _buildGrid(),
+                landscape: (context) => _buildRow(),
               ),
-              tablet: (BuildContext context) => _buildGrid(4),
-              desktop: (BuildContext context) => _buildGrid(4),
-              watch: (BuildContext context) => _buildGrid(1),
+              tablet: (BuildContext context) => _buildRow(),
+              desktop: (BuildContext context) => _buildRow(),
+              watch: (BuildContext context) => _buildGrid(),
             ),
           ],
         );
