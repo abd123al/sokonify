@@ -28,6 +28,7 @@ class _CreateItemPageState extends State<CreateItemPage> {
   final _batchPriceController = TextEditingController();
   final _expireDateController = TextEditingController();
   Products$Query$Product? _product;
+  DateTime? _selectedDate;
 
   @override
   Widget build(BuildContext context) {
@@ -113,20 +114,23 @@ class _CreateItemPageState extends State<CreateItemPage> {
                       hintText: 'Enter item selling price',
                     ),
                   ),
+                  InputDatePickerFormField(
+                    firstDate: DateTime.now(),
+                    fieldLabelText: 'Expire Date (Optional)',
+                    fieldHintText: 'dd/mm/yyyy',
+                    lastDate: DateTime.now().add(const Duration(days: 366 * 9)),
+                    onDateSubmitted: (date) {
+                      setState(() {
+                        _selectedDate = date;
+                      });
+                    },
+                  ),
                   TextField(
                     controller: _batchPriceController,
                     keyboardType: TextInputType.text,
                     decoration: const InputDecoration(
                       labelText: 'Batch (Optional)',
                       hintText: 'Enter batch number',
-                    ),
-                  ),
-                  TextField(
-                    controller: _expireDateController,
-                    keyboardType: TextInputType.datetime,
-                    decoration: const InputDecoration(
-                      labelText: 'Expire Date (Optional)',
-                      hintText: 'Enter expire date number',
                     ),
                   ),
                   const SizedBox(
@@ -136,7 +140,8 @@ class _CreateItemPageState extends State<CreateItemPage> {
                       ItemRepository>(
                     blocCreator: (r) => CreateItemCubit(r),
                     onSuccess: (context, data) {
-                      BlocProvider.of<ItemsListCubit>(context).addItem(Items$Query$Item.fromJson(data.toJson()));
+                      BlocProvider.of<ItemsListCubit>(context)
+                          .addItem(Items$Query$Item.fromJson(data.toJson()));
                     },
                     pop: false,
                     builder: (context, cubit) {
@@ -153,6 +158,7 @@ class _CreateItemPageState extends State<CreateItemPage> {
                               description: _descriptionPriceController.text,
                               batch: _batchPriceController.text,
                               productId: _product!.id,
+                              expiresAt: _selectedDate,
                             ),
                           );
                         },

@@ -11,11 +11,13 @@ DateTime fromGraphQLTimeToDartDateTime(String date) {
 }
 
 String fromDartDateTimeToGraphQLTime(DateTime date) {
-  final dateFormatter = DateFormat('yyyy-MM-dd');
+  final dateFormatter = DateFormat('dd-MM-yyyy');
 
   try {
-    return dateFormatter.format(date);
+    final f = dateFormatter.format(date);
+    //print("dateFormatter: $f");
+    return f;
   } catch (_) {
-    return dateFormatter.format(DateTime.now());
+    return '';
   }
 }

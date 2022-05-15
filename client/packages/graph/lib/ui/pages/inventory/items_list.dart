@@ -2,7 +2,7 @@ import 'package:blocitory/blocitory.dart';
 import 'package:flutter/material.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
-import '../../widgets/empty_list.dart';
+import '../../widgets/widgets.dart';
 import 'items_list_cubit.dart';
 
 class ItemsList extends StatelessWidget {
@@ -10,19 +10,14 @@ class ItemsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return QueryBuilder<ResourceListData<ItemPartsMixin>, ItemsListCubit>(
+    return QueryBuilder<ResourceListData<Items$Query$Item>, ItemsListCubit>(
       retry: (cubit) => cubit.fetch(),
-      builder: (context, items, _) {
-        if (items.items.isEmpty) {
-          return const EmptyList(
-            message: "No items found, Please add some",
-          );
-        }
-
-        return ListView.builder(
-          itemBuilder: (context, index) {
-            final item = items.items[index];
-
+      builder: (context, data, _) {
+        return SearchableList<Items$Query$Item>(
+          hintName: "Product",
+          list: data.items,
+          compare: (i) => i.product.name, //todo
+          builder: (context, item) {
             return Card(
               child: Builder(
                 builder: (context) {
@@ -59,7 +54,6 @@ class ItemsList extends StatelessWidget {
               ),
             );
           },
-          itemCount: items.items.length,
         );
       },
     );
