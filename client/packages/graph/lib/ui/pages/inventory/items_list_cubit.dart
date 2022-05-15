@@ -3,7 +3,7 @@ import 'package:blocitory/blocitory.dart';
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/item_repository.dart';
 
-class ItemsListCubit extends ResourceCubit<ResourceListData<Items$Query$Item>> {
+class ItemsListCubit extends ResourceListCubit<Items$Query$Item> {
   final ItemRepository _repository;
 
   ItemsListCubit(this._repository) : super();
@@ -21,15 +21,5 @@ class ItemsListCubit extends ResourceCubit<ResourceListData<Items$Query$Item>> {
         return ResourceListData(items: result);
       },
     );
-  }
-
-  addItem(Items$Query$Item item) {
-    final list = state.data?.items;
-    list?.insert(0, item);
-
-    super.update(state.data?.copyWith(
-      items: list,
-      addedItems: [item],
-    ));
   }
 }

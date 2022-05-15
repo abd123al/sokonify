@@ -76,7 +76,7 @@ class _CreateStorePageState extends State<CreateStoreWidget> {
               onSuccess: widget.onSuccess ??
                   (context, data) {
                     BlocProvider.of<StoresListCubit>(context)
-                        .addStore(Stores$Query$Store.fromJson(data.toJson()));
+                        .addItem(Stores$Query$Store.fromJson(data.toJson()));
                   },
               pop: widget.onSuccess == null,
               builder: (context, cubit) {

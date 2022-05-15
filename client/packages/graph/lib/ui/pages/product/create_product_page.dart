@@ -76,7 +76,7 @@ class _CreateProductPageState extends State<CreateProductWidget> {
                   CreateProductCubit, ProductRepository>(
                 blocCreator: (r) => CreateProductCubit(r),
                 onSuccess: (context, data) {
-                  BlocProvider.of<ProductsListCubit>(context).addProduct(
+                  BlocProvider.of<ProductsListCubit>(context).addItem(
                       Products$Query$Product.fromJson(data.toJson()));
                 },
                 pop: widget.onSuccess == null,

@@ -7,6 +7,7 @@ import '../../../nav/nav.dart';
 import '../../widgets/widgets.dart';
 import 'orders_list_cubit.dart';
 
+//todo use [SliverAppBar]
 class OrdersListScaffold extends StatelessWidget {
   const OrdersListScaffold({Key? key}) : super(key: key);
 

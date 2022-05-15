@@ -78,7 +78,7 @@ class _CreateCategoryPageState extends State<CreateCategoryWidget> {
                 blocCreator: (r) => CreateCategoryCubit(r),
                 onSuccess: widget.onSuccess ??
                     (context, data) {
-                      BlocProvider.of<CategoriesListCubit>(context).addCategory(
+                      BlocProvider.of<CategoriesListCubit>(context).addItem(
                           Categories$Query$Category.fromJson(data.toJson()));
                     },
                 pop: widget.onSuccess == null,
