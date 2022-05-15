@@ -1,5 +1,6 @@
 # Todo
 
+- option to disable every body to create store. This should be default.
 - use `DESC` for all lists.
 - add currency to store
 - `return store, result.Error` this is bad idea because it returns object with zero values.

@@ -612,17 +612,21 @@ type Unit implements Gorm {
     deletedAt:Time
 
     # tablets/syrups/
-    name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(50);default:null")
+    name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(20);default:null")
+
+    #We will add common units based on this
+    storeType : StoreType
 
     storeId: Int
     store: Store @goTag(key: "gorm", value:  "foreignKey:StoreID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 
     userId: Int
-    user: User @goTag(key: "gorm", value:  "foreignKey:StoreID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    user: User @goTag(key: "gorm", value:  "foreignKey:UserID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 }
 
 input UnitInput {
     name: String!
+    storeType : StoreType
 }
 
 #todo remove storeId everywhere and use JWT for that.
