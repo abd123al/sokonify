@@ -490,14 +490,24 @@ input OrderInput {
     items: [OrderItemInput!]!
 }
 
+# This will decide whether result will be handled in full or by pagination
+enum FetchMode {
+    pagination
+    full
+}
+
 input OrdersArgs {
+    mode:FetchMode!
     by:OrdersBy! = store
-    value:ID!
-    limit: Int! =10
-    offset:Int! = 0
-    sortBy:SortBy! = DESC
-    type:OrderType! = in
+    value:ID
+    limit: Int =10
+    offset:Int = 0
+    sortBy:SortBy = DESC
+    type:OrderType = in
     status:OrderStatus
+    startDate:Time
+    endDate:Time
+    timeframe: TimeframeType
 }
 
 type OrderItem implements Gorm {

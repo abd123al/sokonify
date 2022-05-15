@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"gorm.io/gorm"
 	"mahesabu/graph/model"
+	"mahesabu/helpers"
 	"strconv"
 )
 
@@ -49,19 +50,37 @@ func FindOrders(DB *gorm.DB, args model.OrdersArgs, StoreID int) ([]*model.Order
 	var orders []*model.Order
 	var result *gorm.DB
 	sort := "id " + "DESC" //todo use sortBy var
+	By := args.By
+	Type := args.Type
+	Limit := args.Limit
+	Offset := args.Offset
+
+	q := DB.Debug()
 
 	//todo handle status
-	if args.By == model.OrdersByStore {
-		result = DB.Where(
-			DB.Where(&model.Order{IssuerID: StoreID}).Or(&model.Order{ReceiverID: &StoreID})).Where(&model.Order{Type: args.Type}).Order(sort).Limit(args.Limit).Offset(args.Offset).Find(&orders)
-	} else if args.By == model.OrdersByStaff {
+	if By == model.OrdersByStore {
+		if args.Mode == model.FetchModeFull {
+			StartDate, EndDate := helpers.HandleStatsDates(model.StatsArgs{
+				StartDate: args.StartDate,
+				EndDate:   args.EndDate,
+				Timeframe: args.Timeframe,
+			})
+
+			result = q.Where("orders.created_at BETWEEN ? AND ?", StartDate, EndDate).Where(
+				q.Where(&model.Order{IssuerID: StoreID}).Or(&model.Order{ReceiverID: &StoreID})).Where(&model.Order{Type: *Type}).Order(sort).Find(&orders)
+		} else {
+			result = q.Where(
+				DB.Where(&model.Order{IssuerID: StoreID}).Or(&model.Order{ReceiverID: &StoreID})).Where(&model.Order{Type: *Type}).Order(sort).Limit(*Limit).Offset(*Offset).Find(&orders)
+		}
+	} else if By == model.OrdersByStaff {
 		//Here StaffID is actually userId
-		result = DB.Where(&model.Order{StaffID: args.Value, Type: args.Type}).Order(sort).Limit(args.Limit).Offset(args.Offset).Find(&orders)
-	} else if args.By == model.OrdersByCustomer {
-		result = DB.Where(&model.Order{CustomerID: &args.Value, Type: args.Type}).Order(sort).Limit(args.Limit).Offset(args.Offset).Find(&orders)
+		result = q.Where(&model.Order{StaffID: *args.Value, Type: *Type}).Order(sort).Limit(*Limit).Offset(*Offset).Find(&orders)
+	} else if By == model.OrdersByCustomer {
+		result = q.Where(&model.Order{CustomerID: args.Value, Type: *Type}).Order(sort).Limit(*Limit).Offset(*Offset).Find(&orders)
 	} else {
 		panic(fmt.Errorf("not implemented"))
 	}
+
 	return orders, result.Error
 }
 

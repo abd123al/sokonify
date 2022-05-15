@@ -37,11 +37,11 @@ func (r *itemResolver) BuyingPrice(ctx context.Context, obj *model.Item) (string
 	return obj.BuyingPrice, nil
 }
 
-func (r *itemResolver) Product(_ context.Context, obj *model.Item) (*model.Product, error) {
+func (r *itemResolver) Product(ctx context.Context, obj *model.Item) (*model.Product, error) {
 	return repository.FindProduct(r.DB, obj.ProductID)
 }
 
-func (r *itemResolver) Brand(_ context.Context, obj *model.Item) (*model.Brand, error) {
+func (r *itemResolver) Brand(ctx context.Context, obj *model.Item) (*model.Brand, error) {
 	if obj.BrandID != nil {
 		return repository.FindBrand(r.DB, *obj.BrandID)
 	}
@@ -49,7 +49,7 @@ func (r *itemResolver) Brand(_ context.Context, obj *model.Item) (*model.Brand, 
 	return nil, nil
 }
 
-func (r *itemResolver) Unit(_ context.Context, obj *model.Item) (*model.Unit, error) {
+func (r *itemResolver) Unit(ctx context.Context, obj *model.Item) (*model.Unit, error) {
 	return repository.FindUnit(r.DB, obj.UnitID)
 }
 
