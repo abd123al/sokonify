@@ -24,21 +24,38 @@ class ItemsList extends StatelessWidget {
             final item = items.items[index];
 
             return Card(
-              elevation: 16,
-              child: ListTile(
-                title: Text(
-                  item.name,
-                  style: Theme.of(context).textTheme.headlineSmall,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                subtitle: Text(
-                  "${item.quantity}",
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-                trailing: Text(
-                  item.sellingPrice,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
+              child: Builder(
+                builder: (context) {
+                  String formatName() {
+                    final n = item.product.name;
+                    final b = item.brand?.name;
+
+                    if (b != null) {
+                      return "$n ($b)";
+                    }
+
+                    return n;
+                  }
+
+                  final name = formatName();
+
+                  return ListTile(
+                    title: Text(
+                      name,
+                      style: Theme.of(context).textTheme.titleLarge,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    subtitle: Text(
+                      "${item.quantity}",
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                    dense: true,
+                    trailing: Text(
+                      item.sellingPrice,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  );
+                },
               ),
             );
           },

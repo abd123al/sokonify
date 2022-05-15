@@ -1,6 +1,14 @@
 fragment ItemParts on Item {
     id
-    name
     quantity
     sellingPrice
+    product {
+        name
+    }
+    brand {
+        name
+    }
+    unit {
+        name
+    }
 }

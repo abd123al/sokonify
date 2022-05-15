@@ -338,14 +338,14 @@ type Item implements Gorm {
     expiresAt: Time
 
     productId: Int!
-    product: Product! @goTag(key: "gorm", value:  "foreignKey:ProductID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
+    product: Product! @goTag(key: "gorm", value:  "foreignKey:ProductID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;") @goField(forceResolver: true)
 
     # todo make it nullable when brand is deleted
     brandId: Int
-    brand: Brand @goTag(key: "gorm", value:  "foreignKey:BrandID;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
+    brand: Brand @goTag(key: "gorm", value:  "foreignKey:BrandID;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;") @goField(forceResolver: true)
 
     unitId: Int!
-    unit: Unit! @goTag(key: "gorm", value:  "foreignKey:UnitID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
+    unit: Unit! @goTag(key: "gorm", value:  "foreignKey:UnitID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;") @goField(forceResolver: true)
 }
 
 input ItemInput {

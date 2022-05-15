@@ -109,9 +109,8 @@ type Item implements Gorm {
     createdAt: Time!
     deletedAt: Time
     description: String
-    expiresAt: Time!
+    expiresAt: Time
     id: ID!
-    name: String!
     product: Product!
     productId: Int!
     quantity: Int!

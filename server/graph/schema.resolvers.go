@@ -37,6 +37,22 @@ func (r *itemResolver) BuyingPrice(ctx context.Context, obj *model.Item) (string
 	return obj.BuyingPrice, nil
 }
 
+func (r *itemResolver) Product(_ context.Context, obj *model.Item) (*model.Product, error) {
+	return repository.FindProduct(r.DB, obj.ProductID)
+}
+
+func (r *itemResolver) Brand(_ context.Context, obj *model.Item) (*model.Brand, error) {
+	if obj.BrandID != nil {
+		return repository.FindBrand(r.DB, *obj.BrandID)
+	}
+
+	return nil, nil
+}
+
+func (r *itemResolver) Unit(_ context.Context, obj *model.Item) (*model.Unit, error) {
+	return repository.FindUnit(r.DB, obj.UnitID)
+}
+
 func (r *mutationResolver) CreateBrand(ctx context.Context, input model.BrandInput) (*model.Brand, error) {
 	return repository.CreateBrand(r.DB, input)
 }
