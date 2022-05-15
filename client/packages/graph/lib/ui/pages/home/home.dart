@@ -90,9 +90,14 @@ class _HomePageState extends State<HomePage> {
           return _buildBody();
         },
       ),
-      bottomNavigationBar: OrientationLayoutBuilder(
-        portrait: (context) => _buildBottomNav(true),
-        landscape: (context) => _buildBottomNav(false),
+      bottomNavigationBar: StoreBuilder(
+        noBuilder: (context) => const SizedBox(),
+        builder: (context, _) {
+          return OrientationLayoutBuilder(
+            portrait: (context) => _buildBottomNav(true),
+            landscape: (context) => _buildBottomNav(false),
+          );
+        },
       ),
     );
   }

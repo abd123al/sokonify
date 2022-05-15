@@ -47,58 +47,55 @@ class _CreateStorePageState extends State<CreateStoreWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 16,
-      child: Form(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              if (widget.message != null)
-                Text(
-                  widget.message!,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              const Divider(),
-              TextField(
-                autofocus: true,
-                controller: passwordController,
-                keyboardType: TextInputType.text,
-                decoration: const InputDecoration(
-                  labelText: 'Facility name',
-                  hintText: 'Enter your Shop name',
-                ),
+    return Form(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            if (widget.message != null)
+              Text(
+                widget.message!,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
-              const SizedBox(
-                height: 8,
+            const Divider(),
+            TextField(
+              autofocus: true,
+              controller: passwordController,
+              keyboardType: TextInputType.text,
+              decoration: const InputDecoration(
+                labelText: 'Facility name',
+                hintText: 'Enter your Shop name',
               ),
-              MutationBuilder<CreateStore$Mutation$Store, CreateStoreCubit,
-                  StoreRepository>(
-                blocCreator: (r) => CreateStoreCubit(r),
-                onSuccess: widget.onSuccess ??
-                    (context, data) {
-                      BlocProvider.of<StoresListCubit>(context)
-                          .addStore(Stores$Query$Store.fromJson(data.toJson()));
-                    },
-                pop: widget.onSuccess == null,
-                builder: (context, cubit) {
-                  return Button(
-                    padding: EdgeInsets.zero,
-                    callback: () {
-                      cubit.submit(
-                        StoreInput(
-                          name: passwordController.text,
-                          businessType: BusinessType.both,
-                          storeType: StoreType.pharmacy,
-                        ),
-                      );
-                    },
-                    title: 'Submit',
-                  );
-                },
-              ),
-            ],
-          ),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            MutationBuilder<CreateStore$Mutation$Store, CreateStoreCubit,
+                StoreRepository>(
+              blocCreator: (r) => CreateStoreCubit(r),
+              onSuccess: widget.onSuccess ??
+                  (context, data) {
+                    BlocProvider.of<StoresListCubit>(context)
+                        .addStore(Stores$Query$Store.fromJson(data.toJson()));
+                  },
+              pop: widget.onSuccess == null,
+              builder: (context, cubit) {
+                return Button(
+                  padding: EdgeInsets.zero,
+                  callback: () {
+                    cubit.submit(
+                      StoreInput(
+                        name: passwordController.text,
+                        businessType: BusinessType.both,
+                        storeType: StoreType.pharmacy,
+                      ),
+                    );
+                  },
+                  title: 'Submit',
+                );
+              },
+            ),
+          ],
         ),
       ),
     );

@@ -27,60 +27,70 @@ class SokonifyDrawer extends StatelessWidget {
           );
         },
       ),
-      ListTile(
-        title: const Text('Units'),
-        trailing: const Icon(Icons.brightness_1_rounded),
-        onTap: () {
-          redirectTo(context, Routes.units);
+      StoreBuilder(
+        noBuilder: (context) => const SizedBox(),
+        builder: (context, _) {
+          ///All these need someone to have store
+          return Column(
+            children: [
+              ListTile(
+                title: const Text('Units'),
+                trailing: const Icon(Icons.brightness_1_rounded),
+                onTap: () {
+                  redirectTo(context, Routes.units);
+                },
+              ),
+              ListTile(
+                title: const Text('Product Categories'),
+                trailing: const Icon(Icons.category_outlined),
+                onTap: () {
+                  redirectTo(context, Routes.categories);
+                },
+              ),
+              ListTile(
+                title: const Text('Expense Categories'),
+                trailing: const Icon(Icons.category_outlined),
+                onTap: () {
+                  redirectTo(context, Routes.categories);
+                },
+              ),
+              ListTile(
+                title: const Text('Products'),
+                trailing: const Icon(Icons.dashboard_outlined),
+                onTap: () {
+                  redirectTo(context, Routes.products);
+                },
+              ),
+              ListTile(
+                title: const Text('Brands'),
+                trailing: const Icon(Icons.branding_watermark_outlined),
+                onTap: () {},
+              ),
+              const Divider(),
+              ListTile(
+                title: const Text('Staffs'),
+                trailing: const Icon(Icons.people_outlined),
+                onTap: () {},
+              ),
+              ListTile(
+                title: const Text('Stats'),
+                trailing: const Icon(Icons.query_stats_outlined),
+                onTap: () {},
+              ),
+              ListTile(
+                title: const Text('Stores'),
+                trailing: const Icon(Icons.store),
+                onTap: () {},
+              ),
+              const Divider(),
+              ListTile(
+                title: const Text('Settings'),
+                trailing: const Icon(Icons.settings_outlined),
+                onTap: () {},
+              ),
+            ],
+          );
         },
-      ),
-      ListTile(
-        title: const Text('Product Categories'),
-        trailing: const Icon(Icons.category_outlined),
-        onTap: () {
-          redirectTo(context, Routes.categories);
-        },
-      ),
-      ListTile(
-        title: const Text('Expense Categories'),
-        trailing: const Icon(Icons.category_outlined),
-        onTap: () {
-          redirectTo(context, Routes.categories);
-        },
-      ),
-      ListTile(
-        title: const Text('Products'),
-        trailing: const Icon(Icons.dashboard_outlined),
-        onTap: () {
-          redirectTo(context, Routes.products);
-        },
-      ),
-      ListTile(
-        title: const Text('Brands'),
-        trailing: const Icon(Icons.branding_watermark_outlined),
-        onTap: () {},
-      ),
-      const Divider(),
-      ListTile(
-        title: const Text('Staffs'),
-        trailing: const Icon(Icons.people_outlined),
-        onTap: () {},
-      ),
-      ListTile(
-        title: const Text('Stats'),
-        trailing: const Icon(Icons.query_stats_outlined),
-        onTap: () {},
-      ),
-      ListTile(
-        title: const Text('Stores'),
-        trailing: const Icon(Icons.store),
-        onTap: () {},
-      ),
-      const Divider(),
-      ListTile(
-        title: const Text('Settings'),
-        trailing: const Icon(Icons.settings_outlined),
-        onTap: () {},
       ),
       const Divider(),
       ListTile(
