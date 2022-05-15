@@ -77,11 +77,6 @@ class SokonifyDrawer extends StatelessWidget {
                 trailing: const Icon(Icons.query_stats_outlined),
                 onTap: () {},
               ),
-              ListTile(
-                title: const Text('Stores'),
-                trailing: const Icon(Icons.store),
-                onTap: () {},
-              ),
               const Divider(),
               ListTile(
                 title: const Text('Settings'),

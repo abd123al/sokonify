@@ -125,35 +125,44 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildBottomNav(bool reverse) {
-    return TitledBottomNavigationBar(
-      reverse: reverse,
-      currentIndex: _currentIndex,
-      onTap: (index) {
-        setState(() => _currentIndex = index);
-        _pageController.jumpToPage(index);
+    return Builder(
+      builder: (context) {
+        TextStyle? style;
+        if (!reverse) {
+          style = Theme.of(context).textTheme.titleLarge;
+        }
+
+        return TitledBottomNavigationBar(
+          reverse: reverse,
+          currentIndex: _currentIndex,
+          onTap: (index) {
+            setState(() => _currentIndex = index);
+            _pageController.jumpToPage(index);
+          },
+          items: [
+            TitledNavigationBarItem(
+              title: Text('POS', style: style),
+              icon: const Icon(Icons.point_of_sale_outlined),
+            ),
+            TitledNavigationBarItem(
+              title: Text('Orders', style: style),
+              icon: const Icon(Icons.shopping_cart),
+            ),
+            TitledNavigationBarItem(
+              title: Text('Inventory', style: style),
+              icon: const Icon(Icons.inventory_outlined),
+            ),
+            TitledNavigationBarItem(
+              title: Text('Expenses', style: style),
+              icon: const Icon(Icons.explicit_outlined),
+            ),
+            TitledNavigationBarItem(
+              title: Text('Customers', style: style),
+              icon: const Icon(Icons.people_outlined),
+            ),
+          ],
+        );
       },
-      items: [
-        TitledNavigationBarItem(
-          title: const Text('POS'),
-          icon: const Icon(Icons.point_of_sale_outlined),
-        ),
-        TitledNavigationBarItem(
-          title: const Text('Orders'),
-          icon: const Icon(Icons.shopping_cart),
-        ),
-        TitledNavigationBarItem(
-          title: const Text('Inventory'),
-          icon: const Icon(Icons.inventory_outlined),
-        ),
-        TitledNavigationBarItem(
-          title: const Text('Expenses'),
-          icon: const Icon(Icons.explicit_outlined),
-        ),
-        TitledNavigationBarItem(
-          title: const Text('Customers'),
-          icon: const Icon(Icons.people_outlined),
-        ),
-      ],
     );
   }
 }
