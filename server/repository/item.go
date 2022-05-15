@@ -10,18 +10,14 @@ import (
 func CreateItem(DB *gorm.DB, input model.ItemInput) (*model.Item, error) {
 	item := model.Item{
 		Quantity:     input.Quantity,
-		ProductID:    input.ProductID,
-		BuyingPrice:  input.BuyingPrice,
-		SellingPrice: input.SellingPrice,
 		Batch:        input.Batch,
 		Description:  input.Description,
+		BuyingPrice:  input.BuyingPrice,
+		SellingPrice: input.SellingPrice,
+		ExpiresAt:    input.ExpiresAt,
+		ProductID:    input.ProductID,
 		BrandID:      input.BrandID,
 		UnitID:       input.UnitID,
-	}
-
-	//to avoid: invalid memory address or nil pointer dereference
-	if input.ExpiresAt != nil {
-		item.ExpiresAt = *input.ExpiresAt
 	}
 
 	result := DB.Create(&item)
