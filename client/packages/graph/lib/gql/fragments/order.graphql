@@ -1,0 +1,6 @@
+fragment OrderParts on Order {
+    id
+    status
+    type
+    createdAt
+}

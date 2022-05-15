@@ -1,0 +1,5 @@
+query orders($args: OrdersArgs!) {
+    orders(args: $args) {
+        ...OrderParts
+    }
+}

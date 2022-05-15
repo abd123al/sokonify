@@ -352,6 +352,11 @@ enum ExpensesBy {
     store
 }
 
+enum FetchMode {
+    full
+    pagination
+}
+
 enum GenderType {
     female
     male
@@ -532,12 +537,16 @@ input OrderPaymentInput {
 
 input OrdersArgs {
     by: OrdersBy! = store
-    limit: Int! = 10
-    offset: Int! = 0
-    sortBy: SortBy! = DESC
+    endDate: Time
+    limit: Int = 10
+    mode: FetchMode!
+    offset: Int = 0
+    sortBy: SortBy = DESC
+    startDate: Time
     status: OrderStatus
-    type: OrderType! = in
-    value: ID!
+    timeframe: TimeframeType
+    type: OrderType = in
+    value: ID
 }
 
 input PaymentsArgs {
