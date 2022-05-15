@@ -90,33 +90,31 @@ class _HomePageState extends State<HomePage> {
           return _buildBody();
         },
       ),
+      bottomNavigationBar: OrientationLayoutBuilder(
+        portrait: (context) => _buildBottomNav(true),
+        landscape: (context) => _buildBottomNav(false),
+      ),
     );
   }
 
   Widget _buildBody() {
-    return Scaffold(
-      body: SizedBox.expand(
-        child: PageView(
-          controller: _pageController,
-          onPageChanged: (index) {
-            setState(() => _currentIndex = index);
-          },
-          children: <Widget>[
-            const POS(),
-            const StoresPage(),
-            const Inventory(),
-            Container(
-              color: Colors.green,
-            ),
-            Container(
-              color: Colors.blue,
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: OrientationLayoutBuilder(
-        portrait: (context) => _buildBottomNav(true),
-        landscape: (context) => _buildBottomNav(false),
+    return SizedBox.expand(
+      child: PageView(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() => _currentIndex = index);
+        },
+        children: <Widget>[
+          const POS(),
+          const StoresPage(),
+          const Inventory(),
+          Container(
+            color: Colors.green,
+          ),
+          Container(
+            color: Colors.blue,
+          ),
+        ],
       ),
     );
   }
