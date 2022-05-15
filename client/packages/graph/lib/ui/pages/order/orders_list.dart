@@ -7,13 +7,22 @@ import '../../../nav/nav.dart';
 import '../../widgets/widgets.dart';
 import 'orders_list_cubit.dart';
 
-class OrdersList extends StatelessWidget {
-  const OrdersList({Key? key}) : super(key: key);
+class OrdersListScaffold extends StatelessWidget {
+  const OrdersListScaffold({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const _OrdersList(),
+      body: Column(
+        children: const [
+          Topper(
+            label: "Today Orders",
+          ),
+          Expanded(
+            child: _OrdersList(),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => redirectTo(context, Routes.createItem),
         tooltip: 'Add',

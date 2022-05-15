@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 import '../../../../gql/generated/graphql_api.graphql.dart';
+import '../../../widgets/widgets.dart';
 import 'simple_stats_cubit.dart';
 import 'stat_tile.dart';
 
@@ -57,23 +58,8 @@ class SimpleStats extends StatelessWidget {
         return ListView(
           shrinkWrap: true,
           children: [
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Today Statistics",
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: const Text('More'),
-                    )
-                  ],
-                ),
-              ),
+            const Topper(
+              label: "Today Statistics",
             ),
             ScreenTypeLayout.builder(
               mobile: (BuildContext context) => OrientationLayoutBuilder(

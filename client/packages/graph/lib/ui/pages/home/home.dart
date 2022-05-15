@@ -111,7 +111,7 @@ class _HomePageState extends State<HomePage> {
         },
         children: <Widget>[
           const POS(),
-          const OrdersList(),
+          const OrdersListScaffold(),
           const Inventory(),
           Container(
             color: Colors.green,
