@@ -89,6 +89,7 @@ class _CreateStorePageState extends State<CreateStoreWidget> {
                         StoreInput(
                           name: passwordController.text,
                           businessType: BusinessType.both,
+                          storeType: StoreType.pharmacy,
                         ),
                       );
                     },

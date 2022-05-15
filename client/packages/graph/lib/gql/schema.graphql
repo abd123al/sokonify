@@ -288,6 +288,7 @@ type Store implements Gorm {
     name: String!
     staffs: [Staff!]!
     storeType: StoreType!
+    templateType: TemplateType
     tin: String
     updatedAt: Time!
     user: User!
@@ -310,6 +311,7 @@ type Unit implements Gorm {
     name: String!
     store: Store
     storeId: Int
+    templateType: TemplateType
     updatedAt: Time!
     user: User
     userId: Int
@@ -419,6 +421,11 @@ enum StoreType {
     shop
     storage
     warehouse
+}
+
+enum TemplateType {
+    guest
+    pharmacy
 }
 
 enum TimeframeType {
@@ -590,7 +597,8 @@ input StoreInput {
     description: String
     email: String
     name: String!
-    storeType: StoreType = other
+    storeType: StoreType! = other
+    templateType: TemplateType
     tin: String
 }
 
@@ -600,4 +608,5 @@ input SwitchStoreInput {
 
 input UnitInput {
     name: String!
+    templateType: TemplateType
 }

@@ -29,9 +29,15 @@ class ItemsList extends StatelessWidget {
                 title: Text(
                   item.name,
                   style: Theme.of(context).textTheme.headlineSmall,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                leading: CircleAvatar(
-                  child: Text(item.name.substring(0, 2)),
+                subtitle: Text(
+                  "${item.quantity}",
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+                trailing: Text(
+                  item.sellingPrice,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
             );

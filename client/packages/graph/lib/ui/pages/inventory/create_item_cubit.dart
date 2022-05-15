@@ -4,7 +4,7 @@ import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/item_repository.dart';
 import '../../../repositories/store_repository.dart';
 
-class CreateItemCubit extends ResourceCubit<ItemPartsMixin> {
+class CreateItemCubit extends ResourceCubit<CreateItem$Mutation$Item> {
   CreateItemCubit(this._repository) : super();
   final ItemRepository _repository;
 
