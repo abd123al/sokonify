@@ -196,7 +196,6 @@ func TestResolvers(t *testing.T) {
 			},
 			Name:       "Product Name",
 			Categories: []int{category.ID, category.ID},
-			Unit:       "tabs",
 		}
 
 		c.MustPost(`

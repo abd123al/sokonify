@@ -28,16 +28,23 @@ func FindItems(DB *gorm.DB, args model.ItemsArgs, StoreID int) ([]*model.Item, e
 	var items []*model.Item
 	var result *gorm.DB
 
+	query := DB.Table("items")
+
 	if args.By == model.ItemsByStore {
-		result = DB.Table("items").Joins("inner join products on products.id = items.product_id AND products.store_id = ?", StoreID).Find(&items)
+		result = query.Joins("inner join products on products.id = items.product_id AND products.store_id = ?", StoreID).Find(&items)
 	} else if args.By == model.ItemsByCategory {
-		result = DB.Table("items").Joins("inner join products on products.id = items.product_id inner join categories on categories.id = products.category_id AND categories.id = ?", args.Value).Find(&items)
+		result = query.Joins("inner join products on products.id = items.product_id inner join categories on categories.id = products.category_id AND categories.id = ?", args.Value).Find(&items)
 	} else if args.By == model.ItemsByProduct {
-		result = DB.Where(&model.Item{ProductID: args.Value}).Find(&items)
+		result = query.Where(&model.Item{ProductID: args.Value}).Find(&items)
 	} else {
 		panic(fmt.Errorf("not implemented"))
 	}
-	return items, result.Error
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return items, nil
 }
 
 func FindItem(db *gorm.DB, ID int) (*model.Item, error) {

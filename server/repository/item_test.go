@@ -1,6 +1,7 @@
 package repository_test
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/require"
 	"mahesabu/graph/model"
 	"mahesabu/repository"
@@ -38,10 +39,15 @@ func TestItem(t *testing.T) {
 	t.Run("FindItems by store", func(t *testing.T) {
 		create()
 
-		items, _ := repository.FindItems(DB, model.ItemsArgs{
+		items, err := repository.FindItems(DB, model.ItemsArgs{
 			By: model.ItemsByStore,
 		}, *product.StoreID)
 
+		for i := 0; i < len(items); i++ {
+			fmt.Println(items[i].ID)
+		}
+
+		require.Nil(t, err)
 		require.NotEmpty(t, items)
 	})
 
