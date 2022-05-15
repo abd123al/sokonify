@@ -1,6 +1,7 @@
 export 'auth_wrapper.dart';
 export 'auth_wrapper_cubit.dart';
 export 'empty_list.dart';
+export 'searchable_dropdown.dart';
 export 'store_builder.dart';
 export 'store_builder_cubit.dart';
 export 'uni_bloc_provider.dart';
