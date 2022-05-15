@@ -7,34 +7,10 @@ import '../../../repositories/item_repository.dart';
 import 'create_item_cubit.dart';
 import 'items_list_cubit.dart';
 
-class CreateItemPage extends StatelessWidget {
-  const CreateItemPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("New Item"),
-      ),
-      body: const CreateItemWidget(),
-    );
-  }
-}
-
-class CreateItemWidget extends StatefulWidget {
-  const CreateItemWidget({
+class CreateItemPage extends StatefulWidget {
+  const CreateItemPage({
     Key? key,
-    this.message,
-    this.onSuccess,
   }) : super(key: key);
-
-  /// If users have no stores, they will be greeted by this msg
-  /// which will aid them in creating new store.
-  final String? message;
-
-  /// When users have no default store we are going to switch to this
-  /// one automatically
-  final Function(BuildContext, CreateItem$Mutation$Item)? onSuccess;
 
   @override
   State<StatefulWidget> createState() {
@@ -42,11 +18,20 @@ class CreateItemWidget extends StatefulWidget {
   }
 }
 
-class _CreateItemPageState extends State<CreateItemWidget> {
-  final passwordController = TextEditingController();
+class _CreateItemPageState extends State<CreateItemPage> {
+  final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("New Item"),
+      ),
+      body: _buildForm(context),
+    );
+  }
+
+  Card _buildForm(BuildContext context) {
     return Card(
       elevation: 16,
       child: Form(
@@ -54,15 +39,9 @@ class _CreateItemPageState extends State<CreateItemWidget> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              if (widget.message != null)
-                Text(
-                  widget.message!,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              const Divider(),
               TextField(
                 autofocus: true,
-                controller: passwordController,
+                controller: _passwordController,
                 keyboardType: TextInputType.text,
                 decoration: const InputDecoration(
                   labelText: 'Facility name',
@@ -77,7 +56,7 @@ class _CreateItemPageState extends State<CreateItemWidget> {
                 onSuccess: (context, data) {
                   BlocProvider.of<ItemsListCubit>(context).addItem(data);
                 },
-                pop: widget.onSuccess == null,
+                pop: true,
                 builder: (context, cubit) {
                   return Button(
                     padding: EdgeInsets.zero,
@@ -105,7 +84,7 @@ class _CreateItemPageState extends State<CreateItemWidget> {
 
   @override
   void dispose() {
-    passwordController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 }
