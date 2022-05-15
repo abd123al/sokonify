@@ -8,12 +8,15 @@ import (
 
 func CreateStore(db *gorm.DB, UserID int, input model.StoreInput) (*model.Store, error) {
 	var store = model.Store{
-		Address:     input.Address,
-		Description: input.Description,
-		Email:       input.Email,
-		Name:        input.Name,
-		Tin:         input.Tin,
-		UserID:      UserID,
+		Address:      input.Address,
+		Description:  input.Description,
+		Email:        input.Email,
+		Name:         input.Name,
+		Tin:          input.Tin,
+		StoreType:    input.StoreType,
+		BusinessType: input.BusinessType,
+		TemplateType: input.TemplateType,
+		UserID:       UserID,
 	}
 
 	err := db.Transaction(func(tx *gorm.DB) error {

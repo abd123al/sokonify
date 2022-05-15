@@ -14,8 +14,11 @@ func TestUnits(t *testing.T) {
 	store := util.CreateStore(DB, &user.ID)
 
 	t.Run("CreateUnit", func(t *testing.T) {
+		template := model.TemplateTypePharmacy
+
 		unit, _ := repository.CreateUnit(DB, model.UnitInput{
-			Name: "Tablets",
+			Name:         "Tablets",
+			TemplateType: &template,
 		}, repository.CreateUnitsArgs{
 			StoreID: &store.ID,
 			UserID:  &user.ID,

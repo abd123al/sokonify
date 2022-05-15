@@ -12,9 +12,10 @@ type CreateUnitsArgs struct {
 
 func CreateUnit(db *gorm.DB, input model.UnitInput, Args CreateUnitsArgs) (*model.Unit, error) {
 	unit := model.Unit{
-		Name:    input.Name,
-		StoreID: Args.StoreID,
-		UserID:  Args.UserID,
+		Name:         input.Name,
+		TemplateType: input.TemplateType,
+		StoreID:      Args.StoreID,
+		UserID:       Args.UserID,
 	}
 	result := db.Create(&unit)
 	return &unit, result.Error

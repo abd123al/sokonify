@@ -52,6 +52,11 @@ enum StoreType {
     other
 }
 
+enum TemplateType {
+    pharmacy
+    guest
+}
+
 enum BusinessType {
     retail
     wholesale
@@ -423,6 +428,9 @@ type Store implements Gorm {
     storeType: StoreType!
     businessType: BusinessType!
 
+    #user may remove this option to remove our products suggestions
+    templateType : TemplateType
+
     # Creator of store
     userId: Int!
     user: User! @goTag(key: "gorm", value: "foreignKey:UserID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
@@ -438,8 +446,9 @@ input StoreInput {
     name: String!
     #phones: [String!] @goTag(key: "gorm", value: "size:50;")
     tin: String
-    storeType: StoreType = other
+    storeType: StoreType! = other
     businessType: BusinessType!
+    templateType : TemplateType
 }
 
 type Order implements Gorm {
@@ -615,7 +624,7 @@ type Unit implements Gorm {
     name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(20);default:null")
 
     #We will add common units based on this
-    storeType : StoreType
+    templateType : TemplateType
 
     storeId: Int
     store: Store @goTag(key: "gorm", value:  "foreignKey:StoreID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
@@ -626,7 +635,7 @@ type Unit implements Gorm {
 
 input UnitInput {
     name: String!
-    storeType : StoreType
+    templateType : TemplateType
 }
 
 #todo remove storeId everywhere and use JWT for that.
