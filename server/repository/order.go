@@ -55,7 +55,7 @@ func FindOrders(DB *gorm.DB, args model.OrdersArgs, StoreID int) ([]*model.Order
 	Limit := args.Limit
 	Offset := args.Offset
 
-	q := DB.Debug()
+	q := DB //.Debug()
 
 	//todo handle status
 	if By == model.OrdersByStore {
@@ -67,21 +67,28 @@ func FindOrders(DB *gorm.DB, args model.OrdersArgs, StoreID int) ([]*model.Order
 			})
 
 			result = q.Where("orders.created_at BETWEEN ? AND ?", StartDate, EndDate).Where(
-				q.Where(&model.Order{IssuerID: StoreID}).Or(&model.Order{ReceiverID: &StoreID})).Where(&model.Order{Type: *Type}).Order(sort).Find(&orders)
+				q.Where(
+					&model.Order{IssuerID: StoreID}).Or(
+					&model.Order{ReceiverID: &StoreID})).Where(
+				&model.Order{Type: Type}).Order(sort).Find(&orders)
 		} else {
 			result = q.Where(
-				DB.Where(&model.Order{IssuerID: StoreID}).Or(&model.Order{ReceiverID: &StoreID})).Where(&model.Order{Type: *Type}).Order(sort).Limit(*Limit).Offset(*Offset).Find(&orders)
+				DB.Where(&model.Order{IssuerID: StoreID}).Or(&model.Order{ReceiverID: &StoreID})).Where(&model.Order{Type: Type}).Order(sort).Limit(*Limit).Offset(*Offset).Find(&orders)
 		}
 	} else if By == model.OrdersByStaff {
 		//Here StaffID is actually userId
-		result = q.Where(&model.Order{StaffID: *args.Value, Type: *Type}).Order(sort).Limit(*Limit).Offset(*Offset).Find(&orders)
+		result = q.Where(&model.Order{StaffID: *args.Value, Type: Type}).Order(sort).Limit(*Limit).Offset(*Offset).Find(&orders)
 	} else if By == model.OrdersByCustomer {
-		result = q.Where(&model.Order{CustomerID: args.Value, Type: *Type}).Order(sort).Limit(*Limit).Offset(*Offset).Find(&orders)
+		result = q.Where(&model.Order{CustomerID: args.Value, Type: Type}).Order(sort).Limit(*Limit).Offset(*Offset).Find(&orders)
 	} else {
 		panic(fmt.Errorf("not implemented"))
 	}
 
-	return orders, result.Error
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return orders, nil
 }
 
 func FindOrder(db *gorm.DB, ID int) (*model.Order, error) {

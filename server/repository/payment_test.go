@@ -20,7 +20,7 @@ func TestPayment(t *testing.T) {
 
 		var call = func() (*model.Payment, error) {
 			p, e := repository.CreateOrderPayment(DB, user.ID, model.OrderPaymentInput{
-				OrderID:     order.ID,
+				OrderID:     order.Order.ID,
 				Description: nil,
 				ReferenceID: nil,
 				Method:      model.PaymentMethodCash,

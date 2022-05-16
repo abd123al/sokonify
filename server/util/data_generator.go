@@ -168,7 +168,14 @@ type CreateOrderArgs struct {
 	Items      []*model.Item
 }
 
-func CreateOrder(DB *gorm.DB, args *CreateOrderArgs) *model.Order {
+type CreateOrderResult struct {
+	Order      *model.Order
+	IssuerID   int
+	StaffId    int
+	CustomerID int
+}
+
+func CreateOrder(DB *gorm.DB, args *CreateOrderArgs) CreateOrderResult {
 	var IssuerID int
 	var StaffId int
 	var CustomerID int
@@ -208,7 +215,13 @@ func CreateOrder(DB *gorm.DB, args *CreateOrderArgs) *model.Order {
 		Items:      ItemsInput,
 	}, IssuerID)
 
-	return order
+	result := CreateOrderResult{
+		Order:      order,
+		IssuerID:   IssuerID,
+		StaffId:    StaffId,
+		CustomerID: CustomerID,
+	}
+	return result
 }
 
 func CreateExpense(DB *gorm.DB, StoreID *int) *model.Expense {
@@ -266,7 +279,7 @@ func CreatePayment(DB *gorm.DB, Args *CreatePaymentArgs, Order bool) CreatePayme
 			Items:      []*model.Item{item},
 		})
 		payment, _ = repository.CreateOrderPayment(DB, StaffID, model.OrderPaymentInput{
-			OrderID: order.ID,
+			OrderID: order.Order.ID,
 			Method:  model.PaymentMethodCash,
 		})
 

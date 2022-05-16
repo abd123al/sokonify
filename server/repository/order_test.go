@@ -47,4 +47,21 @@ func TestOrders(t *testing.T) {
 		require.Nil(t, order)
 		require.NotNil(t, err)
 	})
+
+	t.Run("FindOrders by timeframe", func(t *testing.T) {
+		timeframe := model.TimeframeTypeToday
+
+		orderResult := util.CreateOrder(DB, nil)
+
+		orders, err := repository.FindOrders(DB, model.OrdersArgs{
+			Mode:      model.FetchModeFull,
+			By:        model.OrdersByStore,
+			Timeframe: &timeframe,
+			Type:      orderResult.Order.Type,
+		}, orderResult.IssuerID)
+
+		require.Nil(t, err)
+		require.NotEmpty(t, orders)
+		require.NotEqual(t, orders[0].ID, 0)
+	})
 }

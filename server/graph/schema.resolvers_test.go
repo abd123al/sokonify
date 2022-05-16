@@ -34,7 +34,7 @@ func TestResolvers(t *testing.T) {
 		StaffId:    user.ID,
 		Items:      []*model.Item{item},
 		CustomerID: customer.ID,
-	})
+	}).Order
 
 	//Graphql client
 	router := util.ConfigureGraphql(DB)
