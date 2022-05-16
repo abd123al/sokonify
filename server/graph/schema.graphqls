@@ -503,7 +503,7 @@ input OrdersArgs {
     limit: Int =10
     offset:Int = 0
     sortBy:SortBy = DESC
-    type:OrderType = in
+    type:OrderType! = in
     status:OrderStatus
     startDate:Time
     endDate:Time

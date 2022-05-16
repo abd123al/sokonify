@@ -545,7 +545,7 @@ input OrdersArgs {
     startDate: Time
     status: OrderStatus
     timeframe: TimeframeType
-    type: OrderType = in
+    type: OrderType! = in
     value: ID
 }
 
