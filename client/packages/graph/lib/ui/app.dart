@@ -17,7 +17,7 @@ class App extends StatelessWidget {
     Application.router = router;
 
     return MaterialApp(
-      title: 'Mahesabu',
+      title: 'Sokonify',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
