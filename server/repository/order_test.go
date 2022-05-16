@@ -64,4 +64,23 @@ func TestOrders(t *testing.T) {
 		require.NotEmpty(t, orders)
 		require.NotEqual(t, orders[0].ID, 0)
 	})
+
+	t.Run("FindOrders by offset and limit", func(t *testing.T) {
+		offset := 0
+		limit := 10
+
+		orderResult := util.CreateOrder(DB, nil)
+
+		orders, err := repository.FindOrders(DB, model.OrdersArgs{
+			Mode:   model.FetchModePagination,
+			By:     model.OrdersByStore,
+			Offset: &offset,
+			Limit:  &limit,
+			Type:   orderResult.Order.Type,
+		}, orderResult.IssuerID)
+
+		require.Nil(t, err)
+		require.NotEmpty(t, orders)
+		require.NotEqual(t, orders[0].ID, 0)
+	})
 }

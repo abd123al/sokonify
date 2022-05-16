@@ -73,7 +73,9 @@ func FindOrders(DB *gorm.DB, args model.OrdersArgs, StoreID int) ([]*model.Order
 				&model.Order{Type: Type}).Order(sort).Find(&orders)
 		} else {
 			result = q.Where(
-				DB.Where(&model.Order{IssuerID: StoreID}).Or(&model.Order{ReceiverID: &StoreID})).Where(&model.Order{Type: Type}).Order(sort).Limit(*Limit).Offset(*Offset).Find(&orders)
+				DB.Where(&model.Order{IssuerID: StoreID}).Or(
+					&model.Order{ReceiverID: &StoreID})).Where(
+				&model.Order{Type: Type}).Order(sort).Limit(*Limit).Offset(*Offset).Find(&orders)
 		}
 	} else if By == model.OrdersByStaff {
 		//Here StaffID is actually userId
