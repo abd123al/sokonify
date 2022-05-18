@@ -36,109 +36,43 @@ class _OrderItemState extends State<OrderItem> {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = BlocProvider.of<NewOrderCubit>(context);
+    //final cubit = BlocProvider.of<NewOrderCubit>(context);
 
-    if (widget.item.state == NewOrderItemState.searching) {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Autocomplete<Items$Query$Item>(
-          optionsBuilder: (TextEditingValue textEditingValue) {
-            if (textEditingValue.text == '') {
-              return const Iterable<Items$Query$Item>.empty();
-            }
-
-            return widget.items.where((option) {
-              final i = ItemTile.formatItemName(option).toLowerCase();
-              return i.contains(textEditingValue.text.toLowerCase());
-            });
-          },
-          onSelected: (selection) {
-            cubit.addItem(selection);
-          },
-        ),
-      );
-    } else if (widget.item.state == NewOrderItemState.entering) {
-      return Column(
-        children: [
-          Container(
-            color: Colors.blue.shade50,
-            child: Text(ItemTile.formatItemName(widget.item.item!)),
-          ),
-          TextField(
-            autofocus: true,
-            controller: _quantityController,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
-              hintText: 'Enter quantity',
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              cubit.editQuantity(
-                widget.index,
-                int.tryParse(_quantityController.text) ?? 0,
-              );
-            },
-            child: const Text('Save'),
-          ),
-        ],
-      );
-    } else if (widget.item.state == NewOrderItemState.editing) {
-      return ListTile(
-        title: Text(ItemTile.formatItemName(widget.item.item!)),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
+    return ExpansionTile(
+      title: Text(
+          "${(widget.index + 1)}. ${ItemTile.formatItemName(widget.item.item)}"),
+      subtitle: Text(
+        "${widget.item.quantity} Units",
+        style: Theme.of(context).textTheme.titleSmall,
+      ),
+      trailing: Text(
+        widget.item.price,
+        style: Theme.of(context).textTheme.titleMedium,
+      ),
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            IconButton(
+            const Expanded(child: SizedBox()),
+            ElevatedButton.icon(
+              label: const Text("Edit"),
               onPressed: () {},
-              icon: const Icon(Icons.cancel, color: Colors.grey),
-            ),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.save, color: Colors.blue),
-            )
-          ],
-        ),
-        subtitle: TextField(
-          autofocus: true,
-          controller: _quantityController,
-          keyboardType: TextInputType.number,
-          decoration: const InputDecoration(
-            hintText: 'Enter quantity',
-          ),
-        ),
-      );
-    } else {
-      return Column(
-        children: [
-          Text(
-              "${(widget.index)}. ${ItemTile.formatItemName(widget.item.item!)}"),
-          Text(
-            widget.item.price,
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(widget.item.quantity.toString()),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.edit, color: Colors.blue),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.delete, color: Colors.red),
-                  ),
-                ],
+              icon: const Icon(
+                Icons.edit, /* color: Colors.blue*/
               ),
-            ],
-          ),
-        ],
-      );
-    }
+            ),
+            const SizedBox(width: 16),
+            ElevatedButton.icon(
+              label: const Text("Delete"),
+              onPressed: () {},
+              icon: const Icon(
+                Icons.delete, /*color: Colors.red*/
+              ),
+            ),
+          ],
+        )
+      ],
+    );
   }
 
   @override
@@ -178,16 +112,58 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       builder: (context, data, _) {
         return BlocBuilder<NewOrderCubit, NewOrder>(
           builder: (context, state) {
-            return ListView.builder(
-              itemCount: state.items.length,
-              itemBuilder: (context, index) {
-                final item = state.items[index];
-                return OrderItem(
-                  item: item,
-                  items: data.items,
-                  index: index,
-                );
-              },
+            final cubit = BlocProvider.of<NewOrderCubit>(context);
+
+            return Column(
+              children: [
+                Card(
+                  elevation: 16,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Builder(
+                      builder: (context) {
+                        return Autocomplete<Items$Query$Item>(
+                          optionsBuilder: (TextEditingValue textEditingValue) {
+                            if (textEditingValue.text == '') {
+                              return const Iterable<Items$Query$Item>.empty();
+                            }
+
+                            return data.items.where((option) {
+                              final i =
+                                  ItemTile.formatItemName(option).toLowerCase();
+                              return i.contains(
+                                  textEditingValue.text.toLowerCase());
+                            });
+                          },
+                          onSelected: (selection) {
+                            cubit.addItem(selection);
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: state.items.length,
+                    itemBuilder: (context, index) {
+                      final item = state.items[index];
+                      return OrderItem(
+                        item: item,
+                        items: data.items,
+                        index: index,
+                      );
+                    },
+                  ),
+                ),
+                Card(
+                  elevation: 16,
+                  child: ListTile(
+                    title: const Text("Total Amount"),
+                    trailing: Text(state.totalPrice),
+                  ),
+                )
+              ],
             );
           },
         );

@@ -2,39 +2,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 
-class Item with ItemPartsMixin {
-  @override
-  String toString() {
-    return product.name;
-  }
-}
-
-enum NewOrderItemState {
-  /// Here we show fresh tile with search box so user may choose
-  searching,
-
-  /// Here we show fresh tile with search box so user may choose
-  entering,
-
-  /// Here we will show
-  done,
-
-  /// Here we will show edit input which will allow add/reduce quantities
-  editing,
-}
-
 class NewOrderItem {
   NewOrderItem({
     required this.quantity,
     required this.item,
-    required this.state,
     this.error,
   });
 
-  /// This tells us what is going on
-  final NewOrderItemState state;
   final int quantity;
-  final Items$Query$Item? item;
+  final Items$Query$Item item;
 
   /// Lets say required quantity exceeds stock here is where we set that error
   final String? error;
@@ -48,13 +24,11 @@ class NewOrderItem {
   }
 
   NewOrderItem copyWith({
-    NewOrderItemState? state,
     int? quantity,
     Items$Query$Item? item,
     String? error,
   }) {
     return NewOrderItem(
-      state: state ?? this.state,
       item: item ?? this.item,
       quantity: quantity ?? this.quantity,
       error: error ?? this.error,
@@ -98,13 +72,7 @@ class NewOrder {
 
   NewOrder empty() {
     return NewOrder(
-      items: [
-        NewOrderItem(
-          quantity: 0,
-          item: null,
-          state: NewOrderItemState.searching,
-        ),
-      ],
+      items: [],
     );
   }
 
@@ -133,7 +101,6 @@ class NewOrderCubit extends Cubit<NewOrder> {
         item: NewOrderItem(
           quantity: 0,
           item: item,
-          state: NewOrderItemState.entering,
         ),
       ),
     );
@@ -148,7 +115,6 @@ class NewOrderCubit extends Cubit<NewOrder> {
       state.edit(
         item: item.copyWith(
           quantity: quantity,
-          state: NewOrderItemState.done,
         ),
         index: index,
       ),
