@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../../repositories/repositories.dart';
 import '../pages/home/stats/simple_stats_cubit.dart';
+import '../pages/order/new_order_cubit.dart';
 import '../pages/pages.dart';
 import '../pages/store/stores_list_cubit.dart';
 
@@ -110,6 +111,11 @@ class UniBlocProviderState extends State<UniBlocProvider> {
             BlocProvider<OrdersListCubit>(
               create: (context) {
                 return OrdersListCubit(orderRepository)..fetch();
+              },
+            ),
+            BlocProvider<NewOrderCubit>(
+              create: (context) {
+                return NewOrderCubit();
               },
             ),
           ],

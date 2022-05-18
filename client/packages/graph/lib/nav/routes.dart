@@ -7,6 +7,7 @@ class Routes {
   static String categories = "/categories";
   static String createCategory = "/createCategory";
   static String createItem = "/createItem";
+  static String createOrder = "/createOrder";
   static String createProduct = "/createProduct";
   static String createStore = "/createStore";
   static String createUnit = "/createUnit";
@@ -66,6 +67,12 @@ class Routes {
     router.define(
       units,
       handler: unitsListPageRouterHandler,
+      transitionType: TransitionType.inFromLeft,
+    );
+
+    router.define(
+      createOrder,
+      handler: createOrderPageRouterHandler,
       transitionType: TransitionType.inFromLeft,
     );
   }

@@ -12,7 +12,7 @@ class ItemTile extends StatelessWidget {
   final Items$Query$Item item;
   final String currency;
 
-  static formatItemName(Items$Query$Item item) {
+  static String formatItemName(Items$Query$Item item) {
     final n = item.product.name;
     final b = item.brand?.name;
 

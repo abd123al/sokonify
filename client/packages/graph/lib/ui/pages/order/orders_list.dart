@@ -25,7 +25,7 @@ class OrdersListScaffold extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => redirectTo(context, Routes.createItem),
+        onPressed: () => redirectTo(context, Routes.createOrder),
         tooltip: 'Add',
         icon: const Icon(Icons.add),
         label: const Text("New Order"),
