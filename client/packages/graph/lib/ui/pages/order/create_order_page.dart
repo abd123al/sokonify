@@ -1,5 +1,6 @@
 import 'package:blocitory/helpers/resource_list_data.dart';
 import 'package:blocitory/helpers/resource_query_widget.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graph/ui/pages/inventory/item_tile.dart';
@@ -39,8 +40,7 @@ class _OrderItemState extends State<OrderItem> {
     //final cubit = BlocProvider.of<NewOrderCubit>(context);
 
     return ExpansionTile(
-      title: Text(
-          "${(widget.index + 1)}. ${ItemTile.formatItemName(widget.item.item)}"),
+      title: Text(ItemTile.formatItemName(widget.item.item)),
       subtitle: Text(
         "${widget.item.quantity} Units",
         style: Theme.of(context).textTheme.titleSmall,
@@ -95,6 +95,7 @@ class CreateOrderPage extends StatefulWidget {
 
 class _CreateOrderPageState extends State<CreateOrderPage> {
   final _quantityController = TextEditingController();
+  Items$Query$Item? _selected;
 
   @override
   Widget build(BuildContext context) {
@@ -122,22 +123,29 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: Builder(
                       builder: (context) {
-                        return Autocomplete<Items$Query$Item>(
-                          optionsBuilder: (TextEditingValue textEditingValue) {
-                            if (textEditingValue.text == '') {
-                              return const Iterable<Items$Query$Item>.empty();
-                            }
-
-                            return data.items.where((option) {
-                              final i =
-                                  ItemTile.formatItemName(option).toLowerCase();
-                              return i.contains(
-                                  textEditingValue.text.toLowerCase());
-                            });
+                        return DropdownSearch<Items$Query$Item>(
+                          showSearchBox: true,
+                          itemAsString: (u) => ItemTile.formatItemName(u!),
+                          filterFn: (i, query) {
+                            return ItemTile.formatItemName(i!)
+                                .toLowerCase()
+                                .contains(query ?? "");
                           },
-                          onSelected: (selection) {
-                            cubit.addItem(selection);
-                          },
+                          isFilteredOnline: false,
+                          mode: Mode.MENU,
+                          items: data.items,
+                          //popupTitle: const Text("Items List"),
+                          dropdownSearchDecoration: const InputDecoration(
+                            labelText: "Enter item",
+                            hintText: "Type product name",
+                            border: OutlineInputBorder(),
+                          ),
+                          onChanged: (item) => setState(() {
+                            _selected = item;
+                          }),
+                          searchDelay: const Duration(milliseconds: 0),
+                          popupItemBuilder: (_, i, __) => ItemTile(item: i),
+                          showClearButton: true,
                         );
                       },
                     ),
@@ -157,6 +165,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                   ),
                 ),
                 Card(
+                  color: Colors.blue.shade50,
                   elevation: 16,
                   child: ListTile(
                     title: const Text("Total Amount"),

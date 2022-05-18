@@ -47,7 +47,7 @@ class NewOrder {
 
   String get totalPrice {
     final arr = items.map((e) => e.price).toList();
-    return arr[0];
+    return arr.isNotEmpty ? "99" : "";
   }
 
   NewOrder add({
