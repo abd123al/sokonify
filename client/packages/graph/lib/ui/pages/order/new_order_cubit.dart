@@ -54,7 +54,7 @@ class NewOrder {
     required NewOrderItem item,
   }) {
     return NewOrder(
-      items: [...items, item],
+      items: [item, ...items],
     );
   }
 
@@ -95,11 +95,11 @@ class NewOrderCubit extends Cubit<NewOrder> {
   /// todo return error for duplicated items
   /// todo add it to the top
   /// todo add new items at the bottom and push that thing at the top
-  addItem(Items$Query$Item item) {
+  addItem(Items$Query$Item item, int quantity) {
     emit(
       state.add(
         item: NewOrderItem(
-          quantity: 0,
+          quantity: quantity,
           item: item,
         ),
       ),

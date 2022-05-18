@@ -1,5 +1,4 @@
-import 'package:blocitory/helpers/resource_list_data.dart';
-import 'package:blocitory/helpers/resource_query_widget.dart';
+import 'package:blocitory/blocitory.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -94,7 +93,8 @@ class CreateOrderPage extends StatefulWidget {
 }
 
 class _CreateOrderPageState extends State<CreateOrderPage> {
-  final _quantityController = TextEditingController();
+  final _quantityEditController = TextEditingController();
+  final _quantityAddController = TextEditingController();
   Items$Query$Item? _selected;
 
   @override
@@ -115,15 +115,16 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           builder: (context, state) {
             final cubit = BlocProvider.of<NewOrderCubit>(context);
 
-            return Column(
+            return ListView(
+              controller: ScrollController(),
               children: [
                 Card(
                   elevation: 16,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Builder(
-                      builder: (context) {
-                        return DropdownSearch<Items$Query$Item>(
+                    child: Column(
+                      children: [
+                        DropdownSearch<Items$Query$Item>(
                           showSearchBox: true,
                           itemAsString: (u) => ItemTile.formatItemName(u!),
                           filterFn: (i, query) {
@@ -143,35 +144,73 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                           onChanged: (item) => setState(() {
                             _selected = item;
                           }),
+                          selectedItem: _selected,
                           searchDelay: const Duration(milliseconds: 0),
                           popupItemBuilder: (_, i, __) => ItemTile(item: i),
                           showClearButton: true,
-                        );
-                      },
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        if (_selected != null)
+                          TextField(
+                            controller: _quantityAddController,
+                            textInputAction: TextInputAction.send,
+                            keyboardType: TextInputType.number,
+                            autofocus: true,
+                            decoration: InputDecoration(
+                              hintText: 'Enter Quantity',
+                              labelText: "Quantity",
+                              border: const OutlineInputBorder(),
+                              suffixIcon: TextButton.icon(
+                                onPressed: () {
+                                  cubit.addItem(
+                                    _selected!,
+                                    int.parse(_quantityAddController.text),
+                                  );
+
+                                  //Resetting fields
+                                  _quantityAddController.text = "";
+                                  setState(() {
+                                    _selected = null;
+                                  });
+                                },
+                                icon: const Icon(Icons.add_box, size: 40),
+                                label: const Text("Add"),
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
                   ),
                 ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: state.items.length,
-                    itemBuilder: (context, index) {
-                      final item = state.items[index];
-                      return OrderItem(
-                        item: item,
-                        items: data.items,
-                        index: index,
-                      );
-                    },
-                  ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: state.items.length,
+                  itemBuilder: (context, index) {
+                    final item = state.items[index];
+                    return OrderItem(
+                      item: item,
+                      items: data.items,
+                      index: index,
+                    );
+                  },
                 ),
-                Card(
-                  color: Colors.blue.shade50,
-                  elevation: 16,
-                  child: ListTile(
-                    title: const Text("Total Amount"),
-                    trailing: Text(state.totalPrice),
+                if (state.items.isNotEmpty)
+                  Card(
+                    color: Colors.blue.shade50,
+                    elevation: 16,
+                    child: ListTile(
+                      title: const Text("Total Amount"),
+                      trailing: Text(state.totalPrice),
+                    ),
                   ),
-                )
+                if (state.items.isNotEmpty)
+                  Button(
+                    title: "Submit",
+                    callback: () {},
+                  ),
               ],
             );
           },
@@ -182,7 +221,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
 
   @override
   void dispose() {
-    _quantityController.dispose();
+    _quantityEditController.dispose();
     super.dispose();
   }
 }
