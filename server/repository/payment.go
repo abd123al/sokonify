@@ -56,11 +56,11 @@ func CreateOrderPayment(DB *gorm.DB, StaffID int, input model.OrderPaymentInput)
 
 		//We think + and - in terms of cash movement
 		//todo we should make sure amount comes unsigned.
-		if order.Type == model.OrderTypeOut || order.Type == model.OrderTypeLoss {
+		if order.Type == model.OrderTypePurchase || order.Type == model.OrderTypeLoss {
 			payment.Amount = "-" + payment.Amount
-		} else if order.Type == model.OrderTypeIn {
+		} else if order.Type == model.OrderTypeSale {
 			payment.Amount = "+" + payment.Amount
-		} else if order.Type == model.OrderTypeNeutral {
+		} else if order.Type == model.OrderTypeTransfer {
 			return errors.New(`you can't save payment for transfer order.'`)
 		} else {
 			return errors.New(order.Type.String() + " is not implemented in payments.")

@@ -209,9 +209,8 @@ func CreateOrder(DB *gorm.DB, args *CreateOrderArgs) CreateOrderResult {
 	}
 
 	order, _ := repository.CreateOrder(DB, StaffId, model.OrderInput{
-		IssuerID:   IssuerID,
 		CustomerID: &CustomerID,
-		Type:       model.OrderTypeIn,
+		Type:       model.OrderTypeSale,
 		Items:      ItemsInput,
 	}, IssuerID)
 

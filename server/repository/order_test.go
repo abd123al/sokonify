@@ -16,8 +16,7 @@ func TestOrders(t *testing.T) {
 
 	t.Run("CreateOrder with sufficient quantity", func(t *testing.T) {
 		order, err := repository.CreateOrder(DB, user.ID, model.OrderInput{
-			Type:     model.OrderTypeIn,
-			IssuerID: store.ID,
+			Type: model.OrderTypeSale,
 			Items: []*model.OrderItemInput{
 				{
 					Quantity: item.Quantity,
@@ -33,8 +32,7 @@ func TestOrders(t *testing.T) {
 
 	t.Run("CreateOrder with insufficient quantity", func(t *testing.T) {
 		order, err := repository.CreateOrder(DB, user.ID, model.OrderInput{
-			Type:     model.OrderTypeIn,
-			IssuerID: store.ID,
+			Type: model.OrderTypePurchase,
 			Items: []*model.OrderItemInput{
 				{
 					Quantity: item.Quantity + 1,

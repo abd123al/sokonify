@@ -28,13 +28,13 @@ enum OrderStatus {
 # Here we consider things in perception of where money goes (not items)
 enum OrderType {
     # buying items/paying salary/expenses. Items may+, Money -.
-    out #todo rename to purchase and sell
+    sale
     # selling items. Items may-, Money +
-    in
+    purchase
     # expired/damaged/stolen Items -, Money -
     loss
     # transfer from one store to another, Items neutral, Money neutral
-    neutral #todo transfer
+    transfer
 }
 
 enum PaymentMethod {
@@ -483,7 +483,6 @@ type Order implements Gorm {
 
 input OrderInput {
     type: OrderType!
-    issuerId: Int!
     customerId: Int
     receiverId: Int
     comment: String
@@ -503,7 +502,7 @@ input OrdersArgs {
     limit: Int =10
     offset:Int = 0
     sortBy:SortBy = DESC
-    type:OrderType! = in
+    type:OrderType!
     status:OrderStatus
     startDate:Time
     endDate:Time
