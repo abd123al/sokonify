@@ -3,6 +3,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graph/ui/pages/inventory/item_tile.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../inventory/items_list_cubit.dart';
@@ -122,65 +123,75 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                   elevation: 16,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        DropdownSearch<Items$Query$Item>(
-                          showSearchBox: true,
-                          itemAsString: (u) => ItemTile.formatItemName(u!),
-                          filterFn: (i, query) {
-                            return ItemTile.formatItemName(i!)
-                                .toLowerCase()
-                                .contains(query ?? "");
-                          },
-                          isFilteredOnline: false,
-                          mode: Mode.MENU,
-                          items: data.items,
-                          //popupTitle: const Text("Items List"),
-                          dropdownSearchDecoration: const InputDecoration(
-                            labelText: "Enter item",
-                            hintText: "Type product name",
-                            border: OutlineInputBorder(),
+                    child: Builder(
+                      builder: (context) {
+                        final List<Widget> children = [
+                          DropdownSearch<Items$Query$Item>(
+                            showSearchBox: true,
+                            itemAsString: (u) => ItemTile.formatItemName(u!),
+                            filterFn: (i, query) {
+                              return ItemTile.formatItemName(i!)
+                                  .toLowerCase()
+                                  .contains(query ?? "");
+                            },
+                            isFilteredOnline: false,
+                            mode: Mode.MENU,
+                            items: data.items,
+                            dropdownSearchDecoration: const InputDecoration(
+                              labelText: "Enter item",
+                              hintText: "Type product name",
+                              border: OutlineInputBorder(),
+                            ),
+                            onChanged: (item) => setState(() {
+                              _selected = item;
+                            }),
+                            selectedItem: _selected,
+                            searchDelay: const Duration(milliseconds: 0),
+                            popupItemBuilder: (_, i, __) => ItemTile(item: i),
+                            showClearButton: true,
                           ),
-                          onChanged: (item) => setState(() {
-                            _selected = item;
-                          }),
-                          selectedItem: _selected,
-                          searchDelay: const Duration(milliseconds: 0),
-                          popupItemBuilder: (_, i, __) => ItemTile(item: i),
-                          showClearButton: true,
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        if (_selected != null)
-                          TextField(
-                            controller: _quantityAddController,
-                            textInputAction: TextInputAction.send,
-                            keyboardType: TextInputType.number,
-                            autofocus: true,
-                            decoration: InputDecoration(
-                              hintText: 'Enter Quantity',
-                              labelText: "Quantity",
-                              border: const OutlineInputBorder(),
-                              suffixIcon: TextButton.icon(
-                                onPressed: () {
-                                  cubit.addItem(
-                                    _selected!,
-                                    int.parse(_quantityAddController.text),
-                                  );
+                          const SizedBox(
+                            height: 16,
+                            width: 8,
+                          ),
+                          if (_selected != null)
+                            TextField(
+                              controller: _quantityAddController,
+                              textInputAction: TextInputAction.send,
+                              keyboardType: TextInputType.number,
+                              autofocus: true,
+                              decoration: InputDecoration(
+                                hintText: 'Enter Quantity',
+                                labelText: "Quantity",
+                                border: const OutlineInputBorder(),
+                                suffixIcon: TextButton.icon(
+                                  onPressed: () {
+                                    cubit.addItem(
+                                      _selected!,
+                                      int.parse(_quantityAddController.text),
+                                    );
 
-                                  //Resetting fields
-                                  _quantityAddController.text = "";
-                                  setState(() {
-                                    _selected = null;
-                                  });
-                                },
-                                icon: const Icon(Icons.add_box, size: 40),
-                                label: const Text("Add"),
+                                    //Resetting fields
+                                    _quantityAddController.text = "";
+                                    setState(() {
+                                      _selected = null;
+                                    });
+                                  },
+                                  icon: const Icon(Icons.add_box, size: 40),
+                                  label: const Text("Add"),
+                                ),
                               ),
                             ),
+                        ];
+                        return OrientationLayoutBuilder(
+                          portrait: (context) => Column(
+                            children: children,
                           ),
-                      ],
+                          landscape: (context) => Row(
+                            children: children.map((e) => Flexible(child: e)).toList(),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
