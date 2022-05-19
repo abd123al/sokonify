@@ -1,3 +1,4 @@
+import 'package:decimal/decimal.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
@@ -7,16 +8,20 @@ class NewOrderItem {
     required this.quantity,
     required this.item,
     this.error,
+    this.customSellingPrice,
   });
 
   final int quantity;
   final Items$Query$Item item;
+  final String? customSellingPrice;
 
   /// Lets say required quantity exceeds stock here is where we set that error
   final String? error;
 
-  String get price {
-    return "22";
+  String get subTotal {
+    final sub = Decimal.parse(customSellingPrice ?? item.sellingPrice) *
+        Decimal.fromInt(quantity);
+    return sub.toString();
   }
 
   bool get hasError {
@@ -46,8 +51,20 @@ class NewOrder {
   final List<NewOrderItem> items;
 
   String get totalPrice {
-    final arr = items.map((e) => e.price).toList();
-    return arr.isNotEmpty ? "99" : "";
+    final arr = items.map((e) {
+      final subTotal =
+          Decimal.parse(e.customSellingPrice ?? e.item.sellingPrice) *
+              Decimal.fromInt(e.quantity);
+      return subTotal;
+    }).toList();
+
+    var sum = Decimal.parse("0.00");
+
+    for (var i = 0; i < arr.length; i++) {
+      sum += arr[i];
+    }
+
+    return sum.toString();
   }
 
   NewOrder add({

@@ -287,6 +287,13 @@
             </list>
           </value>
         </entry>
+        <entry key="decimal">
+          <value>
+            <list>
+              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/decimal-2.2.0/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="dio">
           <value>
             <list>
@@ -900,6 +907,13 @@
             </list>
           </value>
         </entry>
+        <entry key="rational">
+          <value>
+            <list>
+              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/rational-2.2.0/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="recase">
           <value>
             <list>
@@ -1256,6 +1270,7 @@
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/dart_console-1.0.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/dart_style-2.2.3/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/dbus-0.7.3/lib" />
+      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/decimal-2.2.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/dio-4.0.6/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/dropdown_search-3.0.1/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/equatable-2.0.3/lib" />
@@ -1356,6 +1371,7 @@
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/provider-6.0.2/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/pub_semver-2.1.1/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/pubspec_parse-1.2.0/lib" />
+      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/rational-2.2.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/recase-4.0.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/responsive_builder-0.4.2/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/rxdart-0.27.3/lib" />

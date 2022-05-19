@@ -43,13 +43,16 @@ class _OrderItemState extends State<OrderItem> {
     //final cubit = BlocProvider.of<NewOrderCubit>(context);
 
     return ExpansionTile(
-      title: Text(ItemTile.formatItemName(widget.item.item)),
+      title: Text(
+        ItemTile.formatItemName(widget.item.item),
+        overflow: TextOverflow.ellipsis,
+      ),
       subtitle: Text(
         "${widget.item.quantity} Units",
         style: Theme.of(context).textTheme.titleSmall,
       ),
       trailing: Text(
-        widget.item.price,
+        widget.item.subTotal,
         style: Theme.of(context).textTheme.titleMedium,
       ),
       children: [
@@ -232,7 +235,8 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                             items: state.items
                                 .map(
                                   (e) => OrderItemInput(
-                                    price: e.item.sellingPrice,
+                                    price: e.customSellingPrice ??
+                                        e.item.sellingPrice,
                                     itemId: e.item.id,
                                     quantity: e.quantity,
                                   ),
