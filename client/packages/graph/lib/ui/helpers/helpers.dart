@@ -1,1 +1,1 @@
-export '../widgets/uni_bloc_provider.dart';
+export 'currency_formatter.dart';

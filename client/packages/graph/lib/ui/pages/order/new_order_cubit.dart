@@ -1,7 +1,9 @@
+import 'package:currency_formatter/currency_formatter.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
+import '../../helpers/currency_formatter.dart';
 
 class NewOrderItem {
   NewOrderItem({
@@ -21,7 +23,8 @@ class NewOrderItem {
   String get subTotal {
     final sub = Decimal.parse(customSellingPrice ?? item.sellingPrice) *
         Decimal.fromInt(quantity);
-    return sub.toString();
+
+    return formatCurrency(sub.toString());
   }
 
   bool get hasError {
@@ -64,7 +67,7 @@ class NewOrder {
       sum += arr[i];
     }
 
-    return sum.toString();
+    return formatCurrency(sum.toString());
   }
 
   NewOrder add({

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:graph/ui/helpers/helpers.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 
@@ -42,7 +43,7 @@ class ItemTile extends StatelessWidget {
             ),
             dense: true,
             trailing: Text(
-              "${item.sellingPrice} $currency",
+              formatCurrency(item.sellingPrice),
               style: Theme.of(context).textTheme.titleMedium,
             ),
           );

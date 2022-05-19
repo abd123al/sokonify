@@ -1,8 +1,10 @@
 import 'package:blocitory/blocitory.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 import '../../../../gql/generated/graphql_api.graphql.dart';
+import '../../../helpers/currency_formatter.dart';
 import '../../../widgets/widgets.dart';
 import 'simple_stats_cubit.dart';
 import 'stat_tile.dart';
@@ -19,26 +21,29 @@ class SimpleStats extends StatelessWidget {
     return QueryBuilder<Stats$Query, SimpleStatsCubit>(
       retry: (cubit) => cubit.fetch(),
       builder: (context, data, _) {
+        final netIncome = Decimal.parse(data.totalSalesAmount) -
+            Decimal.parse(data.totalExpensesAmount);
+
         final List<StatTile> children = [
           StatTile(
             title: 'Total Sales',
-            value: data.totalSalesAmount,
+            value: formatCurrency(data.totalSalesAmount),
             color: Colors.brown,
             onTap: () {},
           ),
           StatTile(
-            title: 'Expenses',
-            value: data.totalExpensesAmount,
+            title: 'Total Expenses',
+            value: formatCurrency(data.totalExpensesAmount),
             color: Colors.red,
-          ),
-          const StatTile(
-            title: 'Gross Income',
-            value: "783783.00 TZS",
-            color: Colors.blue,
           ),
           StatTile(
             title: 'Net Income',
-            value: data.netIncome,
+            value: formatCurrency(netIncome.toString()),
+            color: Colors.blue,
+          ),
+          StatTile(
+            title: 'Net Profit',
+            value: formatCurrency(data.netIncome),
             color: Colors.green,
           ),
         ];
