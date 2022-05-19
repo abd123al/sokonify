@@ -102,6 +102,7 @@ class CreateOrderPage extends StatefulWidget {
 class _CreateOrderPageState extends State<CreateOrderPage> {
   final _quantityEditController = TextEditingController();
   final _quantityAddController = TextEditingController();
+  final _commentController = TextEditingController();
   Items$Query$Item? _selected;
 
   @override
@@ -207,49 +208,70 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                 );
               },
             );
-            final bottom = Column(
-              children: [
-                Card(
-                  color: Colors.blue.shade50,
-                  elevation: 16,
-                  child: ListTile(
-                    title: const Text("Total Amount"),
-                    trailing: Text(state.totalPrice),
+            final bottom = Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 0,
+              ),
+              child: Column(
+                children: [
+                  const Divider(),
+                  Container(
+                    color: Colors.blue.shade50,
+                    child: ListTile(
+                      title: Text(
+                        "Total Amount",
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      trailing: Text(
+                        state.totalPrice,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                    ),
                   ),
-                ),
-                MutationBuilder<CreateOrder$Mutation$Order, CreateOrderCubit,
-                    OrderRepository>(
-                  blocCreator: (r) => CreateOrderCubit(r),
-                  onSuccess: (context, data) {
-                    BlocProvider.of<OrdersListCubit>(context)
-                        .addItem(Orders$Query$Order.fromJson(data.toJson()));
-                  },
-                  pop: true,
-                  builder: (context, cubit) {
-                    return Button(
-                      padding: EdgeInsets.zero,
-                      callback: () {
-                        cubit.submit(
-                          OrderInput(
-                            type: OrderType.sale,
-                            items: state.items
-                                .map(
-                                  (e) => OrderItemInput(
-                                    price: e.customSellingPrice ??
-                                        e.item.sellingPrice,
-                                    itemId: e.item.id,
-                                    quantity: e.quantity,
-                                  ),
-                                )
-                                .toList(),
-                          ),
-                        );
-                      },
-                      title: 'Submit',
-                    );
-                  },
-                ),
-              ],
+                  TextField(
+                    controller: _commentController,
+                    keyboardType: TextInputType.text,
+                    decoration: const InputDecoration(
+                      hintText: 'Add optional comment',
+                      labelText: "Comment (Optional)",
+                    ),
+                  ),
+                  MutationBuilder<CreateOrder$Mutation$Order, CreateOrderCubit,
+                      OrderRepository>(
+                    blocCreator: (r) => CreateOrderCubit(r),
+                    onSuccess: (context, data) {
+                      BlocProvider.of<OrdersListCubit>(context)
+                          .addItem(Orders$Query$Order.fromJson(data.toJson()));
+                    },
+                    pop: true,
+                    builder: (context, cubit) {
+                      return Button(
+                        padding: EdgeInsets.zero,
+                        callback: () {
+                          cubit.submit(
+                            OrderInput(
+                              type: OrderType.sale,
+                              comment: _commentController.text,
+                              items: state.items
+                                  .map(
+                                    (e) => OrderItemInput(
+                                      price: e.customSellingPrice ??
+                                          e.item.sellingPrice,
+                                      itemId: e.item.id,
+                                      quantity: e.quantity,
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                          );
+                        },
+                        title: 'Submit',
+                      );
+                    },
+                  ),
+                ],
+              ),
             );
 
             return OrientationLayoutBuilder(
@@ -287,7 +309,9 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
 
   @override
   void dispose() {
+    _quantityAddController.dispose();
     _quantityEditController.dispose();
+    _commentController.dispose();
     super.dispose();
   }
 }
