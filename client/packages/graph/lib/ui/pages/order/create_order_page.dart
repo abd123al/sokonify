@@ -6,8 +6,11 @@ import 'package:graph/ui/pages/inventory/item_tile.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
+import '../../../repositories/order_repository.dart';
 import '../inventory/items_list_cubit.dart';
+import 'create_order_cubit.dart';
 import 'new_order_cubit.dart';
+import 'orders_list_cubit.dart';
 
 class OrderItem extends StatefulWidget {
   const OrderItem({
@@ -211,9 +214,36 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                     trailing: Text(state.totalPrice),
                   ),
                 ),
-                Button(
-                  title: "Submit",
-                  callback: () {},
+                MutationBuilder<CreateOrder$Mutation$Order, CreateOrderCubit,
+                    OrderRepository>(
+                  blocCreator: (r) => CreateOrderCubit(r),
+                  onSuccess: (context, data) {
+                    BlocProvider.of<OrdersListCubit>(context)
+                        .addItem(Orders$Query$Order.fromJson(data.toJson()));
+                  },
+                  pop: true,
+                  builder: (context, cubit) {
+                    return Button(
+                      padding: EdgeInsets.zero,
+                      callback: () {
+                        cubit.submit(
+                          OrderInput(
+                            type: OrderType.sale,
+                            items: state.items
+                                .map(
+                                  (e) => OrderItemInput(
+                                    price: e.item.sellingPrice,
+                                    itemId: e.item.id,
+                                    quantity: e.quantity,
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        );
+                      },
+                      title: 'Submit',
+                    );
+                  },
                 ),
               ],
             );

@@ -15,7 +15,7 @@ class OrdersListCubit extends ResourceListCubit<Orders$Query$Order> {
         OrdersArgs(
           mode: FetchMode.full,
           by: OrdersBy.store,
-          type: OrderType.kw$in,
+          type: OrderType.sale,
         ),
       ),
       parser: (r) {

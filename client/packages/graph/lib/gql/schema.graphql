@@ -375,10 +375,10 @@ enum OrderStatus {
 }
 
 enum OrderType {
-    in
     loss
-    neutral
-    out
+    purchase
+    sale
+    transfer
 }
 
 enum OrdersBy {
@@ -516,7 +516,6 @@ input ItemsArgs {
 input OrderInput {
     comment: String
     customerId: Int
-    issuerId: Int!
     items: [OrderItemInput!]!
     receiverId: Int
     type: OrderType!
@@ -545,7 +544,7 @@ input OrdersArgs {
     startDate: Time
     status: OrderStatus
     timeframe: TimeframeType
-    type: OrderType! = in
+    type: OrderType!
     value: ID
 }
 
