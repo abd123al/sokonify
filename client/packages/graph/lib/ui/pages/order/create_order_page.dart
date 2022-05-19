@@ -121,7 +121,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
       builder: (context, data, _) {
         return BlocBuilder<NewOrderCubit, NewOrder>(
           builder: (context, state) {
-            final cubit = BlocProvider.of<NewOrderCubit>(context);
+            final newOrderCubit = BlocProvider.of<NewOrderCubit>(context);
 
             final card = Card(
               elevation: 16,
@@ -170,7 +170,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                             border: const OutlineInputBorder(),
                             suffixIcon: TextButton.icon(
                               onPressed: () {
-                                cubit.addItem(
+                                newOrderCubit.addItem(
                                   _selected!,
                                   int.parse(_quantityAddController.text),
                                 );
@@ -246,27 +246,44 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                     },
                     pop: true,
                     builder: (context, cubit) {
-                      return Button(
-                        padding: EdgeInsets.zero,
-                        callback: () {
-                          cubit.submit(
-                            OrderInput(
-                              type: OrderType.sale,
-                              comment: _commentController.text,
-                              items: state.items
-                                  .map(
-                                    (e) => OrderItemInput(
-                                      price: e.customSellingPrice ??
-                                          e.item.sellingPrice,
-                                      itemId: e.item.id,
-                                      quantity: e.quantity,
-                                    ),
-                                  )
-                                  .toList(),
+                      return Row(
+                        children: [
+                          Flexible(
+                            child: Button(
+                              color: Colors.red,
+                              padding: EdgeInsets.zero,
+                              callback: () {
+                                newOrderCubit.reset();
+                              },
+                              title: 'Clear',
                             ),
-                          );
-                        },
-                        title: 'Submit',
+                          ),
+                          const SizedBox(width: 8),
+                          Flexible(
+                            child: Button(
+                              padding: EdgeInsets.zero,
+                              callback: () {
+                                cubit.submit(
+                                  OrderInput(
+                                    type: OrderType.sale,
+                                    comment: _commentController.text,
+                                    items: state.items
+                                        .map(
+                                          (e) => OrderItemInput(
+                                            price: e.customSellingPrice ??
+                                                e.item.sellingPrice,
+                                            itemId: e.item.id,
+                                            quantity: e.quantity,
+                                          ),
+                                        )
+                                        .toList(),
+                                  ),
+                                );
+                              },
+                              title: 'Submit',
+                            ),
+                          ),
+                        ],
                       );
                     },
                   ),
