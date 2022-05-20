@@ -33,6 +33,7 @@ class OrderItem extends StatefulWidget {
 
 class _OrderItemState extends State<OrderItem> {
   final _quantityController = TextEditingController();
+  bool _editing = false;
 
   @override
   void initState() {
@@ -42,17 +43,60 @@ class _OrderItemState extends State<OrderItem> {
 
   @override
   Widget build(BuildContext context) {
-    //final cubit = BlocProvider.of<NewOrderCubit>(context);
+    final cubit = BlocProvider.of<NewOrderCubit>(context);
 
     return ExpansionTile(
       title: Text(
         ItemTile.formatItemName(widget.item.item),
         overflow: TextOverflow.ellipsis,
       ),
-      subtitle: Text(
-        "${widget.item.quantity} Units",
-        style: Theme.of(context).textTheme.titleSmall,
-      ),
+      subtitle: _editing
+          ? TextField(
+              controller: _quantityController,
+              textInputAction: TextInputAction.send,
+              keyboardType: TextInputType.number,
+              autofocus: true,
+              decoration: InputDecoration(
+                hintText: 'Enter Quantity',
+                suffix: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextButton.icon(
+                      onPressed: () {
+                        cubit.editQuantity(
+                          widget.index,
+                          int.parse(_quantityController.text),
+                        );
+
+                        setState(() {
+                          _editing = false;
+                        });
+                      },
+                      icon: const Icon(Icons.save),
+                      label: const Text("Update"),
+                    ),
+                    TextButton.icon(
+                      style: TextButton.styleFrom(
+                        primary: Colors.red,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _editing = false;
+                          _quantityController.text =
+                              widget.item.quantity.toString();
+                        });
+                      },
+                      icon: const Icon(Icons.cancel),
+                      label: const Text("Cancel"),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          : Text(
+              "${widget.item.quantity} ${widget.item.item.unit.name}",
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
       trailing: Text(
         widget.item.subTotal,
         style: Theme.of(context).textTheme.titleMedium,
@@ -62,21 +106,27 @@ class _OrderItemState extends State<OrderItem> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             const Expanded(child: SizedBox()),
-            ElevatedButton.icon(
-              label: const Text("Edit"),
-              onPressed: () {},
-              icon: const Icon(
-                Icons.edit, /* color: Colors.blue*/
+            if (!_editing)
+              ElevatedButton.icon(
+                label: const Text("Edit"),
+                onPressed: () {
+                  setState(() {
+                    _editing = true;
+                  });
+                },
+                icon: const Icon(
+                  Icons.edit, /* color: Colors.blue*/
+                ),
               ),
-            ),
             const SizedBox(width: 16),
-            ElevatedButton.icon(
-              label: const Text("Delete"),
-              onPressed: () {},
-              icon: const Icon(
-                Icons.delete, /*color: Colors.red*/
+            if (!_editing)
+              ElevatedButton.icon(
+                label: const Text("Delete"),
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.delete, /*color: Colors.red*/
+                ),
               ),
-            ),
           ],
         )
       ],
