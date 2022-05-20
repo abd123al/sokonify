@@ -3,4 +3,8 @@ fragment OrderParts on Order {
     status
     type
     createdAt
+    customer {
+        id
+        name
+    }
 }
