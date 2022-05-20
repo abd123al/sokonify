@@ -1,5 +1,6 @@
 # Todo
 
+- Option to merge brands/products which are duplicated
 - option to disable every body to create store. This should be default.
 - use `DESC` for all lists.
 - add currency to store
