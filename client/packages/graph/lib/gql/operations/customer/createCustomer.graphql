@@ -1,0 +1,5 @@
+mutation createCustomer($input:CustomerInput!) {
+    createCustomer(input: $input){
+        ...CustomerParts
+    }
+}

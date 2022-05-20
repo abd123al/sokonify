@@ -1,5 +1,6 @@
 - in customers tab we may search for payments/pending orders/etc. everything associated with
   customer
+- So create customer view page and add tabs like orders.
 - add QR code for app linking in the same localhost
 - Put expire date in CI so that when app is build only lives for certain amount of days (3 months is
   a life time)

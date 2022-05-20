@@ -1,4 +1,3 @@
-import 'package:currency_formatter/currency_formatter.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

@@ -6,6 +6,7 @@ class Routes {
   static String root = "/";
   static String categories = "/categories";
   static String createCategory = "/createCategory";
+  static String createCustomer = "/createCustomer";
   static String createItem = "/createItem";
   static String createOrder = "/createOrder";
   static String createProduct = "/createProduct";
@@ -32,6 +33,12 @@ class Routes {
       createCategory,
       handler: createCategoryRouterHandler,
       transitionType: TransitionType.materialFullScreenDialog,
+    );
+
+    router.define(
+      createCustomer,
+      handler: createCustomerRouterHandler,
+      transitionType: TransitionType.inFromLeft,
     );
 
     router.define(

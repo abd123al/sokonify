@@ -1,6 +1,7 @@
 export 'auth/login_page.dart';
 export 'auth/signup_page.dart';
 export 'category/category.dart';
+export 'customer/customer.dart';
 export 'home/home.dart';
 export 'inventory/inventory.dart';
 export 'order/order.dart';

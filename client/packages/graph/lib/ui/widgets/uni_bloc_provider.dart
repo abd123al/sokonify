@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 
 import '../../repositories/repositories.dart';
 import '../pages/home/stats/simple_stats_cubit.dart';
-import '../pages/order/new_order_cubit.dart';
 import '../pages/pages.dart';
 import '../pages/store/stores_list_cubit.dart';
 
@@ -56,6 +55,7 @@ class UniBlocProviderState extends State<UniBlocProvider> {
         final storeRepository = StoreRepository(client);
         final authRepository = AuthRepository(client);
         final categoryRepository = CategoryRepository(client);
+        final customerRepository = CustomerRepository(client);
         final userRepository = UserRepository(client);
         final statsRepository = StatsRepository(client);
         final itemRepository = ItemRepository(client);
@@ -65,55 +65,60 @@ class UniBlocProviderState extends State<UniBlocProvider> {
 
         return MultiBlocProvider(
           providers: [
-            BlocProvider<AuthWrapperCubit>(
+            BlocProvider(
               create: (context) => AuthWrapperCubit()..check(),
             ),
-            BlocProvider<StoresListCubit>(
+            BlocProvider(
               create: (context) {
                 return StoresListCubit(storeRepository)..fetch();
               },
             ),
-            BlocProvider<UserBuilderCubit>(
+            BlocProvider(
               create: (context) {
                 return UserBuilderCubit(userRepository)..fetch();
               },
             ),
-            BlocProvider<StoreBuilderCubit>(
+            BlocProvider(
               create: (context) {
                 return StoreBuilderCubit(storeRepository)..fetch();
               },
             ),
-            BlocProvider<ProductsListCubit>(
+            BlocProvider(
               create: (context) {
                 return ProductsListCubit(productRepository)..fetch();
               },
             ),
-            BlocProvider<ItemsListCubit>(
+            BlocProvider(
               create: (context) {
                 return ItemsListCubit(itemRepository)..fetch();
               },
             ),
-            BlocProvider<SimpleStatsCubit>(
+            BlocProvider(
               create: (context) {
                 return SimpleStatsCubit(statsRepository)..fetch();
               },
             ),
-            BlocProvider<UnitsListCubit>(
+            BlocProvider(
               create: (context) {
                 return UnitsListCubit(unitRepository)..fetch();
               },
             ),
-            BlocProvider<CategoriesListCubit>(
+            BlocProvider(
               create: (context) {
                 return CategoriesListCubit(categoryRepository)..fetch();
               },
             ),
-            BlocProvider<OrdersListCubit>(
+            BlocProvider(
               create: (context) {
                 return OrdersListCubit(orderRepository)..fetch();
               },
             ),
-            BlocProvider<NewOrderCubit>(
+            BlocProvider(
+              create: (context) {
+                return CustomersListCubit(customerRepository)..fetch();
+              },
+            ),
+            BlocProvider(
               create: (context) {
                 return NewOrderCubit();
               },
@@ -121,29 +126,32 @@ class UniBlocProviderState extends State<UniBlocProvider> {
           ],
           child: MultiRepositoryProvider(
             providers: [
-              RepositoryProvider<AuthRepository>(
+              RepositoryProvider(
                 create: (context) => authRepository,
               ),
-              RepositoryProvider<StoreRepository>(
+              RepositoryProvider(
                 create: (context) => storeRepository,
               ),
-              RepositoryProvider<UserRepository>(
+              RepositoryProvider(
                 create: (context) => userRepository,
               ),
-              RepositoryProvider<ItemRepository>(
+              RepositoryProvider(
                 create: (context) => itemRepository,
               ),
-              RepositoryProvider<ProductRepository>(
+              RepositoryProvider(
                 create: (context) => productRepository,
               ),
-              RepositoryProvider<UnitRepository>(
+              RepositoryProvider(
                 create: (context) => unitRepository,
               ),
-              RepositoryProvider<CategoryRepository>(
+              RepositoryProvider(
                 create: (context) => categoryRepository,
               ),
-              RepositoryProvider<OrderRepository>(
+              RepositoryProvider(
                 create: (context) => orderRepository,
+              ),
+              RepositoryProvider(
+                create: (context) => customerRepository,
               ),
             ],
             child: widget.child,

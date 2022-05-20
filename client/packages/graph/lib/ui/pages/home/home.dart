@@ -6,6 +6,7 @@ import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../widgets/widgets.dart';
 import '../pages.dart';
+import 'customers.dart';
 import 'drawer.dart';
 import 'inventory.dart';
 import 'pos.dart';
@@ -116,9 +117,7 @@ class _HomePageState extends State<HomePage> {
           Container(
             color: Colors.green,
           ),
-          Container(
-            color: Colors.blue,
-          ),
+          const Customers(),
         ],
       ),
     );

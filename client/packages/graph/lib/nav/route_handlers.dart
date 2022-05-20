@@ -41,3 +41,7 @@ var productsListRouterHandler = Handler(handlerFunc: (_, __) {
 var createOrderPageRouterHandler = Handler(handlerFunc: (_, __) {
   return const CreateOrderPage();
 });
+
+var createCustomerRouterHandler = Handler(handlerFunc: (_, __) {
+  return const CreateCustomerPage();
+});
