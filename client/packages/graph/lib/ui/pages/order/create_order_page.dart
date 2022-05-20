@@ -7,6 +7,8 @@ import 'package:responsive_builder/responsive_builder.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/order_repository.dart';
+import '../customer/customer_tile.dart';
+import '../customer/customers_list_cubit.dart';
 import '../inventory/items_list_cubit.dart';
 import 'create_order_cubit.dart';
 import 'new_order_cubit.dart';
@@ -91,7 +93,10 @@ class _OrderItemState extends State<OrderItem> {
 class CreateOrderPage extends StatefulWidget {
   const CreateOrderPage({
     Key? key,
+    this.requireCustomer = true,
   }) : super(key: key);
+
+  final bool requireCustomer;
 
   @override
   State<StatefulWidget> createState() {
@@ -104,6 +109,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   final _quantityAddController = TextEditingController();
   final _commentController = TextEditingController();
   Items$Query$Item? _selected;
+  Customers$Query$Customer? _customer;
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +124,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   Widget _buildForm() {
     return QueryBuilder<ResourceListData<Items$Query$Item>, ItemsListCubit>(
       retry: (cubit) => cubit.fetch(),
-      builder: (context, data, _) {
+      builder: (context, itemsData, _) {
         return BlocBuilder<NewOrderCubit, NewOrder>(
           builder: (context, state) {
             final newOrderCubit = BlocProvider.of<NewOrderCubit>(context);
@@ -127,9 +133,43 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
               elevation: 16,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Builder(
-                  builder: (context) {
+                child: QueryBuilder<ResourceListData<Customers$Query$Customer>,
+                    CustomersListCubit>(
+                  retry: (cubit) => cubit.fetch(),
+                  builder: (context, customers, _) {
                     final List<Widget> children = [
+                      if (widget.requireCustomer)
+                        Builder(builder: (context) {
+                          return DropdownSearch<Customers$Query$Customer>(
+                            showSearchBox: true,
+                            itemAsString: (u) => u!.name,
+                            filterFn: (i, query) {
+                              return i!.name
+                                  .toLowerCase()
+                                  .contains(query ?? "");
+                            },
+                            isFilteredOnline: false,
+                            mode: Mode.MENU,
+                            items: customers.items,
+                            dropdownSearchDecoration: const InputDecoration(
+                              labelText: "Customer",
+                              hintText: "Add customer",
+                              border: OutlineInputBorder(),
+                            ),
+                            onChanged: (item) => setState(() {
+                              _customer = item;
+                            }),
+                            selectedItem: _customer,
+                            searchDelay: const Duration(milliseconds: 0),
+                            popupItemBuilder: (_, i, __) =>
+                                CustomerTile(customer: i),
+                            showClearButton: true,
+                          );
+                        }),
+                      const SizedBox(
+                        height: 16,
+                        width: 8,
+                      ),
                       DropdownSearch<Items$Query$Item>(
                         showSearchBox: true,
                         itemAsString: (u) => ItemTile.formatItemName(u!),
@@ -140,7 +180,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                         },
                         isFilteredOnline: false,
                         mode: Mode.MENU,
-                        items: data.items,
+                        items: itemsData.items,
                         dropdownSearchDecoration: const InputDecoration(
                           labelText: "Enter item",
                           hintText: "Type product name",
@@ -203,7 +243,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                 final item = state.items[index];
                 return OrderItem(
                   item: item,
-                  items: data.items,
+                  items: itemsData.items,
                   index: index,
                 );
               },
@@ -267,6 +307,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                                   OrderInput(
                                     type: OrderType.sale,
                                     comment: _commentController.text,
+                                    customerId: _customer?.id,
                                     items: state.items
                                         .map(
                                           (e) => OrderItemInput(
