@@ -14,6 +14,7 @@ import 'create_order_cubit.dart';
 import 'new_order_cubit.dart';
 import 'orders_list_cubit.dart';
 
+/// todo quantity of items when editing acts weird
 class OrderItem extends StatefulWidget {
   const OrderItem({
     Key? key,
@@ -101,6 +102,7 @@ class _OrderItemState extends State<OrderItem> {
         widget.item.subTotal,
         style: Theme.of(context).textTheme.titleMedium,
       ),
+      childrenPadding: const EdgeInsets.only(right: 16.0),
       children: [
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -121,8 +123,15 @@ class _OrderItemState extends State<OrderItem> {
             const SizedBox(width: 16),
             if (!_editing)
               ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.red,
+                ),
                 label: const Text("Delete"),
-                onPressed: () {},
+                onPressed: () {
+                  cubit.deleteItem(widget.index);
+                  //This helps clearing things
+                  setState(() {});
+                },
                 icon: const Icon(
                   Icons.delete, /*color: Colors.red*/
                 ),

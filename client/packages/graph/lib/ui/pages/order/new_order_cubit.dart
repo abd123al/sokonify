@@ -1,11 +1,12 @@
 import 'package:decimal/decimal.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../helpers/currency_formatter.dart';
 
-class NewOrderItem {
-  NewOrderItem({
+class NewOrderItem extends Equatable {
+  const NewOrderItem({
     required this.quantity,
     required this.item,
     this.error,
@@ -41,12 +42,13 @@ class NewOrderItem {
       error: error ?? this.error,
     );
   }
+
+  @override
+  List<Object?> get props => [item, quantity, customSellingPrice, error];
 }
 
-//todo allow user to create many orders simulations
-//mfano ana anajaza order yangu na ya mwinginr
-class NewOrder {
-  NewOrder({
+class NewOrder extends Equatable {
+  const NewOrder({
     required this.items,
   });
 
@@ -90,25 +92,31 @@ class NewOrder {
   }
 
   NewOrder empty() {
-    return NewOrder(
+    return const NewOrder(
       items: [],
     );
   }
 
-// NewOrder delete({
-//   required int index,
-// }) {
-//   return NewOrder(
-//     items: [...items, item],
-//   );
-// }
+  NewOrder delete({
+    required int index,
+  }) {
+    List<NewOrderItem> copy = items;
+    copy.remove(items[index]);
+
+    return NewOrder(
+      items: copy,
+    );
+  }
+
+  @override
+  List<Object?> get props => [items];
 }
 
 class NewOrderCubit extends Cubit<NewOrder> {
-  NewOrderCubit() : super(NewOrder(items: []).empty());
+  NewOrderCubit() : super(const NewOrder(items: []).empty());
 
   reset() {
-    emit(NewOrder(items: []).empty());
+    emit(const NewOrder(items: []).empty());
   }
 
   /// todo return error for duplicated items
@@ -125,7 +133,11 @@ class NewOrderCubit extends Cubit<NewOrder> {
     );
   }
 
-  deleteItem() {}
+  deleteItem(int index) {
+    emit(
+      state.delete(index: index),
+    );
+  }
 
   editQuantity(int index, int quantity) {
     final item = state.items[index];
