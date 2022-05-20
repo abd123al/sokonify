@@ -464,19 +464,19 @@ type Order implements Gorm {
     # todo depending on order type this can be supplier
     # Customer can be nullable. Since POS don't have to register customer.
     customerId: Int
-    customer: Customer @goTag(key: "gorm", value: "foreignKey:CustomerID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    customer: Customer @goTag(key: "gorm", value: "foreignKey:CustomerID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
 
     staffId: Int!
-    staff: User! @goTag(key: "gorm", value: "foreignKey:StaffID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    staff: User! @goTag(key: "gorm", value: "foreignKey:StaffID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
 
     # Where products come from
     issuerId: Int!
-    issuer: Store! @goTag(key: "gorm", value: "foreignKey:IssuerID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    issuer: Store! @goTag(key: "gorm", value: "foreignKey:IssuerID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
 
     # todo if we transfer to different owner's store I think approve is must before altering stock
     # This is not null in transfer
     receiverId: Int
-    receiver: Store @goTag(key: "gorm", value: "foreignKey:ReceiverID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    receiver: Store @goTag(key: "gorm", value: "foreignKey:ReceiverID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
 
     items: [OrderItem!]! @goTag(key: "gorm", value: "constraint:OnUpdate:CASCADE,OnDelete:RESTRICT;") @goField(forceResolver: true)
 }

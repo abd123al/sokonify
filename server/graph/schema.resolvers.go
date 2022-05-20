@@ -171,6 +171,28 @@ func (r *orderResolver) TotalPrice(ctx context.Context, obj *model.Order) (*stri
 	panic(fmt.Errorf("not implemented"))
 }
 
+func (r *orderResolver) Customer(ctx context.Context, obj *model.Order) (*model.Customer, error) {
+	if obj.CustomerID != nil {
+		return repository.FindCustomer(r.DB, *obj.CustomerID)
+	}
+	return nil, nil
+}
+
+func (r *orderResolver) Staff(ctx context.Context, obj *model.Order) (*model.User, error) {
+	return repository.FindUser(r.DB, obj.StaffID)
+}
+
+func (r *orderResolver) Issuer(ctx context.Context, obj *model.Order) (*model.Store, error) {
+	return repository.FindStore(r.DB, obj.IssuerID)
+}
+
+func (r *orderResolver) Receiver(ctx context.Context, obj *model.Order) (*model.Store, error) {
+	if obj.CustomerID != nil {
+		return repository.FindStore(r.DB, *obj.ReceiverID)
+	}
+	return nil, nil
+}
+
 func (r *orderResolver) Items(ctx context.Context, obj *model.Order) ([]*model.OrderItem, error) {
 	panic(fmt.Errorf("not implemented"))
 }
