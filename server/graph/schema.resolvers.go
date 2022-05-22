@@ -94,7 +94,24 @@ func (r *mutationResolver) CreateStaff(ctx context.Context, input model.StaffInp
 }
 
 func (r *mutationResolver) CreateStore(ctx context.Context, input model.StoreInput) (*model.Store, error) {
-	return repository.CreateStore(r.DB, helpers.ForContext(ctx).UserID, input)
+	create := func() (*model.Store, error) {
+		return repository.CreateStore(r.DB, helpers.ForContext(ctx).UserID, input)
+	}
+
+	if r.Multistore {
+		return create()
+	} else {
+		var count int64
+		if err := r.DB.Model(&model.Store{}).Count(&count).Error; err != nil {
+			return nil, err
+		}
+
+		if count >= 1 {
+			return nil, errors.New("multi-stores are not allowed in this current installation")
+		} else {
+			return create()
+		}
+	}
 }
 
 func (r *mutationResolver) CreateUnit(ctx context.Context, input model.UnitInput) (*model.Unit, error) {
@@ -161,10 +178,14 @@ func (r *mutationResolver) SignUp(ctx context.Context, input model.SignUpInput) 
 }
 
 func (r *mutationResolver) SwitchStore(ctx context.Context, input model.SwitchStoreInput) (*model.AuthPayload, error) {
-	return repository.SwitchStore(r.DB, helpers.UserAndStoreArgs{
-		StoreID: input.StoreID,
-		UserID:  helpers.ForContext(ctx).UserID,
-	})
+	if r.Multistore {
+		return repository.SwitchStore(r.DB, helpers.UserAndStoreArgs{
+			StoreID: input.StoreID,
+			UserID:  helpers.ForContext(ctx).UserID,
+		})
+	} else {
+		return nil, errors.New("switching to other stores is not allowed in current installation")
+	}
 }
 
 func (r *orderResolver) TotalPrice(ctx context.Context, obj *model.Order) (*string, error) {

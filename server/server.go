@@ -6,6 +6,7 @@ import (
 
 func main() {
 	util.StartServer(util.StartServerArgs{
-		Offline: false,
+		Offline:    false,
+		Multistore: true,
 	})
 }
