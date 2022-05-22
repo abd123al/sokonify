@@ -12,7 +12,6 @@ type InitDbArgs struct {
 	DbName    string
 	Clear     bool
 	Offline   bool
-	Mobile    bool
 	Dsn       string
 	IsRelease bool
 }
@@ -22,7 +21,7 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 	var err error
 
 	// We are using sqlite in offline mobile apps
-	if args.Offline && args.Mobile {
+	if args.Offline {
 		dsn := "sokonify.db"
 		if args.Dsn != "" {
 			//In android, we need full path
@@ -48,8 +47,7 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 		panic(fmt.Sprintf("failed to connect database with error: %s", err.Error()))
 	}
 
-	// todo: Check if this is not production
-	if args.Clear {
+	if args.Clear && !args.IsRelease {
 		if args.Offline {
 			// Clearing sqlite
 			//todo
@@ -79,7 +77,6 @@ func InitTestDB() *gorm.DB {
 		DbName:  "mahesabu_test",
 		Clear:   true,
 		Offline: false,
-		Mobile:  false,
 	})
 
 	return DB

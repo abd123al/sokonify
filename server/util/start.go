@@ -17,9 +17,11 @@ import (
 )
 
 type StartServerArgs struct {
-	Offline bool
-	Port    string
-	Dsn     string //Especially for android
+	Offline    bool
+	Multistore bool
+	Port       string
+	Dsn        string //Especially for android
+	IsRelease  bool
 }
 
 // StartServer This way so that it can be invoked via libs
@@ -35,14 +37,14 @@ func StartServer(Args StartServerArgs) string {
 	}
 
 	db := InitDB(InitDbArgs{
-		DbName:  "mahesabu",
-		Clear:   false,
-		Offline: Args.Offline,
-		Mobile:  Args.Offline,
-		Dsn:     Args.Dsn,
+		DbName:    "mahesabu",
+		Clear:     false,
+		Offline:   Args.Offline,
+		Dsn:       Args.Dsn,
+		IsRelease: Args.IsRelease,
 	})
 
-	router := ConfigureGraphql(db)
+	router := ConfigureGraphql(db, Args.Multistore)
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(":"+port, router))
@@ -50,7 +52,7 @@ func StartServer(Args StartServerArgs) string {
 	return port
 }
 
-func ConfigureGraphql(DB *gorm.DB) *chi.Mux {
+func ConfigureGraphql(DB *gorm.DB, Multistore bool) *chi.Mux {
 	router := chi.NewRouter()
 
 	//jwt: Seek, verify and validate JWT tokens
@@ -58,7 +60,8 @@ func ConfigureGraphql(DB *gorm.DB) *chi.Mux {
 	router.Use(Authenticator)
 
 	config := generated.Config{Resolvers: &graph.Resolver{
-		DB: DB,
+		DB:         DB,
+		Multistore: Multistore,
 	}}
 
 	//Configuring directives to be used on run-time

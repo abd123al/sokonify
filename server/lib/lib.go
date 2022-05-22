@@ -8,7 +8,8 @@ import (
 // We receive and return int because they are easy to deal with in native
 func StartServer(Dsn string) string {
 	return util.StartServer(util.StartServerArgs{
-		Dsn:     Dsn,
-		Offline: true,
+		Dsn:        Dsn,
+		Offline:    true,
+		Multistore: true, //Since phone just belongs to one person
 	})
 }

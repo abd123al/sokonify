@@ -9,8 +9,10 @@ import (
 //export StartServer
 func StartServer(Port int, isRelease bool) int {
 	result := util.StartServer(util.StartServerArgs{
-		Port:    strconv.Itoa(Port),
-		Offline: true,
+		Port:       strconv.Itoa(Port),
+		Offline:    true,
+		IsRelease:  isRelease,
+		Multistore: false,
 	})
 
 	port, err := strconv.Atoi(result)

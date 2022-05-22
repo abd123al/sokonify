@@ -1,5 +1,6 @@
 # Todo
-
+- offline apps should support only one store.
+- have permissions table to assign users permission based on permission type.
 - Option to merge brands/products which are duplicated
 - option to disable every body to create store. This should be default.
 - use `DESC` for all lists.

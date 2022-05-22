@@ -37,7 +37,7 @@ func TestResolvers(t *testing.T) {
 	}).Order
 
 	//Graphql client
-	router := util.ConfigureGraphql(DB)
+	router := util.ConfigureGraphql(DB, true)
 	token := helpers.GenerateAuthToken(user.ID, &helpers.FindDefaultStoreAndRoleResult{
 		StoreID: store.ID,
 		Role:    model.StaffRoleOwner,
@@ -242,9 +242,8 @@ func TestResolvers(t *testing.T) {
 				{Quantity: 2, Price: "74774", ItemID: item.ID},
 				{Quantity: 5, Price: "23445", ItemID: item.ID},
 			},
-			Type:       model.OrderTypeIn,
+			Type:       model.OrderTypeSale,
 			CustomerID: &customer.ID,
-			IssuerID:   store.ID,
 		}
 
 		c.MustPost(`
