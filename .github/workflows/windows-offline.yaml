@@ -26,6 +26,10 @@ jobs:
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.1
 
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '1.18'
+
       - name: run msix build script
         shell: pwsh
         run: .\client/scripts/build_offline_msi.ps1
