@@ -16,6 +16,8 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v2
+        with:
+          ssh-key: ${{ secrets.BROCITORY_ACCESS_TOKEN }}
       - uses: actions/setup-java@v2
         with:
           distribution: 'zulu'
