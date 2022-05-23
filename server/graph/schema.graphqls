@@ -523,7 +523,7 @@ type OrderItem implements Gorm {
     subTotalPrice: String! @goField(forceResolver: true) @goTag(key: "gorm", value: "-")
 
     itemId: Int!
-    item: Item! @goTag(key: "gorm", value:  "foreignKey:ItemID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
+    item: Item! @goTag(key: "gorm", value:  "foreignKey:ItemID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;") @goField(forceResolver: true)
 
     orderId: Int!
     order: Order! @goTag(key: "gorm", value:  "foreignKey:OrderID;not null;")

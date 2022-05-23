@@ -214,11 +214,15 @@ func (r *orderResolver) Receiver(ctx context.Context, obj *model.Order) (*model.
 	return nil, nil
 }
 
-func (r *orderResolver) Items(ctx context.Context, obj *model.Order) ([]*model.OrderItem, error) {
-	panic(fmt.Errorf("not implemented"))
+func (r *orderResolver) Items(_ context.Context, obj *model.Order) ([]*model.OrderItem, error) {
+	return repository.FindOrderItems(r.DB, obj.ID)
 }
 
 func (r *orderItemResolver) SubTotalPrice(ctx context.Context, obj *model.OrderItem) (string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *orderItemResolver) Item(ctx context.Context, obj *model.OrderItem) (*model.Item, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
