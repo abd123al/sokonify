@@ -5,12 +5,12 @@ on:
       - alpha #
       - beta #
       - production #What our users use
-      - main
+
 name: "Build & Release"
 jobs:
   generate:
     name: Generate codes
-    runs-on: windows-10
+    runs-on: windows-latest
     permissions:
       contents: write
     steps:

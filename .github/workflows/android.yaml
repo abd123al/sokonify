@@ -5,7 +5,6 @@ on:
       - alpha #
       - beta #
       - production #What our users use
-      - main #todo remove
 
 name: "Build and release online app"
 jobs:
