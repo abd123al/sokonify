@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          token: ${{ secrets.BROCITORY_ACCESS_TOKEN }}
+          ssh-key: ${{ secrets.BROCITORY_SSH_KEY }}
       - uses: actions/setup-java@v2
         with:
           distribution: 'zulu'
