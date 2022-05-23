@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
+import '../../../nav/nav.dart';
 
 class OrderTile extends StatelessWidget {
   const OrderTile({
@@ -38,6 +39,7 @@ class OrderTile extends StatelessWidget {
               describeEnum(order.status).toUpperCase(),
               style: Theme.of(context).textTheme.titleMedium,
             ),
+            onTap: () => redirectTo(context, "${Routes.order}/${order.id}"),
           );
         },
       ),

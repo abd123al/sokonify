@@ -45,3 +45,8 @@ var createOrderPageRouterHandler = Handler(handlerFunc: (_, __) {
 var createCustomerRouterHandler = Handler(handlerFunc: (_, __) {
   return const CreateCustomerPage();
 });
+
+var orderPageRouterHandler = Handler(handlerFunc: (_, params) {
+  final id = params["id"]![0];
+  return  OrderPage(id: int.parse(id));
+});

@@ -8,6 +8,14 @@
 - add option for configure server during auth so users may
 - user should see price changing when adding new items.
 
+## Keys
+
+https://linuxhint.com/bash_base64_encode_decode/
+
+```aidl
+base64 keystore.jks > keystore.txt
+```
+
 ```aidl
 flutter run --release
 flutter build appbundle --obfuscate --split-debug-info=./build/app/outputs/symbols

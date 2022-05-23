@@ -56,6 +56,7 @@
           <value>
             <list>
               <option value="$PROJECT_DIR$/../../../_apps/blocitory/lib" />
+              <option value="C:/flutter/.pub-cache/git/blocitory-d66029c07ee302fb80acc2ffd2cd23ed691b59b1//lib" />
             </list>
           </value>
         </entry>
@@ -1233,6 +1234,7 @@
       </option>
     </properties>
     <CLASSES>
+      <root url="file://C:/flutter/.pub-cache/git/blocitory-d66029c07ee302fb80acc2ffd2cd23ed691b59b1//lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/_fe_analyzer_shared-38.0.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/analyzer-3.4.1/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/archive-3.3.0/lib" />

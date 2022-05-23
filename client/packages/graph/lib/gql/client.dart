@@ -24,7 +24,7 @@ class AuthInterceptor extends Interceptor {
     if (accessToken == null) {
       return super.onRequest(options, handler);
     }
-    options.headers["Authorization"] = "Bearer " + accessToken;
+    options.headers["Authorization"] = "Bearer $accessToken";
     return super.onRequest(options, handler);
   }
 
@@ -67,7 +67,7 @@ Future<GraphQLClient> graphQLClient(String baseUrl) async {
 
   dio.interceptors.add(AuthInterceptor(box));
 
-  final Link _dioLink = DioLink(
+  final Link dioLink = DioLink(
     baseUrl,
     client: dio,
   );
@@ -79,6 +79,6 @@ Future<GraphQLClient> graphQLClient(String baseUrl) async {
         fetch: FetchPolicy.noCache, //so refresh works
       ),
     ),
-    link: _dioLink,
+    link: dioLink,
   );
 }

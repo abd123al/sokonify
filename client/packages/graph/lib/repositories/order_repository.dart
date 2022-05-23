@@ -23,4 +23,13 @@ class OrderRepository {
 
     return client.query(options);
   }
+
+  fetchOrder(int id) {
+    final options = QueryOptions(
+      document: ORDER_QUERY_DOCUMENT,
+      variables: OrderArguments(id: id).toJson(),
+    );
+
+    return client.query(options);
+  }
 }

@@ -1,0 +1,24 @@
+query order($id: ID!) {
+    order(id: $id) {
+        status
+        type
+        createdAt
+        customer {
+            id
+            name
+        }
+        items {
+            id
+            quantity
+            price
+            item {
+                product {
+                    name
+                }
+                brand {
+                    name
+                }
+            }
+        }
+    }
+}
