@@ -23,16 +23,16 @@ jobs:
         with:
           flutter-version: '3.0.0'
 
-      - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v1.1
-
       - uses: actions/setup-go@v3
         with:
           go-version: '1.18'
 
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+
       - name: run msix build script
         shell: pwsh
-        run: .\client/scripts/build_offline_msi.ps1
+        run: '& $env:GITHUB_ACTION_PATH/client/scripts/build_offline_msi.ps1'
 
       - name: Push to Releases
         uses: ncipollo/release-action@v1
