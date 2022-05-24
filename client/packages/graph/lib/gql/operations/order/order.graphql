@@ -4,18 +4,21 @@ query order($id: ID!) {
         type
         createdAt
         customer {
-            id
             name
         }
-        items {
+        orderItems {
             id
             quantity
             price
+            subTotalPrice
             item {
                 product {
                     name
                 }
                 brand {
+                    name
+                }
+                unit {
                     name
                 }
             }

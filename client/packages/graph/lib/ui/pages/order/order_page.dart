@@ -63,9 +63,9 @@ class OrderPage extends StatelessWidget {
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: data.items.length,
+                itemCount: data.orderItems.length,
                 itemBuilder: (context, index) {
-                  final item = data.items[index];
+                  final item = data.orderItems[index];
 
                   return ListTile(
                     title: Text(item.price),
@@ -95,7 +95,10 @@ class OrderPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const PrintPage(),
+                    builder: (context) => PrintPage(
+                      order: data,
+                      id: id,
+                    ),
                   ),
                 );
               }

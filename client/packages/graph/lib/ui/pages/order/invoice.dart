@@ -1,35 +1,18 @@
 import 'dart:typed_data';
 
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
-Future<Uint8List> generateInvoice(PdfPageFormat pageFormat) async {
-  final lorem = pw.LoremText();
+import '../../../gql/generated/graphql_api.graphql.dart';
 
-  final products = <Product>[
-    Product('19874', lorem.sentence(4), 3.99, 2),
-    Product('98452', lorem.sentence(6), 15, 2),
-    Product('28375', lorem.sentence(4), 6.95, 3),
-    Product('95673', lorem.sentence(3), 49.99, 4),
-    Product('23763', lorem.sentence(2), 560.03, 1),
-    Product('55209', lorem.sentence(5), 26, 1),
-    Product('09853', lorem.sentence(5), 26, 1),
-    Product('23463', lorem.sentence(5), 34, 1),
-    Product('56783', lorem.sentence(5), 7, 4),
-    Product('78256', lorem.sentence(5), 23, 1),
-    Product('23745', lorem.sentence(5), 94, 1),
-    Product('07834', lorem.sentence(5), 12, 1),
-    Product('23547', lorem.sentence(5), 34, 1),
-    Product('98387', lorem.sentence(5), 7.99, 2),
-  ];
-
+Future<Uint8List> generateInvoice(
+    PdfPageFormat pageFormat, Order$Query$Order order, int id) async {
   final invoice = Invoice(
-    invoiceNumber: '982347',
-    products: products,
-    customerName: 'Abraham Swearegin',
+    invoiceNumber: '$id',
+    products: order.orderItems,
+    customerName: order.customer?.name ?? "No customer",
     customerAddress: '54 rue de Rivoli\n75001 Paris, France',
     paymentInfo:
         '4509 Wiseman Street\nKnoxville, Tennessee(TN), 37929\n865-372-0425',
@@ -53,7 +36,7 @@ class Invoice {
     required this.accentColor,
   });
 
-  final List<Product> products;
+  final List<Order$Query$Order$OrderItem> products;
   final String customerName;
   final String customerAddress;
   final String invoiceNumber;
@@ -69,10 +52,10 @@ class Invoice {
 
   PdfColor get _accentTextColor => baseColor.isLight ? _lightColor : _darkColor;
 
-  double get _total =>
-      products.map<double>((p) => p.total).reduce((a, b) => a + b);
+  String get _total =>
+      products.map<String>((p) => p.price).reduce((a, b) => a + b);
 
-  double get _grandTotal => _total * (1 + tax);
+  String get _grandTotal => _total;
 
   //String? _logo;
 
@@ -196,7 +179,7 @@ class Invoice {
           width: 100,
           child: pw.BarcodeWidget(
             barcode: pw.Barcode.pdf417(),
-            data: 'Invoice# $invoiceNumber',
+            data: 'Invoice No $invoiceNumber',
             drawText: false,
           ),
         ),
@@ -237,7 +220,7 @@ class Invoice {
             height: 70,
             child: pw.FittedBox(
               child: pw.Text(
-                'Total: ${_formatCurrency(_grandTotal)}',
+                'Total: $_grandTotal',
                 style: pw.TextStyle(
                   color: baseColor,
                   fontStyle: pw.FontStyle.italic,
@@ -347,7 +330,7 @@ class Invoice {
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                     pw.Text('Sub Total:'),
-                    pw.Text(_formatCurrency(_total)),
+                    pw.Text(_total),
                   ],
                 ),
                 pw.SizedBox(height: 5),
@@ -369,7 +352,7 @@ class Invoice {
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                     children: [
                       pw.Text('Total:'),
-                      pw.Text(_formatCurrency(_grandTotal)),
+                      pw.Text(_grandTotal),
                     ],
                   ),
                 ),
@@ -442,8 +425,8 @@ class Invoice {
       cellHeight: 40,
       cellAlignments: {
         0: pw.Alignment.centerLeft,
-        1: pw.Alignment.centerLeft,
-        2: pw.Alignment.centerRight,
+        1: pw.Alignment.center,
+        2: pw.Alignment.center,
         3: pw.Alignment.center,
         4: pw.Alignment.centerRight,
       },
@@ -464,58 +447,27 @@ class Invoice {
           ),
         ),
       ),
-      headers: List<String>.generate(
-        tableHeaders.length,
-        (col) => tableHeaders[col],
-      ),
-      data: List<List<String>>.generate(
-        products.length,
-        (row) => List<String>.generate(
-          tableHeaders.length,
-          (col) => products[row].getIndex(col),
-        ),
-      ),
+      headers: [
+        "Item Name",
+        "Unit",
+        "Unit Price",
+        "Quantity",
+        "Total",
+      ],
+      data: products
+          .map((e) => [
+                "${e.item.product.name} ${e.item.brand?.name ?? ""}",
+                e.item.unit.name,
+                e.price,
+                e.quantity,
+                e.subTotalPrice,
+              ])
+          .toList(),
     );
   }
-}
-
-String _formatCurrency(double amount) {
-  return '\$${amount.toStringAsFixed(2)}';
 }
 
 String _formatDate(DateTime date) {
   final format = DateFormat.yMMMd('en_US');
   return format.format(date);
-}
-
-class Product {
-  const Product(
-    this.sku,
-    this.productName,
-    this.price,
-    this.quantity,
-  );
-
-  final String sku;
-  final String productName;
-  final double price;
-  final int quantity;
-
-  double get total => price * quantity;
-
-  String getIndex(int index) {
-    switch (index) {
-      case 0:
-        return sku;
-      case 1:
-        return productName;
-      case 2:
-        return _formatCurrency(price);
-      case 3:
-        return quantity.toString();
-      case 4:
-        return _formatCurrency(total);
-    }
-    return '';
-  }
 }

@@ -27,7 +27,7 @@ class PrintPage extends StatelessWidget {
         pdfFileName: "invoice_$id.pdf",
         initialPageFormat: PdfPageFormat.a4,
         build: (PdfPageFormat format) {
-          return generateInvoice(format);
+          return generateInvoice(format, order, id);
         },
       ),
     );

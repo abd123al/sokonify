@@ -159,7 +159,7 @@ type Order implements Gorm {
     id: ID!
     issuer: Store!
     issuerId: Int!
-    items: [OrderItem!]!
+    orderItems: [OrderItem!]!
     receiver: Store
     receiverId: Int
     staff: User!
@@ -195,6 +195,7 @@ type Payment implements Gorm {
     method: PaymentMethod!
     order: Order
     orderId: Int
+    receiptId: String
     referenceId: String
     staff: User!
     staffId: Int!
