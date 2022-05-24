@@ -52,38 +52,61 @@ class OrderPage extends StatelessWidget {
           );
         }
 
-        return ListView(
-          children: [
-            if (data.customer?.name != null)
-              _buildTile("Customer", "${data.customer?.name}"),
-            _buildTile("Created At", "${data.createdAt}"),
-            _buildTile("Status", describeEnum(data.status)),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: data.items.length,
-              itemBuilder: (context, index) {
-                final item = data.items[index];
+        return Scaffold(
+          body: ListView(
+            children: [
+              if (data.customer?.name != null)
+                _buildTile("Customer", "${data.customer?.name}"),
+              _buildTile("Created At", "${data.createdAt}"),
+              _buildTile("Status", describeEnum(data.status)),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: data.items.length,
+                itemBuilder: (context, index) {
+                  final item = data.items[index];
 
-                return ListTile(
-                  title: Text(item.price),
-                );
-              },
-            ),
-            Container(
-              color: Colors.blue.shade50,
-              child: ListTile(
-                title: Text(
-                  "Total Amount",
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                trailing: Text(
-                  "70000",
-                  style: Theme.of(context).textTheme.titleMedium,
+                  return ListTile(
+                    title: Text(item.price),
+                  );
+                },
+              ),
+              Container(
+                color: Colors.blue.shade50,
+                child: ListTile(
+                  title: Text(
+                    "Total Amount",
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  trailing: Text(
+                    "70000",
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            backgroundColor: Colors.grey.shade50,
+            unselectedItemColor: Theme.of(context).primaryColor,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.print,
+                  //color: Colors.red,
+                ),
+                label: "Print Invoice",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.print),
+                label: "Print Receipt",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.payment),
+                label: "Complete Payment",
+              ),
+            ],
+          ),
         );
       },
     );
