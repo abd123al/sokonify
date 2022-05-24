@@ -34,6 +34,8 @@ dependencies:
   path_provider: ^2.0.6
   permission_handler: ^9.2.0
   pretty_dio_logger: ^1.2.0-beta-1
+  pdf: ^3.8.1
+  printing: ^5.9.1
   intl: ^0.17.0
   cached_network_image: ^3.2.0
   url_launcher: ^6.1.1
@@ -74,10 +76,10 @@ flutter:
         pluginClass: GraphPlugin
 
   # To add assets to your plugin package, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
-  #
+  uses-material-design: true
+  assets:
+    - assets/
+
   # For details regarding assets in packages, see
   # https://flutter.dev/assets-and-images/#from-packages
   #

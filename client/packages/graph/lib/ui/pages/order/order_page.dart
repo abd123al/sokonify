@@ -2,6 +2,7 @@ import 'package:blocitory/blocitory.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:graph/ui/pages/order/print.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/order_repository.dart';
@@ -89,6 +90,16 @@ class OrderPage extends StatelessWidget {
           bottomNavigationBar: BottomNavigationBar(
             backgroundColor: Colors.grey.shade50,
             unselectedItemColor: Theme.of(context).primaryColor,
+            onTap: (n) {
+              if (n == 0) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PrintPage(),
+                  ),
+                );
+              }
+            },
             items: const [
               BottomNavigationBarItem(
                 icon: Icon(
