@@ -8,6 +8,6 @@ Set-Location $PSScriptRoot
 cd..
 
 #Installing go and build
-go build -o ../client/packages/server/windows/lib.dll -buildmode=c-shared ./lib.go
+go build -o ../client/packages/server/windows/lib.dll -buildmode=c-shared -ldflags="-s -w" ./lib.go
 
 Write-Host "Done!"
