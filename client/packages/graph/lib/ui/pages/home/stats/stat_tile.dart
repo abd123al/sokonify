@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 class StatTile extends StatelessWidget {
@@ -29,23 +30,28 @@ class StatTile extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  '$value',
-                  //todo use headers in large displays
-                  style: Theme.of(context).textTheme.titleLarge,
-                  overflow: TextOverflow.visible,
+                Expanded(
+                  child: AutoSizeText(
+                    '$value',
+                    //todo use headers in large displays
+                    style: Theme.of(context).textTheme.titleLarge,
+                    overflow: TextOverflow.visible,
+                  ),
                 ),
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleSmall,
-                  overflow: TextOverflow.ellipsis,
+                Expanded(
+                  child: AutoSizeText(
+                    title,
+                    minFontSize: 12,
+                    style: Theme.of(context).textTheme.titleSmall,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
                 if (subtitle != null)
                   Padding(
                     padding: const EdgeInsets.only(
                       top: 8.0,
                     ),
-                    child: Text(
+                    child: AutoSizeText(
                       '$subtitle',
                       style: const TextStyle(
                         fontSize: 14,
