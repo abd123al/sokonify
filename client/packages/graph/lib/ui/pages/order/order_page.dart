@@ -7,6 +7,7 @@ import 'package:responsive_builder/responsive_builder.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/order_repository.dart';
+import '../../helpers/currency_formatter.dart';
 import 'order_page_cubit.dart';
 
 /// There is no need at all to edit posted order.
@@ -46,7 +47,7 @@ class OrderPage extends StatelessWidget {
           return ListTile(
             title: Text(
               value,
-              style: Theme.of(context).textTheme.titleMedium,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             subtitle: Text(
               key,
@@ -62,16 +63,30 @@ class OrderPage extends StatelessWidget {
         ];
 
         final right = [
-          ListView.builder(
+          ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: data.orderItems.length,
             itemBuilder: (context, index) {
-              final item = data.orderItems[index];
+              final order = data.orderItems[index];
 
               return ListTile(
-                title: Text(item.price),
+                title: Text(
+                  "${order.item.product.name} ${order.item.brand?.name ?? ""}",
+                  style: Theme.of(context).textTheme.titleLarge,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                trailing: Text(
+                  formatCurrency(order.subTotalPrice),
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                subtitle: Text(
+                  "${order.quantity} ${order.item.unit.name}",
+                ),
               );
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return const Divider();
             },
           ),
           Container(
