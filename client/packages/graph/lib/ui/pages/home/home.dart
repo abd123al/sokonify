@@ -57,6 +57,10 @@ class _HomePageState extends State<HomePage> {
             return const Text("Sokonify");
           },
           loadingWidget: const Text("Connecting..."),
+          retryWidget: IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () {},
+          ),
         ),
         centerTitle: true,
         actions: [
