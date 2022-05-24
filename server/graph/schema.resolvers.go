@@ -7,6 +7,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/shopspring/decimal"
 	"mahesabu/graph/generated"
 	"mahesabu/graph/model"
 	"mahesabu/helpers"
@@ -188,8 +189,21 @@ func (r *mutationResolver) SwitchStore(ctx context.Context, input model.SwitchSt
 	}
 }
 
-func (r *orderResolver) TotalPrice(ctx context.Context, obj *model.Order) (*string, error) {
-	panic(fmt.Errorf("not implemented"))
+// TotalPrice don't work todo
+func (r *orderResolver) TotalPrice(_ context.Context, obj *model.Order) (*string, error) {
+	var totalPrice decimal.Decimal
+
+	for _, o := range obj.OrderItems {
+		SubTotalPrice, err := decimal.NewFromString(o.SubTotalPrice)
+		if err != nil {
+			panic(err)
+		}
+
+		totalPrice = totalPrice.Add(SubTotalPrice)
+	}
+
+	total := totalPrice.String()
+	return &total, nil
 }
 
 func (r *orderResolver) Customer(ctx context.Context, obj *model.Order) (*model.Customer, error) {
@@ -214,16 +228,23 @@ func (r *orderResolver) Receiver(ctx context.Context, obj *model.Order) (*model.
 	return nil, nil
 }
 
-func (r *orderResolver) Items(_ context.Context, obj *model.Order) ([]*model.OrderItem, error) {
+func (r *orderResolver) OrderItems(ctx context.Context, obj *model.Order) ([]*model.OrderItem, error) {
 	return repository.FindOrderItems(r.DB, obj.ID)
 }
 
 func (r *orderItemResolver) SubTotalPrice(ctx context.Context, obj *model.OrderItem) (string, error) {
-	panic(fmt.Errorf("not implemented"))
+	fromString, err := decimal.NewFromString(obj.Price)
+	if err != nil {
+		return "", err
+	}
+
+	v := fromString.Mul(decimal.NewFromInt(int64(obj.Quantity)))
+
+	return v.String(), nil
 }
 
 func (r *orderItemResolver) Item(ctx context.Context, obj *model.OrderItem) (*model.Item, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.FindItem(r.DB, obj.ItemID)
 }
 
 func (r *productResolver) Brands(ctx context.Context, obj *model.Product) ([]*model.Brand, error) {

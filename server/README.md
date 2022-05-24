@@ -1,4 +1,6 @@
 # Todo
+
+- in staff table add permissions separated by , only
 - add expire date in all premium server. So that they must update every year
 - Use built-in certificate for using ssl.
 - offline apps should support only one store.

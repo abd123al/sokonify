@@ -36,7 +36,7 @@ func CreateOrder(DB *gorm.DB, UserId int, input model.OrderInput, StoreID int) (
 		CustomerID: input.CustomerID,
 		StaffID:    UserId,
 		Type:       input.Type,
-		Items:      items,
+		OrderItems: items,
 		Status:     model.OrderStatusPending, //Important
 	}
 
