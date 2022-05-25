@@ -133,10 +133,10 @@ func FindPayment(db *gorm.DB, ID int) (*model.Payment, error) {
 
 func FindPaymentByOrderId(db *gorm.DB, OrderID int) (*model.Payment, error) {
 	var payment *model.Payment
-	if err := db.Where(&model.Payment{OrderID: &OrderID}).First(&payment).Error; err != nil {
-		return nil, err
+	if r := db.Where(&model.Payment{OrderID: &OrderID}).Find(&payment).RowsAffected; r > 0 {
+		return payment, nil
 	}
-	return payment, nil
+	return nil, nil
 }
 
 func FindPayments(DB *gorm.DB, args model.PaymentsArgs) ([]*model.Payment, error) {
