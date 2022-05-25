@@ -7,11 +7,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/shopspring/decimal"
 	"mahesabu/graph/generated"
 	"mahesabu/graph/model"
 	"mahesabu/helpers"
 	"mahesabu/repository"
+
+	"github.com/shopspring/decimal"
 )
 
 func (r *adminResolver) Password(ctx context.Context, obj *model.Admin) (*string, error) {
@@ -189,8 +190,7 @@ func (r *mutationResolver) SwitchStore(ctx context.Context, input model.SwitchSt
 	}
 }
 
-// TotalPrice don't work todo
-func (r *orderResolver) TotalPrice(_ context.Context, obj *model.Order) (*string, error) {
+func (r *orderResolver) TotalPrice(ctx context.Context, obj *model.Order) (*string, error) {
 	var totalPrice decimal.Decimal
 
 	for _, o := range obj.OrderItems {
@@ -230,6 +230,10 @@ func (r *orderResolver) Receiver(ctx context.Context, obj *model.Order) (*model.
 
 func (r *orderResolver) OrderItems(ctx context.Context, obj *model.Order) ([]*model.OrderItem, error) {
 	return repository.FindOrderItems(r.DB, obj.ID)
+}
+
+func (r *orderResolver) Payment(_ context.Context, obj *model.Order) (*model.Payment, error) {
+	return repository.FindPaymentByOrderId(r.DB, obj.ID)
 }
 
 func (r *orderItemResolver) SubTotalPrice(ctx context.Context, obj *model.OrderItem) (string, error) {
@@ -367,11 +371,11 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 }
 
 func (r *queryResolver) NetIncome(ctx context.Context, args model.StatsArgs) (string, error) {
-	return repository.SumNetProfit(r.DB, helpers.ForContext(ctx).StoreID, args)
+	return repository.SumNetIncome(r.DB, helpers.ForContext(ctx).StoreID, args)
 }
 
 func (r *queryResolver) GrossIncome(ctx context.Context, args model.StatsArgs) (string, error) {
-	return repository.SumNetProfit(r.DB, helpers.ForContext(ctx).StoreID, args)
+	return repository.SumNetIncome(r.DB, helpers.ForContext(ctx).StoreID, args)
 }
 
 func (r *queryResolver) TotalExpensesAmount(ctx context.Context, args model.StatsArgs) (string, error) {

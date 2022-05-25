@@ -479,6 +479,8 @@ type Order implements Gorm {
     receiver: Store @goTag(key: "gorm", value: "foreignKey:ReceiverID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
 
     orderItems: [OrderItem!]! @goTag(key: "gorm", value: "constraint:OnUpdate:CASCADE,OnDelete:RESTRICT;") @goField(forceResolver: true)
+
+    payment: Payment @goTag(key: "gorm",value: "-") @goField(forceResolver: true)
 }
 
 input OrderInput {
