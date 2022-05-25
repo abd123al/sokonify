@@ -10,6 +10,7 @@
 #include <flutter_secure_storage_windows/flutter_secure_storage_windows_plugin.h>
 #include <graph/graph_plugin.h>
 #include <permission_handler_windows/permission_handler_windows_plugin.h>
+#include <printing/printing_plugin.h>
 #include <server/server_plugin.h>
 #include <url_launcher_windows/url_launcher_windows.h>
 
@@ -22,6 +23,8 @@ void RegisterPlugins(flutter::PluginRegistry* registry) {
       registry->GetRegistrarForPlugin("GraphPlugin"));
   PermissionHandlerWindowsPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("PermissionHandlerWindowsPlugin"));
+  PrintingPluginRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("PrintingPlugin"));
   ServerPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("ServerPlugin"));
   UrlLauncherWindowsRegisterWithRegistrar(

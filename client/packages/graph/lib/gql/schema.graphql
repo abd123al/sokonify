@@ -160,6 +160,7 @@ type Order implements Gorm {
     issuer: Store!
     issuerId: Int!
     orderItems: [OrderItem!]!
+    payment: Payment
     receiver: Store
     receiverId: Int
     staff: User!

@@ -139,6 +139,30 @@
       <excludeFolder url="file://$MODULE_DIR$/apps/online/linux/flutter/ephemeral/.plugin_symlinks/share_plus_linux/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/apps/online/linux/flutter/ephemeral/.plugin_symlinks/share_plus_linux/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/apps/online/linux/flutter/ephemeral/.plugin_symlinks/share_plus_linux/build" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/windows/flutter/ephemeral/.plugin_symlinks/printing/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/windows/flutter/ephemeral/.plugin_symlinks/printing/build" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/windows/flutter/ephemeral/.plugin_symlinks/printing/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/windows/flutter/ephemeral/.plugin_symlinks/printing/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/windows/flutter/ephemeral/.plugin_symlinks/printing/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/windows/flutter/ephemeral/.plugin_symlinks/printing/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/linux/flutter/ephemeral/.plugin_symlinks/printing/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/linux/flutter/ephemeral/.plugin_symlinks/printing/build" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/linux/flutter/ephemeral/.plugin_symlinks/printing/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/linux/flutter/ephemeral/.plugin_symlinks/printing/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/linux/flutter/ephemeral/.plugin_symlinks/printing/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/linux/flutter/ephemeral/.plugin_symlinks/printing/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/linux/flutter/ephemeral/.plugin_symlinks/printing/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/linux/flutter/ephemeral/.plugin_symlinks/printing/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/linux/flutter/ephemeral/.plugin_symlinks/printing/build" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/windows/flutter/ephemeral/.plugin_symlinks/printing/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/windows/flutter/ephemeral/.plugin_symlinks/printing/build" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/windows/flutter/ephemeral/.plugin_symlinks/printing/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/linux/flutter/ephemeral/.plugin_symlinks/printing/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/linux/flutter/ephemeral/.plugin_symlinks/printing/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/linux/flutter/ephemeral/.plugin_symlinks/printing/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/windows/flutter/ephemeral/.plugin_symlinks/printing/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/windows/flutter/ephemeral/.plugin_symlinks/printing/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/windows/flutter/ephemeral/.plugin_symlinks/printing/example/.dart_tool" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -146,14 +146,14 @@ func TestPayment(t *testing.T) {
 		/**
 		Validating sum for all.
 		*/
-		res1, err1 := repository.SumNetProfit(DB, storeId, model.StatsArgs{
+		res1, err1 := repository.SumNetIncome(DB, storeId, model.StatsArgs{
 			StartDate: &startDate,
 			EndDate:   &endDate,
 			Timeframe: nil,
 		})
 
 		//using period
-		res1a, err1a := repository.SumNetProfit(DB, storeId, model.StatsArgs{
+		res1a, err1a := repository.SumNetIncome(DB, storeId, model.StatsArgs{
 			Timeframe: &period,
 		})
 
@@ -203,7 +203,7 @@ func TestPayment(t *testing.T) {
 		startDate := time.Now()
 		endDate := time.Now().Add(time.Hour * 1)
 
-		res, err := repository.SumNetProfit(DB, staff.StoreID, model.StatsArgs{
+		res, err := repository.SumNetIncome(DB, staff.StoreID, model.StatsArgs{
 			StartDate: &startDate,
 			EndDate:   &endDate,
 			Timeframe: nil,

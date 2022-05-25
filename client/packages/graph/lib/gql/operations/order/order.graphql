@@ -23,5 +23,10 @@ query order($id: ID!) {
                 }
             }
         }
+        payment {
+            id
+            amount
+            receiptId
+        }
     }
 }

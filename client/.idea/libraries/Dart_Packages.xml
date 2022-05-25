@@ -69,7 +69,6 @@
         <entry key="blocitory">
           <value>
             <list>
-              <option value="$PROJECT_DIR$/../../../_apps/blocitory/lib" />
               <option value="C:/flutter/.pub-cache/git/blocitory-d66029c07ee302fb80acc2ffd2cd23ed691b59b1//lib" />
             </list>
           </value>
@@ -1484,7 +1483,6 @@
       <root url="file://C:/flutter/packages/flutter/lib" />
       <root url="file://C:/flutter/packages/flutter_test/lib" />
       <root url="file://C:/flutter/packages/flutter_web_plugins/lib" />
-      <root url="file://$PROJECT_DIR$/../../../_apps/blocitory/lib" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
