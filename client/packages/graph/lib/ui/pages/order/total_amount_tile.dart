@@ -12,11 +12,11 @@ class TotalAmountTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.blue.shade50,
+      color:Theme.of(context).secondaryHeaderColor,
       child: ListTile(
         title: Text(
           "Total Amount",
-          style: Theme.of(context).textTheme.titleMedium,
+          style: Theme.of(context).textTheme.titleLarge,
         ),
         trailing: Text(
           amount,

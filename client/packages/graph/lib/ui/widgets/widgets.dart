@@ -9,3 +9,4 @@ export 'topper.dart';
 export 'uni_bloc_provider.dart';
 export 'user_builder.dart';
 export 'user_builder_cubit.dart';
+export 'word_divider.dart';

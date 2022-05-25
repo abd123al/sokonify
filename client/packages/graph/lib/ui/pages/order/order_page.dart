@@ -8,6 +8,7 @@ import 'package:responsive_builder/responsive_builder.dart';
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/order_repository.dart';
 import '../../helpers/currency_formatter.dart';
+import '../../widgets/word_divider.dart';
 import 'order_page_cubit.dart';
 import 'print.dart';
 import 'total_amount_tile.dart';
@@ -78,12 +79,12 @@ class OrderPage extends StatelessWidget {
               return ListTile(
                 title: Text(
                   "${order.item.product.name} ${order.item.brand?.name ?? ""}",
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: Theme.of(context).textTheme.titleMedium,
                   overflow: TextOverflow.ellipsis,
                 ),
                 trailing: Text(
                   formatCurrency(order.subTotalPrice),
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: Theme.of(context).textTheme.titleSmall,
                 ),
                 subtitle: Text(
                   "${order.quantity} ${order.item.unit.name}",
@@ -104,6 +105,7 @@ class OrderPage extends StatelessWidget {
             portrait: (context) => ListView(
               children: [
                 ...left,
+                const WordDivider(text: "Order Items"),
                 ...right,
               ],
             ),
