@@ -1,14 +1,15 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:blocitory/blocitory.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:graph/ui/pages/order/print.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/order_repository.dart';
 import '../../helpers/currency_formatter.dart';
 import 'order_page_cubit.dart';
+import 'print.dart';
 import 'total_amount_tile.dart';
 
 /// There is no need at all to edit posted order.
@@ -127,39 +128,81 @@ class OrderPage extends StatelessWidget {
               ],
             ),
           ),
-          bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: Colors.grey.shade50,
-            unselectedItemColor: Theme.of(context).primaryColor,
-            onTap: (n) {
-              if (n == 0) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PrintPage(
-                      order: data,
-                      id: id,
+          bottomNavigationBar: Builder(
+            builder: (context) {
+              final group = AutoSizeGroup();
+
+              _buildButton(
+                String label,
+                IconData icon,
+                GestureTapCallback onTap,
+              ) {
+                return Expanded(
+                  child: InkWell(
+                    onTap: onTap,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          icon,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        AutoSizeText(
+                          label,
+                          group: group,
+                          minFontSize: 16,
+                          maxFontSize: 20,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 );
               }
-            },
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.print,
-                  //color: Colors.red,
+
+              return SizedBox(
+                height: 60,
+                width: double.infinity,
+                child: Card(
+                  elevation: 16,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _buildButton(
+                        "Print Invoice",
+                        Icons.print,
+                        () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PrintPage(
+                                order: data,
+                                id: id,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      if (data.payment != null)
+                        _buildButton(
+                          "Print Receipt",
+                          Icons.print,
+                          () {},
+                        ),
+                      if (data.payment == null)
+                        _buildButton(
+                          "Complete Payment",
+                          Icons.payment,
+                          () {},
+                        ),
+                    ],
+                  ),
                 ),
-                label: "Print Invoice",
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.print),
-                label: "Print Receipt",
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.payment),
-                label: "Complete Payment",
-              ),
-            ],
+              );
+            },
           ),
         );
       },
