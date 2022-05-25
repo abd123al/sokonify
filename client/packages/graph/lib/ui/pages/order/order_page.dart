@@ -9,6 +9,7 @@ import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/order_repository.dart';
 import '../../helpers/currency_formatter.dart';
 import 'order_page_cubit.dart';
+import 'total_amount_tile.dart';
 
 /// There is no need at all to edit posted order.
 class OrderPage extends StatelessWidget {
@@ -60,6 +61,9 @@ class OrderPage extends StatelessWidget {
             _buildTile("Customer", "${data.customer?.name}"),
           _buildTile("Created At", "${data.createdAt}"),
           _buildTile("Status", describeEnum(data.status)),
+          if (data.payment != null)
+            _buildTile("Paid Amount",
+                describeEnum(formatCurrency(data.payment!.amount))),
         ];
 
         final right = [
@@ -89,18 +93,8 @@ class OrderPage extends StatelessWidget {
               return const Divider();
             },
           ),
-          Container(
-            color: Colors.blue.shade50,
-            child: ListTile(
-              title: Text(
-                "Total Amount",
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              trailing: Text(
-                "70000",
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-            ),
+          TotalAmountTile(
+            amount: formatCurrency(data.payment?.amount ?? "0"),
           ),
         ];
 

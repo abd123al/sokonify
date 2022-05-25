@@ -14,6 +14,7 @@ import 'create_order_cubit.dart';
 import 'new_order_cubit.dart';
 import 'order_item.dart';
 import 'orders_list_cubit.dart';
+import 'total_amount_tile.dart';
 
 class CreateOrderPage extends StatefulWidget {
   const CreateOrderPage({
@@ -181,18 +182,8 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
               child: Column(
                 children: [
                   const Divider(),
-                  Container(
-                    color: Colors.blue.shade50,
-                    child: ListTile(
-                      title: Text(
-                        "Total Amount",
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      trailing: Text(
-                        state.totalPrice,
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                    ),
+                  TotalAmountTile(
+                    amount: state.totalPrice,
                   ),
                   TextField(
                     controller: _commentController,
