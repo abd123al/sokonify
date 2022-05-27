@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graph/ui/widgets/widgets.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:in_app_update/in_app_update.dart';
-import 'package:provider/provider.dart';
 
 import '../../repositories/repositories.dart';
 import '../pages/home/stats/simple_stats_cubit.dart';
@@ -13,10 +12,12 @@ import '../pages/store/stores_list_cubit.dart';
 
 class UniBlocProvider extends StatefulWidget {
   final Widget child;
+  final GraphQLClient graphQLClient;
 
   const UniBlocProvider({
     Key? key,
     required this.child,
+    required this.graphQLClient,
   }) : super(key: key);
 
   @override
@@ -50,7 +51,7 @@ class UniBlocProviderState extends State<UniBlocProvider> {
   _buildClient() {
     return Builder(
       builder: (context) {
-        final client = Provider.of<GraphQLClient>(context);
+        final client = widget.graphQLClient;
 
         final storeRepository = StoreRepository(client);
         final authRepository = AuthRepository(client);

@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:provider/provider.dart';
 
 import '../gql/client.dart';
-import '../ui/app.dart';
-import '../ui/widgets/uni_bloc_provider.dart';
+import '../ui/widgets/graphql_client_builder.dart';
 
 /// Sometimes we want different behaviours for different apps
 startApp(UrlHandler urlHandler) async {
@@ -19,25 +16,8 @@ startApp(UrlHandler urlHandler) async {
 
   runApp(
     Phoenix(
-      child: FutureBuilder<GraphQLClient>(
-        future: graphQLClient(urlHandler),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            /// Remove splash
-            //FlutterNativeSplash.remove();
-
-            return Provider<GraphQLClient>(
-              create: (_) => snapshot.data!,
-              child: const UniBlocProvider(
-                child: App(),
-              ),
-            );
-          }
-
-          return Container(
-            color: Colors.blue,
-          );
-        },
+      child: GraphqlClientBuilder(
+        handler: urlHandler,
       ),
     ),
   );
