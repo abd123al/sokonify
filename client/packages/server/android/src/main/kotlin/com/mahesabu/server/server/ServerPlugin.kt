@@ -42,10 +42,11 @@ class ServerPlugin : FlutterPlugin, MethodCallHandler {
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
         if (call.method == "startServer") {
             try {
-                start {
+                val port = (8000..9999).random().toString()
+                start(port) {
                     Log.d("FirstFragment", it.toString())
                 }
-                result.success("8080")
+                result.success(port)
             } catch (e: Exception) {
                 e.printStackTrace();
                 result.error("Error in starting server", "${e.message}", null);
@@ -64,14 +65,14 @@ class ServerPlugin : FlutterPlugin, MethodCallHandler {
      * 1. https://developer.android.com/guide/background/threading
      */
     private fun start(
-        callback: (Resource<String>) -> Unit
+        port: String, callback: (Resource<String>) -> Unit
     ) {
         executorService.execute {
             try {
                 val dir = context.filesDir
                 val path = dir.path
 
-                val port = startServer("$path/sokonify.db")
+                startServer("$path/sokonify.db", port)
                 val result = Resource.Success(port)
                 threadHandler.post { callback(result) }
             } catch (e: Exception) {
