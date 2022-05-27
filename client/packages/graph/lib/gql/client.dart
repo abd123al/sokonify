@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,7 +33,8 @@ class AuthInterceptor extends Interceptor {
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {
     if (err.response?.statusCode == 401) {
-      BlocProvider.of<AuthWrapperCubit>(Application.navigatorKey.currentContext!)
+      BlocProvider.of<AuthWrapperCubit>(
+              Application.navigatorKey.currentContext!)
           .logOut();
 
       //Restart app.
@@ -42,14 +45,17 @@ class AuthInterceptor extends Interceptor {
   }
 }
 
-Future<GraphQLClient> graphQLClient(String baseUrl) async {
+typedef UrlHandler = FutureOr<String> Function();
+
+Future<GraphQLClient> graphQLClient(UrlHandler urlHandler) async {
+  final box = await tokenBox();
+  final baseUrl = await urlHandler();
+
   final dio = Dio(
     BaseOptions(
       connectTimeout: baseUrl.contains('https') ? 30000 : 10000,
     ),
   );
-
-  final box = await tokenBox();
 
   if (kDebugMode) {
     dio.interceptors.add(

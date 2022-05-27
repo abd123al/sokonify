@@ -44,7 +44,7 @@ class ServerPlugin : FlutterPlugin, MethodCallHandler {
             try {
                 val port = (8000..9999).random().toString()
                 start(port) {
-                    Log.d("FirstFragment", it.toString())
+                    Log.d("port", it.toString())
                 }
                 result.success(port)
             } catch (e: Exception) {

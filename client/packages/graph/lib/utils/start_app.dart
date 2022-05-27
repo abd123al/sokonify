@@ -9,7 +9,7 @@ import '../ui/app.dart';
 import '../ui/widgets/uni_bloc_provider.dart';
 
 /// Sometimes we want different behaviours for different apps
-startApp(String url) async {
+startApp(UrlHandler urlHandler) async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   //FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
@@ -20,7 +20,7 @@ startApp(String url) async {
   runApp(
     Phoenix(
       child: FutureBuilder<GraphQLClient>(
-        future: graphQLClient(url),
+        future: graphQLClient(urlHandler),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             /// Remove splash
