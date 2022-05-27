@@ -44,9 +44,8 @@ class ServerPlugin : FlutterPlugin, MethodCallHandler {
             try {
                 val port = (8000..9999).random().toString()
                 start(port) {
-                    Log.d("port", it.toString())
+                    result.success(port)
                 }
-                result.success(port)
             } catch (e: Exception) {
                 e.printStackTrace();
                 result.error("Error in starting server", "${e.message}", null);
@@ -58,6 +57,7 @@ class ServerPlugin : FlutterPlugin, MethodCallHandler {
 
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
+        executorService.shutdown()
     }
 
     /**
@@ -72,9 +72,9 @@ class ServerPlugin : FlutterPlugin, MethodCallHandler {
                 val dir = context.filesDir
                 val path = dir.path
 
-                startServer("$path/sokonify.db", port)
-                val result = Resource.Success(port)
-                threadHandler.post { callback(result) }
+                val result = startServer("$path/sokonify.db", port)
+                val successResult = Resource.Success(result)
+                threadHandler.post { callback(successResult) }
             } catch (e: Exception) {
                 val errorResult = Resource.Error(e)
                 threadHandler.post { callback(errorResult) }
