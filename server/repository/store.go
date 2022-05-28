@@ -1,42 +1,62 @@
 package repository
 
 import (
+	"errors"
 	"gorm.io/gorm"
 	"mahesabu/graph/model"
 	"mahesabu/helpers"
 )
 
-func CreateStore(db *gorm.DB, UserID int, input model.StoreInput) (*model.Store, error) {
-	var store = model.Store{
-		Address:      input.Address,
-		Description:  input.Description,
-		Email:        input.Email,
-		Name:         input.Name,
-		Tin:          input.Tin,
-		StoreType:    input.StoreType,
-		BusinessType: input.BusinessType,
-		TemplateType: input.TemplateType,
-		UserID:       UserID,
+func CreateStore(db *gorm.DB, UserID int, input model.StoreInput, Multistore bool) (*model.Store, error) {
+	create := func() (*model.Store, error) {
+		var store = model.Store{
+			Address:      input.Address,
+			Description:  input.Description,
+			Email:        input.Email,
+			Name:         input.Name,
+			Tin:          input.Tin,
+			StoreType:    input.StoreType,
+			BusinessType: input.BusinessType,
+			TemplateType: input.TemplateType,
+			UserID:       UserID,
+		}
+
+		if err := db.Transaction(func(tx *gorm.DB) error {
+			if err := db.Create(&store).Error; err != nil {
+				return err
+			}
+
+			_, err := CreateStaff(tx, model.StaffInput{
+				UserID: UserID,
+				Role:   model.StaffRoleOwner,
+			}, store.ID)
+
+			if err != nil {
+				return err
+			}
+
+			return nil
+		}); err != nil {
+			return nil, err
+		}
+
+		return &store, nil
 	}
 
-	err := db.Transaction(func(tx *gorm.DB) error {
-		if err := db.Create(&store).Error; err != nil {
-			return err
+	if Multistore {
+		return create()
+	} else {
+		var count int64
+		if err := db.Model(&model.Store{}).Count(&count).Error; err != nil {
+			return nil, err
 		}
 
-		_, err := CreateStaff(tx, model.StaffInput{
-			UserID: UserID,
-			Role:   model.StaffRoleOwner,
-		}, store.ID)
-
-		if err != nil {
-			return err
+		if count >= 1 {
+			return nil, errors.New("multi-stores are not allowed in this current installation")
+		} else {
+			return create()
 		}
-
-		return nil
-	})
-
-	return &store, err
+	}
 }
 
 func FindStores(db *gorm.DB, UserId int) ([]*model.Store, error) {

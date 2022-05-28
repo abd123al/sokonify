@@ -17,10 +17,21 @@ func TestStore(t *testing.T) {
 	t.Run("CreateStore", func(t *testing.T) {
 		store, err := repository.CreateStore(DB, UserID, model.StoreInput{
 			Name: faker.Name(),
-		})
+		}, false)
 
 		assert.Nil(t, err)
 		assert.NotNil(t, store)
+	})
+
+	t.Run("should fail to CreateStore when there is one", func(t *testing.T) {
+		util.CreateStore(DB, nil)
+
+		store, err := repository.CreateStore(DB, UserID, model.StoreInput{
+			Name: faker.Name(),
+		}, false)
+
+		assert.NotNil(t, err)
+		assert.Nil(t, store)
 	})
 
 	t.Run("FindStaffStore with valid store", func(t *testing.T) {

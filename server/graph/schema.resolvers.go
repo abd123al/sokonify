@@ -96,24 +96,7 @@ func (r *mutationResolver) CreateStaff(ctx context.Context, input model.StaffInp
 }
 
 func (r *mutationResolver) CreateStore(ctx context.Context, input model.StoreInput) (*model.Store, error) {
-	create := func() (*model.Store, error) {
-		return repository.CreateStore(r.DB, helpers.ForContext(ctx).UserID, input)
-	}
-
-	if r.Multistore {
-		return create()
-	} else {
-		var count int64
-		if err := r.DB.Model(&model.Store{}).Count(&count).Error; err != nil {
-			return nil, err
-		}
-
-		if count >= 1 {
-			return nil, errors.New("multi-stores are not allowed in this current installation")
-		} else {
-			return create()
-		}
-	}
+	return repository.CreateStore(r.DB, helpers.ForContext(ctx).UserID, input, r.Multistore)
 }
 
 func (r *mutationResolver) CreateUnit(ctx context.Context, input model.UnitInput) (*model.Unit, error) {
