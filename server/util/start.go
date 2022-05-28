@@ -58,6 +58,7 @@ func ConfigureGraphql(DB *gorm.DB, Multistore bool) *chi.Mux {
 	//jwt: Seek, verify and validate JWT tokens
 	router.Use(jwtauth.Verifier(helpers.TokenAuth))
 	router.Use(Authenticator)
+	router.Get("/status", StatusRouter)
 
 	config := generated.Config{Resolvers: &graph.Resolver{
 		DB:         DB,
