@@ -13,6 +13,8 @@ dependencies:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
+  dio: ^4.0.6
+  dio_smart_retry: ^1.0.0
 
 dev_dependencies:
   flutter_test:

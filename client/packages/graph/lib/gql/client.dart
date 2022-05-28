@@ -9,7 +9,6 @@ import 'package:graph/gql/token_box.dart';
 import 'package:graph/ui/widgets/auth_wrapper_cubit.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hive/hive.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import '../utils/application.dart';
 import '../utils/consts.dart';
@@ -47,9 +46,25 @@ class AuthInterceptor extends Interceptor {
 
 typedef UrlHandler = FutureOr<String> Function();
 
-Future<GraphQLClient> graphQLClient(UrlHandler urlHandler) async {
+/// This will test if url is reachable
+typedef StatusHandler = FutureOr<bool> Function(String address);
+
+Future<GraphQLClient> graphQLClient({
+  required UrlHandler urlHandler,
+  required StatusHandler statusHandler,
+}) async {
   final box = await tokenBox();
   final baseUrl = await urlHandler();
+
+  final url = "$baseUrl/graphql";
+  final statusUrl = "$baseUrl/status";
+
+  /// This will delay graphql requests until everything is ready.
+  final isLive = await statusHandler(statusUrl);
+
+  if (!isLive) {
+    throw Exception("Something went wrong please restart your app");
+  }
 
   final dio = Dio(
     BaseOptions(
@@ -58,23 +73,23 @@ Future<GraphQLClient> graphQLClient(UrlHandler urlHandler) async {
   );
 
   if (kDebugMode) {
-    dio.interceptors.add(
-      PrettyDioLogger(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        responseHeader: true,
-        error: true,
-        compact: true,
-        maxWidth: 90,
-      ),
-    );
+    // dio.interceptors.add(
+    //   PrettyDioLogger(
+    //     requestBody: true,
+    //     responseBody: true,
+    //     requestHeader: true,
+    //     responseHeader: true,
+    //     error: true,
+    //     compact: true,
+    //     maxWidth: 90,
+    //   ),
+    // );
   }
 
   dio.interceptors.add(AuthInterceptor(box));
 
   final Link dioLink = DioLink(
-    baseUrl,
+    url,
     client: dio,
   );
 

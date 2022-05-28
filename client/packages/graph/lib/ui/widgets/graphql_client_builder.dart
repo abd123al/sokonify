@@ -7,22 +7,40 @@ import '../../gql/client.dart';
 import '../app.dart';
 
 class GraphqlClientBuilder extends StatelessWidget {
-  final UrlHandler handler;
+  final UrlHandler urlHandler;
+  final StatusHandler statusHandler;
 
   const GraphqlClientBuilder({
     Key? key,
-    required this.handler,
+    required this.urlHandler,
+    required this.statusHandler,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<GraphQLClient>(
-      future: graphQLClient(handler),
+      future: graphQLClient(
+        urlHandler: urlHandler,
+        statusHandler: statusHandler,
+      ),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return UniBlocProvider(
             graphQLClient: snapshot.data!,
             child: const App(),
+          );
+        }
+
+        if (snapshot.hasError) {
+          return Scaffold(
+            body: Center(
+              child: Text(
+                snapshot.error.toString(),
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: Colors.red,
+                    ),
+              ),
+            ),
           );
         }
 

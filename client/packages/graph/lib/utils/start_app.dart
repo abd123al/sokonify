@@ -6,7 +6,10 @@ import '../gql/client.dart';
 import '../ui/widgets/graphql_client_builder.dart';
 
 /// Sometimes we want different behaviours for different apps
-startApp(UrlHandler urlHandler) async {
+startApp({
+  required UrlHandler urlHandler,
+  required StatusHandler statusHandler,
+}) async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   //FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
@@ -17,7 +20,8 @@ startApp(UrlHandler urlHandler) async {
   runApp(
     Phoenix(
       child: GraphqlClientBuilder(
-        handler: urlHandler,
+        urlHandler: urlHandler,
+        statusHandler: statusHandler,
       ),
     ),
   );

@@ -4,6 +4,8 @@ import 'dart:ffi';
 import 'dart:io';
 import 'dart:isolate';
 
+import 'package:dio/dio.dart';
+import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -36,5 +38,30 @@ class Server {
         return null;
       }
     }
+  }
+
+  static Future<bool> checkServerStatus(String endpoint) async {
+    final dio = Dio();
+
+    // Add the interceptor with optional options
+    dio.interceptors.add(
+      RetryInterceptor(
+        dio: dio,
+        logPrint: print, // specify log function
+        retries: 5, // retry count
+        retryDelays: const [
+          Duration(seconds: 1), // wait 1 sec before first retry
+          Duration(seconds: 2), // wait 2 sec before second retry
+          Duration(seconds: 5), // wait 3 sec before third retry
+          Duration(seconds: 10),
+          Duration(seconds: 15),
+        ],
+      ),
+    );
+
+    /// Sending a failing request for 5 times with a 1s, then 2s, then 3s interval
+    final result = await dio.get(endpoint);
+
+    return result.statusCode == 200;
   }
 }
