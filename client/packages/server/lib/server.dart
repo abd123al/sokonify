@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:ffi';
 import 'dart:io';
 import 'dart:isolate';
+import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
@@ -11,6 +11,14 @@ import 'package:flutter/services.dart';
 
 class Server {
   static const MethodChannel _channel = MethodChannel('server');
+
+  static int getRandomSocket() {
+    final random = Random();
+    const min = 8000;
+    const max = 9999;
+
+    return min + random.nextInt(max - min);
+  }
 
   static Future<String?> startServer() async {
     if (Platform.isWindows) {
@@ -25,7 +33,7 @@ class Server {
         return "$result";
       }
 
-      const port = kReleaseMode ? 8081 : 9091;
+      final port = getRandomSocket();
       Isolate.spawn(call, port);
 
       return "$port";
@@ -34,7 +42,6 @@ class Server {
         final String? port = await _channel.invokeMethod('startServer');
         return port;
       } catch (e) {
-        log('startServer error: ${e.toString()}');
         return null;
       }
     }
