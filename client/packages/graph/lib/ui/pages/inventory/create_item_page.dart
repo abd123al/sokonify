@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
+import '../../../nav/nav.dart';
 import '../../../repositories/item_repository.dart';
+import '../../widgets/widgets.dart';
 import '../product/product_tile.dart';
 import '../product/products_list_cubit.dart';
 import '../unit/unit_tile.dart';
@@ -54,6 +56,13 @@ class _CreateItemPageState extends State<CreateItemPage> {
                 ProductsListCubit>(
               retry: (cubit) => cubit.fetch(),
               builder: (context, products, _) {
+                if (products.items.isEmpty) {
+                  return CreateButton(
+                    title: "Products",
+                    onPressed: () => redirectTo(context, Routes.createProduct),
+                  );
+                }
+
                 return DropdownSearch<Products$Query$Product>(
                   showSearchBox: true,
                   itemAsString: (u) => u!.name,
@@ -98,6 +107,13 @@ class _CreateItemPageState extends State<CreateItemPage> {
                     loadingWidget: const LoadingIndicator.small(),
                     retryWidget: const Icon(Icons.refresh),
                     builder: (context, units, _) {
+                      if (units.items.isEmpty) {
+                        return CreateButton(
+                          title: "Units",
+                          onPressed: () => redirectTo(context, Routes.createUnit),
+                        );
+                      }
+
                       return DropdownSearch<Units$Query$Unit>(
                         showSearchBox: true,
                         itemAsString: (u) => u!.name,
