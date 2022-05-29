@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../nav/nav.dart';
 import '../../widgets/empty_list.dart';
+import 'product_tile.dart';
 import 'products_list_cubit.dart';
 
 //todo show product count
@@ -82,19 +83,10 @@ class _ProductState extends State<ProductList> {
             ListView.builder(
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                final store = units[index];
+                final product = units[index];
 
-                return Card(
-                  elevation: 16,
-                  child: ListTile(
-                    title: Text(
-                      store.name,
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                    onTap: widget.onSelected != null
-                        ? () => widget.onSelected!(store)
-                        : null,
-                  ),
+                return ProductTile(
+                  product: product,
                 );
               },
               itemCount: units.length,

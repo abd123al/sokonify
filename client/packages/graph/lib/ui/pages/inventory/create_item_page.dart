@@ -1,10 +1,11 @@
 import 'package:blocitory/blocitory.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/item_repository.dart';
-import '../../widgets/widgets.dart';
+import '../product/product_tile.dart';
 import '../product/products_list_cubit.dart';
 import 'create_item_cubit.dart';
 import 'items_list_cubit.dart';
@@ -49,21 +50,28 @@ class _CreateItemPageState extends State<CreateItemPage> {
             QueryBuilder<ResourceListData<Products$Query$Product>,
                 ProductsListCubit>(
               retry: (cubit) => cubit.fetch(),
-              builder: (context, list, _) {
-                return SearchableDropdown<Products$Query$Product>(
-                  builder: (context, p) {
-                    return ListTile(
-                      title: Text(p.name),
-                    );
+              builder: (context, products, _) {
+                return DropdownSearch<Products$Query$Product>(
+                  showSearchBox: true,
+                  itemAsString: (u) => u!.name,
+                  filterFn: (i, query) {
+                    return i!.name.toLowerCase().contains(query ?? "");
                   },
-                  list: list.items,
-                  compere: (p) => p.name,
-                  onSelected: (p) {
-                    setState(() {
-                      _product = p;
-                    });
-                  },
-                  hint: 'Select Product',
+                  isFilteredOnline: false,
+                  mode: Mode.MENU,
+                  items: products.items,
+                  dropdownSearchDecoration: const InputDecoration(
+                    labelText: "Select Product",
+                    hintText: "Type product name",
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (item) => setState(() {
+                    _product = item;
+                  }),
+                  selectedItem: _product,
+                  searchDelay: const Duration(milliseconds: 0),
+                  popupItemBuilder: (_, i, __) => ProductTile(product: i),
+                  showClearButton: true,
                 );
               },
             ),
