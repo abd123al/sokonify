@@ -197,6 +197,8 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                       OrderRepository>(
                     blocCreator: (r) => CreateOrderCubit(r),
                     onSuccess: (context, data) {
+                      newOrderCubit.reset();
+
                       BlocProvider.of<OrdersListCubit>(context)
                           .addItem(Orders$Query$Order.fromJson(data.toJson()));
                     },
