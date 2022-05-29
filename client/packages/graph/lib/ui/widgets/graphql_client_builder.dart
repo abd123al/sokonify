@@ -32,14 +32,12 @@ class GraphqlClientBuilder extends StatelessWidget {
         }
 
         if (snapshot.hasError) {
-          return Scaffold(
-            body: Center(
-              child: Text(
-                snapshot.error.toString(),
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Colors.red,
-                    ),
-              ),
+          return Center(
+            child: Text(
+              snapshot.error.toString(),
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Colors.red,
+                  ),
             ),
           );
         }
