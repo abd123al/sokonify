@@ -5,6 +5,7 @@ import 'package:graph/ui/pages/unit/units_list_cubit.dart';
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../nav/nav.dart';
 import '../../widgets/empty_list.dart';
+import 'unit_tile.dart';
 
 class UnitsListPage extends StatelessWidget {
   const UnitsListPage({Key? key}) : super(key: key);
@@ -35,20 +36,9 @@ class UnitsListPage extends StatelessWidget {
         }
         return ListView.builder(
           itemBuilder: (context, index) {
-            final store = units.items[index];
+            final unit = units.items[index];
 
-            return Card(
-              elevation: 16,
-              child: ListTile(
-                title: Text(
-                  store.name,
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                leading: CircleAvatar(
-                  child: Text(store.name.substring(0, 2)),
-                ),
-              ),
-            );
+            return UnitTile(unit: unit);
           },
           itemCount: units.items.length,
         );

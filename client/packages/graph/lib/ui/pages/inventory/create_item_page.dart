@@ -7,6 +7,8 @@ import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/item_repository.dart';
 import '../product/product_tile.dart';
 import '../product/products_list_cubit.dart';
+import '../unit/unit_tile.dart';
+import '../unit/units_list_cubit.dart';
 import 'create_item_cubit.dart';
 import 'items_list_cubit.dart';
 
@@ -29,6 +31,7 @@ class _CreateItemPageState extends State<CreateItemPage> {
   final _batchPriceController = TextEditingController();
   final _expireDateController = TextEditingController();
   Products$Query$Product? _product;
+  Units$Query$Unit? _unit;
   DateTime? _selectedDate;
 
   @override
@@ -80,21 +83,43 @@ class _CreateItemPageState extends State<CreateItemPage> {
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          autofocus: true,
-                          controller: _quantityController,
-                          keyboardType: TextInputType.number,
-                          decoration: const InputDecoration(
-                            labelText: 'Quantity',
-                            hintText: 'The number of items',
-                          ),
+                  TextField(
+                    autofocus: true,
+                    controller: _quantityController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      labelText: 'Quantity',
+                      hintText: 'The number of items',
+                    ),
+                  ),
+                  QueryBuilder<ResourceListData<Units$Query$Unit>,
+                      UnitsListCubit>(
+                    retry: (cubit) => cubit.fetch(),
+                    loadingWidget: const LoadingIndicator.small(),
+                    retryWidget: const Icon(Icons.refresh),
+                    builder: (context, units, _) {
+                      return DropdownSearch<Units$Query$Unit>(
+                        showSearchBox: true,
+                        itemAsString: (u) => u!.name,
+                        filterFn: (i, query) {
+                          return i!.name.toLowerCase().contains(query ?? "");
+                        },
+                        isFilteredOnline: false,
+                        mode: Mode.MENU,
+                        items: units.items,
+                        dropdownSearchDecoration: const InputDecoration(
+                          labelText: "Select Unit",
+                          hintText: "Type unit name",
                         ),
-                      ),
-                    ],
+                        onChanged: (item) => setState(() {
+                          _unit = item;
+                        }),
+                        selectedItem: _unit,
+                        searchDelay: const Duration(milliseconds: 0),
+                        popupItemBuilder: (_, i, __) => UnitTile(unit: i),
+                        showClearButton: true,
+                      );
+                    },
                   ),
                   TextField(
                     controller: _buyingPriceController,
@@ -162,7 +187,7 @@ class _CreateItemPageState extends State<CreateItemPage> {
                                   int.tryParse(_quantityController.text) ?? 0,
                               sellingPrice: _sellingPriceController.text,
                               buyingPrice: _buyingPriceController.text,
-                              unitId: 2,
+                              unitId: _unit!.id,
                               description: _descriptionPriceController.text,
                               batch: _batchPriceController.text,
                               productId: _product!.id,
