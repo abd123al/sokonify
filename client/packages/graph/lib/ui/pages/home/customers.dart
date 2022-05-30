@@ -13,6 +13,7 @@ class Customers extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => redirectTo(context, Routes.createCustomer),
         tooltip: 'Register Customer',
+        backgroundColor: Colors.brown,
         label: const Text("Register Customer"),
         icon: const Icon(Icons.add),
       ),

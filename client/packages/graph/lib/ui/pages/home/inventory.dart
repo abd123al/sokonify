@@ -15,6 +15,7 @@ class Inventory extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => redirectTo(context, Routes.createItem),
         tooltip: 'Add',
+        backgroundColor: Colors.teal,
         icon: const Icon(Icons.add),
         label: const Text("New Item"),
       ),

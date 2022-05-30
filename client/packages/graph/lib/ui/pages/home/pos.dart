@@ -19,8 +19,9 @@ class POS extends StatelessWidget {
         onPressed: () {
           //todo here we just open window for single item
         },
-        icon: const Icon(Icons.new_label),
-        label: const Text("New Order"),
+        icon: const Icon(Icons.add),
+        backgroundColor: Colors.blue,
+        label: const Text("Track Sales"),
       ),
     );
   }

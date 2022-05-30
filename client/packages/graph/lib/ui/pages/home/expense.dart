@@ -14,8 +14,9 @@ class Expenses extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {},
-        icon: const Icon(Icons.explicit_outlined),
-        label: const Text("New Expense"),
+        icon: const Icon(Icons.add),
+        backgroundColor: Colors.blueGrey,
+        label: const Text("Track Expense"),
       ),
     );
   }
