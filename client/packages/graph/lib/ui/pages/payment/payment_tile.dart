@@ -20,7 +20,7 @@ class PaymentTile extends StatelessWidget {
         builder: (context) {
           return ListTile(
             title: Text(
-              formatCurrency(payment.amount), //todo kustoer or orderid
+              payment.name,
               style: Theme.of(context).textTheme.titleLarge,
               overflow: TextOverflow.ellipsis,
             ),

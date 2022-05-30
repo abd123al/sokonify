@@ -3,4 +3,5 @@ fragment PaymentParts on Payment {
     amount
     createdAt
     type
+    name
 }
