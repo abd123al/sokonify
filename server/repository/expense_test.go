@@ -22,8 +22,7 @@ func TestFindExpenses(t *testing.T) {
 		util.CreateExpense(DB, &otherStore.ID) //Not to be returned
 
 		results, _ := repository.FindExpenses(DB, model.ExpensesArgs{
-			By:    model.ExpensesByStore,
-			Value: store.ID,
+			By: model.ExpensesByStore,
 		}, store.ID)
 
 		require.GreaterOrEqual(t, len(results), 3)

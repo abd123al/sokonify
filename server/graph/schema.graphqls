@@ -232,10 +232,8 @@ enum ExpensesBy {
 
 input ExpensesArgs {
     by:ExpensesBy! = store
-    value:ID!
-    limit: Int! =10
-    offset:Int! = 0
-    sortBy:SortBy! = DESC
+    value:ID
+    sortBy:SortBy = DESC
     type:ExpenseType
 }
 
