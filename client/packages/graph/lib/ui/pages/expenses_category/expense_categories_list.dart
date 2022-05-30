@@ -12,7 +12,7 @@ class ExpensesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return QueryBuilder<ResourceListData<Expenses$Query$Expense>,
-        ExpensesListCubit>(
+        ExpensesCategoriesListCubit>(
       retry: (cubit) => cubit.fetch(),
       builder: (context, data, _) {
         return SearchableList<Expenses$Query$Expense>(
@@ -20,7 +20,7 @@ class ExpensesList extends StatelessWidget {
           list: data.items,
           compare: (i) => i.name,
           builder: (context, item) {
-            return ExpenseTile(
+            return ExpenseCategoryTile(
               expense: item,
             );
           },

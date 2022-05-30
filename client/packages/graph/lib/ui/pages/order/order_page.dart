@@ -9,7 +9,7 @@ import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/order_repository.dart';
 import '../../helpers/currency_formatter.dart';
 import '../../widgets/word_divider.dart';
-import '../payment/create_payment.dart';
+import '../payment/create_order_payment_page.dart';
 import 'order_page_cubit.dart';
 import 'print.dart';
 import 'total_amount_tile.dart';

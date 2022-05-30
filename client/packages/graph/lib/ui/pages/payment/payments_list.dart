@@ -29,7 +29,9 @@ class PaymentsList extends StatelessWidget {
 
         final payments = data.items.where((e) => e.type == type).toList();
 
-        return Column(
+        return ListView(
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
           children: [
             Topper(
               label: "Today ${word()}",

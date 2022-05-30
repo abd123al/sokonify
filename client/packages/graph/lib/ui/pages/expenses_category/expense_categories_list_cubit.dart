@@ -4,10 +4,10 @@ import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/expense_repository.dart';
 import '../../../repositories/item_repository.dart';
 
-class ExpensesListCubit extends ResourceListCubit<Expenses$Query$Expense> {
+class ExpensesCategoriesListCubit extends ResourceListCubit<Expenses$Query$Expense> {
   final ExpenseRepository _repository;
 
-  ExpensesListCubit(this._repository) : super();
+  ExpensesCategoriesListCubit(this._repository) : super();
 
   fetch() {
     super.execute(

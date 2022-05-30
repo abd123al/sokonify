@@ -17,14 +17,4 @@ class CreateOrderPaymentCubit
       },
     );
   }
-
-  //todo
-  submitExpensePayment(ExpensePaymentInput input) {
-    super.execute(
-      executor: () => _repository.createExpensePayment(input),
-      parser: (r) {
-        return CreateOrderPayment$Mutation.fromJson(r).createOrderPayment;
-      },
-    );
-  }
 }

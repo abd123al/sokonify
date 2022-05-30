@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 
-class ExpenseTile extends StatelessWidget {
-  const ExpenseTile({
+class ExpenseCategoryTile extends StatelessWidget {
+  const ExpenseCategoryTile({
     Key? key,
     required this.expense,
   }) : super(key: key);

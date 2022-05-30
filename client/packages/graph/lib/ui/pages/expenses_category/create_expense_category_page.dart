@@ -37,7 +37,7 @@ class _CreateExpensesCategoryPageState extends State<CreateExpensesCategoryPage>
         ExpenseRepository>(
       blocCreator: (r) => CreateExpenseCategoryCubit(r),
       onSuccess: (context, data) {
-        BlocProvider.of<ExpensesListCubit>(context)
+        BlocProvider.of<ExpensesCategoriesListCubit>(context)
             .addItem(Expenses$Query$Expense.fromJson(data.toJson()));
       },
       pop: false,

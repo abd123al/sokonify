@@ -58,3 +58,7 @@ var createExpensePageRouterHandler = Handler(handlerFunc: (_, __) {
 var expensesListPageRouterHandler = Handler(handlerFunc: (_, __) {
   return  const ExpensesListPage();
 });
+
+var trackExpensePagePageRouterHandler = Handler(handlerFunc: (_, __) {
+  return  const TrackExpensePage();
+});

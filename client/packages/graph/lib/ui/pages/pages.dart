@@ -6,6 +6,7 @@ export "expenses_category/expense_category.dart";
 export 'home/home.dart';
 export 'inventory/inventory.dart';
 export 'order/order.dart';
+export 'payment/payment.dart';
 export 'product/product.dart';
 export 'store/create_store_page.dart';
 export 'store/stores.dart';

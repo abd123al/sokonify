@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:graph/gql/generated/graphql_api.graphql.dart';
 
+import '../../../nav/nav.dart';
 import '../payment/payments_list.dart';
 
 class Expenses extends StatelessWidget {
@@ -13,7 +14,7 @@ class Expenses extends StatelessWidget {
         type: PaymentType.expense,
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () => redirectTo(context, Routes.createExpensePayment),
         icon: const Icon(Icons.add),
         backgroundColor: Colors.blueGrey,
         label: const Text("Track Expense"),
