@@ -11,6 +11,7 @@ import (
 	"mahesabu/graph/model"
 	"mahesabu/helpers"
 	"mahesabu/repository"
+	"strconv"
 
 	"github.com/shopspring/decimal"
 )
@@ -247,7 +248,15 @@ func (r *paymentResolver) Name(ctx context.Context, obj *model.Payment) (string,
 		return repository.FindName(r.DB, obj.StaffID)
 	}
 
-	return repository.FindOrderCustomerName(r.DB, *obj.OrderID)
+	result, _ := repository.FindOrderCustomerName(r.DB, *obj.OrderID)
+
+	if result != nil {
+		return *result, nil
+	}
+
+	str := fmt.Sprintf("#%s", strconv.Itoa(*obj.OrderID))
+
+	return str, nil
 }
 
 func (r *productResolver) Brands(ctx context.Context, obj *model.Product) ([]*model.Brand, error) {
