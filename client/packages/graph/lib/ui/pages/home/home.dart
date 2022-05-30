@@ -8,6 +8,7 @@ import '../../widgets/widgets.dart';
 import '../pages.dart';
 import 'customers.dart';
 import 'drawer.dart';
+import 'expense.dart';
 import 'inventory.dart';
 import 'pos.dart';
 
@@ -114,14 +115,12 @@ class _HomePageState extends State<HomePage> {
         onPageChanged: (index) {
           setState(() => _currentIndex = index);
         },
-        children: <Widget>[
-          const POS(),
-          const OrdersListScaffold(),
-          const Inventory(),
-          Container(
-            color: Colors.green,
-          ),
-          const Customers(),
+        children: const <Widget>[
+          POS(),
+          OrdersListScaffold(),
+          Inventory(),
+          Expenses(),
+          Customers(),
         ],
       ),
     );

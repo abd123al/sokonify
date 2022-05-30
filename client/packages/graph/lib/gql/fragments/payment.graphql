@@ -2,4 +2,5 @@ fragment PaymentParts on Payment {
     id
     amount
     createdAt
+    type
 }

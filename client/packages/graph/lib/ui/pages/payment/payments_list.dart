@@ -6,9 +6,13 @@ import '../../widgets/widgets.dart';
 import 'payment_tile.dart';
 import 'payments_list_cubit.dart';
 
-//todo add eksipensi order filter and use it in two tabs
 class PaymentsList extends StatelessWidget {
-  const PaymentsList({Key? key}) : super(key: key);
+  const PaymentsList({
+    Key? key,
+    this.type = PaymentType.order,
+  }) : super(key: key);
+
+  final PaymentType type;
 
   @override
   Widget build(BuildContext context) {
@@ -16,18 +20,27 @@ class PaymentsList extends StatelessWidget {
         PaymentsListCubit>(
       retry: (cubit) => cubit.fetch(),
       builder: (context, data, _) {
+        word() {
+          if (type == PaymentType.order) {
+            return "Payments";
+          }
+          return "Expenses";
+        }
+
+        final payments = data.items.where((e) => e.type == type).toList();
+
         return Column(
           children: [
-            const Topper(
-              label: "Today Payments",
+            Topper(
+              label: "Today ${word()}",
             ),
             ListView.builder(
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                final p = data.items[index];
+                final p = payments[index];
                 return PaymentTile(payment: p);
               },
-              itemCount: data.items.length,
+              itemCount: payments.length,
             ),
           ],
         );

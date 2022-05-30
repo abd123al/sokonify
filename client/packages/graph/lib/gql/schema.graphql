@@ -200,6 +200,7 @@ type Payment implements Gorm {
     referenceId: String
     staff: User!
     staffId: Int!
+    type: PaymentType!
     updatedAt: Time!
 }
 
