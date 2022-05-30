@@ -8,6 +8,7 @@ import 'package:in_app_update/in_app_update.dart';
 import '../../repositories/repositories.dart';
 import '../pages/home/stats/simple_stats_cubit.dart';
 import '../pages/pages.dart';
+import '../pages/payment/payments_list_cubit.dart';
 import '../pages/store/stores_list_cubit.dart';
 
 class UniBlocProvider extends StatefulWidget {
@@ -63,6 +64,7 @@ class UniBlocProviderState extends State<UniBlocProvider> {
         final productRepository = ProductRepository(client);
         final unitRepository = UnitRepository(client);
         final orderRepository = OrderRepository(client);
+        final paymentRepository = PaymentRepository(client);
 
         return MultiBlocProvider(
           providers: [
@@ -121,6 +123,11 @@ class UniBlocProviderState extends State<UniBlocProvider> {
             ),
             BlocProvider(
               create: (context) {
+                return PaymentsListCubit(paymentRepository)..fetch();
+              },
+            ),
+            BlocProvider(
+              create: (context) {
                 return NewOrderCubit();
               },
             ),
@@ -153,6 +160,9 @@ class UniBlocProviderState extends State<UniBlocProvider> {
               ),
               RepositoryProvider(
                 create: (context) => customerRepository,
+              ),
+              RepositoryProvider(
+                create: (context) => paymentRepository,
               ),
             ],
             child: widget.child,

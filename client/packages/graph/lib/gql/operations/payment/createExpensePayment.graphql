@@ -1,0 +1,5 @@
+mutation createExpensePayment($input:ExpensePaymentInput!) {
+    createExpensePayment(input: $input){
+        ...PaymentParts
+    }
+}

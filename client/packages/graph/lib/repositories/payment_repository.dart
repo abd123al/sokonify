@@ -8,8 +8,17 @@ class PaymentRepository {
 
   createOrderPayment(OrderPaymentInput input) {
     final options = MutationOptions(
-      document: CREATE_PRODUCT_MUTATION_DOCUMENT,
+      document: CREATE_ORDER_PAYMENT_MUTATION_DOCUMENT,
       variables: CreateOrderPaymentArguments(input: input).toJson(),
+    );
+
+    return client.mutate(options);
+  }
+
+  createExpensePayment(ExpensePaymentInput input) {
+    final options = MutationOptions(
+      document: CREATE_EXPENSE_PAYMENT_MUTATION_DOCUMENT,
+      variables: CreateExpensePaymentArguments(input: input).toJson(),
     );
 
     return client.mutate(options);

@@ -1,0 +1,5 @@
+query payments($args: PaymentsArgs!) {
+    payments(args: $args) {
+        ...PaymentParts
+    }
+}

@@ -1,0 +1,5 @@
+mutation createOrderPayment($input:OrderPaymentInput!) {
+    createOrderPayment(input: $input){
+        ...PaymentParts
+    }
+}

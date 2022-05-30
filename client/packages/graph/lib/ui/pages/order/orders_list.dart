@@ -8,6 +8,7 @@ import 'order_tile.dart';
 import 'orders_list_cubit.dart';
 
 //todo use [SliverAppBar]
+// todo show stats for pending, canceled, completed order with stats like tabs
 class OrdersListScaffold extends StatelessWidget {
   const OrdersListScaffold({Key? key}) : super(key: key);
 

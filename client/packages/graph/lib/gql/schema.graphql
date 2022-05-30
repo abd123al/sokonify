@@ -552,12 +552,16 @@ input OrdersArgs {
 
 input PaymentsArgs {
     by: PaymentsBy! = store
-    limit: Int! = 10
+    endDate: Time
+    limit: Int = 10
     method: PaymentMethod
-    offset: Int! = 0
-    sortBy: SortBy! = DESC
+    mode: FetchMode!
+    offset: Int = 0
+    sortBy: SortBy = DESC
+    startDate: Time
+    timeframe: TimeframeType
     type: PaymentType
-    value: ID!
+    value: ID
 }
 
 input ProductBrandInput {

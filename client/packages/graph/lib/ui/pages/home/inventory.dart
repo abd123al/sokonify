@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../nav/nav.dart';
 import '../inventory/items_list.dart';
 
+//todo show tile like stats for near expired items
+// todo and low stocks items
 class Inventory extends StatelessWidget {
   const Inventory({Key? key}) : super(key: key);
 
