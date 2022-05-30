@@ -9,9 +9,19 @@ class CreateOrderPaymentCubit
 
   final PaymentRepository _repository;
 
-  submit(OrderPaymentInput input) {
+  submitOrderPayment(OrderPaymentInput input) {
     super.execute(
       executor: () => _repository.createOrderPayment(input),
+      parser: (r) {
+        return CreateOrderPayment$Mutation.fromJson(r).createOrderPayment;
+      },
+    );
+  }
+
+  //todo
+  submitExpensePayment(ExpensePaymentInput input) {
+    super.execute(
+      executor: () => _repository.createExpensePayment(input),
       parser: (r) {
         return CreateOrderPayment$Mutation.fromJson(r).createOrderPayment;
       },

@@ -321,6 +321,8 @@ input BrandsArgs {
 }
 
 # todo: expenses items should also come as items.
+# this should be tracked as whole, so we just decrease amount not increment them.
+# no editing stock kizembe so as it will easy tracking where items went
 type Item implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
 

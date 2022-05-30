@@ -9,6 +9,7 @@ import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/order_repository.dart';
 import '../../helpers/currency_formatter.dart';
 import '../../widgets/word_divider.dart';
+import '../payment/create_payment.dart';
 import 'order_page_cubit.dart';
 import 'print.dart';
 import 'total_amount_tile.dart';
@@ -198,7 +199,17 @@ class OrderPage extends StatelessWidget {
                         _buildButton(
                           "Complete Payment",
                           Icons.payment,
-                          () {},
+                          () {
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (context) {
+                                return CreatePaymentWidget(
+                                  amount: '36677',
+                                  orderId: id,
+                                );
+                              },
+                            );
+                          },
                         ),
                     ],
                   ),
