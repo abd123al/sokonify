@@ -275,7 +275,7 @@ func (r *queryResolver) Brand(ctx context.Context, id int) (*model.Brand, error)
 	return repository.FindBrand(r.DB, id)
 }
 
-func (r *queryResolver) Brands(ctx context.Context, args model.BrandsArgs) ([]*model.Brand, error) {
+func (r *queryResolver) Brands(_ context.Context, args model.BrandsArgs) ([]*model.Brand, error) {
 	return repository.FindBrands(r.DB, args)
 }
 

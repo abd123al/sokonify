@@ -16,8 +16,14 @@ func CreateBrand(db *gorm.DB, input model.BrandInput) (*model.Brand, error) {
 }
 
 func FindBrands(db *gorm.DB, args model.BrandsArgs) ([]*model.Brand, error) {
+	var result *gorm.DB
+
 	var brands []*model.Brand
-	result := db.Where(&model.Brand{ProductID: args.ProductID}).Find(&brands)
+	if args.ProductID != nil {
+		result = db.Where(&model.Brand{ProductID: *args.ProductID}).Find(&brands)
+	} else {
+		result = db.Find(&brands)
+	}
 	return brands, result.Error
 }
 

@@ -315,7 +315,7 @@ input BrandInput {
 }
 
 input BrandsArgs {
-    productId: Int!
+    productId: Int
 }
 
 # todo: expenses items should also come as items.
