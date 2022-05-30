@@ -258,6 +258,7 @@ func CreatePayment(DB *gorm.DB, Args *CreatePaymentArgs, Order bool) CreatePayme
 	if Args == nil {
 		StaffID = CreateStaff(DB, nil).UserID //Remember we use userId mostly and not staff's ID
 		StoreID = CreateStore(DB, nil).ID
+
 		_ = CreateStaff(DB, &CreateStaffArgs{
 			StoreID: StoreID,
 			UserID:  StaffID,

@@ -139,26 +139,49 @@ func FindPaymentByOrderId(db *gorm.DB, OrderID int) (*model.Payment, error) {
 	return nil, nil
 }
 
-func FindPayments(DB *gorm.DB, args model.PaymentsArgs) ([]*model.Payment, error) {
+// FindPayments todo make it use time like order
+func FindPayments(DB *gorm.DB, args model.PaymentsArgs, StoreID int) ([]*model.Payment, error) {
 	var payments []*model.Payment
 	var result *gorm.DB
 
-	Query := DB.Table("payments").Order("id DESC").Offset(args.Offset).Limit(args.Limit)
+	sort := "id " + "DESC" //todo use sortBy var
+	By := args.By
+	//Type := args.Type
+	//Limit := args.Limit
+	//Offset := args.Offset
 
-	if args.By == model.PaymentsByStaff {
+	q := DB //.Debug() //todo filter payments
+
+	//partialQuery := q.Table("payments").Order("id DESC").Offset(*Offset).Limit(*Limit).Order(sort)
+
+	if By == model.PaymentsByStore {
+		if args.Mode == model.FetchModeFull {
+			StartDate, EndDate := helpers.HandleStatsDates(model.StatsArgs{
+				StartDate: args.StartDate,
+				EndDate:   args.EndDate,
+				Timeframe: args.Timeframe,
+			})
+
+			result = q.Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate).Order(sort).Joins("inner join staffs on payments.staff_id = staffs.user_id AND staffs.store_id = ?", StoreID).Find(&payments)
+		} else {
+			//This will return all payments store processed.
+			//result = partialQuery.Joins("inner join staffs on payments.staff_id = staffs.user_id AND staffs.store_id = ?", args.Value).Find(&payments)
+		}
+	} else if By == model.PaymentsByStaff {
 		//This will return payments processed by a specific staff.
-		result = Query.Where(&model.Payment{StaffID: args.Value}).Find(&payments)
-	} else if args.By == model.PaymentsByStore {
-		//This will return all payments store processed.
-		result = Query.Joins("inner join staffs on payments.staff_id = staffs.user_id AND staffs.store_id = ?", args.Value).Find(&payments)
-	} else if args.By == model.PaymentsByCustomer {
+		//result = partialQuery.Where(&model.Payment{StaffID: *args.Value}).Find(&payments)
+	} else if By == model.PaymentsByCustomer {
 		//This will return payments by specific customer.
-		result = Query.Joins("inner join orders on payments.order_id = orders.id AND orders.customer_id = ?", args.Value).Find(&payments)
+		//result = partialQuery.Joins("inner join orders on payments.order_id = orders.id AND orders.customer_id = ?", args.Value).Find(&payments)
 	} else {
 		panic(fmt.Errorf("not implemented"))
 	}
 
-	return payments, result.Error
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return payments, nil
 }
 
 func SumNetIncome(db *gorm.DB, StoreID int, args model.StatsArgs) (string, error) {

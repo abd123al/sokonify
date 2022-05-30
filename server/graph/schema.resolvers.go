@@ -215,7 +215,7 @@ func (r *orderResolver) OrderItems(ctx context.Context, obj *model.Order) ([]*mo
 	return repository.FindOrderItems(r.DB, obj.ID)
 }
 
-func (r *orderResolver) Payment(_ context.Context, obj *model.Order) (*model.Payment, error) {
+func (r *orderResolver) Payment(ctx context.Context, obj *model.Order) (*model.Payment, error) {
 	return repository.FindPaymentByOrderId(r.DB, obj.ID)
 }
 
@@ -310,7 +310,7 @@ func (r *queryResolver) Payment(ctx context.Context, id int) (*model.Payment, er
 }
 
 func (r *queryResolver) Payments(ctx context.Context, args model.PaymentsArgs) ([]*model.Payment, error) {
-	return repository.FindPayments(r.DB, args)
+	return repository.FindPayments(r.DB, args, helpers.ForContext(ctx).StoreID)
 }
 
 func (r *queryResolver) Product(ctx context.Context, id int) (*model.Product, error) {

@@ -595,13 +595,17 @@ enum PaymentType {
 }
 
 input PaymentsArgs {
+    mode:FetchMode!
     by:PaymentsBy! = store
-    value: ID!
-    limit: Int! =10
-    offset: Int! = 0
-    sortBy: SortBy! = DESC
+    value: ID
+    limit: Int =10
+    offset: Int = 0
+    sortBy: SortBy = DESC
     method: PaymentMethod
     type: PaymentType
+    timeframe: TimeframeType
+    startDate:Time
+    endDate:Time
 }
 
 enum TimeframeType {
