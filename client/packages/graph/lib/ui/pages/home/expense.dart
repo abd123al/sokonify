@@ -12,6 +12,7 @@ class Expenses extends StatelessWidget {
     return Scaffold(
       body: const PaymentsList(
         type: PaymentType.expense,
+        topper: SizedBox(),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => redirectTo(context, Routes.createExpensePayment),

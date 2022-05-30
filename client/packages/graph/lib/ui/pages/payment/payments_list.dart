@@ -10,9 +10,11 @@ class PaymentsList extends StatelessWidget {
   const PaymentsList({
     Key? key,
     this.type = PaymentType.order,
+    required this.topper,
   }) : super(key: key);
 
   final PaymentType type;
+  final Widget topper;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +34,7 @@ class PaymentsList extends StatelessWidget {
         return ListView(
           shrinkWrap: true,
           children: [
+            topper,
             Topper(
               label: "Today ${word()}",
             ),
