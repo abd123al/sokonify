@@ -15,25 +15,28 @@ class PaymentTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final color = payment.type == PaymentType.order
+        ? Theme.of(context).primaryColorDark
+        : Colors.red;
+
     return Card(
-      child: Builder(
-        builder: (context) {
-          return ListTile(
-            title: Text(
-              payment.name,
-              style: Theme.of(context).textTheme.titleLarge,
-              overflow: TextOverflow.ellipsis,
-            ),
-            subtitle: Text(
-              "${payment.createdAt}",
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-            trailing: Text(
-              formatCurrency(payment.amount),
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-          );
-        },
+      child: ListTile(
+        title: Text(
+          payment.name,
+          style: Theme.of(context).textTheme.titleMedium,
+          overflow: TextOverflow.ellipsis,
+        ),
+        subtitle: Text(
+          "${payment.createdAt}",
+          style: Theme.of(context).textTheme.titleSmall,
+        ),
+        trailing: Text(
+          formatCurrency(payment.amount),
+          overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: color,
+              ),
+        ),
       ),
     );
   }
