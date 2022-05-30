@@ -86,3 +86,14 @@ func FindUser(db *gorm.DB, ID int) (*model.User, error) {
 	result := db.Where(&model.User{ID: ID}).First(&user)
 	return user, result.Error
 }
+
+func FindName(db *gorm.DB, UserID int) (string, error) {
+	var name string
+
+	err := db.Model(&model.User{}).Where(&model.User{ID: UserID}).Select("name").Row().Scan(&name)
+	if err != nil {
+		return "", nil
+	}
+
+	return name, nil
+}

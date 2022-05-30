@@ -557,6 +557,7 @@ type Payment implements Gorm {
     receiptId: String @goTag(key: "gorm", value: "index;size:50")
     method: PaymentMethod!
     type: PaymentType! @goTag(key: "gorm",value: "-") @goField(forceResolver: true)
+    name : String! @goTag(key: "gorm",value: "-") @goField(forceResolver: true)
 
     staffId: Int!
     staff: User! @goTag(key: "gorm", value: "foreignKey:StaffID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")

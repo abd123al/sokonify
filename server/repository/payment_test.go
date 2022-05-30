@@ -67,10 +67,12 @@ func TestPayment(t *testing.T) {
 	t.Run("FindPayments by store", func(t *testing.T) {
 		re := util.CreatePayment(DB, nil, false)
 
+		paymentType := model.PaymentTypeExpense
+
 		paymentsByCustomer, err := repository.FindPayments(DB, model.PaymentsArgs{
 			By:   model.PaymentsByStore,
 			Mode: model.FetchModeFull,
-			Type: model.PaymentTypeExpense,
+			Type: &paymentType,
 		}, re.StoreID)
 
 		require.Nil(t, err)

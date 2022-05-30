@@ -111,4 +111,13 @@ func TestUser(t *testing.T) {
 		require.Nil(t, payload)
 		require.NotNil(t, err)
 	})
+
+	t.Run("FindName", func(t *testing.T) {
+		staff := util.CreateStaff(DB, nil)
+
+		name, err := repository.FindName(DB, staff.UserID)
+
+		require.Nil(t, err)
+		require.NotEmpty(t, name)
+	})
 }

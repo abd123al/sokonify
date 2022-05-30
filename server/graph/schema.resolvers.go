@@ -242,6 +242,14 @@ func (r *paymentResolver) Type(ctx context.Context, obj *model.Payment) (model.P
 	return model.PaymentTypeExpense, nil
 }
 
+func (r *paymentResolver) Name(ctx context.Context, obj *model.Payment) (string, error) {
+	if obj.ExpenseID != nil {
+		return repository.FindName(r.DB, obj.StaffID)
+	}
+
+	return "", nil
+}
+
 func (r *productResolver) Brands(ctx context.Context, obj *model.Product) ([]*model.Brand, error) {
 	panic(fmt.Errorf("not implemented"))
 }
