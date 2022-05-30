@@ -234,6 +234,14 @@ func (r *orderItemResolver) Item(ctx context.Context, obj *model.OrderItem) (*mo
 	return repository.FindItem(r.DB, obj.ItemID)
 }
 
+func (r *paymentResolver) Type(ctx context.Context, obj *model.Payment) (model.PaymentType, error) {
+	if obj.OrderID != nil {
+		return model.PaymentTypeOrder, nil
+	}
+
+	return model.PaymentTypeExpense, nil
+}
+
 func (r *productResolver) Brands(ctx context.Context, obj *model.Product) ([]*model.Brand, error) {
 	panic(fmt.Errorf("not implemented"))
 }
@@ -431,6 +439,9 @@ func (r *Resolver) Order() generated.OrderResolver { return &orderResolver{r} }
 // OrderItem returns generated.OrderItemResolver implementation.
 func (r *Resolver) OrderItem() generated.OrderItemResolver { return &orderItemResolver{r} }
 
+// Payment returns generated.PaymentResolver implementation.
+func (r *Resolver) Payment() generated.PaymentResolver { return &paymentResolver{r} }
+
 // Product returns generated.ProductResolver implementation.
 func (r *Resolver) Product() generated.ProductResolver { return &productResolver{r} }
 
@@ -449,6 +460,7 @@ type itemResolver struct{ *Resolver }
 type mutationResolver struct{ *Resolver }
 type orderResolver struct{ *Resolver }
 type orderItemResolver struct{ *Resolver }
+type paymentResolver struct{ *Resolver }
 type productResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
 type subscriptionResolver struct{ *Resolver }

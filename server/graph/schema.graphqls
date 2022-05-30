@@ -556,6 +556,7 @@ type Payment implements Gorm {
     # If posting to TRA will result in some kind of receipt then we will save it here
     receiptId: String @goTag(key: "gorm", value: "index;size:50")
     method: PaymentMethod!
+    type: PaymentType! @goTag(key: "gorm",value: "-") @goField(forceResolver: true)
 
     staffId: Int!
     staff: User! @goTag(key: "gorm", value: "foreignKey:StaffID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
