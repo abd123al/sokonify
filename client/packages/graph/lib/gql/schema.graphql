@@ -493,11 +493,9 @@ input ExpensePaymentInput {
 
 input ExpensesArgs {
     by: ExpensesBy! = store
-    limit: Int! = 10
-    offset: Int! = 0
-    sortBy: SortBy! = DESC
+    sortBy: SortBy = DESC
     type: ExpenseType
-    value: ID!
+    value: ID
 }
 
 input ItemInput {

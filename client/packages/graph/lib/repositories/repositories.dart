@@ -1,6 +1,7 @@
 export 'auth_repository.dart';
 export 'category_repository.dart';
 export 'customer_repository.dart';
+export 'expense_repository.dart';
 export 'item_repository.dart';
 export 'order_repository.dart';
 export 'payment_repository.dart';

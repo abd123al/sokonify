@@ -56,6 +56,7 @@ class UniBlocProviderState extends State<UniBlocProvider> {
 
         final storeRepository = StoreRepository(client);
         final authRepository = AuthRepository(client);
+        final expenseRepository = ExpenseRepository(client);
         final categoryRepository = CategoryRepository(client);
         final customerRepository = CustomerRepository(client);
         final userRepository = UserRepository(client);
@@ -128,6 +129,11 @@ class UniBlocProviderState extends State<UniBlocProvider> {
             ),
             BlocProvider(
               create: (context) {
+                return ExpensesListCubit(expenseRepository)..fetch();
+              },
+            ),
+            BlocProvider(
+              create: (context) {
                 return NewOrderCubit();
               },
             ),
@@ -163,6 +169,9 @@ class UniBlocProviderState extends State<UniBlocProvider> {
               ),
               RepositoryProvider(
                 create: (context) => paymentRepository,
+              ),
+              RepositoryProvider(
+                create: (context) => expenseRepository,
               ),
             ],
             child: widget.child,

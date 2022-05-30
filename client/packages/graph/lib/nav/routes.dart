@@ -4,14 +4,17 @@ import './route_handlers.dart';
 
 class Routes {
   static String root = "/";
-  static String categories = "/categories";
   static String createCategory = "/createCategory";
   static String createCustomer = "/createCustomer";
+  static String createExpense = "/createExpense";
   static String createItem = "/createItem";
   static String createOrder = "/createOrder";
   static String createProduct = "/createProduct";
   static String createStore = "/createStore";
   static String createUnit = "/createUnit";
+
+  static String categories = "/categories";
+  static String expenses = "/expenses";
   static String order = "/order";
   static String products = "/products";
   static String units = "/units";
@@ -43,9 +46,21 @@ class Routes {
     );
 
     router.define(
+      createExpense,
+      handler: createExpensePageRouterHandler,
+      transitionType: TransitionType.inFromLeft,
+    );
+
+    router.define(
       createItem,
       handler: createItemRouterHandler,
       transitionType: TransitionType.materialFullScreenDialog,
+    );
+
+    router.define(
+      createOrder,
+      handler: createOrderPageRouterHandler,
+      transitionType: TransitionType.inFromLeft,
     );
 
     router.define(
@@ -67,6 +82,12 @@ class Routes {
     );
 
     router.define(
+      expenses,
+      handler: expensesListPageRouterHandler,
+      transitionType: TransitionType.inFromLeft,
+    );
+
+    router.define(
       products,
       handler: productsListRouterHandler,
       transitionType: TransitionType.inFromLeft,
@@ -81,12 +102,6 @@ class Routes {
     router.define(
       units,
       handler: unitsListPageRouterHandler,
-      transitionType: TransitionType.inFromLeft,
-    );
-
-    router.define(
-      createOrder,
-      handler: createOrderPageRouterHandler,
       transitionType: TransitionType.inFromLeft,
     );
   }

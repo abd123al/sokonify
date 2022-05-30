@@ -50,3 +50,11 @@ var orderPageRouterHandler = Handler(handlerFunc: (_, params) {
   final id = params["id"]![0];
   return  OrderPage(id: int.parse(id));
 });
+
+var createExpensePageRouterHandler = Handler(handlerFunc: (_, __) {
+  return  const CreateExpensesCategoryPage();
+});
+
+var expensesListPageRouterHandler = Handler(handlerFunc: (_, __) {
+  return  const ExpensesListPage();
+});

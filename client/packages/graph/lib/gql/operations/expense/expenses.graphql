@@ -1,0 +1,5 @@
+query expenses($args: ExpensesArgs!) {
+    expenses(args: $args) {
+        ...ExpenseParts
+    }
+}
