@@ -9,10 +9,12 @@ class POS extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
+      body: Column(
         children: const [
           SimpleStats(),
-          PaymentsList(),
+          Expanded(
+            child: PaymentsList(),
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
