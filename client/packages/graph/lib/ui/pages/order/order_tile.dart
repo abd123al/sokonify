@@ -14,6 +14,14 @@ class OrderTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// This will show black for pending orders.
+    Color? color;
+    if (order.status == OrderStatus.completed) {
+      color = Colors.green;
+    } else if (order.status == OrderStatus.canceled) {
+      color = Colors.red;
+    }
+
     return Card(
       child: Builder(
         builder: (context) {
@@ -37,7 +45,9 @@ class OrderTile extends StatelessWidget {
             dense: true,
             trailing: Text(
               describeEnum(order.status).toUpperCase(),
-              style: Theme.of(context).textTheme.titleMedium,
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    color: color,
+                  ),
             ),
             onTap: () => redirectTo(context, "${Routes.order}/${order.id}"),
           );
