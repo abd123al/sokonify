@@ -65,8 +65,7 @@ class OrderPage extends StatelessWidget {
           _buildTile("Created At", "${data.createdAt}"),
           _buildTile("Status", describeEnum(data.status)),
           if (data.payment != null)
-            _buildTile("Paid Amount",
-                describeEnum(formatCurrency(data.payment!.amount))),
+            _buildTile("Paid Amount", formatCurrency(data.payment!.amount)),
         ];
 
         final right = [
@@ -191,7 +190,7 @@ class OrderPage extends StatelessWidget {
                       ),
                       if (data.payment != null)
                         _buildButton(
-                          "Print Receipt",
+                          "Issue Receipt",
                           Icons.print,
                           () {},
                         ),
