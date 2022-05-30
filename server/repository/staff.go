@@ -19,7 +19,7 @@ func CreateStaff(db *gorm.DB, input model.StaffInput, StoreID int) (*model.Staff
 	for _, s := range memberships {
 		//Checking is user is already a member of this store
 		//This will prevent duplicates
-		if s.ID == StoreID {
+		if s.StoreID == StoreID {
 			return nil, errors.New("user is already a staff in this store")
 		}
 		//Checking if user has default login store
@@ -36,8 +36,10 @@ func CreateStaff(db *gorm.DB, input model.StaffInput, StoreID int) (*model.Staff
 		Default: !hasDefault,
 	}
 
-	result := db.Create(&staff)
-	return &staff, result.Error
+	if err := db.Create(&staff).Error; err != nil {
+		return nil, err
+	}
+	return &staff, nil
 }
 
 func FindStaff(db *gorm.DB, ID int) (*model.Staff, error) {
