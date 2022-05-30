@@ -247,7 +247,7 @@ func (r *paymentResolver) Name(ctx context.Context, obj *model.Payment) (string,
 		return repository.FindName(r.DB, obj.StaffID)
 	}
 
-	return "", nil
+	return repository.FindOrderCustomerName(r.DB, *obj.OrderID)
 }
 
 func (r *productResolver) Brands(ctx context.Context, obj *model.Product) ([]*model.Brand, error) {

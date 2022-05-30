@@ -81,4 +81,12 @@ func TestOrders(t *testing.T) {
 		require.NotEmpty(t, orders)
 		require.NotEqual(t, orders[0].ID, 0)
 	})
+
+	t.Run("FindOrderCustomerName", func(t *testing.T) {
+		orderResult := util.CreateOrder(DB, nil)
+		name, err := repository.FindOrderCustomerName(DB, orderResult.Order.ID)
+
+		require.Nil(t, err)
+		require.NotEmpty(t, name)
+	})
 }

@@ -98,3 +98,14 @@ func FindOrder(db *gorm.DB, ID int) (*model.Order, error) {
 	result := db.Where(&model.Order{ID: ID}).First(&order)
 	return order, result.Error
 }
+
+func FindOrderCustomerName(db *gorm.DB, OrderID int) (string, error) {
+	var name string
+
+	err := db.Table("orders").Joins("inner join customers on customers.id = orders.customer_id AND orders.id = ?", OrderID).Select("customers.name as name").Row().Scan(&name)
+	if err != nil {
+		return "", nil
+	}
+
+	return name, nil
+}
