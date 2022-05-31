@@ -15,6 +15,11 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+        with:
+          repository: kateile/blocitory
+          token: ${{ secrets.BROCITORY_ACCESS_TOKEN }}
+          path: blocitory
       - uses: actions/setup-java@v2
         with:
           distribution: 'zulu'
@@ -32,7 +37,8 @@ jobs:
 
       - name: run msix build script
         shell: pwsh
-        run: '& $env:GITHUB_ACTION_PATH/client/scripts/build_offline_msi.ps1'
+        working-directory: client/scripts
+        run: build_offline_msi.ps1
 
       - name: Push to Releases
         uses: ncipollo/release-action@v1

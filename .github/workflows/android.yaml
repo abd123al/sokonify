@@ -59,7 +59,7 @@ jobs:
         run: echo "::set-output name=tag::${{steps.date.outputs.date}}.${{steps.version.outputs.version}}.${{github.ref_name}}"
 
       - name: Building appbundle
-        working-directory: ./client/apps/online/client
+        working-directory: ./client/apps/online
         run: >
           flutter build appbundle
           --release
