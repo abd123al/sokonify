@@ -22,7 +22,7 @@ class SimpleStats extends StatelessWidget {
       retry: (cubit) => cubit.fetch(),
       builder: (context, data, _) {
         final netIncome = Decimal.parse(data.totalSalesAmount) -
-            Decimal.parse(data.totalExpensesAmount);
+            Decimal.parse(data.totalExpensesAmount.replaceAll("-", ""));
 
         final List<StatTile> children = [
           StatTile(
@@ -33,7 +33,7 @@ class SimpleStats extends StatelessWidget {
           ),
           StatTile(
             title: 'Total Expenses',
-            value: formatCurrency(data.totalExpensesAmount),
+            value: formatCurrency(data.totalExpensesAmount.replaceAll("-", "")),
             color: Colors.red,
           ),
           StatTile(
