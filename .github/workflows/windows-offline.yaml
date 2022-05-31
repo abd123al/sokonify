@@ -38,7 +38,7 @@ jobs:
       - name: run msix build script
         shell: pwsh
         working-directory: client/scripts
-        run: build_offline_msi.ps1
+        run: ./build_offline_msi.ps1
 
       - name: Push to Releases
         uses: ncipollo/release-action@v1

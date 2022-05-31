@@ -2,7 +2,7 @@ on:
   push:
     branches:
       - internal #What developers see
-      - alpha #
+#      - alpha #
       - beta #
       - production #What our users use
 
