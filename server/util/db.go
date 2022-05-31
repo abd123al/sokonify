@@ -19,6 +19,7 @@ type InitDbArgs struct {
 func InitDB(args InitDbArgs) (DB *gorm.DB) {
 	var db *gorm.DB
 	var err error
+	dbName := args.DbName
 
 	// We are using sqlite in offline mobile apps
 	if args.IsServer {
@@ -29,8 +30,9 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 		if args.IsRelease {
 			password = "#$0k0n1fy@5433"
 			port = "5433"
+			dbName = "sokonify"
 		}
-		dsn := fmt.Sprintf("host=localhost user=postgres password=%s dbname=%s port=%s sslmode=disable TimeZone=Africa/Nairobi", password, args.DbName, port)
+		dsn := fmt.Sprintf("host=localhost user=postgres password=%s dbname=%s port=%s sslmode=disable TimeZone=Africa/Nairobi", password, dbName, port)
 		db, err = gorm.Open(postgres.New(postgres.Config{DSN: dsn}), &gorm.Config{
 			//Logger: logger.Default.LogMode(logger.Info),
 		})

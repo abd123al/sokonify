@@ -14,7 +14,7 @@ func StartServer(Port int, IsServer bool, isRelease bool) int {
 		Port:       strconv.Itoa(Port),
 		IsServer:   IsServer,
 		IsRelease:  isRelease,
-		Multistore: false, //todo use int to show how many stores are possible
+		Multistore: true, //todo use int to show how many stores are possible
 	})
 
 	port, err := strconv.Atoi(result)
