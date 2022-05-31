@@ -10,7 +10,7 @@ func StartServer(Dsn string, Port string) string {
 	go util.StartServer(util.StartServerArgs{
 		Dsn:        Dsn,
 		Port:       Port,
-		Offline:    true,
+		IsServer:   false,
 		Multistore: true, //Since phone just belongs to one person
 	})
 

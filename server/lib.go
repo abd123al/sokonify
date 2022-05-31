@@ -9,12 +9,12 @@ import (
 )
 
 //export StartServer
-func StartServer(Port int, isRelease bool) int {
+func StartServer(Port int, IsServer bool, isRelease bool) int {
 	result := util.StartServer(util.StartServerArgs{
 		Port:       strconv.Itoa(Port),
-		Offline:    true,
+		IsServer:   IsServer,
 		IsRelease:  isRelease,
-		Multistore: false,
+		Multistore: false, //todo use int to show how many stores are possible
 	})
 
 	port, err := strconv.Atoi(result)

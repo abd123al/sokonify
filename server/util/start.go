@@ -17,7 +17,7 @@ import (
 )
 
 type StartServerArgs struct {
-	Offline    bool
+	IsServer   bool
 	Multistore bool
 	Port       string
 	Dsn        string //Especially for android
@@ -39,7 +39,7 @@ func StartServer(Args StartServerArgs) string {
 	db := InitDB(InitDbArgs{
 		DbName:    "mahesabu",
 		Clear:     false,
-		Offline:   Args.Offline,
+		IsServer:  Args.IsServer,
 		Dsn:       Args.Dsn,
 		IsRelease: Args.IsRelease,
 	})

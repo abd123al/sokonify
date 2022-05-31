@@ -11,7 +11,7 @@ import (
 type InitDbArgs struct {
 	DbName    string
 	Clear     bool
-	Offline   bool
+	IsServer  bool
 	Dsn       string
 	IsRelease bool
 }
@@ -21,14 +21,7 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 	var err error
 
 	// We are using sqlite in offline mobile apps
-	if args.Offline {
-		dsn := "sokonify.db"
-		if args.Dsn != "" {
-			//In android, we need full path
-			dsn = args.Dsn
-		}
-		db, err = gorm.Open(sqlite.Open(dsn), &gorm.Config{})
-	} else {
+	if args.IsServer {
 		password := "password"
 		port := "5432"
 
@@ -41,6 +34,13 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 		db, err = gorm.Open(postgres.New(postgres.Config{DSN: dsn}), &gorm.Config{
 			//Logger: logger.Default.LogMode(logger.Info),
 		})
+	} else {
+		dsn := "sokonify.db"
+		if args.Dsn != "" {
+			//In android, we need full path
+			dsn = args.Dsn
+		}
+		db, err = gorm.Open(sqlite.Open(dsn), &gorm.Config{})
 	}
 
 	if err != nil {
@@ -48,10 +48,7 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 	}
 
 	if args.Clear && !args.IsRelease {
-		if args.Offline {
-			// Clearing sqlite
-			//todo
-		} else {
+		if args.IsServer {
 			//Clearing postgres.
 			db.Exec("" +
 				"DROP SCHEMA public CASCADE; " +
@@ -59,6 +56,9 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 				"GRANT ALL ON SCHEMA public TO postgres; " +
 				"GRANT ALL ON SCHEMA public TO public;" +
 				"")
+		} else {
+			// Clearing sqlite
+			//todo
 		}
 	}
 
@@ -74,9 +74,9 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 
 func InitTestDB() *gorm.DB {
 	DB := InitDB(InitDbArgs{
-		DbName:  "mahesabu_test",
-		Clear:   true,
-		Offline: false,
+		DbName:   "mahesabu_test",
+		Clear:    true,
+		IsServer: true,
 	})
 
 	return DB
