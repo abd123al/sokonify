@@ -46,6 +46,7 @@ dependencies:
   decimal: ^2.2.0
   currency_formatter: ^1.2.1
   auto_size_text: ^3.0.0
+  window_manager: ^0.2.3
 
 dev_dependencies:
   flutter_test:
