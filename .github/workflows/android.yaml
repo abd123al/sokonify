@@ -15,8 +15,11 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
-          ssh-key: ${{ secrets.BROCITORY_SSH_KEY }}
+          repository: kateile/blocitory
+          token: ${{ secrets.BROCITORY_ACCESS_TOKEN }}
+          path: blocitory
       - uses: actions/setup-java@v2
         with:
           distribution: 'zulu'
