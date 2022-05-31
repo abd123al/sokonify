@@ -110,7 +110,8 @@ class _CreateItemPageState extends State<CreateItemPage> {
                       if (units.items.isEmpty) {
                         return CreateButton(
                           title: "Units",
-                          onPressed: () => redirectTo(context, Routes.createUnit),
+                          onPressed: () =>
+                              redirectTo(context, Routes.createUnit),
                         );
                       }
 

@@ -24,16 +24,29 @@ class Server {
     if (Platform.isWindows) {
       call(int port) async {
         final DynamicLibrary lib = DynamicLibrary.open("lib.dll");
-        final int Function(int, bool) startServer = lib
-            .lookup<NativeFunction<Int32 Function(Int32, Bool)>>('StartServer')
+        final int Function(int, bool, bool) startServer = lib
+            .lookup<NativeFunction<Int32 Function(Int32, Bool, Bool)>>(
+                'StartServer')
             .asFunction();
 
+        const isServer = bool.fromEnvironment(
+          "IS_SERVER",
+          defaultValue: false,
+        );
+
         //kReleaseMode will help deciding which db to use.
-        final result = startServer(port, kReleaseMode);
+        final result = startServer(port, isServer, kReleaseMode);
         return "$result";
       }
 
-      final port = getRandomSocket();
+      const noPort = 0;
+
+      const envPort = int.fromEnvironment(
+        "PORT",
+        defaultValue: noPort,
+      );
+
+      final port = envPort == noPort ? getRandomSocket() : envPort;
       Isolate.spawn(call, port);
 
       return "$port";
