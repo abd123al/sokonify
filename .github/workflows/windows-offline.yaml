@@ -6,10 +6,10 @@ on:
       - beta #
       - production #What our users use
 
-name: "Build & Release"
+name: "Build & Release Windows app"
 jobs:
   generate:
-    name: Generate codes
+    name: Build Windows app
     runs-on: windows-latest
     permissions:
       contents: write

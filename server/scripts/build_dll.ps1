@@ -1,6 +1,11 @@
 Write-Host "Building DDl started!"
 Write-Host $PSScriptRoot
 
+Set-Location $PSScriptRoot
+
+# Run graph generate
+.\generate.ps1
+
 #This is current dirctory
 Set-Location $PSScriptRoot
 
