@@ -1,8 +1,6 @@
 on:
   push:
     branches:
-      - internal #What developers see
-      - alpha #
       - beta #
       - production #What our users use
 
@@ -11,6 +9,7 @@ jobs:
   generate:
     name: Build Windows app
     runs-on: windows-latest
+    timeout-minutes: 20
     permissions:
       contents: write
     steps:
