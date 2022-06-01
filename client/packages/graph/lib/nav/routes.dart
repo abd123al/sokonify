@@ -4,6 +4,7 @@ import './route_handlers.dart';
 
 class Routes {
   static String root = "/";
+  static String createBrand = "/createBrand";
   static String createCategory = "/createCategory";
   static String createCustomer = "/createCustomer";
   static String createExpense = "/createExpense";
@@ -15,6 +16,7 @@ class Routes {
   static String createStore = "/createStore";
   static String createUnit = "/createUnit";
 
+  static String brands = "/brands";
   static String categories = "/categories";
   static String expenses = "/expenses";
   static String order = "/order";
@@ -32,6 +34,12 @@ class Routes {
     router.define(
       categories,
       handler: categoriesListRouterHandler,
+      transitionType: TransitionType.materialFullScreenDialog,
+    );
+
+    router.define(
+      createBrand,
+      handler: createBrandPagePageRouterHandler,
       transitionType: TransitionType.materialFullScreenDialog,
     );
 
@@ -93,6 +101,12 @@ class Routes {
       createUnit,
       handler: createUnitRouterHandler,
       transitionType: TransitionType.materialFullScreenDialog,
+    );
+
+    router.define(
+      brands,
+      handler: brandsPagePageRouterHandler,
+      transitionType: TransitionType.inFromLeft,
     );
 
     router.define(

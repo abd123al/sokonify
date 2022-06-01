@@ -64,7 +64,9 @@ class SokonifyDrawer extends StatelessWidget {
               ListTile(
                 title: const Text('Brands'),
                 trailing: const Icon(Icons.branding_watermark_outlined),
-                onTap: () {},
+                onTap: () {
+                  redirectTo(context, Routes.brands);
+                },
               ),
               const Divider(),
               ListTile(

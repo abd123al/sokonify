@@ -56,6 +56,7 @@ class UniBlocProviderState extends State<UniBlocProvider> {
 
         final storeRepository = StoreRepository(client);
         final authRepository = AuthRepository(client);
+        final brandRepository = BrandRepository(client);
         final expenseRepository = ExpenseRepository(client);
         final categoryRepository = CategoryRepository(client);
         final customerRepository = CustomerRepository(client);
@@ -75,6 +76,11 @@ class UniBlocProviderState extends State<UniBlocProvider> {
             BlocProvider(
               create: (context) {
                 return StoresListCubit(storeRepository)..fetch();
+              },
+            ),
+            BlocProvider(
+              create: (context) {
+                return BrandsListCubit(brandRepository)..fetch();
               },
             ),
             BlocProvider(
@@ -140,39 +146,18 @@ class UniBlocProviderState extends State<UniBlocProvider> {
           ],
           child: MultiRepositoryProvider(
             providers: [
-              RepositoryProvider(
-                create: (context) => authRepository,
-              ),
-              RepositoryProvider(
-                create: (context) => storeRepository,
-              ),
-              RepositoryProvider(
-                create: (context) => userRepository,
-              ),
-              RepositoryProvider(
-                create: (context) => itemRepository,
-              ),
-              RepositoryProvider(
-                create: (context) => productRepository,
-              ),
-              RepositoryProvider(
-                create: (context) => unitRepository,
-              ),
-              RepositoryProvider(
-                create: (context) => categoryRepository,
-              ),
-              RepositoryProvider(
-                create: (context) => orderRepository,
-              ),
-              RepositoryProvider(
-                create: (context) => customerRepository,
-              ),
-              RepositoryProvider(
-                create: (context) => paymentRepository,
-              ),
-              RepositoryProvider(
-                create: (context) => expenseRepository,
-              ),
+              RepositoryProvider(create: (context) => authRepository),
+              RepositoryProvider(create: (context) => brandRepository),
+              RepositoryProvider(create: (context) => storeRepository),
+              RepositoryProvider(create: (context) => userRepository),
+              RepositoryProvider(create: (context) => itemRepository),
+              RepositoryProvider(create: (context) => productRepository),
+              RepositoryProvider(create: (context) => unitRepository),
+              RepositoryProvider(create: (context) => categoryRepository),
+              RepositoryProvider(create: (context) => orderRepository),
+              RepositoryProvider(create: (context) => customerRepository),
+              RepositoryProvider(create: (context) => paymentRepository),
+              RepositoryProvider(create: (context) => expenseRepository),
             ],
             child: widget.child,
           ),
