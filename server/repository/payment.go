@@ -144,7 +144,7 @@ func FindPayments(DB *gorm.DB, args model.PaymentsArgs, StoreID int) ([]*model.P
 	var payments []*model.Payment
 	var result *gorm.DB
 
-	sort := "id " + "DESC" //todo use sortBy var
+	sort := "payments.id " + "DESC" //todo use sortBy var
 	By := args.By
 	//Type := args.Type
 	//Limit := args.Limit
