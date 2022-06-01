@@ -40,7 +40,7 @@ class _CreateExpensesCategoryPageState extends State<CreateExpensesCategoryPage>
         BlocProvider.of<ExpensesCategoriesListCubit>(context)
             .addItem(Expenses$Query$Expense.fromJson(data.toJson()));
       },
-      pop: false,
+      pop: true,
       builder: (context, cubit) {
         return Form(
           child: Padding(

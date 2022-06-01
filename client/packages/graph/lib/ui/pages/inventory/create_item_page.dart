@@ -193,7 +193,7 @@ class _CreateItemPageState extends State<CreateItemPage> {
                       BlocProvider.of<ItemsListCubit>(context)
                           .addItem(Items$Query$Item.fromJson(data.toJson()));
                     },
-                    pop: false,
+                    pop: true,
                     builder: (context, cubit) {
                       return Button(
                         padding: EdgeInsets.zero,
