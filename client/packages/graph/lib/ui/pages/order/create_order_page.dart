@@ -44,29 +44,31 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("New Order"),
+        title: Text(widget.isOrder ? "New Order" : "New Sales"),
       ),
       body: _buildForm(),
     );
   }
 
   Widget _buildForm() {
-    return QueryBuilder<ResourceListData<Items$Query$Item>, ItemsListCubit>(
-      retry: (cubit) => cubit.fetch(),
-      builder: (context, itemsData, _) {
-        return MutationBuilder<CreateOrderPayment$Mutation$Payment,
-            CreateOrderPaymentCubit, PaymentRepository>(
-          blocCreator: (r) => CreateOrderPaymentCubit(r),
-          onSuccess: (context, data) {
-            BlocProvider.of<PaymentsListCubit>(context)
-                .addItem(Payments$Query$Payment.fromJson(data.toJson()));
-          },
-          pop: true,
-          builder: (context, salesCubit) {
-            return BlocBuilder<NewOrderCubit, NewOrder>(
-              builder: (context, state) {
-                final newOrderCubit = BlocProvider.of<NewOrderCubit>(context);
+    return BlocBuilder<NewOrderCubit, NewOrder>(
+      builder: (context, state) {
+        final newOrderCubit = BlocProvider.of<NewOrderCubit>(context);
 
+        return QueryBuilder<ResourceListData<Items$Query$Item>, ItemsListCubit>(
+          retry: (cubit) => cubit.fetch(),
+          builder: (context, itemsData, _) {
+            return MutationBuilder<CreateOrderPayment$Mutation$Payment,
+                CreateOrderPaymentCubit, PaymentRepository>(
+              blocCreator: (r) => CreateOrderPaymentCubit(r),
+              onSuccess: (context, data) {
+                newOrderCubit.reset();
+
+                BlocProvider.of<PaymentsListCubit>(context)
+                    .addItem(Payments$Query$Payment.fromJson(data.toJson()));
+              },
+              pop: true,
+              builder: (context, salesCubit) {
                 final card = Card(
                   elevation: 16,
                   child: Padding(
