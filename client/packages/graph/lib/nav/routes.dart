@@ -11,6 +11,7 @@ class Routes {
   static String createItem = "/createItem";
   static String createOrder = "/createOrder";
   static String createProduct = "/createProduct";
+  static String createSales = "/createSales";
   static String createStore = "/createStore";
   static String createUnit = "/createUnit";
 
@@ -67,6 +68,12 @@ class Routes {
     router.define(
       createOrder,
       handler: createOrderPageRouterHandler,
+      transitionType: TransitionType.inFromLeft,
+    );
+
+    router.define(
+      createSales,
+      handler: createSalePageRouterHandler,
       transitionType: TransitionType.inFromLeft,
     );
 

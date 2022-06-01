@@ -131,6 +131,7 @@ type Mutation {
     createOrder(input: OrderInput!): Order!
     createOrderPayment(input: OrderPaymentInput!): Payment!
     createProduct(input: ProductInput!): Product!
+    createSales(input: SalesInput!): Payment!
     createStaff(input: StaffInput!): Staff!
     createStore(input: StoreInput!): Store!
     createUnit(input: UnitInput!): Unit!
@@ -455,7 +456,7 @@ input BrandInput {
 }
 
 input BrandsArgs {
-    productId: Int!
+    productId: Int
 }
 
 input CategoryInput {
@@ -579,6 +580,11 @@ input ProductsArgs {
     by: ProductsBy = store
     storeType: StoreType
     value: ID
+}
+
+input SalesInput {
+    comment: String
+    items: [OrderItemInput!]!
 }
 
 input SignInInput {

@@ -1,0 +1,5 @@
+mutation createSales($input:SalesInput!) {
+    createSales(input: $input){
+        ...PaymentParts
+    }
+}

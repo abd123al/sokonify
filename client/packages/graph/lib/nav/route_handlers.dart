@@ -42,23 +42,29 @@ var createOrderPageRouterHandler = Handler(handlerFunc: (_, __) {
   return const CreateOrderPage();
 });
 
+var createSalePageRouterHandler = Handler(handlerFunc: (_, __) {
+  return const CreateOrderPage(
+    isOrder: false,
+  );
+});
+
 var createCustomerRouterHandler = Handler(handlerFunc: (_, __) {
   return const CreateCustomerPage();
 });
 
 var orderPageRouterHandler = Handler(handlerFunc: (_, params) {
   final id = params["id"]![0];
-  return  OrderPage(id: int.parse(id));
+  return OrderPage(id: int.parse(id));
 });
 
 var createExpensePageRouterHandler = Handler(handlerFunc: (_, __) {
-  return  const CreateExpensesCategoryPage();
+  return const CreateExpensesCategoryPage();
 });
 
 var expensesListPageRouterHandler = Handler(handlerFunc: (_, __) {
-  return  const ExpensesListPage();
+  return const ExpensesListPage();
 });
 
 var trackExpensePagePageRouterHandler = Handler(handlerFunc: (_, __) {
-  return  const TrackExpensePage();
+  return const TrackExpensePage();
 });

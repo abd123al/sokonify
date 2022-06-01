@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../nav/nav.dart';
 import '../payment/payments_list.dart';
 import 'stats/simple_stats.dart';
 
@@ -13,9 +14,7 @@ class POS extends StatelessWidget {
         topper: SimpleStats(),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          //todo here we just open window for single item
-        },
+        onPressed: () => redirectTo(context, Routes.createSales),
         icon: const Icon(Icons.add),
         backgroundColor: Colors.blue,
         label: const Text("Track Sales"),

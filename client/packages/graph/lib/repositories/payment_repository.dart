@@ -32,4 +32,13 @@ class PaymentRepository {
 
     return client.query(options);
   }
+
+  createSalesPayment(SalesInput input) {
+    final options = MutationOptions(
+      document: CREATE_SALES_MUTATION_DOCUMENT,
+      variables: CreateSalesArguments(input: input).toJson(),
+    );
+
+    return client.mutate(options);
+  }
 }

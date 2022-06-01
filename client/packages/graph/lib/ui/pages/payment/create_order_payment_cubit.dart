@@ -17,4 +17,15 @@ class CreateOrderPaymentCubit
       },
     );
   }
+
+  submitSalesPayment(SalesInput input) {
+    super.execute(
+      executor: () => _repository.createSalesPayment(input),
+      parser: (r) {
+        final result = CreateSales$Mutation.fromJson(r).createSales;
+
+        return CreateOrderPayment$Mutation$Payment.fromJson(result.toJson());
+      },
+    );
+  }
 }
