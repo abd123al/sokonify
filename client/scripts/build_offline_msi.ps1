@@ -16,4 +16,4 @@ cd..
 
 cd apps/offline
 flutter pub get
-flutter pub run msix:create
+flutter pub run msix:create --version "1.0.0.3" -n "sokonify_community_edition" -d "Sokonify Community" -i "sokonify.freemium" --build-windows false
