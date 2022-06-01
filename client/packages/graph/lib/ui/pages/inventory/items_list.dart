@@ -15,12 +15,13 @@ class ItemsList extends StatelessWidget {
       retry: (cubit) => cubit.fetch(),
       builder: (context, data, _) {
         return SearchableList<Items$Query$Item>(
-          hintName: "Product",
-          list: data.items,
+          hintName: "Item",
+          data: data,
           compare: (i) => ItemTile.formatItemName(i),
-          builder: (context, item) {
+          builder: (context, item,color) {
             return ItemTile(
               item: item,
+              color: color,
             );
           },
         );

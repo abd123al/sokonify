@@ -46,10 +46,10 @@ class _OrdersList extends StatelessWidget {
       builder: (context, data, _) {
         return SearchableList<Orders$Query$Order>(
           hintName: "Order",
-          list: data.items,
+          data: data,
           compare: (i) => "${i.customer?.name}${i.id}",
-          builder: (context, o) {
-            return OrderTile(order: o);
+          builder: (context, o, color) {
+            return OrderTile(order: o,color: color,);
           },
         );
       },

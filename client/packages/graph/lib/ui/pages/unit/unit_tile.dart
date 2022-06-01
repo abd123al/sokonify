@@ -6,9 +6,11 @@ class UnitTile extends StatelessWidget {
   const UnitTile({
     Key? key,
     required this.unit,
+    this.color,
   }) : super(key: key);
 
   final Units$Query$Unit unit;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +19,7 @@ class UnitTile extends StatelessWidget {
         unit.name,
         style: Theme.of(context).textTheme.headlineSmall,
       ),
+      tileColor: color,
     );
   }
 }

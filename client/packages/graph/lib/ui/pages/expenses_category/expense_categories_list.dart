@@ -17,11 +17,12 @@ class ExpensesList extends StatelessWidget {
       builder: (context, data, _) {
         return SearchableList<Expenses$Query$Expense>(
           hintName: "Product",
-          list: data.items,
+          data: data,
           compare: (i) => i.name,
-          builder: (context, item) {
+          builder: (context, item,color) {
             return ExpenseCategoryTile(
               expense: item,
+              color: color,
             );
           },
         );

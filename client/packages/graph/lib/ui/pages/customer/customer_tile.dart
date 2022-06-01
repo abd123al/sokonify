@@ -6,13 +6,16 @@ class CustomerTile extends StatelessWidget {
   const CustomerTile({
     Key? key,
     required this.customer,
+    this.color,
   }) : super(key: key);
 
   final Customers$Query$Customer customer;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: color,
       child: Builder(
         builder: (context) {
           return ListTile(

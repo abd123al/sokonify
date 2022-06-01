@@ -1,20 +1,22 @@
+import 'package:blocitory/helpers/resource_list_data.dart';
 import 'package:flutter/material.dart';
 
 import 'empty_list.dart';
+import 'high_builder.dart';
 
 class SearchableList<T> extends StatefulWidget {
   const SearchableList({
     Key? key,
     required this.builder,
     required this.compare,
-    required this.list,
+    required this.data,
     required this.hintName,
   }) : super(key: key);
 
-  final Widget Function(BuildContext context, T item) builder;
+  final Widget Function(BuildContext context, T item, Color? color) builder;
   final String Function(T item) compare;
   final String hintName;
-  final List<T> list;
+  final ResourceListData<T> data;
 
   @override
   State<StatefulWidget> createState() {
@@ -34,7 +36,7 @@ class _SearchableListState<T> extends State<SearchableList<T>> {
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
-        List<T> items = widget.list;
+        List<T> items = widget.data.items;
 
         if (_keyword.isNotEmpty) {
           items = items.where((e) {
@@ -77,12 +79,13 @@ class _SearchableListState<T> extends State<SearchableList<T>> {
                   );
                 }
                 return Expanded(
-                  child: ListView.builder(
-                    itemBuilder: (context, index) {
-                      final store = items[index];
-                      return widget.builder(context, store);
+                  child: HighList<T>(
+                    items: widget.data.copyWith(
+                      items: items,
+                    ),
+                    builder: (context, item, color) {
+                      return widget.builder(context, item, color);
                     },
-                    itemCount: items.length,
                   ),
                 );
               },

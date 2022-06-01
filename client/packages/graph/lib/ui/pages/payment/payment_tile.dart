@@ -8,18 +8,21 @@ class PaymentTile extends StatelessWidget {
     Key? key,
     required this.payment,
     this.currency = "TZS",
+    this.color,
   }) : super(key: key);
 
   final Payments$Query$Payment payment;
   final String currency;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
-    final color = payment.type == PaymentType.order
+    final amountColor = payment.type == PaymentType.order
         ? Theme.of(context).primaryColorDark
         : Colors.red;
 
     return Card(
+      color: color,
       child: ListTile(
         title: Text(
           payment.name,
@@ -34,7 +37,7 @@ class PaymentTile extends StatelessWidget {
           formatCurrency(payment.amount),
           overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: color,
+                color: amountColor,
               ),
         ),
       ),

@@ -6,13 +6,16 @@ class ExpenseCategoryTile extends StatelessWidget {
   const ExpenseCategoryTile({
     Key? key,
     required this.expense,
+    this.color,
   }) : super(key: key);
 
   final Expenses$Query$Expense expense;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: color,
       child: Builder(
         builder: (context) {
           return ListTile(

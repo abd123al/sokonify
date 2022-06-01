@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../nav/nav.dart';
-import '../../widgets/empty_list.dart';
+import '../../widgets/high_builder.dart';
 import 'categories_list_cubit.dart';
+import 'category_tile.dart';
 
 class CategoriesListPage extends StatelessWidget {
   const CategoriesListPage({Key? key}) : super(key: key);
@@ -30,29 +31,14 @@ class CategoriesListPage extends StatelessWidget {
         CategoriesListCubit>(
       retry: (cubit) => cubit.fetch(),
       builder: (context, units, _) {
-        if (units.items.isEmpty) {
-          return const EmptyList(
-            message: "No Categories found, Please create some",
-          );
-        }
-        return ListView.builder(
-          itemBuilder: (context, index) {
-            final store = units.items[index];
-
-            return Card(
-              elevation: 16,
-              child: ListTile(
-                title: Text(
-                  store.name,
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                leading: CircleAvatar(
-                  child: Text(store.name.substring(0, 2)),
-                ),
-              ),
+        return HighList<Categories$Query$Category>(
+          builder: (context, store, color) {
+            return CategoryTile(
+              category: store,
+              color: color,
             );
           },
-          itemCount: units.items.length,
+          items: units,
         );
       },
     );

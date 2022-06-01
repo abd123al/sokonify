@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 
-class ProductTile extends StatelessWidget {
-  const ProductTile({
+class CategoryTile extends StatelessWidget {
+  const CategoryTile({
     Key? key,
-    required this.product,
+    required this.category,
     this.color,
   }) : super(key: key);
 
-  final Products$Query$Product product;
+  final Categories$Query$Category category;
   final Color? color;
 
   @override
@@ -19,7 +19,7 @@ class ProductTile extends StatelessWidget {
       elevation: 16,
       child: ListTile(
         title: Text(
-          product.name,
+          category.name,
           style: Theme.of(context).textTheme.headlineSmall,
         ),
       ),

@@ -29,3 +29,5 @@
 build/
 
 lib/gql/generated/
+.flutter-plugins
+.flutter-plugins-dependencies

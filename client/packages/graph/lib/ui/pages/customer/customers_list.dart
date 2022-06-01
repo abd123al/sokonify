@@ -17,10 +17,10 @@ class CustomersList extends StatelessWidget {
       builder: (context, data, _) {
         return SearchableList<Customers$Query$Customer>(
           hintName: "Customer",
-          list: data.items,
+          data: data,
           compare: (i) => i.name,
-          builder: (context, c) {
-            return CustomerTile(customer: c);
+          builder: (context, c, color) {
+            return CustomerTile(customer: c,color:color);
           },
         );
       },

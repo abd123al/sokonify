@@ -8,10 +8,12 @@ class ItemTile extends StatelessWidget {
     Key? key,
     required this.item,
     this.currency = "TZS",
+    this.color,
   }) : super(key: key);
 
   final Items$Query$Item item;
   final String currency;
+  final Color? color;
 
   static String formatItemName(Items$Query$Item item) {
     final n = item.product.name;
@@ -27,6 +29,7 @@ class ItemTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: color,
       child: Builder(
         builder: (context) {
           final name = formatItemName(item);

@@ -38,14 +38,18 @@ class PaymentsList extends StatelessWidget {
             Topper(
               label: "Today ${word()}",
             ),
-            ListView.builder(
-              controller: ScrollController(),
+            HighList<Payments$Query$Payment>(
               shrinkWrap: true,
-              itemBuilder: (context, index) {
-                final p = payments[index];
-                return PaymentTile(payment: p);
+              emptyWord: "No recent payments",
+              builder: (context, store, color) {
+                return PaymentTile(
+                  payment: store,
+                  color: color,
+                );
               },
-              itemCount: payments.length,
+              items: data.copyWith(
+                items: payments,
+              ),
             ),
           ],
         );

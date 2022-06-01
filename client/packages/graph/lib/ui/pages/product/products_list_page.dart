@@ -3,36 +3,13 @@ import 'package:flutter/material.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../nav/nav.dart';
-import '../../widgets/empty_list.dart';
+import '../../widgets/searchable_list.dart';
 import 'product_tile.dart';
 import 'products_list_cubit.dart';
 
 //todo show product count
-class ProductList extends StatefulWidget {
-  const ProductList({
-    Key? key,
-    this.onSelected,
-    this.labelText,
-  }) : super(key: key);
-
-  final Function(Products$Query$Product)? onSelected;
-  final String? labelText;
-
-  @override
-  State<StatefulWidget> createState() {
-    return _ProductState();
-  }
-}
-
-class _ProductState extends State<ProductList> {
-  String _keyword = "";
-  late bool selective;
-
-  @override
-  void initState() {
-    selective = widget.onSelected != null;
-    super.initState();
-  }
+class ProductList extends StatelessWidget {
+  const ProductList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,58 +17,16 @@ class _ProductState extends State<ProductList> {
         ProductsListCubit>(
       retry: (cubit) => cubit.fetch(),
       builder: (context, data, _) {
-        List<Products$Query$Product> units = data.items;
-
-        if (_keyword.isNotEmpty) {
-          units = units.where((e) {
-            final searchable =  e.name.toLowerCase();
-            return searchable.contains(_keyword.toLowerCase());
-          }).toList();
-        }
-
-        if (units.isEmpty) {
-          if (_keyword.isNotEmpty) {
-            return TextButton(
-              onPressed: () {},
-              child: Text("$_keyword was found, but you can create it."),
+        return SearchableList<Products$Query$Product>(
+          hintName: "Product",
+          data: data,
+          compare: (i) => i.name,
+          builder: (context, item, color) {
+            return ProductTile(
+              product: item,
+              color: color,
             );
-          }
-          return const EmptyList(
-            message: "No Products found, Please create some",
-          );
-        }
-
-        return Column(
-          children: [
-            Card(
-              child: TextField(
-                autofocus: false,
-                keyboardType: TextInputType.text,
-                onChanged: (s) {
-                  setState(() {
-                    _keyword = s;
-                  });
-                },
-                decoration: InputDecoration(
-                  hintText: 'Search Product',
-                  labelText: widget.labelText,
-                  border: const OutlineInputBorder(),
-                  suffixIcon: const Icon(Icons.search_outlined),
-                ),
-              ),
-            ),
-            ListView.builder(
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                final product = units[index];
-
-                return ProductTile(
-                  product: product,
-                );
-              },
-              itemCount: units.length,
-            ),
-          ],
+          },
         );
       },
     );
