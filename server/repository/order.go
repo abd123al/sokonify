@@ -55,7 +55,7 @@ func FindOrders(DB *gorm.DB, args model.OrdersArgs, StoreID int) ([]*model.Order
 	Limit := args.Limit
 	Offset := args.Offset
 
-	q := DB //.Debug()
+	q := DB.Debug().Where("orders.customer_id IS NOT NULL") //.Debug()
 
 	//todo handle status
 	if By == model.OrdersByStore {
