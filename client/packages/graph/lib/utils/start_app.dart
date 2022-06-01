@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -36,11 +35,9 @@ startApp({
   ]);
 
   runApp(
-    Phoenix(
-      child: GraphqlClientBuilder(
-        urlHandler: urlHandler,
-        statusHandler: statusHandler,
-      ),
+    GraphqlClientBuilder(
+      urlHandler: urlHandler,
+      statusHandler: statusHandler,
     ),
   );
 }

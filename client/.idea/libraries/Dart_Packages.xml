@@ -134,8 +134,8 @@
         <entry key="built_value">
           <value>
             <list>
-              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/built_value-8.2.3/lib" />
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/built_value-8.2.0/lib" />
+              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/built_value-8.2.3/lib" />
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/built_value-8.3.2/lib" />
             </list>
           </value>
@@ -274,8 +274,8 @@
         <entry key="crypto">
           <value>
             <list>
-              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/crypto-3.0.2/lib" />
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/crypto-3.0.1/lib" />
+              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/crypto-3.0.2/lib" />
             </list>
           </value>
         </entry>
@@ -420,8 +420,8 @@
         <entry key="flutter_hooks">
           <value>
             <list>
-              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_hooks-0.18.3/lib" />
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_hooks-0.18.4/lib" />
+              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_hooks-0.18.3/lib" />
             </list>
           </value>
         </entry>
@@ -677,16 +677,16 @@
         <entry key="json_annotation">
           <value>
             <list>
-              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/json_annotation-4.5.0/lib" />
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/json_annotation-4.4.0/lib" />
+              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/json_annotation-4.5.0/lib" />
             </list>
           </value>
         </entry>
         <entry key="json_serializable">
           <value>
             <list>
-              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/json_serializable-6.2.0/lib" />
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/json_serializable-6.1.6/lib" />
+              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/json_serializable-6.2.0/lib" />
             </list>
           </value>
         </entry>
@@ -801,8 +801,8 @@
         <entry key="path_provider_android">
           <value>
             <list>
-              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_android-2.0.13/lib" />
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_android-2.0.12/lib" />
+              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_android-2.0.13/lib" />
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_android-2.0.14/lib" />
             </list>
           </value>
@@ -1261,16 +1261,16 @@
         <entry key="web_socket_channel">
           <value>
             <list>
-              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/web_socket_channel-2.2.0/lib" />
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/web_socket_channel-2.1.0/lib" />
+              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/web_socket_channel-2.2.0/lib" />
             </list>
           </value>
         </entry>
         <entry key="win32">
           <value>
             <list>
-              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/win32-2.5.2/lib" />
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/win32-2.5.1/lib" />
+              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/win32-2.5.2/lib" />
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/win32-2.6.1/lib" />
             </list>
           </value>

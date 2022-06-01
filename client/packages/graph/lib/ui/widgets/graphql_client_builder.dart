@@ -1,5 +1,6 @@
 import 'package:blocitory/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:graph/ui/widgets/widgets.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -25,9 +26,11 @@ class GraphqlClientBuilder extends StatelessWidget {
       ),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return UniBlocProvider(
-            graphQLClient: snapshot.data!,
-            child: const App(),
+          return Phoenix(
+            child: UniBlocProvider(
+              graphQLClient: snapshot.data!,
+              child: const App(),
+            ),
           );
         }
 

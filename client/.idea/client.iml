@@ -163,6 +163,30 @@
       <excludeFolder url="file://$MODULE_DIR$/apps/offline/windows/flutter/ephemeral/.plugin_symlinks/printing/example/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/apps/offline/windows/flutter/ephemeral/.plugin_symlinks/printing/example/build" />
       <excludeFolder url="file://$MODULE_DIR$/apps/offline/windows/flutter/ephemeral/.plugin_symlinks/printing/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/linux/flutter/ephemeral/.plugin_symlinks/window_manager/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/linux/flutter/ephemeral/.plugin_symlinks/window_manager/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/linux/flutter/ephemeral/.plugin_symlinks/window_manager/build" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/linux/flutter/ephemeral/.plugin_symlinks/window_manager/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/linux/flutter/ephemeral/.plugin_symlinks/window_manager/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/linux/flutter/ephemeral/.plugin_symlinks/window_manager/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/windows/flutter/ephemeral/.plugin_symlinks/window_manager/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/windows/flutter/ephemeral/.plugin_symlinks/window_manager/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/windows/flutter/ephemeral/.plugin_symlinks/window_manager/build" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/windows/flutter/ephemeral/.plugin_symlinks/window_manager/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/windows/flutter/ephemeral/.plugin_symlinks/window_manager/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/windows/flutter/ephemeral/.plugin_symlinks/window_manager/build" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/windows/flutter/ephemeral/.plugin_symlinks/window_manager/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/windows/flutter/ephemeral/.plugin_symlinks/window_manager/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/windows/flutter/ephemeral/.plugin_symlinks/window_manager/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/linux/flutter/ephemeral/.plugin_symlinks/window_manager/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/linux/flutter/ephemeral/.plugin_symlinks/window_manager/build" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/linux/flutter/ephemeral/.plugin_symlinks/window_manager/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/linux/flutter/ephemeral/.plugin_symlinks/window_manager/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/linux/flutter/ephemeral/.plugin_symlinks/window_manager/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/linux/flutter/ephemeral/.plugin_symlinks/window_manager/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/windows/flutter/ephemeral/.plugin_symlinks/window_manager/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/windows/flutter/ephemeral/.plugin_symlinks/window_manager/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/offline/windows/flutter/ephemeral/.plugin_symlinks/window_manager/example/.pub" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
