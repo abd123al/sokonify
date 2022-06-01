@@ -92,6 +92,13 @@ func (r *mutationResolver) CreateProduct(ctx context.Context, input model.Produc
 	return repository.CreateProduct(r.DB, input, &helpers.ForContext(ctx).StoreID)
 }
 
+func (r *mutationResolver) CreateSales(ctx context.Context, input model.SalesInput) (*model.Payment, error) {
+	return repository.CreateSalePayment(r.DB, input, helpers.UserAndStoreArgs{
+		UserID:  helpers.ForContext(ctx).UserID,
+		StoreID: helpers.ForContext(ctx).StoreID,
+	})
+}
+
 func (r *mutationResolver) CreateStaff(ctx context.Context, input model.StaffInput) (*model.Staff, error) {
 	return repository.CreateStaff(r.DB, input, helpers.ForContext(ctx).StoreID)
 }

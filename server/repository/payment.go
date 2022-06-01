@@ -10,6 +10,35 @@ import (
 	"strconv"
 )
 
+func CreateSalePayment(DB *gorm.DB, input model.SalesInput, args helpers.UserAndStoreArgs) (*model.Payment, error) {
+	var payment *model.Payment
+
+	err := DB.Transaction(func(tx *gorm.DB) error {
+		order, err := CreateOrder(tx, args.UserID, model.OrderInput{
+			Type:       model.OrderTypeSale,
+			Items:      input.Items,
+			CustomerID: nil,
+		}, args.StoreID)
+
+		if err != nil {
+			return err
+		}
+
+		payment, err = CreateOrderPayment(tx, args.UserID, model.OrderPaymentInput{
+			OrderID:     order.ID,
+			Description: input.Comment,
+		})
+
+		return nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return payment, nil
+}
+
 // CreateOrderPayment todo loans
 func CreateOrderPayment(DB *gorm.DB, StaffID int, input model.OrderPaymentInput) (*model.Payment, error) {
 	var payment *model.Payment

@@ -485,8 +485,13 @@ type Order implements Gorm {
 
 input OrderInput {
     type: OrderType!
-    customerId: Int
+    customerId: Int @validate(constraint: "required")
     receiverId: Int
+    comment: String
+    items: [OrderItemInput!]!
+}
+
+input SalesInput {
     comment: String
     items: [OrderItemInput!]!
 }
@@ -710,6 +715,7 @@ type Mutation {
     createOrderPayment(input: OrderPaymentInput!): Payment! @isAuthenticated  @hasRole(role: staff)
     createExpensePayment(input: ExpensePaymentInput!): Payment! @isAuthenticated  @hasRole(role: staff)
     createProduct(input: ProductInput!): Product! @isAuthenticated  @hasRole(role: owner)
+    createSales(input: SalesInput!): Payment! @isAuthenticated  @hasRole(role: staff)
     createStaff(input: StaffInput!): Staff! @isAuthenticated  @hasRole(role: owner)
     createStore(input: StoreInput!): Store! @isAuthenticated
     # Only admins can create new user.

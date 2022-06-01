@@ -4,6 +4,7 @@ import (
 	"github.com/shopspring/decimal"
 	"github.com/stretchr/testify/require"
 	"mahesabu/graph/model"
+	"mahesabu/helpers"
 	"mahesabu/repository"
 	"mahesabu/util"
 	"testing"
@@ -214,5 +215,25 @@ func TestPayment(t *testing.T) {
 
 		require.Nil(t, err)
 		require.Equal(t, res, "0.00")
+	})
+
+	t.Run("CreateSale", func(t *testing.T) {
+		item := util.CreateItem(DB, nil, &store.ID)
+
+		payment, err := repository.CreateSalePayment(DB, model.SalesInput{
+			Items: []*model.OrderItemInput{
+				{
+					Quantity: item.Quantity,
+					Price:    item.SellingPrice,
+					ItemID:   item.ID,
+				},
+			},
+		}, helpers.UserAndStoreArgs{
+			UserID:  user.ID,
+			StoreID: store.ID,
+		})
+
+		require.Nil(t, err)
+		require.NotNil(t, payment)
 	})
 }
