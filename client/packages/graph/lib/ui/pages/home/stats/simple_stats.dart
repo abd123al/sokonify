@@ -26,7 +26,7 @@ class SimpleStats extends StatelessWidget {
 
         final List<StatTile> children = [
           StatTile(
-            title: 'Total Sales',
+            title: 'Total Income',
             value: formatCurrency(data.totalSalesAmount),
             color: Colors.brown,
             onTap: () {},
@@ -51,6 +51,7 @@ class SimpleStats extends StatelessWidget {
         //Function which returns list builder
         _buildGrid(int crossAxisCount, double childAspectRatio) {
           return GridView(
+            physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: crossAxisCount,
@@ -61,6 +62,7 @@ class SimpleStats extends StatelessWidget {
         }
 
         return ListView(
+          physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           children: [
             const Topper(
