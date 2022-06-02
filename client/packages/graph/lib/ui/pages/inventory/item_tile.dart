@@ -41,7 +41,7 @@ class ItemTile extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
             subtitle: Text(
-              "${item.quantity}",
+              "${item.quantity} ${item.unit.name}",
               style: Theme.of(context).textTheme.titleSmall,
             ),
             dense: true,
