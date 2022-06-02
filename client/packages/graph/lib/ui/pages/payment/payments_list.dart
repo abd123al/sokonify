@@ -32,7 +32,7 @@ class PaymentsList extends StatelessWidget {
         final payments = data.items.where((e) => e.type == type).toList();
 
         return ListView(
-          shrinkWrap: true,
+          physics: const BouncingScrollPhysics(),
           children: [
             topper,
             Topper(
@@ -40,6 +40,7 @@ class PaymentsList extends StatelessWidget {
             ),
             HighList<Payments$Query$Payment>(
               shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
               emptyWord: "No recent payments",
               builder: (context, store, color) {
                 return PaymentTile(

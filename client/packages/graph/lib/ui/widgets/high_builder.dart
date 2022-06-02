@@ -10,12 +10,14 @@ class HighList<T> extends StatelessWidget {
     required this.items,
     required this.builder,
     this.shrinkWrap = false,
+    this.physics = const BouncingScrollPhysics(),
     this.emptyWord = "Nothing found here!",
   }) : super(key: key);
 
   final ResourceListData<T> items;
   final Function(BuildContext context, T item, Color? color) builder;
   final bool shrinkWrap;
+  final ScrollPhysics physics;
   final String emptyWord;
 
   @override
@@ -28,6 +30,7 @@ class HighList<T> extends StatelessWidget {
 
     return ListView.builder(
       shrinkWrap: shrinkWrap,
+      physics: physics,
       itemBuilder: (context, index) {
         final item = items.items[index];
         final isNew = items.newItems.contains(item);
