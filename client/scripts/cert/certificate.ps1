@@ -4,7 +4,7 @@ $name = Read-Host "Certificate Name"
 Set-Location $PSScriptRoot
 
 $certificate = New-SelfSignedCertificate `
-                -Type Custom -Subject "CN=Sokonify Software, O=Sokonify Inc, C=US" `
+                -Type Custom -Subject "CN=Sokonify Software, O=Sokonify Inc, C=TZ" `
                 -KeyUsage DigitalSignature `
                 -FriendlyName "Sokonify" `
                 -CertStoreLocation "Cert:\CurrentUser\My" `

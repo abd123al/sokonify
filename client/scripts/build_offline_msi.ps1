@@ -15,5 +15,13 @@ Set-Location $PSScriptRoot
 cd..
 
 cd apps/offline
-flutter pub get
-flutter pub run msix:create --version "1.0.0.3" -n "sokonify_community_edition" -d "Sokonify Community" -i "sokonify.freemium" --build-windows false
+#flutter pub get
+flutter pub run msix:create `
+                    --version "1.0.0.4" `
+                    -c "$PSScriptRoot\sokonify.pfx" `
+                    -p "#50k0n1f4" `
+                    -n "sokonify_freemium" `
+                    -d "Sokonify Community" `
+                    -i "sokonify.freemium" `
+                    -b "CN=Sokonify Software, O=Sokonify Inc, C=TZ" `
+                    --install-certificate true
