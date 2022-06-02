@@ -82,7 +82,7 @@ class _CreateStorePageState extends State<TrackExpensePage> {
                         border: const OutlineInputBorder(),
                       ),
                       onChanged: (item) => setState(() {
-                        _expense = item!;
+                        _expense = item;
                       }),
                       selectedItem: _expense,
                       searchDelay: const Duration(milliseconds: 0),
@@ -92,43 +92,45 @@ class _CreateStorePageState extends State<TrackExpensePage> {
                     );
                   },
                 ),
-                const Divider(),
-                TextField(
-                  controller: _amountController,
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
-                  decoration:  InputDecoration(
-                    labelText: '$word Amount',
-                    hintText: 'Enter $word spent',
-                    border: const OutlineInputBorder(),
+                if (_expense != null) ...[
+                  const Divider(),
+                  TextField(
+                    controller: _amountController,
+                    keyboardType:
+                        const TextInputType.numberWithOptions(decimal: true),
+                    decoration: InputDecoration(
+                      labelText: '$word Amount',
+                      hintText: 'Enter $word spent',
+                      border: const OutlineInputBorder(),
+                    ),
                   ),
-                ),
-                const Divider(),
-                TextField(
-                  controller: _dController,
-                  keyboardType: TextInputType.multiline,
-                  maxLength: 100,
-                  maxLines: 2,
-                  decoration: const InputDecoration(
-                    labelText: 'Comment (Optional)',
-                    hintText: 'Enter anything..',
-                    border: OutlineInputBorder(),
+                  const Divider(),
+                  TextField(
+                    controller: _dController,
+                    keyboardType: TextInputType.multiline,
+                    maxLength: 100,
+                    maxLines: 2,
+                    decoration: const InputDecoration(
+                      labelText: 'Comment (Optional)',
+                      hintText: 'Enter anything..',
+                      border: OutlineInputBorder(),
+                    ),
                   ),
-                ),
-                Button(
-                  padding: EdgeInsets.zero,
-                  callback: () {
-                    cubit.submitExpensePayment(
-                      ExpensePaymentInput(
-                        description: _dController.text,
-                        method: PaymentMethod.cash,
-                        expenseId: _expense!.id,
-                        amount: _amountController.text,
-                      ),
-                    );
-                  },
-                  title: 'Submit $word',
-                ),
+                  Button(
+                    padding: EdgeInsets.zero,
+                    callback: () {
+                      cubit.submitExpensePayment(
+                        ExpensePaymentInput(
+                          description: _dController.text,
+                          method: PaymentMethod.cash,
+                          expenseId: _expense!.id,
+                          amount: _amountController.text,
+                        ),
+                      );
+                    },
+                    title: 'Submit $word',
+                  ),
+                ]
               ],
             ),
           ),
