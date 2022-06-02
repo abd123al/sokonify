@@ -17,7 +17,7 @@ class POS extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton.extended(
-            onPressed: () => redirectTo(context, Routes.createExpensePayment),
+            onPressed: () => redirectTo(context, Routes.createCustomPayment),
             icon: const Icon(Icons.payment),
             backgroundColor: Colors.blueGrey,
             label: const Text("Add Payment"),

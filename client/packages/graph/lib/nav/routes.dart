@@ -9,6 +9,7 @@ class Routes {
   static String createCustomer = "/createCustomer";
   static String createExpense = "/createExpense";
   static String createExpensePayment = "/createExpensePayment";
+  static String createCustomPayment = "/createCustomPayment";
   static String createItem = "/createItem";
   static String createOrder = "/createOrder";
   static String createProduct = "/createProduct";
@@ -64,6 +65,12 @@ class Routes {
     router.define(
       createExpensePayment,
       handler: trackExpensePagePageRouterHandler,
+      transitionType: TransitionType.inFromLeft,
+    );
+
+    router.define(
+      createCustomPayment,
+      handler: trackCustomPaymentPagePageRouterHandler,
       transitionType: TransitionType.inFromLeft,
     );
 

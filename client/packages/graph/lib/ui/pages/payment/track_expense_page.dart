@@ -12,7 +12,10 @@ import 'track_expense_cubit.dart';
 class TrackExpensePage extends StatefulWidget {
   const TrackExpensePage({
     Key? key,
+    required this.type,
   }) : super(key: key);
+
+  final ExpenseType type;
 
   @override
   State<StatefulWidget> createState() {
@@ -24,12 +27,19 @@ class _CreateStorePageState extends State<TrackExpensePage> {
   final _dController = TextEditingController();
   final _amountController = TextEditingController();
   Expenses$Query$Expense? _expense;
+  late String word;
+
+  @override
+  void initState() {
+    super.initState();
+    word = widget.type == ExpenseType.out ? "Expense" : "Payment";
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Track Expense"),
+        title: Text("Track $word"),
       ),
       body: _build(),
     );
@@ -54,6 +64,9 @@ class _CreateStorePageState extends State<TrackExpensePage> {
                     ExpensesCategoriesListCubit>(
                   retry: (cubit) => cubit.fetch(),
                   builder: (context, data, _) {
+                    final cats =
+                        data.items.where((e) => e.type == widget.type).toList();
+
                     return DropdownSearch<Expenses$Query$Expense>(
                       showSearchBox: true,
                       itemAsString: (u) => u!.name,
@@ -62,11 +75,11 @@ class _CreateStorePageState extends State<TrackExpensePage> {
                       },
                       isFilteredOnline: false,
                       mode: Mode.MENU,
-                      items: data.items,
-                      dropdownSearchDecoration: const InputDecoration(
-                        labelText: "Select Expense Category",
-                        hintText: "Type category name",
-                        border: OutlineInputBorder(),
+                      items: cats,
+                      dropdownSearchDecoration: InputDecoration(
+                        labelText: "Select $word Category",
+                        hintText: "Type $word name",
+                        border: const OutlineInputBorder(),
                       ),
                       onChanged: (item) => setState(() {
                         _expense = item!;
@@ -84,10 +97,10 @@ class _CreateStorePageState extends State<TrackExpensePage> {
                   controller: _amountController,
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
-                  decoration: const InputDecoration(
-                    labelText: 'Amount Spent',
-                    hintText: 'Enter amount spent',
-                    border: OutlineInputBorder(),
+                  decoration:  InputDecoration(
+                    labelText: '$word Amount',
+                    hintText: 'Enter $word spent',
+                    border: const OutlineInputBorder(),
                   ),
                 ),
                 const Divider(),
@@ -114,7 +127,7 @@ class _CreateStorePageState extends State<TrackExpensePage> {
                       ),
                     );
                   },
-                  title: 'Submit Expense',
+                  title: 'Submit $word',
                 ),
               ],
             ),

@@ -1,4 +1,5 @@
 fragment ExpenseParts on Expense {
     id
     name
+    type
 }

@@ -1,5 +1,6 @@
 import 'package:fluro/fluro.dart';
 
+import '../gql/generated/graphql_api.graphql.dart';
 import '../ui/pages/pages.dart';
 
 var rootHandler = Handler(handlerFunc: (_, __) {
@@ -66,7 +67,15 @@ var expensesListPageRouterHandler = Handler(handlerFunc: (_, __) {
 });
 
 var trackExpensePagePageRouterHandler = Handler(handlerFunc: (_, __) {
-  return const TrackExpensePage();
+  return const TrackExpensePage(
+    type: ExpenseType.out,
+  );
+});
+
+var trackCustomPaymentPagePageRouterHandler = Handler(handlerFunc: (_, __) {
+  return const TrackExpensePage(
+    type: ExpenseType.kw$in,
+  );
 });
 
 var createBrandPagePageRouterHandler = Handler(handlerFunc: (_, __) {
