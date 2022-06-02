@@ -244,11 +244,11 @@ func (r *orderItemResolver) Item(ctx context.Context, obj *model.OrderItem) (*mo
 }
 
 func (r *paymentResolver) Type(ctx context.Context, obj *model.Payment) (model.PaymentType, error) {
-	if obj.OrderID != nil || !strings.Contains(obj.Amount, "-") {
-		return model.PaymentTypeOrder, nil
+	if strings.Contains(obj.Amount, "-") {
+		return model.PaymentTypeExpense, nil
 	}
 
-	return model.PaymentTypeExpense, nil
+	return model.PaymentTypeOrder, nil
 }
 
 func (r *paymentResolver) Name(ctx context.Context, obj *model.Payment) (string, error) {

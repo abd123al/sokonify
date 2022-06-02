@@ -236,15 +236,15 @@ func sumPaymentType(db *gorm.DB, StoreID int, args model.StatsArgs, t model.Paym
 	var amount string
 	StartDate, EndDate := helpers.HandleStatsDates(args)
 
-	var column string
+	var condition string
 
 	if t == model.PaymentTypeExpense {
-		column = "expense_id"
+		condition = "< 0"
 	} else {
-		column = "order_id"
+		condition = "> 0"
 	}
 
-	if err := db.Table("payments").Where(fmt.Sprintf("%s is not null", column)).Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate).Joins("inner join staffs on payments.staff_id = staffs.user_id AND staffs.store_id = ?", StoreID).Select("sum(amount)").Row().Scan(&amount); err != nil {
+	if err := db.Table("payments").Where(fmt.Sprintf("amount %s", condition)).Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate).Joins("inner join staffs on payments.staff_id = staffs.user_id AND staffs.store_id = ?", StoreID).Select("sum(amount)").Row().Scan(&amount); err != nil {
 		return "0.00", nil
 	}
 
