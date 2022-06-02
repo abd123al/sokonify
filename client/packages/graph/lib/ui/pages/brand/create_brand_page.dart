@@ -4,6 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/brand_repository.dart';
+import '../../widgets/searchable_dropdown.dart';
+import '../product/product_tile.dart';
+import '../product/products_list_cubit.dart';
 import 'brands_list_cubit.dart';
 import 'create_brand_cubit.dart';
 
@@ -20,6 +23,7 @@ class CreateBrandPage extends StatefulWidget {
 
 class _CreateBrandPageState extends State<CreateBrandPage> {
   final _nameController = TextEditingController();
+  Products$Query$Product? _product;
 
   @override
   Widget build(BuildContext context) {
@@ -46,26 +50,46 @@ class _CreateBrandPageState extends State<CreateBrandPage> {
             padding: const EdgeInsets.all(8.0),
             child: ListView(
               children: [
-                TextField(
-                  controller: _nameController,
-                  keyboardType: TextInputType.text,
-                  decoration: const InputDecoration(
-                    labelText: 'Category name',
-                    hintText: 'Enter category name',
-                  ),
-                ),
-                Button(
-                  padding: EdgeInsets.zero,
-                  callback: () {
-                    cubit.submit(
-                      BrandInput(
-                        name: _nameController.text,
-                        productId: 1,
-                      ),
+                QueryBuilder<ResourceListData<Products$Query$Product>,
+                    ProductsListCubit>(
+                  retry: (cubit) => cubit.fetch(),
+                  builder: (context, data, _) {
+                    return SearchableDropdown<Products$Query$Product>(
+                      asString: (i) => i.name.toLowerCase(),
+                      data: data,
+                      labelText: "Product",
+                      hintText: "Select Product",
+                      onChanged: (item) => setState(() {
+                        _product = item;
+                      }),
+                      selectedItem: _product,
+                      builder: (_, i) => ProductTile(product: i),
                     );
                   },
-                  title: 'Submit',
                 ),
+                if (_product != null) ...[
+                  TextField(
+                    controller: _nameController,
+                    keyboardType: TextInputType.text,
+                    decoration: const InputDecoration(
+                      labelText: 'Category name',
+                      hintText: 'Enter category name',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  Button(
+                    padding: EdgeInsets.zero,
+                    callback: () {
+                      cubit.submit(
+                        BrandInput(
+                          name: _nameController.text,
+                          productId: _product!.id,
+                        ),
+                      );
+                    },
+                    title: 'Submit',
+                  ),
+                ]
               ],
             ),
           ),

@@ -35,6 +35,7 @@
           <value>
             <list>
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/artemis-7.6.2-beta/lib" />
+              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/artemis-7.7.0-beta/lib" />
             </list>
           </value>
         </entry>
@@ -519,6 +520,7 @@
           <value>
             <list>
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/gql-0.13.1-alpha+1645425888336/lib" />
+              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/gql-0.13.1/lib" />
             </list>
           </value>
         </entry>
@@ -526,6 +528,7 @@
           <value>
             <list>
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/gql_code_builder-0.5.1-alpha+1645425888395/lib" />
+              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/gql_code_builder-0.5.1/lib" />
             </list>
           </value>
         </entry>
@@ -1312,6 +1315,7 @@
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/args-2.3.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/args-2.3.1/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/artemis-7.6.2-beta/lib" />
+      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/artemis-7.7.0-beta/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.8.2/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/auto_size_text-3.0.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/barcode-2.2.1/lib" />
@@ -1390,7 +1394,9 @@
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/get_it-7.2.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/glob-2.0.2/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/gql-0.13.1-alpha+1645425888336/lib" />
+      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/gql-0.13.1/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/gql_code_builder-0.5.1-alpha+1645425888395/lib" />
+      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/gql_code_builder-0.5.1/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/gql_dedupe_link-2.0.3-alpha+1645425888429/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/gql_dio_link-0.2.2/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/gql_error_link-0.2.2/lib" />

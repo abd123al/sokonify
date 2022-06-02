@@ -5,11 +5,11 @@ import '../../../gql/generated/graphql_api.graphql.dart';
 class BrandTile extends StatelessWidget {
   const BrandTile({
     Key? key,
-    required this.expense,
+    required this.brand,
     this.color,
   }) : super(key: key);
 
-  final Brands$Query$Brand expense;
+  final Brands$Query$Brand brand;
   final Color? color;
 
   @override
@@ -19,7 +19,7 @@ class BrandTile extends StatelessWidget {
         return ListTile(
           tileColor: color,
           title: Text(
-            expense.name,
+            brand.name,
             overflow: TextOverflow.ellipsis,
           ),
           dense: true,

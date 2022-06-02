@@ -20,7 +20,7 @@ class BrandsList extends StatelessWidget {
           compare: (i) => i.name,
           builder: (context, item, color) {
             return BrandTile(
-              expense: item,
+              brand: item,
               color: color,
             );
           },

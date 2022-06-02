@@ -7,6 +7,7 @@ import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../nav/nav.dart';
 import '../../../repositories/item_repository.dart';
 import '../../widgets/widgets.dart';
+import '../brand/brand.dart';
 import '../product/product_tile.dart';
 import '../product/products_list_cubit.dart';
 import '../unit/unit_tile.dart';
@@ -34,6 +35,7 @@ class _CreateItemPageState extends State<CreateItemPage> {
   final _expireDateController = TextEditingController();
   Products$Query$Product? _product;
   Units$Query$Unit? _unit;
+  Brands$Query$Brand? _brand;
   DateTime? _selectedDate;
 
   @override
@@ -79,6 +81,7 @@ class _CreateItemPageState extends State<CreateItemPage> {
                   ),
                   onChanged: (item) => setState(() {
                     _product = item;
+                    _brand = null;
                   }),
                   selectedItem: _product,
                   searchDelay: const Duration(milliseconds: 0),
@@ -87,6 +90,30 @@ class _CreateItemPageState extends State<CreateItemPage> {
                 );
               },
             ),
+            if (_product != null)
+              QueryBuilder<ResourceListData<Brands$Query$Brand>,
+                  BrandsListCubit>(
+                retry: (cubit) => cubit.fetch(),
+                builder: (context, data, _) {
+                  final List<Brands$Query$Brand> brands = data.items
+                      .where((e) => e.productId == _product!.id)
+                      .toList();
+
+                  return SearchableDropdown<Brands$Query$Brand>(
+                    asString: (i) => i.name.toLowerCase(),
+                    data: data.copyWith(
+                      items: brands,
+                    ),
+                    labelText: "Brand (Optional)",
+                    hintText: "Select Brand (Optional)",
+                    onChanged: (item) => setState(() {
+                      _brand = item;
+                    }),
+                    selectedItem: _brand,
+                    builder: (_, i) => BrandTile(brand: i),
+                  );
+                },
+              ),
             if (_product != null)
               ListView(
                 physics: const NeverScrollableScrollPhysics(),
@@ -138,6 +165,7 @@ class _CreateItemPageState extends State<CreateItemPage> {
                       );
                     },
                   ),
+
                   TextField(
                     controller: _buyingPriceController,
                     keyboardType:
@@ -209,6 +237,7 @@ class _CreateItemPageState extends State<CreateItemPage> {
                               batch: _batchPriceController.text,
                               productId: _product!.id,
                               expiresAt: _selectedDate,
+                              brandId: _brand?.id,
                             ),
                           );
                         },
