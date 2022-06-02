@@ -62,9 +62,35 @@ class _SearchableListState<T> extends State<SearchableDropdown<T>> {
 
         return Padding(
           padding: const EdgeInsets.only(top: 8.0),
-          child: Builder(builder: (context) {
-            if (widget.isMultiSelectionMode) {
-              return DropdownSearch<T>.multiSelection(
+          child: Builder(
+            builder: (context) {
+              if (widget.isMultiSelectionMode) {
+                return DropdownSearch<T>.multiSelection(
+                  showSearchBox: true,
+                  itemAsString: (u) => widget.asString(u as T),
+                  filterFn: (i, query) {
+                    return widget
+                        .asString(i as T)
+                        .toLowerCase()
+                        .contains(query ?? "");
+                  },
+                  isFilteredOnline: false,
+                  mode: Mode.MENU,
+                  items: items,
+                  dropdownSearchDecoration: InputDecoration(
+                    labelText: widget.labelText,
+                    hintText: widget.hintText,
+                    border: const OutlineInputBorder(),
+                  ),
+                  onChanged: widget.onChangedMultiSelection,
+                  selectedItems: widget.selectedItems,
+                  searchDelay: const Duration(milliseconds: 0),
+                  popupItemBuilder: (ont, i, __) => widget.builder(ont, i),
+                  showClearButton: true,
+                );
+              }
+
+              return DropdownSearch<T>(
                 showSearchBox: true,
                 itemAsString: (u) => widget.asString(u as T),
                 filterFn: (i, query) {
@@ -81,38 +107,14 @@ class _SearchableListState<T> extends State<SearchableDropdown<T>> {
                   hintText: widget.hintText,
                   border: const OutlineInputBorder(),
                 ),
-                onChanged: widget.onChangedMultiSelection,
-                selectedItems: widget.selectedItems,
+                onChanged: widget.onChanged,
+                selectedItem: widget.selectedItem,
                 searchDelay: const Duration(milliseconds: 0),
                 popupItemBuilder: (ont, i, __) => widget.builder(ont, i),
                 showClearButton: true,
               );
-            }
-
-            return DropdownSearch<T>(
-              showSearchBox: true,
-              itemAsString: (u) => widget.asString(u as T),
-              filterFn: (i, query) {
-                return widget
-                    .asString(i as T)
-                    .toLowerCase()
-                    .contains(query ?? "");
-              },
-              isFilteredOnline: false,
-              mode: Mode.MENU,
-              items: items,
-              dropdownSearchDecoration: InputDecoration(
-                labelText: widget.labelText,
-                hintText: widget.hintText,
-                border: const OutlineInputBorder(),
-              ),
-              onChanged: widget.onChanged,
-              selectedItem: widget.selectedItem,
-              searchDelay: const Duration(milliseconds: 0),
-              popupItemBuilder: (ont, i, __) => widget.builder(ont, i),
-              showClearButton: true,
-            );
-          }),
+            },
+          ),
         );
       },
     );

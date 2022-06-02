@@ -13,11 +13,23 @@ class POS extends StatelessWidget {
       body: const PaymentsList(
         topper: SimpleStats(),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => redirectTo(context, Routes.createSales),
-        icon: const Icon(Icons.add),
-        backgroundColor: Colors.blue,
-        label: const Text("Track Sales"),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton.extended(
+            onPressed: () => redirectTo(context, Routes.createExpensePayment),
+            icon: const Icon(Icons.payment),
+            backgroundColor: Colors.blueGrey,
+            label: const Text("Add Payment"),
+          ),
+          const SizedBox(height: 16,width: 0),
+          FloatingActionButton.extended(
+            onPressed: () => redirectTo(context, Routes.createSales),
+            icon: const Icon(Icons.add),
+            backgroundColor: Colors.blue,
+            label: const Text("Track Sales  "),
+          ),
+        ],
       ),
     );
   }
