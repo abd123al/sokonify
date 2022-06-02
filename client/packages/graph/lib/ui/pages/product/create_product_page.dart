@@ -4,6 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/product_repository.dart';
+import '../../widgets/searchable_dropdown.dart';
+import '../category/categories_list_cubit.dart';
+import '../category/category_tile.dart';
 import 'create_product_cubit.dart';
 import 'products_list_cubit.dart';
 
@@ -44,6 +47,7 @@ class CreateProductWidget extends StatefulWidget {
 
 class _CreateProductPageState extends State<CreateProductWidget> {
   final _nameController = TextEditingController();
+  List<Categories$Query$Category> _categories = [];
 
   @override
   Widget build(BuildContext context) {
@@ -65,9 +69,27 @@ class _CreateProductPageState extends State<CreateProductWidget> {
                 controller: _nameController,
                 keyboardType: TextInputType.text,
                 decoration: const InputDecoration(
-                  labelText: 'Facility name',
-                  hintText: 'Enter your Shop name',
+                  labelText: 'Category name',
+                  hintText: 'Enter Category name',
                 ),
+              ),
+              QueryBuilder<ResourceListData<Categories$Query$Category>,
+                  CategoriesListCubit>(
+                retry: (cubit) => cubit.fetch(),
+                builder: (context, data, _) {
+                  return SearchableDropdown<
+                      Categories$Query$Category>.multiSelection(
+                    asString: (i) => i.name.toLowerCase(),
+                    data: data,
+                    labelText: "Categories (Optional)",
+                    hintText: "Select Categories (Optional)",
+                    onChangedMultiSelection: (item) => setState(() {
+                      _categories = item;
+                    }),
+                    selectedItems: _categories,
+                    builder: (_, i) => CategoryTile(category: i),
+                  );
+                },
               ),
               const SizedBox(
                 height: 8,
@@ -76,8 +98,8 @@ class _CreateProductPageState extends State<CreateProductWidget> {
                   CreateProductCubit, ProductRepository>(
                 blocCreator: (r) => CreateProductCubit(r),
                 onSuccess: (context, data) {
-                  BlocProvider.of<ProductsListCubit>(context).addItem(
-                      Products$Query$Product.fromJson(data.toJson()));
+                  BlocProvider.of<ProductsListCubit>(context)
+                      .addItem(Products$Query$Product.fromJson(data.toJson()));
                 },
                 pop: widget.onSuccess == null,
                 builder: (context, cubit) {
@@ -87,6 +109,7 @@ class _CreateProductPageState extends State<CreateProductWidget> {
                       cubit.submit(
                         ProductInput(
                           name: _nameController.text,
+                          categories: _categories.map((e) => e.id).toList(),
                         ),
                       );
                     },
