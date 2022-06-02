@@ -10,7 +10,9 @@ import 'expense_categories_list_cubit.dart';
 class CreateExpensesCategoryPage extends StatefulWidget {
   const CreateExpensesCategoryPage({
     Key? key,
+    required this.type,
   }) : super(key: key);
+  final ExpenseType type;
 
   @override
   State<StatefulWidget> createState() {
@@ -18,7 +20,8 @@ class CreateExpensesCategoryPage extends StatefulWidget {
   }
 }
 
-class _CreateExpensesCategoryPageState extends State<CreateExpensesCategoryPage> {
+class _CreateExpensesCategoryPageState
+    extends State<CreateExpensesCategoryPage> {
   final _nameController = TextEditingController();
 
   @override
@@ -33,8 +36,7 @@ class _CreateExpensesCategoryPageState extends State<CreateExpensesCategoryPage>
 
   Widget _buildForm(BuildContext context) {
     return MutationBuilder<CreateExpense$Mutation$Expense,
-        CreateExpenseCategoryCubit,
-        ExpenseRepository>(
+        CreateExpenseCategoryCubit, ExpenseRepository>(
       blocCreator: (r) => CreateExpenseCategoryCubit(r),
       onSuccess: (context, data) {
         BlocProvider.of<ExpensesCategoriesListCubit>(context)
@@ -61,7 +63,7 @@ class _CreateExpensesCategoryPageState extends State<CreateExpensesCategoryPage>
                     cubit.submit(
                       ExpenseInput(
                         name: _nameController.text,
-                        type: ExpenseType.out,
+                        type: widget.type,
                       ),
                     );
                   },

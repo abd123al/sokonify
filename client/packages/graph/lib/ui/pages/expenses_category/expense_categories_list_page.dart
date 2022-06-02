@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../nav/nav.dart';
 import 'expense_categories_list.dart';
 
 class ExpensesListPage extends StatelessWidget {
-  const ExpensesListPage({Key? key}) : super(key: key);
+  const ExpensesListPage({Key? key, required this.type}) : super(key: key);
+  final ExpenseType type;
 
   @override
   Widget build(BuildContext context) {
@@ -12,9 +14,17 @@ class ExpensesListPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Expenses Categories"),
       ),
-      body: const ExpensesList(),
+      body: ExpensesList(
+        type: type,
+      ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => redirectTo(context, Routes.createExpense),
+        onPressed: () {
+          if (type == ExpenseType.out) {
+            redirectTo(context, Routes.createExpense);
+          } else {
+            redirectTo(context, Routes.createGains);
+          }
+        },
         tooltip: 'Add',
         icon: const Icon(Icons.add),
         label: const Text("New Category"),

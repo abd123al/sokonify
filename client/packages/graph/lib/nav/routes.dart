@@ -8,6 +8,7 @@ class Routes {
   static String createCategory = "/createCategory";
   static String createCustomer = "/createCustomer";
   static String createExpense = "/createExpense";
+  static String createGains = "/createGains";
   static String createExpensePayment = "/createExpensePayment";
   static String createCustomPayment = "/createCustomPayment";
   static String createItem = "/createItem";
@@ -20,6 +21,7 @@ class Routes {
   static String brands = "/brands";
   static String categories = "/categories";
   static String expenses = "/expenses";
+  static String gains = "/gains";
   static String order = "/order";
   static String products = "/products";
   static String units = "/units";
@@ -59,6 +61,12 @@ class Routes {
     router.define(
       createExpense,
       handler: createExpensePageRouterHandler,
+      transitionType: TransitionType.inFromLeft,
+    );
+
+    router.define(
+      createGains,
+      handler: createGainsPageRouterHandler,
       transitionType: TransitionType.inFromLeft,
     );
 
@@ -119,6 +127,12 @@ class Routes {
     router.define(
       expenses,
       handler: expensesListPageRouterHandler,
+      transitionType: TransitionType.inFromLeft,
+    );
+
+    router.define(
+      gains,
+      handler: gainsListPageRouterHandler,
       transitionType: TransitionType.inFromLeft,
     );
 

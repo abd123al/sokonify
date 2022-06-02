@@ -596,6 +596,7 @@ enum PaymentsBy {
     customer
 }
 
+# todo add rename to in/out
 enum PaymentType {
     expense
     order

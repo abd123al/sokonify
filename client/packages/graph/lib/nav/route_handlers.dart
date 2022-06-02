@@ -59,11 +59,19 @@ var orderPageRouterHandler = Handler(handlerFunc: (_, params) {
 });
 
 var createExpensePageRouterHandler = Handler(handlerFunc: (_, __) {
-  return const CreateExpensesCategoryPage();
+  return const CreateExpensesCategoryPage(type: ExpenseType.out);
+});
+
+var createGainsPageRouterHandler = Handler(handlerFunc: (_, __) {
+  return const CreateExpensesCategoryPage(type: ExpenseType.kw$in);
 });
 
 var expensesListPageRouterHandler = Handler(handlerFunc: (_, __) {
-  return const ExpensesListPage();
+  return const ExpensesListPage(type: ExpenseType.out);
+});
+
+var gainsListPageRouterHandler = Handler(handlerFunc: (_, __) {
+  return const ExpensesListPage(type: ExpenseType.kw$in);
 });
 
 var trackExpensePagePageRouterHandler = Handler(handlerFunc: (_, __) {

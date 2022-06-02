@@ -12,6 +12,7 @@ import (
 	"mahesabu/helpers"
 	"mahesabu/repository"
 	"strconv"
+	"strings"
 
 	"github.com/shopspring/decimal"
 )
@@ -243,7 +244,7 @@ func (r *orderItemResolver) Item(ctx context.Context, obj *model.OrderItem) (*mo
 }
 
 func (r *paymentResolver) Type(ctx context.Context, obj *model.Payment) (model.PaymentType, error) {
-	if obj.OrderID != nil {
+	if obj.OrderID != nil || !strings.Contains(obj.Amount, "-") {
 		return model.PaymentTypeOrder, nil
 	}
 

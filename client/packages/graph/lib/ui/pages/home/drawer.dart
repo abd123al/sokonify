@@ -34,24 +34,10 @@ class SokonifyDrawer extends StatelessWidget {
           return Column(
             children: [
               ListTile(
-                title: const Text('Units'),
-                trailing: const Icon(Icons.brightness_1_rounded),
-                onTap: () {
-                  redirectTo(context, Routes.units);
-                },
-              ),
-              ListTile(
                 title: const Text('Product Categories'),
                 trailing: const Icon(Icons.category_outlined),
                 onTap: () {
                   redirectTo(context, Routes.categories);
-                },
-              ),
-              ListTile(
-                title: const Text('Expense Categories'),
-                trailing: const Icon(Icons.category_outlined),
-                onTap: () {
-                  redirectTo(context, Routes.expenses);
                 },
               ),
               ListTile(
@@ -66,6 +52,28 @@ class SokonifyDrawer extends StatelessWidget {
                 trailing: const Icon(Icons.branding_watermark_outlined),
                 onTap: () {
                   redirectTo(context, Routes.brands);
+                },
+              ),
+              ListTile(
+                title: const Text('Units'),
+                trailing: const Icon(Icons.brightness_1_rounded),
+                onTap: () {
+                  redirectTo(context, Routes.units);
+                },
+              ),
+              const Divider(),
+              ListTile(
+                title: const Text('Payment Categories'),
+                trailing: const Icon(Icons.category_outlined),
+                onTap: () {
+                  redirectTo(context, Routes.gains);
+                },
+              ),
+              ListTile(
+                title: const Text('Expense Categories'),
+                trailing: const Icon(Icons.category_outlined),
+                onTap: () {
+                  redirectTo(context, Routes.expenses);
                 },
               ),
               const Divider(),
