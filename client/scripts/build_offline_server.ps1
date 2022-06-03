@@ -24,10 +24,10 @@ flutter build windows `
                     --release
 
 flutter pub run msix:create `
-                    --version "1.0.0.8" `
+                    --version "1.0.0.9" `
                     --install-certificate true `
                     --build-windows false `
-                    -c "$PSScriptRoot\sokonify.pfx" `
+                    -c "$PSScriptRoot\sokonify_server.pfx" `
                     -p "#50k0n1f4" `
                     -n "sokonify_server" `
                     -d "Sokonify Server" `
