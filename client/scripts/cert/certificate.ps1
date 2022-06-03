@@ -5,8 +5,9 @@ Set-Location $PSScriptRoot
 
 $certificate = New-SelfSignedCertificate `
                 -Type Custom -Subject "CN=Sokonify Software, O=Sokonify Inc, C=TZ" `
+                -NotAfter (Get-Date).AddMonths(36) `
                 -KeyUsage DigitalSignature `
-                -FriendlyName "Sokonify" `
+                -FriendlyName "Sokonify Server" `
                 -CertStoreLocation "Cert:\CurrentUser\My" `
                 -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.3", "2.5.29.19={text}")
 

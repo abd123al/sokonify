@@ -16,10 +16,15 @@ class App extends StatelessWidget {
 
     Application.router = router;
 
+    const isServer = bool.fromEnvironment(
+      "IS_SERVER",
+      defaultValue: false,
+    );
+
     return MaterialApp(
       title: 'Sokonify',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: isServer ? Colors.blueGrey : Colors.blue,
       ),
       onGenerateRoute: Application.router?.generator,
       home: const AuthWrapper(

@@ -7,6 +7,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   flutter_secure_storage_windows
   permission_handler_windows
   printing
+  screen_retriever
   server
   url_launcher_windows
   window_manager

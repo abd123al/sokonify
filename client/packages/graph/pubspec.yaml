@@ -28,7 +28,7 @@ dependencies:
   flutter_secure_storage: ^5.0.2
   gql: 0.13.1
   gql_dio_link: ^0.2.2
-  graphql_flutter: ^5.1.0
+  graphql_flutter: ^5.1.1-beta.3
   hive: ^2.0.4
   hive_flutter: ^1.1.0
   in_app_update: ^3.0.0

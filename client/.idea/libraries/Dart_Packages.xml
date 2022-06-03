@@ -35,6 +35,7 @@
           <value>
             <list>
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/artemis-7.7.0-beta/lib" />
+              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/artemis-7.8.0-beta/lib" />
             </list>
           </value>
         </entry>
@@ -133,7 +134,6 @@
           <value>
             <list>
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/built_value-8.2.0/lib" />
-              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/built_value-8.2.3/lib" />
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/built_value-8.3.2/lib" />
             </list>
           </value>
@@ -258,7 +258,6 @@
           <value>
             <list>
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity_plus_windows-1.2.0/lib" />
-              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity_plus_windows-1.2.1/lib" />
             </list>
           </value>
         </entry>
@@ -419,7 +418,6 @@
           <value>
             <list>
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_hooks-0.18.4/lib" />
-              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_hooks-0.18.3/lib" />
             </list>
           </value>
         </entry>
@@ -582,6 +580,7 @@
           <value>
             <list>
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/graphql-5.1.1/lib" />
+              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/graphql-5.1.2-beta.2/lib" />
             </list>
           </value>
         </entry>
@@ -589,6 +588,7 @@
           <value>
             <list>
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/graphql_flutter-5.1.0/lib" />
+              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/graphql_flutter-5.1.1-beta.3/lib" />
             </list>
           </value>
         </entry>
@@ -800,7 +800,6 @@
           <value>
             <list>
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_android-2.0.12/lib" />
-              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_android-2.0.13/lib" />
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_android-2.0.14/lib" />
             </list>
           </value>
@@ -999,6 +998,13 @@
             <list>
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/rxdart-0.27.3/lib" />
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/rxdart-0.27.4/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="screen_retriever">
+          <value>
+            <list>
+              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/screen_retriever-0.1.2/lib" />
             </list>
           </value>
         </entry>
@@ -1268,7 +1274,6 @@
           <value>
             <list>
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/win32-2.5.1/lib" />
-              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/win32-2.5.2/lib" />
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/win32-2.6.1/lib" />
             </list>
           </value>
@@ -1277,6 +1282,7 @@
           <value>
             <list>
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/window_manager-0.2.3/lib" />
+              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/window_manager-0.2.5/lib" />
             </list>
           </value>
         </entry>
@@ -1312,6 +1318,7 @@
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/args-2.3.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/args-2.3.1/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/artemis-7.7.0-beta/lib" />
+      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/artemis-7.8.0-beta/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.8.2/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/auto_size_text-3.0.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/barcode-2.2.1/lib" />
@@ -1325,7 +1332,6 @@
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/build_runner_core-7.2.3/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/built_collection-5.1.1/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/built_value-8.2.0/lib" />
-      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/built_value-8.2.3/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/built_value-8.3.2/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/cached_network_image-3.2.1/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/cached_network_image_platform_interface-1.0.0/lib" />
@@ -1348,7 +1354,6 @@
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity_plus_web-1.2.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity_plus_web-1.2.1/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity_plus_windows-1.2.0/lib" />
-      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity_plus_windows-1.2.1/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/convert-3.0.1/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/convert-3.0.2/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/crypto-3.0.1/lib" />
@@ -1375,7 +1380,6 @@
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_blurhash-0.6.8/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_blurhash-0.7.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_cache_manager-3.3.0/lib" />
-      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_hooks-0.18.3/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_hooks-0.18.4/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_lints-1.0.4/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_lints-2.0.1/lib" />
@@ -1399,7 +1403,9 @@
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/gql_link-0.4.3-alpha+1645425888352/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/gql_transform_link-0.2.2/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/graphql-5.1.1/lib" />
+      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/graphql-5.1.2-beta.2/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/graphql_flutter-5.1.0/lib" />
+      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/graphql_flutter-5.1.1-beta.3/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/graphs-2.1.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/hive-2.1.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/hive-2.2.1/lib" />
@@ -1437,7 +1443,6 @@
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-2.0.10/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-2.0.9/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_android-2.0.12/lib" />
-      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_android-2.0.13/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_android-2.0.14/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_ios-2.0.8/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_ios-2.0.9/lib" />
@@ -1474,6 +1479,7 @@
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/responsive_builder-0.4.2/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/rxdart-0.27.3/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/rxdart-0.27.4/lib" />
+      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/screen_retriever-0.1.2/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/share_plus-4.0.4/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/share_plus-4.0.5/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/share_plus_linux-3.0.0/lib" />
@@ -1520,9 +1526,9 @@
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/web_socket_channel-2.1.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/web_socket_channel-2.2.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/win32-2.5.1/lib" />
-      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/win32-2.5.2/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/win32-2.6.1/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/window_manager-0.2.3/lib" />
+      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/window_manager-0.2.5/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/xdg_directories-0.2.0+1/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/xml-5.3.1/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/xml-6.1.0/lib" />

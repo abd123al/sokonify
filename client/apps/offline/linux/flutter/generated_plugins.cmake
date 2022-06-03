@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   flutter_secure_storage_linux
   printing
+  screen_retriever
   server
   url_launcher_linux
   window_manager
