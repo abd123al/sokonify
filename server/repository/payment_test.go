@@ -1,6 +1,7 @@
 package repository_test
 
 import (
+	"fmt"
 	"github.com/shopspring/decimal"
 	"github.com/stretchr/testify/require"
 	"mahesabu/graph/model"
@@ -235,5 +236,21 @@ func TestPayment(t *testing.T) {
 
 		require.Nil(t, err)
 		require.NotNil(t, payment)
+	})
+
+	t.Run("SumGrossProfit", func(t *testing.T) {
+		re := util.CreatePayment(DB, nil, true)
+
+		timeframe := model.TimeframeTypeToday
+
+		profit, err := repository.SumGrossProfit(DB, re.StoreID, model.StatsArgs{
+			Timeframe: &timeframe,
+		})
+
+		fmt.Printf("Profit %s\n", profit.Gross)
+		fmt.Printf("Expected %s\n", profit.Expected)
+
+		require.Nil(t, err)
+		require.NotEmpty(t, profit)
 	})
 }
