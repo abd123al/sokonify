@@ -6,8 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/repositories.dart';
 import '../expenses_category/expense_category.dart';
+import '../home/stats/simple_stats_cubit.dart';
+import 'create_order_payment_cubit.dart';
 import 'payments_list_cubit.dart';
-import 'track_expense_cubit.dart';
 
 class TrackExpensePage extends StatefulWidget {
   const TrackExpensePage({
@@ -46,9 +47,11 @@ class _CreateStorePageState extends State<TrackExpensePage> {
   }
 
   Widget _build() {
-    return MutationBuilder<CreateExpensePayment$Mutation$Payment,
-        TrackExpenseCubit, PaymentRepository>(
-      blocCreator: (r) => TrackExpenseCubit(r),
+    return MutationBuilder<CreateOrderPayment$Mutation$Payment,
+        CreatePaymentCubit, PaymentRepository>(
+      blocCreator: (r) => CreatePaymentCubit(r, () {
+        BlocProvider.of<SimpleStatsCubit>(context).fetch();
+      }),
       onSuccess: (context, data) {
         BlocProvider.of<PaymentsListCubit>(context)
             .addItem(Payments$Query$Payment.fromJson(data.toJson()));

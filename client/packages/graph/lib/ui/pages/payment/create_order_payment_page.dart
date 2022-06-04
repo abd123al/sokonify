@@ -7,6 +7,7 @@ import 'package:graph/ui/helpers/currency_formatter.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/repositories.dart';
+import '../home/stats/simple_stats_cubit.dart';
 import 'create_order_payment_cubit.dart';
 import 'payments_list_cubit.dart';
 
@@ -83,8 +84,10 @@ class _CreateStorePageState extends State<CreatePaymentWidget> {
             ),
             const Expanded(child: SizedBox()),
             MutationBuilder<CreateOrderPayment$Mutation$Payment,
-                CreateOrderPaymentCubit, PaymentRepository>(
-              blocCreator: (r) => CreateOrderPaymentCubit(r),
+                CreatePaymentCubit, PaymentRepository>(
+              blocCreator: (r) => CreatePaymentCubit(r, () {
+                BlocProvider.of<SimpleStatsCubit>(context).fetch();
+              }),
               onSuccess: (context, data) {
                 //1.
                 //2.

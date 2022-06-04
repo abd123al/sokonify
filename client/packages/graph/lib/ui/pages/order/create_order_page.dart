@@ -10,6 +10,7 @@ import '../../../repositories/order_repository.dart';
 import '../../../repositories/payment_repository.dart';
 import '../customer/customer_tile.dart';
 import '../customer/customers_list_cubit.dart';
+import '../home/stats/simple_stats_cubit.dart';
 import '../inventory/items_list_cubit.dart';
 import '../payment/create_order_payment_cubit.dart';
 import '../payment/payments_list_cubit.dart';
@@ -59,8 +60,10 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
           retry: (cubit) => cubit.fetch(),
           builder: (context, itemsData, _) {
             return MutationBuilder<CreateOrderPayment$Mutation$Payment,
-                CreateOrderPaymentCubit, PaymentRepository>(
-              blocCreator: (r) => CreateOrderPaymentCubit(r),
+                CreatePaymentCubit, PaymentRepository>(
+              blocCreator: (r) => CreatePaymentCubit(r, () {
+                BlocProvider.of<SimpleStatsCubit>(context).fetch();
+              }),
               onSuccess: (context, data) {
                 newOrderCubit.reset();
 
