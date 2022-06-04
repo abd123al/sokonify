@@ -42,8 +42,8 @@ class SimpleStats extends StatelessWidget {
             color: Colors.blue,
           ),
           StatTile(
-            title: 'Net Profit',
-            value: formatCurrency(data.netIncome),
+            title: 'Gross Profit',
+            value: formatCurrency(data.grossProfit.real),
             color: Colors.green,
           ),
         ];

@@ -228,6 +228,11 @@ type ProductCategory implements Gorm {
     updatedAt: Time!
 }
 
+type Profit {
+    expected: String!
+    real: String!
+}
+
 type Query {
     admin(id: ID!): Admin!
     admins: [Admin!]!
@@ -241,7 +246,7 @@ type Query {
     customers: [Customer!]!
     expense(id: ID!): Expense!
     expenses(args: ExpensesArgs!): [Expense!]!
-    grossIncome(args: StatsArgs!): String!
+    grossProfit(args: StatsArgs!): Profit!
     item(id: ID!): Item!
     items(args: ItemsArgs!): [Item!]!
     me: User!
