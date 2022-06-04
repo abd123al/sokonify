@@ -390,8 +390,8 @@ func (r *queryResolver) NetIncome(ctx context.Context, args model.StatsArgs) (st
 	return repository.SumNetIncome(r.DB, helpers.ForContext(ctx).StoreID, args)
 }
 
-func (r *queryResolver) GrossIncome(ctx context.Context, args model.StatsArgs) (string, error) {
-	return repository.SumNetIncome(r.DB, helpers.ForContext(ctx).StoreID, args)
+func (r *queryResolver) GrossProfit(ctx context.Context, args model.StatsArgs) (*model.Profit, error) {
+	return repository.SumGrossProfit(r.DB, helpers.ForContext(ctx).StoreID, args)
 }
 
 func (r *queryResolver) TotalExpensesAmount(ctx context.Context, args model.StatsArgs) (string, error) {

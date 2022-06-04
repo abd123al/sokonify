@@ -251,16 +251,11 @@ func sumPaymentType(db *gorm.DB, StoreID int, args model.StatsArgs, t model.Paym
 	return amount, nil
 }
 
-type GrossProfit struct {
-	Gross    string
-	Expected string
-}
-
-func SumGrossProfit(db *gorm.DB, StoreID int, args model.StatsArgs) (*GrossProfit, error) {
-	var profit *GrossProfit
+func SumGrossProfit(db *gorm.DB, StoreID int, args model.StatsArgs) (*model.Profit, error) {
+	var profit *model.Profit
 	StartDate, EndDate := helpers.HandleStatsDates(args)
 
-	if err := db.Debug().Table("order_items").Joins("inner join items on order_items.item_id = items.id").Joins("inner join orders on order_items.order_id = orders.id AND orders.issuer_id = ?", StoreID).Joins("inner join payments on orders.id = payments.order_id").Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate).Select("sum(items.selling_price - items.buying_price) AS expected, sum(order_items.price - items.buying_price) AS gross").Scan(&profit).Error; err != nil {
+	if err := db.Debug().Table("order_items").Joins("inner join items on order_items.item_id = items.id").Joins("inner join orders on order_items.order_id = orders.id AND orders.issuer_id = ?", StoreID).Joins("inner join payments on orders.id = payments.order_id").Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate).Select("sum((items.selling_price - items.buying_price) * order_items.quantity) AS expected, sum((order_items.price - items.buying_price) * order_items.quantity) AS real").Scan(&profit).Error; err != nil {
 		return nil, err
 	}
 

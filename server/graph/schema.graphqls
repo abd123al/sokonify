@@ -660,6 +660,13 @@ input UnitInput {
     templateType : TemplateType
 }
 
+type Profit {
+    # Profit without discount
+    expected : String!
+    # With discount
+    real : String!
+}
+
 #todo remove storeId everywhere and use JWT for that.
 type Query {
     admin(id:ID!): Admin!
@@ -693,7 +700,7 @@ type Query {
 
     # stats
     netIncome(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
-    grossIncome(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
+    grossProfit(args:StatsArgs!): Profit! @goField(forceResolver: true) @isAuthenticated
     totalExpensesAmount(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
     totalSalesAmount(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
     # Daily sales

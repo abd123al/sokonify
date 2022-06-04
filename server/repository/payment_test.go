@@ -247,7 +247,7 @@ func TestPayment(t *testing.T) {
 			Timeframe: &timeframe,
 		})
 
-		fmt.Printf("Profit %s\n", profit.Gross)
+		fmt.Printf("Profit %s\n", profit.Real)
 		fmt.Printf("Expected %s\n", profit.Expected)
 
 		require.Nil(t, err)
