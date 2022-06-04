@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -11,7 +12,7 @@ startApp({
   required StatusHandler statusHandler,
 }) async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  //FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   try {
     await windowManager.ensureInitialized();
@@ -38,6 +39,9 @@ startApp({
     GraphqlClientBuilder(
       urlHandler: urlHandler,
       statusHandler: statusHandler,
+      onDone: () {
+        FlutterNativeSplash.remove();
+      },
     ),
   );
 }

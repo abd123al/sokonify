@@ -8,7 +8,6 @@ import 'package:in_app_update/in_app_update.dart';
 import '../../repositories/repositories.dart';
 import '../pages/home/stats/simple_stats_cubit.dart';
 import '../pages/pages.dart';
-import '../pages/payment/payments_list_cubit.dart';
 import '../pages/store/stores_list_cubit.dart';
 
 class UniBlocProvider extends StatefulWidget {

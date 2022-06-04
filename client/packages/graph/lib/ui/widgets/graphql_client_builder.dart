@@ -10,11 +10,13 @@ import '../app.dart';
 class GraphqlClientBuilder extends StatelessWidget {
   final UrlHandler urlHandler;
   final StatusHandler statusHandler;
+  final Function() onDone;
 
   const GraphqlClientBuilder({
     Key? key,
     required this.urlHandler,
     required this.statusHandler,
+    required this.onDone,
   }) : super(key: key);
 
   @override
@@ -26,6 +28,9 @@ class GraphqlClientBuilder extends StatelessWidget {
       ),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          //Remove splash screen
+          onDone();
+
           return Phoenix(
             child: UniBlocProvider(
               graphQLClient: snapshot.data!,
@@ -35,12 +40,14 @@ class GraphqlClientBuilder extends StatelessWidget {
         }
 
         if (snapshot.hasError) {
-          return Center(
-            child: Text(
-              snapshot.error.toString(),
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Colors.red,
-                  ),
+          return MaterialApp(
+            home: Center(
+              child: Text(
+                snapshot.error.toString(),
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: Colors.red,
+                    ),
+              ),
             ),
           );
         }
