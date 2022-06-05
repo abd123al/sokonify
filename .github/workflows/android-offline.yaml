@@ -29,6 +29,9 @@ jobs:
       - name: Installing go server dependencies
         working-directory: server
         run: |
+          go mod init mahesabu
+          go mod tidy
+          go run github.com/99designs/gqlgen init
           go install
 
       - uses: actions/setup-java@v2
