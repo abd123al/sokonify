@@ -30,8 +30,6 @@ jobs:
         working-directory: server
         run: |
           go get ./...
-          go mod tidy
-          go run github.com/99designs/gqlgen init
 
       - uses: actions/setup-java@v2
         with:
