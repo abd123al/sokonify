@@ -15,6 +15,6 @@ cd..
 Write-Host "Start Building DDl...!"
 
 #Installing go and build
-go build -o ../client/packages/server/windows/lib.dll -buildmode=c-shared -ldflags="-s -w" ./lib.go
+go build -o ../client/packages/server/windows/lib.dll -buildmode=c-shared -ldflags="-s -w" ./c/c.go
 
 Write-Host "Done building dll!"
