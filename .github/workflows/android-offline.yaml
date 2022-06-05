@@ -29,6 +29,7 @@ jobs:
       - name: Installing go server dependencies
         working-directory: server
         run: |
+          go run github.com/99designs/gqlgen generate
           go get ./...
 
       - uses: actions/setup-java@v2
