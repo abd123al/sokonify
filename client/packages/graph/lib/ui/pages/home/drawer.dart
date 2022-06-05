@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -19,11 +18,11 @@ class SokonifyDrawer extends StatelessWidget {
           return UserAccountsDrawerHeader(
             accountEmail: Text(data.email),
             accountName: Text(data.name),
-            currentAccountPicture: CachedNetworkImage(
-              imageUrl: "",
-              placeholder: (__, _) => const CircularProgressIndicator(),
-              errorWidget: (___, __, _) => const Icon(Icons.error),
-            ),
+            // currentAccountPicture: CachedNetworkImage(
+            //   imageUrl: "",
+            //   placeholder: (__, _) => const CircularProgressIndicator(),
+            //   errorWidget: (___, __, _) => const Icon(Icons.error),
+            // ),
           );
         },
       ),
