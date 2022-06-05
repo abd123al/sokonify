@@ -407,7 +407,7 @@ func (r *queryResolver) AverageDailySalesAmount(ctx context.Context, args model.
 }
 
 func (r *queryResolver) ItemsStats(ctx context.Context) (*model.ItemsStats, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.SumItemsCost(r.DB, helpers.ForContext(ctx).StoreID)
 }
 
 func (r *queryResolver) NetItemsIncome(ctx context.Context) (string, error) {

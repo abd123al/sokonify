@@ -17,7 +17,7 @@ class Inventory extends StatelessWidget {
         tooltip: 'Add',
         backgroundColor: Colors.teal,
         icon: const Icon(Icons.add),
-        label: const Text("New Item"),
+        label: const Text("Add Stock"),
       ),
     );
   }

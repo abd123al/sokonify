@@ -14,4 +14,12 @@ class StatsRepository {
 
     return client.query(options);
   }
+
+  fetchItemsStats() {
+    final options = QueryOptions(
+      document: ITEMS_STATS_QUERY_DOCUMENT,
+    );
+
+    return client.query(options);
+  }
 }

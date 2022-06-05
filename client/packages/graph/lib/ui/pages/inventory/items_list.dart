@@ -5,6 +5,7 @@ import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../widgets/widgets.dart';
 import 'item_tile.dart';
 import 'items_list_cubit.dart';
+import 'items_stats.dart';
 
 class ItemsList extends StatelessWidget {
   const ItemsList({Key? key}) : super(key: key);
@@ -14,16 +15,25 @@ class ItemsList extends StatelessWidget {
     return QueryBuilder<ResourceListData<Items$Query$Item>, ItemsListCubit>(
       retry: (cubit) => cubit.fetch(),
       builder: (context, data, _) {
-        return SearchableList<Items$Query$Item>(
-          hintName: "Item",
-          data: data,
-          compare: (i) => ItemTile.formatItemName(i),
-          builder: (context, item,color) {
-            return ItemTile(
-              item: item,
-              color: color,
-            );
-          },
+        return ListView(
+          children: [
+            const InventoryStats(),
+            const SizedBox(height: 8),
+            SearchableList<Items$Query$Item>(
+              hintName: "Item",
+              data: data,
+              mainAxisSize:  MainAxisSize.min,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              compare: (i) => ItemTile.formatItemName(i),
+              builder: (context, item, color) {
+                return ItemTile(
+                  item: item,
+                  color: color,
+                );
+              },
+            ),
+          ],
         );
       },
     );

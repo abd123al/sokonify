@@ -120,6 +120,11 @@ type Item implements Gorm {
     updatedAt: Time!
 }
 
+type ItemsStats {
+    expectedProfit: String!
+    totalCost: String!
+}
+
 type Mutation {
     changePassword(input: ChangePasswordInput!): User!
     createBrand(input: BrandInput!): Brand!
@@ -249,6 +254,7 @@ type Query {
     grossProfit(args: StatsArgs!): Profit!
     item(id: ID!): Item!
     items(args: ItemsArgs!): [Item!]!
+    itemsStats: ItemsStats!
     me: User!
     netIncome(args: StatsArgs!): String!
     netItemsIncome: String!
@@ -263,8 +269,6 @@ type Query {
     store(id: ID!): Store!
     stores: [Store!]!
     totalExpensesAmount(args: StatsArgs!): String!
-    totalItemsCost: String!
-    totalItemsRevenue: String!
     totalSalesAmount(args: StatsArgs!): String!
     unit(id: ID!): Unit!
     units: [Unit!]!

@@ -7,6 +7,7 @@ import 'package:in_app_update/in_app_update.dart';
 
 import '../../repositories/repositories.dart';
 import '../pages/home/stats/simple_stats_cubit.dart';
+import '../pages/inventory/items_stats_cubit.dart';
 import '../pages/pages.dart';
 import '../pages/store/stores_list_cubit.dart';
 
@@ -105,6 +106,11 @@ class UniBlocProviderState extends State<UniBlocProvider> {
             BlocProvider(
               create: (context) {
                 return SimpleStatsCubit(statsRepository)..fetch();
+              },
+            ),
+            BlocProvider(
+              create: (context) {
+                return ItemsStatsCubit(statsRepository)..fetch();
               },
             ),
             BlocProvider(

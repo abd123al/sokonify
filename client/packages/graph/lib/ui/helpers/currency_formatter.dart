@@ -1,16 +1,20 @@
 import 'package:currency_formatter/currency_formatter.dart';
 
-formatCurrency(String amount){
-  CurrencyFormatter cf = CurrencyFormatter();
+formatCurrency(String amount) {
+  try {
+    CurrencyFormatter cf = CurrencyFormatter();
 
-  CurrencyFormatterSettings euroSettings = CurrencyFormatterSettings(
-    symbol: '/=',
-    symbolSide: SymbolSide.right,
-    thousandSeparator: ',',
-    decimalSeparator: '.',
-  );
+    CurrencyFormatterSettings euroSettings = CurrencyFormatterSettings(
+      symbol: '/=',
+      symbolSide: SymbolSide.right,
+      thousandSeparator: ',',
+      decimalSeparator: '.',
+    );
 
-  final formatted = cf.format(amount, euroSettings);
+    final formatted = cf.format(amount, euroSettings);
 
-  return formatted;
+    return formatted;
+  } catch (e) {
+    return "..";
+  }
 }

@@ -1,0 +1,6 @@
+query itemsStats {
+    itemsStats {
+        expectedProfit
+        totalCost
+    }
+}

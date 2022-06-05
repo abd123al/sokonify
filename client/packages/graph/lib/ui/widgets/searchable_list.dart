@@ -11,12 +11,18 @@ class SearchableList<T> extends StatefulWidget {
     required this.compare,
     required this.data,
     required this.hintName,
+    this.shrinkWrap = false,
+    this.physics = const BouncingScrollPhysics(),
+    this.mainAxisSize = MainAxisSize.max,
   }) : super(key: key);
 
   final Widget Function(BuildContext context, T item, Color? color) builder;
   final String Function(T item) compare;
   final String hintName;
+  final bool shrinkWrap;
   final ResourceListData<T> data;
+  final ScrollPhysics physics;
+  final MainAxisSize mainAxisSize;
 
   @override
   State<StatefulWidget> createState() {
@@ -46,6 +52,7 @@ class _SearchableListState<T> extends State<SearchableList<T>> {
         }
 
         return Column(
+          mainAxisSize: widget.mainAxisSize,
           children: [
             Card(
               elevation: 16,
@@ -64,31 +71,34 @@ class _SearchableListState<T> extends State<SearchableList<T>> {
                 ),
               ),
             ),
-            Builder(
-              builder: (context) {
-                if (items.isEmpty) {
-                  if (_keyword.isNotEmpty) {
-                    return TextButton(
-                      onPressed: () {},
-                      child:
-                          Text("$_keyword was found, but you can create it."),
+            Flexible(
+              child: Builder(
+                builder: (context) {
+                  if (items.isEmpty) {
+                    if (_keyword.isNotEmpty) {
+                      return TextButton(
+                        onPressed: () {},
+                        child:
+                            Text("$_keyword was found, but you can create it."),
+                      );
+                    }
+                    return EmptyList(
+                      message:
+                          "No ${widget.hintName}s found, Please create some",
                     );
                   }
-                  return EmptyList(
-                    message: "No ${widget.hintName}s found, Please create some",
-                  );
-                }
-                return Expanded(
-                  child: HighList<T>(
+                  return HighList<T>(
+                    shrinkWrap: widget.shrinkWrap,
                     items: widget.data.copyWith(
                       items: items,
                     ),
+                    physics: widget.physics,
                     builder: (context, item, color) {
                       return widget.builder(context, item, color);
                     },
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ],
         );
