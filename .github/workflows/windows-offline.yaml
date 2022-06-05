@@ -1,8 +1,7 @@
 on:
   push:
     branches:
-      - beta #
-      - production #What our users use
+      - production
 
 name: "Build & Release Windows app"
 jobs:

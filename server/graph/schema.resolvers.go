@@ -410,10 +410,6 @@ func (r *queryResolver) ItemsStats(ctx context.Context) (*model.ItemsStats, erro
 	return repository.SumItemsCost(r.DB, helpers.ForContext(ctx).StoreID)
 }
 
-func (r *queryResolver) NetItemsIncome(ctx context.Context) (string, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
 func (r *subscriptionResolver) Item(ctx context.Context) (<-chan *model.Item, error) {
 	panic(fmt.Errorf("not implemented"))
 }
@@ -493,6 +489,9 @@ type userResolver struct{ *Resolver }
 //  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //    it when you're done.
 //  - You have helper methods in this file. Move them out to keep these resolver files clean.
+func (r *queryResolver) NetItemsIncome(ctx context.Context) (string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
 func (r *queryResolver) TotalItemsCost(ctx context.Context) (string, error) {
 	panic(fmt.Errorf("not implemented"))
 }

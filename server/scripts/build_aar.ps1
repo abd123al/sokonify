@@ -13,7 +13,12 @@ Set-Location $PSScriptRoot
 cd..
 
 #Installing go and build
-go get -d golang.org/x/mobile/cmd/gomobile
+go install golang.org/x/mobile/cmd/gomobile@latest
+go install golang.org/x/mobile/cmd/gobind@latest
+go get golang.org/x/mobile/cmd/gobind
+go get golang.org/x/mobile/cmd/gomobile
+gomobile init
+
 gomobile bind -v -o ../client/packages/server/android/libs/server.aar -target=android  -ldflags="-s -w" ./lib
 
 Write-Host "Done!"

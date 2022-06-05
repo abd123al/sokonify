@@ -2,11 +2,11 @@ on:
   push:
     branches:
       - internal #What developers see
-#      - alpha #
+      - alpha #
       - beta #
       - production #What our users use
 
-name: "Build and release online app"
+name: "Build and release offline app"
 jobs:
   generate:
     name: Building appbundle
@@ -29,21 +29,28 @@ jobs:
         with:
           flutter-version: '3.0.0'
 
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '1.18'
+
+      - name: Installing go server dependencies
+        working-directory: server
+        run: |
+          export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+          go install
+
+      - name: setup-android-tools
+        uses: maxim-lobanov/setup-android-tools@v1
+        with:
+          packages: ndk;19.2.5345600
+
       - name: Decoding keystore.jks
-        working-directory: client/apps/online
+        working-directory: client/apps/offline
         run: echo "${{ secrets.KEYSTORE_JKS }}" | base64 --decode > android/app/keystore.jks
 
       - name: Decoding key.properties
-        working-directory: client/apps/online
+        working-directory: client/apps/offline
         run: echo "${{ secrets.KEY_PROPERTIES }}" | base64 --decode > android/key.properties
-
-      - name: Installing graph dependencies
-        working-directory: ./client/packages/graph
-        run: flutter pub get
-
-      - name: Generating code
-        working-directory: ./client/packages/graph
-        run: flutter pub run build_runner build --delete-conflicting-outputs
 
       - name: Setting date
         id: date
@@ -53,32 +60,31 @@ jobs:
         id: version
         env:
           NUM: ${{ github.run_number }}
-        run: echo "::set-output name=version::$(($NUM+5))"
+        run: echo "::set-output name=version::$(($NUM+0))"
 
       - name: Setting tag name
         id: tag
         run: echo "::set-output name=tag::${{steps.date.outputs.date}}.${{steps.version.outputs.version}}.${{github.ref_name}}"
 
-      - name: Building appbundle
-        working-directory: ./client/apps/online
+      - name: Building app
+        shell: pwsh
         run: >
-          flutter build appbundle
-          --release
-          --dart-define BASE_URL="https://api.sokonify.com/graphql"
-          --build-number=${{ steps.version.outputs.version }}
-          --build-name=${{ steps.tag.outputs.tag }}
-          --obfuscate
-          --split-debug-info=./build/app/outputs/symbols
+          ./client/scripts/build_offline_app_bundle.ps1 
+          -build_number ${{ steps.version.outputs.version }} 
+          -build_name ${{ steps.tag.outputs.tag }}
+        env:
+          GOPROXY: https://proxy.golang.org,direct
+          GO111MODULE: "on"
 
       - uses: r0adkll/upload-google-play@v1.0.15
         with:
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
-          packageName: com.sokonify.online
-          releaseFiles: client/apps/online/build/app/outputs/bundle/release/*.aab
+          packageName: com.sokonify.offline
+          releaseFiles: client/apps/offline/build/app/outputs/bundle/release/*.aab
           track: ${{ github.ref_name }}
           inAppUpdatePriority: 2
           whatsNewDirectory: client/whatsnew
-          mappingFile: client/apps/online/build/app/outputs/mapping/release/mapping.txt
+          mappingFile: client/apps/offline/build/app/outputs/mapping/release/mapping.txt
 
       - name: Configure git
         run: |

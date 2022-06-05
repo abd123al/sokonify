@@ -712,8 +712,6 @@ type Query {
     averageDailySalesAmount(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
     #cost of buying goods
     itemsStats: ItemsStats! @goField(forceResolver: true) @isAuthenticated
-    #money will you make when sell all
-    netItemsIncome: String! @goField(forceResolver: true) @isAuthenticated
 }
 
 type Mutation {
