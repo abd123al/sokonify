@@ -61,4 +61,13 @@ func TestItem(t *testing.T) {
 
 		require.NotEmpty(t, items)
 	})
+
+	t.Run("SumItemsCost", func(t *testing.T) {
+		create()
+
+		itemsStat, _ := repository.SumItemsCost(DB, *product.StoreID)
+
+		require.NotNil(t, itemsStat.ExpectedProfit)
+		require.NotNil(t, itemsStat.TotalCost)
+	})
 }

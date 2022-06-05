@@ -667,6 +667,11 @@ type Profit {
     real : String!
 }
 
+type ItemsStats {
+    expectedProfit : String!
+    totalCost : String!
+}
+
 #todo remove storeId everywhere and use JWT for that.
 type Query {
     admin(id:ID!): Admin!
@@ -706,9 +711,7 @@ type Query {
     # Daily sales
     averageDailySalesAmount(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
     #cost of buying goods
-    totalItemsCost: String! @goField(forceResolver: true) @isAuthenticated
-    #how much will you make when sell all
-    totalItemsRevenue: String! @goField(forceResolver: true) @isAuthenticated
+    itemsStats: ItemsStats! @goField(forceResolver: true) @isAuthenticated
     #money will you make when sell all
     netItemsIncome: String! @goField(forceResolver: true) @isAuthenticated
 }

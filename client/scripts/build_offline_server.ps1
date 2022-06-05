@@ -24,7 +24,7 @@ flutter build windows `
                     --release
 
 flutter pub run msix:create `
-                    --version "1.0.0.9" `
+                    --version "1.0.0.11" `
                     --install-certificate true `
                     --build-windows false `
                     -c "$PSScriptRoot\sokonify_server.pfx" `
