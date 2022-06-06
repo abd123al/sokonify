@@ -69,5 +69,6 @@ func TestItem(t *testing.T) {
 
 		require.NotNil(t, itemsStat.ExpectedProfit)
 		require.NotNil(t, itemsStat.TotalCost)
+		require.NotNil(t, itemsStat.TotalReturn)
 	})
 }

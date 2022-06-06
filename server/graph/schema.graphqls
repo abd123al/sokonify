@@ -670,6 +670,7 @@ type Profit {
 type ItemsStats {
     expectedProfit : String!
     totalCost : String!
+    totalReturn : String!
 }
 
 #todo remove storeId everywhere and use JWT for that.
