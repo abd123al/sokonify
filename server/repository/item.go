@@ -28,7 +28,7 @@ func FindItems(DB *gorm.DB, args model.ItemsArgs, StoreID int) ([]*model.Item, e
 	var items []*model.Item
 	var result *gorm.DB
 
-	query := DB.Table("items")
+	query := DB.Table("items").Where("items.quantity > 0")
 
 	if args.By == model.ItemsByStore {
 		result = query.Joins("inner join products on products.id = items.product_id AND products.store_id = ?", StoreID).Find(&items)
