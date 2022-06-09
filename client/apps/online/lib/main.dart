@@ -2,13 +2,27 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:graph/graph.dart';
+import 'package:network_info_plus/network_info_plus.dart';
 
 void main() async {
   await startApp(
-    urlHandler: () {
-      String getBaseUrl() {
+    urlHandler: () async {
+      Future<String> getBaseUrl() async {
         if (kReleaseMode) {
-          return "http://127.0.0.1:8081";
+          ip() async {
+            try {
+              //In web this don't work
+              final info = NetworkInfo();
+              final ip = await info.getWifiIP();
+              return ip;
+            } catch (e) {
+              return null;
+            }
+          }
+
+          final url = "http://${await ip() ?? "127.0.0.1"}:9191";
+
+          return url;
         } else {
           //Web don't support platform
           if (!kIsWeb) {
@@ -22,12 +36,12 @@ void main() async {
       }
 
       //This works for majority env
-      String baseUrl = String.fromEnvironment(
+      const baseUrl = String.fromEnvironment(
         "BASE_URL",
-        defaultValue: getBaseUrl(),
+        defaultValue: "",
       );
 
-      return baseUrl;
+      return baseUrl.isNotEmpty ? baseUrl : await getBaseUrl();
     },
     statusHandler: (endpoint) {
       return true;

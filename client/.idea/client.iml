@@ -199,6 +199,12 @@
       <excludeFolder url="file://$MODULE_DIR$/apps/offline/linux/flutter/ephemeral/.plugin_symlinks/screen_retriever/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/apps/offline/linux/flutter/ephemeral/.plugin_symlinks/screen_retriever/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/apps/offline/linux/flutter/ephemeral/.plugin_symlinks/screen_retriever/build" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/linux/flutter/ephemeral/.plugin_symlinks/network_info_plus_linux/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/linux/flutter/ephemeral/.plugin_symlinks/network_info_plus_linux/build" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/linux/flutter/ephemeral/.plugin_symlinks/network_info_plus_linux/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/windows/flutter/ephemeral/.plugin_symlinks/network_info_plus_windows/build" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/windows/flutter/ephemeral/.plugin_symlinks/network_info_plus_windows/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/online/windows/flutter/ephemeral/.plugin_symlinks/network_info_plus_windows/.pub" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
