@@ -7,6 +7,6 @@ $ipv4 = (Test-Connection -ComputerName (hostname) -Count 1 | Select -ExpandPrope
 $baseUrl = "http://$($ipv4):9191"
 $baseUrl
 
-flutter run --release -d R9ANB0BYKXJ --dart-define BASE_URL=$baseUrl
+flutter run --dart-define BASE_URL=$baseUrl
 
 Write-Host "Done gerenerating graph code!"
