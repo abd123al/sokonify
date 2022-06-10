@@ -25,6 +25,7 @@ class Routes {
   static String gains = "/gains";
   static String order = "/order";
   static String products = "/products";
+  static String product = "/product";
   static String units = "/units";
 
   /// [:params] should be defined here.
@@ -146,6 +147,12 @@ class Routes {
     router.define(
       products,
       handler: productsListRouterHandler,
+      transitionType: TransitionType.inFromLeft,
+    );
+
+    router.define(
+      "$product/:id",
+      handler: productPageRouterHandler,
       transitionType: TransitionType.inFromLeft,
     );
 

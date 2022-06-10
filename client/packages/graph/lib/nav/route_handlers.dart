@@ -98,3 +98,8 @@ var itemPageRouterHandler = Handler(handlerFunc: (_, params) {
   final id = params["id"]![0];
   return ItemPage(id: int.parse(id));
 });
+
+var productPageRouterHandler = Handler(handlerFunc: (_, params) {
+  final id = params["id"]![0];
+  return ProductPage(id: int.parse(id));
+});

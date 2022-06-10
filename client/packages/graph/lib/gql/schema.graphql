@@ -228,6 +228,7 @@ type Product implements Gorm {
     creator: User
     creatorId: Int
     deletedAt: Time
+    description: String
     id: ID!
     name: String!
     store: Store
@@ -598,6 +599,7 @@ input ProductBrandInput {
 input ProductInput {
     brands: [ProductBrandInput!]
     categories: [ID!]
+    description: String
     name: String!
 }
 

@@ -23,4 +23,13 @@ class ProductRepository {
 
     return client.query(options);
   }
+
+  fetchProduct(int id ) {
+    final options = QueryOptions(
+      document: PRODUCT_QUERY_DOCUMENT,
+      variables: ProductArguments(id: id).toJson(),
+    );
+
+    return client.query(options);
+  }
 }

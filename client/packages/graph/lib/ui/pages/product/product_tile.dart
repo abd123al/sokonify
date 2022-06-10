@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
+import '../../../nav/redirect_to.dart';
+import '../../../nav/routes.dart';
 
 class ProductTile extends StatelessWidget {
   const ProductTile({
@@ -22,6 +24,9 @@ class ProductTile extends StatelessWidget {
           product.name,
           style: Theme.of(context).textTheme.headlineSmall,
         ),
+        onTap: () {
+          redirectTo(context, "${Routes.product}/${product.id}");
+        },
       ),
     );
   }

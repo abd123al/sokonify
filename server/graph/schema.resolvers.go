@@ -280,7 +280,9 @@ func (r *paymentResolver) Name(ctx context.Context, obj *model.Payment) (string,
 }
 
 func (r *productResolver) Brands(ctx context.Context, obj *model.Product) ([]*model.Brand, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.FindBrands(r.DB, model.BrandsArgs{
+		ProductID: &obj.ID,
+	})
 }
 
 func (r *queryResolver) Admin(ctx context.Context, id int) (*model.Admin, error) {

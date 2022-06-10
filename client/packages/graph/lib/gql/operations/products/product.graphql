@@ -1,0 +1,14 @@
+query product($id: ID!) {
+    product(id: $id) {
+        name
+        description
+        createdAt
+        creator {
+            name
+            id
+        }
+        brands {
+            ...BrandParts
+        }
+    }
+}
