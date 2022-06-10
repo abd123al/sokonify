@@ -13,6 +13,9 @@ cd..
 .\server\scripts\build_dll.ps1
 
 Set-Location $PSScriptRoot
+.\build_web.ps1 -destination "../apps/offline/build/windows/runner/Release/"
+
+Set-Location $PSScriptRoot
 cd..
 
 cd apps/offline
@@ -24,7 +27,7 @@ flutter build windows `
                     --release
 
 flutter pub run msix:create `
-                    --version "1.0.0.11" `
+                    --version "1.0.0.13" `
                     --install-certificate true `
                     --build-windows false `
                     -c "$PSScriptRoot\sokonify_server.pfx" `
