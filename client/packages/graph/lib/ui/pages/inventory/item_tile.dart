@@ -20,7 +20,7 @@ class ItemTile extends StatelessWidget {
     final b = item.brand?.name;
 
     if (b != null) {
-      return "$n ($b)";
+      return "$b - $n";
     }
 
     return n;
