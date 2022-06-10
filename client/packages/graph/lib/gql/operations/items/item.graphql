@@ -1,0 +1,27 @@
+query item($id: ID!) {
+    item(id: $id) {
+        buyingPrice
+        createdAt
+        description
+        expiresAt
+        sellingPrice
+        batch
+        quantity
+        brand {
+            id
+            name
+        }
+        creator {
+            id
+            name
+        }
+        product {
+            id
+            name
+        }
+        unit {
+            id
+            name
+        }
+    }
+}

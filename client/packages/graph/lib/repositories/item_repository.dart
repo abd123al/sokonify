@@ -23,4 +23,13 @@ class ItemRepository {
 
     return client.query(options);
   }
+
+  fetchItem(int id) {
+    final options = QueryOptions(
+      document: ITEM_QUERY_DOCUMENT,
+      variables: ItemArguments(id: id).toJson(),
+    );
+
+    return client.query(options);
+  }
 }

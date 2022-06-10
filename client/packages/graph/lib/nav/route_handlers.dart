@@ -93,3 +93,8 @@ var createBrandPagePageRouterHandler = Handler(handlerFunc: (_, __) {
 var brandsPagePageRouterHandler = Handler(handlerFunc: (_, __) {
   return const BrandsListPage();
 });
+
+var itemPageRouterHandler = Handler(handlerFunc: (_, params) {
+  final id = params["id"]![0];
+  return ItemPage(id: int.parse(id));
+});

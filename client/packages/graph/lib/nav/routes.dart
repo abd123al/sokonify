@@ -21,6 +21,7 @@ class Routes {
   static String brands = "/brands";
   static String categories = "/categories";
   static String expenses = "/expenses";
+  static String item = "/item";
   static String gains = "/gains";
   static String order = "/order";
   static String products = "/products";
@@ -127,6 +128,12 @@ class Routes {
     router.define(
       expenses,
       handler: expensesListPageRouterHandler,
+      transitionType: TransitionType.inFromLeft,
+    );
+
+    router.define(
+      "$item/:id",
+      handler: itemPageRouterHandler,
       transitionType: TransitionType.inFromLeft,
     );
 

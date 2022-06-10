@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:graph/ui/helpers/helpers.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
+import '../../../nav/nav.dart';
 
 class ItemTile extends StatelessWidget {
   const ItemTile({
@@ -49,6 +50,7 @@ class ItemTile extends StatelessWidget {
               formatCurrency(item.sellingPrice),
               style: Theme.of(context).textTheme.titleMedium,
             ),
+            onTap: () => redirectTo(context, "${Routes.item}/${item.id}"),
           );
         },
       ),
