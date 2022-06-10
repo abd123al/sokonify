@@ -8,10 +8,16 @@ import 'package:printing/printing.dart';
 import '../../../gql/generated/graphql_api.graphql.dart';
 
 Future<Uint8List> generateInvoice(
-    PdfPageFormat pageFormat, Order$Query$Order order, int id) async {
+  PdfPageFormat pageFormat,
+  Order$Query$Order order,
+  int id,
+  CurrentStore$Query$Store store,
+) async {
   final invoice = Invoice(
+    store: store,
+    order: order,
     invoiceNumber: '$id',
-    products: order.orderItems,
+    items: order.orderItems,
     customerName: order.customer?.name ?? "No customer",
     customerAddress: '54 rue de Rivoli\n75001 Paris, France',
     paymentInfo:
@@ -26,7 +32,9 @@ Future<Uint8List> generateInvoice(
 
 class Invoice {
   Invoice({
-    required this.products,
+    required this.items,
+    required this.store,
+    required this.order,
     required this.customerName,
     required this.customerAddress,
     required this.invoiceNumber,
@@ -36,7 +44,9 @@ class Invoice {
     required this.accentColor,
   });
 
-  final List<Order$Query$Order$OrderItem> products;
+  final List<Order$Query$Order$OrderItem> items;
+  final CurrentStore$Query$Store store;
+  final Order$Query$Order order;
   final String customerName;
   final String customerAddress;
   final String invoiceNumber;
@@ -50,10 +60,8 @@ class Invoice {
 
   PdfColor get _baseTextColor => baseColor.isLight ? _lightColor : _darkColor;
 
-  PdfColor get _accentTextColor => baseColor.isLight ? _lightColor : _darkColor;
-
   String get _total =>
-      products.map<String>((p) => p.price).reduce((a, b) => a + b);
+      items.map<String>((p) => p.price).reduce((a, b) => a + b);
 
   String get _grandTotal => _total;
 
@@ -97,69 +105,43 @@ class Invoice {
   pw.Widget _buildHeader(pw.Context context) {
     return pw.Column(
       children: [
-        pw.Row(
-          crossAxisAlignment: pw.CrossAxisAlignment.start,
+        pw.Column(
           children: [
-            pw.Expanded(
-              child: pw.Column(
-                children: [
-                  pw.Container(
-                    height: 50,
-                    padding: const pw.EdgeInsets.only(left: 20),
-                    alignment: pw.Alignment.centerLeft,
-                    child: pw.Text(
-                      'INVOICE',
-                      style: pw.TextStyle(
-                        color: baseColor,
-                        fontWeight: pw.FontWeight.bold,
-                        fontSize: 40,
-                      ),
-                    ),
-                  ),
-                  pw.Container(
-                    decoration: pw.BoxDecoration(
-                      borderRadius:
-                          const pw.BorderRadius.all(pw.Radius.circular(2)),
-                      color: accentColor,
-                    ),
-                    padding: const pw.EdgeInsets.only(
-                        left: 40, top: 10, bottom: 10, right: 20),
-                    alignment: pw.Alignment.centerLeft,
-                    height: 50,
-                    child: pw.DefaultTextStyle(
-                      style: pw.TextStyle(
-                        color: _accentTextColor,
-                        fontSize: 12,
-                      ),
-                      child: pw.GridView(
-                        crossAxisCount: 2,
-                        children: [
-                          pw.Text('Invoice #'),
-                          pw.Text(invoiceNumber),
-                          pw.Text('Date:'),
-                          pw.Text(_formatDate(DateTime.now())),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+            pw.Container(
+              height: 50,
+              padding: const pw.EdgeInsets.only(left: 20),
+              alignment: pw.Alignment.centerLeft,
+              child: pw.Text(
+                'INVOICE',
+                style: pw.TextStyle(
+                  fontWeight: pw.FontWeight.bold,
+                  fontSize: 40,
+                ),
               ),
             ),
-            pw.Expanded(
-              child: pw.Column(
-                mainAxisSize: pw.MainAxisSize.min,
-                children: [
-                  pw.Container(
-                    alignment: pw.Alignment.topRight,
-                    padding: const pw.EdgeInsets.only(bottom: 8, left: 30),
-                    height: 72,
-                    //child: _logo != null ? pw.SvgImage(svg: _logo!) : pw.PdfLogo(),
-                  ),
-                  // pw.Container(
-                  //   color: baseColor,
-                  //   padding: pw.EdgeInsets.only(top: 3),
-                  // ),
-                ],
+            pw.Container(
+              decoration: const pw.BoxDecoration(
+                borderRadius: pw.BorderRadius.all(
+                  pw.Radius.circular(2),
+                ),
+              ),
+              padding: const pw.EdgeInsets.only(
+                  left: 40, top: 10, bottom: 10, right: 20),
+              alignment: pw.Alignment.centerLeft,
+              height: 50,
+              child: pw.DefaultTextStyle(
+                style: const pw.TextStyle(
+                  fontSize: 12,
+                ),
+                child: pw.GridView(
+                  crossAxisCount: 2,
+                  children: [
+                    pw.Text('Invoice #'),
+                    pw.Text(invoiceNumber),
+                    pw.Text('Date:'),
+                    pw.Text(_formatDate(order.createdAt)),
+                  ],
+                ),
               ),
             ),
           ],
@@ -179,7 +161,7 @@ class Invoice {
           width: 100,
           child: pw.BarcodeWidget(
             barcode: pw.Barcode.pdf417(),
-            data: 'Invoice No $invoiceNumber',
+            data: invoiceNumber,
             drawText: false,
           ),
         ),
@@ -269,7 +251,7 @@ class Invoice {
                             fontSize: 10,
                           ),
                         ),
-                      ])),
+                      ],),),
                 ),
               ),
             ],
@@ -454,7 +436,7 @@ class Invoice {
         "Quantity",
         "Total",
       ],
-      data: products
+      data: items
           .map((e) => [
                 "${e.item.product.name} ${e.item.brand?.name ?? ""}",
                 e.item.unit.name,

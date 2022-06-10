@@ -4,6 +4,7 @@ import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
+import '../../widgets/store_builder.dart';
 import 'invoice.dart';
 
 class PrintPage extends StatelessWidget {
@@ -22,12 +23,24 @@ class PrintPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Print"),
       ),
-      body: PdfPreview(
-        canDebug: kDebugMode,
-        pdfFileName: "invoice_$id.pdf",
-        initialPageFormat: PdfPageFormat.a4,
-        build: (PdfPageFormat format) {
-          return generateInvoice(format, order, id);
+      body: StoreBuilder(
+        noBuilder: (BuildContext ctx) {
+          return const SizedBox();
+        },
+        builder: (context, store) {
+          return PdfPreview(
+            canDebug: kDebugMode,
+            pdfFileName: "invoice_$id.pdf",
+            initialPageFormat: PdfPageFormat.a4,
+            build: (PdfPageFormat format) {
+              return generateInvoice(
+                format,
+                order,
+                id,
+                store,
+              );
+            },
+          );
         },
       ),
     );
