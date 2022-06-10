@@ -37,7 +37,7 @@ func TestResolvers(t *testing.T) {
 	}).Order
 
 	//Graphql client
-	router := util.ConfigureGraphql(DB, true)
+	router := util.ConfigureGraphql(DB, true, false)
 	token := helpers.GenerateAuthToken(user.ID, &helpers.FindDefaultStoreAndRoleResult{
 		StoreID: store.ID,
 		Role:    model.StaffRoleOwner,

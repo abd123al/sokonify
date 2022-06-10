@@ -14,6 +14,7 @@ import (
 	"mahesabu/helpers"
 	"net/http"
 	"os"
+	"path/filepath"
 )
 
 type StartServerArgs struct {
@@ -44,7 +45,7 @@ func StartServer(Args StartServerArgs) string {
 		IsRelease: Args.IsRelease,
 	})
 
-	router := ConfigureGraphql(db, Args.Multistore)
+	router := ConfigureGraphql(db, Args.Multistore, Args.IsServer)
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(":"+port, router))
@@ -52,7 +53,7 @@ func StartServer(Args StartServerArgs) string {
 	return port
 }
 
-func ConfigureGraphql(DB *gorm.DB, Multistore bool) *chi.Mux {
+func ConfigureGraphql(DB *gorm.DB, Multistore bool, isServer bool) *chi.Mux {
 	router := chi.NewRouter()
 
 	//jwt: Seek, verify and validate JWT tokens
@@ -75,8 +76,14 @@ func ConfigureGraphql(DB *gorm.DB, Multistore bool) *chi.Mux {
 	srv.AddTransport(transport.POST{})
 	srv.Use(extension.Introspection{}) //todo disable when live
 
-	router.Handle("/", playground.Handler("GraphQL playground", "/graphql"))
+	router.Handle("/graphql", playground.Handler("GraphQL playground", "/graphql"))
 	router.Handle("/graphql", srv)
+
+	if isServer {
+		workDir, _ := os.Getwd()
+		filesDir := http.Dir(filepath.Join(workDir, "web"))
+		helpers.FileServer(router, "/", filesDir)
+	}
 
 	return router
 }
