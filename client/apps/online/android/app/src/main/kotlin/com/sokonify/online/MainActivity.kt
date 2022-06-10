@@ -1,4 +1,4 @@
-package com.example.online
+package com.sokonify.online
 
 import io.flutter.embedding.android.FlutterActivity
 

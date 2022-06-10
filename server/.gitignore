@@ -3,3 +3,4 @@ graph/model/models_gen.go
 *.so
 *.h
 *.db
+static/
