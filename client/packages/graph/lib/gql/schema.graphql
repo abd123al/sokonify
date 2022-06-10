@@ -51,6 +51,8 @@ type AuthPayload {
 
 type Brand implements Gorm {
     createdAt: Time!
+    creator: User
+    creatorId: Int
     deletedAt: Time
     id: ID!
     manufacturer: String
@@ -62,6 +64,8 @@ type Brand implements Gorm {
 
 type Category implements Gorm {
     createdAt: Time!
+    creator: User
+    creatorId: Int
     deletedAt: Time
     id: ID!
     name: String!
@@ -74,6 +78,8 @@ type Customer implements Gorm {
     address: String
     comment: String
     createdAt: Time!
+    creator: User
+    creatorId: Int
     deletedAt: Time
     dob: Time
     email: String
@@ -92,6 +98,8 @@ type Customer implements Gorm {
 
 type Expense implements Gorm {
     createdAt: Time!
+    creator: User
+    creatorId: Int
     deletedAt: Time
     id: ID!
     name: String!
@@ -107,6 +115,8 @@ type Item implements Gorm {
     brandId: Int
     buyingPrice: String!
     createdAt: Time!
+    creator: User
+    creatorId: Int
     deletedAt: Time
     description: String
     expiresAt: Time
@@ -123,6 +133,7 @@ type Item implements Gorm {
 type ItemsStats {
     expectedProfit: String!
     totalCost: String!
+    totalReturn: String!
 }
 
 type Mutation {
@@ -214,6 +225,8 @@ type Payment implements Gorm {
 type Product implements Gorm {
     brands: [Brand!]!
     createdAt: Time!
+    creator: User
+    creatorId: Int
     deletedAt: Time
     id: ID!
     name: String!
@@ -226,6 +239,8 @@ type ProductCategory implements Gorm {
     category: Category!
     categoryId: Int!
     createdAt: Time!
+    creator: User
+    creatorId: Int
     deletedAt: Time
     id: ID!
     product: Product!
@@ -257,7 +272,6 @@ type Query {
     itemsStats: ItemsStats!
     me: User!
     netIncome(args: StatsArgs!): String!
-    netItemsIncome: String!
     order(id: ID!): Order!
     orders(args: OrdersArgs!): [Order!]!
     payment(id: ID!): Payment!
@@ -278,6 +292,8 @@ type Query {
 
 type Staff implements Gorm {
     createdAt: Time!
+    creator: User
+    creatorId: Int
     default: Boolean!
     deletedAt: Time
     id: ID!
