@@ -10,19 +10,14 @@ import (
 
 //export StartServer
 func StartServer(Port int, IsServer bool, isRelease bool) int {
-	result := util.StartServer(util.StartServerArgs{
+	go util.StartServer(util.StartServerArgs{
 		Port:       strconv.Itoa(Port),
 		IsServer:   IsServer,
 		IsRelease:  isRelease,
 		Multistore: true, //todo use int to show how many stores are possible
 	})
 
-	port, err := strconv.Atoi(result)
-	if err != nil {
-		return 8080
-	}
-
-	return port
+	return Port
 }
 
 //export FindFreePort

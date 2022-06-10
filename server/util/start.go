@@ -76,7 +76,7 @@ func ConfigureGraphql(DB *gorm.DB, Multistore bool, isServer bool) *chi.Mux {
 	srv.AddTransport(transport.POST{})
 	srv.Use(extension.Introspection{}) //todo disable when live
 
-	router.Handle("/graphql", playground.Handler("GraphQL playground", "/graphql"))
+	router.Handle("/playground", playground.Handler("GraphQL playground", "/graphql"))
 	router.Handle("/graphql", srv)
 
 	if isServer {
