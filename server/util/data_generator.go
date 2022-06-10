@@ -4,6 +4,7 @@ import (
 	"github.com/bxcodec/faker/v3"
 	"gorm.io/gorm"
 	"mahesabu/graph/model"
+	"mahesabu/helpers"
 	"mahesabu/repository"
 )
 
@@ -64,7 +65,10 @@ func CreateStaff(DB *gorm.DB, Args *CreateStaffArgs) *model.Staff {
 	staff, _ := repository.CreateStaff(DB, model.StaffInput{
 		UserID: UserID,
 		Role:   model.StaffRoleStaff,
-	}, StoreID)
+	}, helpers.UserAndStoreArgs{
+		UserID:  UserID,
+		StoreID: StoreID,
+	})
 
 	return staff
 }
@@ -89,6 +93,8 @@ func CreateProduct(DB *gorm.DB, Args *CreateProductArgs) *model.Product {
 	var StoreID int
 	var Categories []int
 
+	UserID := CreateUser(DB).ID
+
 	if Args == nil {
 		StoreID = CreateStore(DB, nil).ID
 	} else {
@@ -106,7 +112,10 @@ func CreateProduct(DB *gorm.DB, Args *CreateProductArgs) *model.Product {
 			{Name: faker.Word()},
 			{Name: faker.Word()},
 		},
-	}, &StoreID)
+	}, helpers.UserAndStoreArgs{
+		UserID:  UserID,
+		StoreID: StoreID,
+	})
 
 	return product
 }
@@ -119,6 +128,7 @@ type CreateItemArgs struct {
 func CreateItem(DB *gorm.DB, args *CreateItemArgs, StoreId *int) *model.Item {
 	var BrandID *int
 	var ProductID int
+	var CreatorID int
 
 	//Here what is required is ProductID
 	if args != nil {
@@ -129,7 +139,9 @@ func CreateItem(DB *gorm.DB, args *CreateItemArgs, StoreId *int) *model.Item {
 		if StoreId != nil {
 			ProductID = CreateProduct(DB, &CreateProductArgs{StoreID: *StoreId}).ID
 		} else {
-			ProductID = CreateProduct(DB, nil).ID
+			Product := CreateProduct(DB, nil)
+			ProductID = Product.ID
+			CreatorID = *Product.CreatorID
 		}
 	}
 
@@ -145,7 +157,7 @@ func CreateItem(DB *gorm.DB, args *CreateItemArgs, StoreId *int) *model.Item {
 		BrandID:      BrandID,
 		ProductID:    ProductID,
 		UnitID:       unit.ID,
-	})
+	}, CreatorID)
 
 	return item
 }
@@ -224,14 +236,19 @@ func CreateOrder(DB *gorm.DB, args *CreateOrderArgs) CreateOrderResult {
 }
 
 func CreateExpense(DB *gorm.DB, StoreID *int) *model.Expense {
+	UserID := CreateUser(DB).ID
+
 	if StoreID == nil {
-		StoreID = &CreateStore(DB, nil).ID
+		StoreID = &CreateStore(DB, &UserID).ID
 	}
 
 	expense, _ := repository.CreateExpense(DB, model.ExpenseInput{
 		Name: faker.Name(),
 		Type: model.ExpenseTypeOut,
-	}, *StoreID)
+	}, helpers.UserAndStoreArgs{
+		UserID:  UserID,
+		StoreID: *StoreID,
+	})
 
 	return expense
 }

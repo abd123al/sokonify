@@ -254,6 +254,7 @@ type Product implements Gorm {
     deletedAt:Time
 
     name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(100);default:null")
+    description: String @goTag(key: "gorm", value: "")
 
     # We will add our custom items and user may choose from our list.
     storeId: Int
@@ -271,6 +272,7 @@ input ProductInput {
     categories: [ID!]
     # Brands can be inserted when creating product.
     brands: [ProductBrandInput!]
+    description: String
 }
 
 enum ProductsBy {

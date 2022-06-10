@@ -7,7 +7,7 @@ import (
 	"mahesabu/helpers"
 )
 
-func CreateProduct(DB *gorm.DB, input model.ProductInput, StoreID *int) (*model.Product, error) {
+func CreateProduct(DB *gorm.DB, input model.ProductInput, args helpers.UserAndStoreArgs) (*model.Product, error) {
 	//todo should this run on transaction?
 	var brands []*model.Brand
 	var productCategories []*model.ProductCategory
@@ -22,9 +22,11 @@ func CreateProduct(DB *gorm.DB, input model.ProductInput, StoreID *int) (*model.
 	}
 
 	product := model.Product{
-		Name:    input.Name,
-		Brands:  brands,
-		StoreID: StoreID,
+		Name:        input.Name,
+		Brands:      brands,
+		StoreID:     &args.StoreID,
+		CreatorID:   &args.UserID,
+		Description: input.Description,
 	}
 
 	result := DB.Create(&product)

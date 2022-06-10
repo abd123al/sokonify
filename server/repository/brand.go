@@ -5,11 +5,12 @@ import (
 	"mahesabu/graph/model"
 )
 
-func CreateBrand(db *gorm.DB, input model.BrandInput) (*model.Brand, error) {
+func CreateBrand(db *gorm.DB, input model.BrandInput, CreatorID int) (*model.Brand, error) {
 	brand := model.Brand{
 		Name:         input.Name,
 		Manufacturer: input.Manufacturer,
 		ProductID:    input.ProductID,
+		CreatorID:    &CreatorID,
 	}
 	result := db.Create(&brand)
 	return &brand, result.Error

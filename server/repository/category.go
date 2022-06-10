@@ -3,12 +3,14 @@ package repository
 import (
 	"gorm.io/gorm"
 	"mahesabu/graph/model"
+	"mahesabu/helpers"
 )
 
-func CreateCategory(db *gorm.DB, input model.CategoryInput, StoreID *int) (*model.Category, error) {
+func CreateCategory(db *gorm.DB, input model.CategoryInput, args helpers.UserAndStoreArgs) (*model.Category, error) {
 	category := model.Category{
-		Name:    input.Name,
-		StoreID: StoreID,
+		Name:      input.Name,
+		StoreID:   &args.StoreID,
+		CreatorID: &args.UserID,
 	}
 	result := db.Create(&category)
 	return &category, result.Error

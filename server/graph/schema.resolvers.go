@@ -58,11 +58,14 @@ func (r *itemResolver) Unit(ctx context.Context, obj *model.Item) (*model.Unit, 
 }
 
 func (r *mutationResolver) CreateBrand(ctx context.Context, input model.BrandInput) (*model.Brand, error) {
-	return repository.CreateBrand(r.DB, input)
+	return repository.CreateBrand(r.DB, input, helpers.ForContext(ctx).UserID)
 }
 
 func (r *mutationResolver) CreateCategory(ctx context.Context, input model.CategoryInput) (*model.Category, error) {
-	return repository.CreateCategory(r.DB, input, &helpers.ForContext(ctx).StoreID)
+	return repository.CreateCategory(r.DB, input, helpers.UserAndStoreArgs{
+		UserID:  helpers.ForContext(ctx).UserID,
+		StoreID: helpers.ForContext(ctx).StoreID,
+	})
 }
 
 func (r *mutationResolver) CreateCustomer(ctx context.Context, input model.CustomerInput) (*model.Customer, error) {
@@ -70,11 +73,14 @@ func (r *mutationResolver) CreateCustomer(ctx context.Context, input model.Custo
 }
 
 func (r *mutationResolver) CreateExpense(ctx context.Context, input model.ExpenseInput) (*model.Expense, error) {
-	return repository.CreateExpense(r.DB, input, helpers.ForContext(ctx).StoreID)
+	return repository.CreateExpense(r.DB, input, helpers.UserAndStoreArgs{
+		UserID:  helpers.ForContext(ctx).UserID,
+		StoreID: helpers.ForContext(ctx).StoreID,
+	})
 }
 
 func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput) (*model.Item, error) {
-	return repository.CreateItem(r.DB, input)
+	return repository.CreateItem(r.DB, input, helpers.ForContext(ctx).UserID)
 }
 
 func (r *mutationResolver) CreateOrder(ctx context.Context, input model.OrderInput) (*model.Order, error) {
@@ -90,7 +96,10 @@ func (r *mutationResolver) CreateExpensePayment(ctx context.Context, input model
 }
 
 func (r *mutationResolver) CreateProduct(ctx context.Context, input model.ProductInput) (*model.Product, error) {
-	return repository.CreateProduct(r.DB, input, &helpers.ForContext(ctx).StoreID)
+	return repository.CreateProduct(r.DB, input, helpers.UserAndStoreArgs{
+		UserID:  helpers.ForContext(ctx).UserID,
+		StoreID: helpers.ForContext(ctx).StoreID,
+	})
 }
 
 func (r *mutationResolver) CreateSales(ctx context.Context, input model.SalesInput) (*model.Payment, error) {
@@ -101,7 +110,10 @@ func (r *mutationResolver) CreateSales(ctx context.Context, input model.SalesInp
 }
 
 func (r *mutationResolver) CreateStaff(ctx context.Context, input model.StaffInput) (*model.Staff, error) {
-	return repository.CreateStaff(r.DB, input, helpers.ForContext(ctx).StoreID)
+	return repository.CreateStaff(r.DB, input, helpers.UserAndStoreArgs{
+		UserID:  helpers.ForContext(ctx).UserID,
+		StoreID: helpers.ForContext(ctx).StoreID,
+	})
 }
 
 func (r *mutationResolver) CreateStore(ctx context.Context, input model.StoreInput) (*model.Store, error) {

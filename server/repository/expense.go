@@ -4,13 +4,15 @@ import (
 	"fmt"
 	"gorm.io/gorm"
 	"mahesabu/graph/model"
+	"mahesabu/helpers"
 )
 
-func CreateExpense(DB *gorm.DB, input model.ExpenseInput, StoreID int) (*model.Expense, error) {
+func CreateExpense(DB *gorm.DB, input model.ExpenseInput, args helpers.UserAndStoreArgs) (*model.Expense, error) {
 	expense := model.Expense{
-		Name:    input.Name,
-		Type:    input.Type,
-		StoreID: StoreID,
+		Name:      input.Name,
+		Type:      input.Type,
+		StoreID:   args.StoreID,
+		CreatorID: &args.UserID,
 	}
 
 	result := DB.Create(&expense)

@@ -7,7 +7,7 @@ import (
 )
 
 // CreateItem Items can have the same brand but different price and batch
-func CreateItem(DB *gorm.DB, input model.ItemInput) (*model.Item, error) {
+func CreateItem(DB *gorm.DB, input model.ItemInput, CreatorID int) (*model.Item, error) {
 	item := model.Item{
 		Quantity:     input.Quantity,
 		Batch:        input.Batch,
@@ -18,6 +18,7 @@ func CreateItem(DB *gorm.DB, input model.ItemInput) (*model.Item, error) {
 		ProductID:    input.ProductID,
 		BrandID:      input.BrandID,
 		UnitID:       input.UnitID,
+		CreatorID:    &CreatorID,
 	}
 
 	result := DB.Create(&item)

@@ -7,7 +7,7 @@ import (
 	"mahesabu/helpers"
 )
 
-func CreateStaff(db *gorm.DB, input model.StaffInput, StoreID int) (*model.Staff, error) {
+func CreateStaff(db *gorm.DB, input model.StaffInput, args helpers.UserAndStoreArgs) (*model.Staff, error) {
 	var hasDefault bool
 
 	memberships, err := FindMyMemberships(db, input.UserID)
@@ -19,7 +19,7 @@ func CreateStaff(db *gorm.DB, input model.StaffInput, StoreID int) (*model.Staff
 	for _, s := range memberships {
 		//Checking is user is already a member of this store
 		//This will prevent duplicates
-		if s.StoreID == StoreID {
+		if s.StoreID == args.StoreID {
 			return nil, errors.New("user is already a staff in this store")
 		}
 		//Checking if user has default login store
@@ -30,10 +30,11 @@ func CreateStaff(db *gorm.DB, input model.StaffInput, StoreID int) (*model.Staff
 	}
 
 	staff := model.Staff{
-		UserID:  input.UserID, //This is user who is about to get membership
-		StoreID: StoreID,
-		Role:    input.Role,
-		Default: !hasDefault,
+		UserID:    input.UserID, //This is user who is about to get membership
+		StoreID:   args.StoreID,
+		Role:      input.Role,
+		Default:   !hasDefault,
+		CreatorID: &args.UserID,
 	}
 
 	if err := db.Create(&staff).Error; err != nil {

@@ -20,7 +20,10 @@ func TestStaff(t *testing.T) {
 				UserID: UserID,
 				Role:   model.StaffRoleStaff,
 			}
-			return repository.CreateStaff(DB, input, StoreID)
+			return repository.CreateStaff(DB, input, helpers.UserAndStoreArgs{
+				UserID:  UserID,
+				StoreID: StoreID,
+			})
 		}
 
 		staff, err := fn()

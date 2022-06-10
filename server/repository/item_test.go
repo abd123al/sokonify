@@ -21,7 +21,7 @@ func TestItem(t *testing.T) {
 			Quantity:     12,
 			BuyingPrice:  "2000",
 			SellingPrice: "5000",
-		})
+		}, *product.CreatorID)
 
 		require.GreaterOrEqual(t, item.ID, 1)
 	})
@@ -33,7 +33,7 @@ func TestItem(t *testing.T) {
 			UnitID:       unit.ID,
 			SellingPrice: "5000",
 			ProductID:    product.ID,
-		})
+		}, *product.CreatorID)
 	}
 
 	t.Run("FindItems by store", func(t *testing.T) {
