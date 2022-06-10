@@ -598,6 +598,8 @@ type Payment implements Gorm {
 
     expenseId: Int
     expense: Expense @goTag(key: "gorm", value: "foreignKey:ExpenseID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+
+    orderItems: [OrderItem!] @goField(forceResolver: true) @goTag(key: "gorm",value: "-")
 }
 
 # This is used for completing order and tracking expenses..
