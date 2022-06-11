@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:printing/printing.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 
@@ -79,12 +78,7 @@ class Invoice {
     // Add page to the PDF
     doc.addPage(
       pw.MultiPage(
-        pageTheme: _buildTheme(
-          pageFormat,
-          await PdfGoogleFonts.robotoRegular(),
-          await PdfGoogleFonts.robotoBold(),
-          await PdfGoogleFonts.robotoItalic(),
-        ),
+        pageFormat: pageFormat,
         header: _buildHeader,
         footer: _buildFooter,
         build: (context) => [
@@ -176,22 +170,6 @@ class Invoice {
     );
   }
 
-  pw.PageTheme _buildTheme(
-      PdfPageFormat pageFormat, pw.Font base, pw.Font bold, pw.Font italic) {
-    return pw.PageTheme(
-      pageFormat: pageFormat,
-      theme: pw.ThemeData.withFont(
-        base: base,
-        bold: bold,
-        italic: italic,
-      ),
-      buildBackground: (context) => pw.FullPage(
-        ignoreMargins: true,
-        //child: pw.SvgImage(svg: _bgShape!),
-      ),
-    );
-  }
-
   pw.Widget _contentHeader(pw.Context context) {
     return pw.Row(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -230,14 +208,14 @@ class Invoice {
                 child: pw.Container(
                   height: 70,
                   child: pw.RichText(
-                      text: pw.TextSpan(
-                          text: '$customerName\n',
-                          style: pw.TextStyle(
-                            color: _darkColor,
-                            fontWeight: pw.FontWeight.bold,
-                            fontSize: 12,
-                          ),
-                          children: [
+                    text: pw.TextSpan(
+                      text: '$customerName\n',
+                      style: pw.TextStyle(
+                        color: _darkColor,
+                        fontWeight: pw.FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                      children: [
                         const pw.TextSpan(
                           text: '\n',
                           style: pw.TextStyle(
@@ -251,7 +229,9 @@ class Invoice {
                             fontSize: 10,
                           ),
                         ),
-                      ],),),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ],
