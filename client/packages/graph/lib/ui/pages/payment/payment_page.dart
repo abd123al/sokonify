@@ -62,8 +62,8 @@ class PaymentPage extends StatelessWidget {
               _buildTile("Expenses Category", data.expense?.name),
             _buildTile("Description", data.description),
             const Divider(),
-            _buildTile("Approved By", data.staff.name),
-            _buildTile("Approved on", data.createdAt.toString()),
+            _buildTile("Submitted By", data.staff.name),
+            _buildTile("Submitted on", data.createdAt.toString()),
             if (data.orderItems != null) const WordDivider(text: 'Items'),
             if (data.orderItems != null)
               Builder(

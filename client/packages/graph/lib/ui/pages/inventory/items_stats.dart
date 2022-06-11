@@ -8,7 +8,6 @@ import '../../widgets/topper.dart';
 import '../home/stats/stat_tile.dart';
 import 'items_stats_cubit.dart';
 
-
 class InventoryStats extends StatelessWidget {
   const InventoryStats({
     Key? key,
@@ -26,19 +25,19 @@ class InventoryStats extends StatelessWidget {
             color: Colors.blue,
           ),
           StatTile(
+            title: 'Expected Return',
+            value: formatCurrency(data.totalReturn),
+            color: Colors.grey,
+          ),
+          StatTile(
             title: 'Expected Profit',
             value: formatCurrency(data.expectedProfit),
             color: Colors.green,
           ),
           const StatTile(
-            title: 'Near Expire Date',
+            title: 'Warnings',
             value: "0",
             color: Colors.red,
-          ),
-          const StatTile(
-            title: 'Near Out of Stock',
-            value: "0",
-            color: Colors.grey,
           ),
         ];
 

@@ -26,7 +26,7 @@ class SimpleStats extends StatelessWidget {
 
         final List<StatTile> children = [
           StatTile(
-            title: 'Total Income',
+            title: 'Total Sales',
             value: formatCurrency(data.totalSalesAmount),
             color: Colors.brown,
             onTap: () {},
