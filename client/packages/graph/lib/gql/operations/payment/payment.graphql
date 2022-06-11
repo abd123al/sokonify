@@ -1,0 +1,23 @@
+query payment($id: ID!) {
+    payment(id: $id) {
+        amount
+        description
+        createdAt
+        orderItems {
+            ...OrderItemParts
+        }
+        expense {
+            id
+            name
+        }
+        order {
+            customer {
+                name
+            }
+        }
+        staff {
+            id
+            name
+        }
+    }
+}

@@ -214,6 +214,7 @@ type Payment implements Gorm {
     name: String!
     order: Order
     orderId: Int
+    orderItems: [OrderItem!]
     receiptId: String
     referenceId: String
     staff: User!

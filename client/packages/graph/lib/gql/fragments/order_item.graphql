@@ -1,0 +1,17 @@
+fragment OrderItemParts on OrderItem {
+    id
+    quantity
+    price
+    subTotalPrice
+    item {
+        product {
+            name
+        }
+        brand {
+            name
+        }
+        unit {
+            name
+        }
+    }
+}

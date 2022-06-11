@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:graph/ui/helpers/helpers.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
+import '../../../nav/nav.dart';
 
 class PaymentTile extends StatelessWidget {
   const PaymentTile({
@@ -40,6 +41,7 @@ class PaymentTile extends StatelessWidget {
                 color: amountColor,
               ),
         ),
+        onTap: () => redirectTo(context, "${Routes.payment}/${payment.id}"),
       ),
     );
   }

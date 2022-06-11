@@ -10,6 +10,7 @@ import '../../../repositories/order_repository.dart';
 import '../../helpers/currency_formatter.dart';
 import '../../widgets/word_divider.dart';
 import '../payment/create_order_payment_page.dart';
+import 'order_item_tile.dart';
 import 'order_page_cubit.dart';
 import 'print.dart';
 import 'total_amount_tile.dart';
@@ -76,19 +77,8 @@ class OrderPage extends StatelessWidget {
             itemBuilder: (context, index) {
               final order = data.orderItems[index];
 
-              return ListTile(
-                title: Text(
-                  "${order.item.product.name} ${order.item.brand?.name ?? ""}",
-                  style: Theme.of(context).textTheme.titleMedium,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                trailing: Text(
-                  formatCurrency(order.subTotalPrice),
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-                subtitle: Text(
-                  "${order.quantity} ${order.item.unit.name}",
-                ),
+              return OrderItemTile(
+                orderItem: order,
               );
             },
             separatorBuilder: (BuildContext context, int index) {

@@ -41,4 +41,13 @@ class PaymentRepository {
 
     return client.mutate(options);
   }
+
+  fetchPayment(int id) {
+    final options = QueryOptions(
+      document: PAYMENT_QUERY_DOCUMENT,
+      variables: PaymentArguments(id: id).toJson(),
+    );
+
+    return client.query(options);
+  }
 }

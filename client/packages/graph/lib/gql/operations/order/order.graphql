@@ -7,21 +7,7 @@ query order($id: ID!) {
             name
         }
         orderItems {
-            id
-            quantity
-            price
-            subTotalPrice
-            item {
-                product {
-                    name
-                }
-                brand {
-                    name
-                }
-                unit {
-                    name
-                }
-            }
+            ...OrderItemParts
         }
         payment {
             id
