@@ -29,7 +29,7 @@ class _CreateBrandPageState extends State<CreateBrandPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("New Brands Category"),
+        title: const Text("New Brand"),
       ),
       body: _buildForm(context),
     );
@@ -67,13 +67,14 @@ class _CreateBrandPageState extends State<CreateBrandPage> {
                     );
                   },
                 ),
+                const SizedBox(height: 8),
                 if (_product != null) ...[
                   TextField(
                     controller: _nameController,
                     keyboardType: TextInputType.text,
                     decoration: const InputDecoration(
-                      labelText: 'Category name',
-                      hintText: 'Enter category name',
+                      labelText: 'Brand name',
+                      hintText: 'Enter brand name',
                       border: OutlineInputBorder(),
                     ),
                   ),

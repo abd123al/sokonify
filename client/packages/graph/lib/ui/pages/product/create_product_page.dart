@@ -69,8 +69,8 @@ class _CreateProductPageState extends State<CreateProductWidget> {
                 controller: _nameController,
                 keyboardType: TextInputType.text,
                 decoration: const InputDecoration(
-                  labelText: 'Category name',
-                  hintText: 'Enter Category name',
+                  labelText: 'Product name',
+                  hintText: 'Enter Product name',
                 ),
               ),
               QueryBuilder<ResourceListData<Categories$Query$Category>,

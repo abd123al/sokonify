@@ -103,7 +103,7 @@ class _CreateStorePageState extends State<TrackExpensePage> {
                         const TextInputType.numberWithOptions(decimal: true),
                     decoration: InputDecoration(
                       labelText: '$word Amount',
-                      hintText: 'Enter $word spent',
+                      hintText: 'Enter $word amount',
                       border: const OutlineInputBorder(),
                     ),
                   ),

@@ -66,8 +66,9 @@ class _CreateUnitPageState extends State<CreateUnitWidget> {
                 controller: _nameController,
                 keyboardType: TextInputType.text,
                 decoration: const InputDecoration(
-                  labelText: 'Facility name',
-                  hintText: 'Enter your Shop name',
+                  labelText: 'Unit name',
+                  hintText: 'Enter unit name',
+                  helperText: "Something like tabs, bottles, boxes",
                 ),
               ),
               const SizedBox(
