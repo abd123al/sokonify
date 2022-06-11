@@ -279,6 +279,24 @@ func (r *paymentResolver) Name(ctx context.Context, obj *model.Payment) (string,
 	return str, nil
 }
 
+func (r *paymentResolver) Staff(ctx context.Context, obj *model.Payment) (*model.User, error) {
+	return repository.FindUser(r.DB, obj.StaffID)
+}
+
+func (r *paymentResolver) Order(ctx context.Context, obj *model.Payment) (*model.Order, error) {
+	if obj.OrderID != nil {
+		return repository.FindOrder(r.DB, *obj.OrderID)
+	}
+	return nil, nil
+}
+
+func (r *paymentResolver) Expense(ctx context.Context, obj *model.Payment) (*model.Expense, error) {
+	if obj.ExpenseID != nil {
+		return repository.FindExpense(r.DB, *obj.ExpenseID)
+	}
+	return nil, nil
+}
+
 func (r *paymentResolver) OrderItems(ctx context.Context, obj *model.Payment) ([]*model.OrderItem, error) {
 	if obj.OrderID != nil {
 		return repository.FindOrderItems(r.DB, *obj.OrderID)

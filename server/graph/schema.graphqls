@@ -589,15 +589,15 @@ type Payment implements Gorm {
     name : String! @goTag(key: "gorm",value: "-") @goField(forceResolver: true)
 
     staffId: Int!
-    staff: User! @goTag(key: "gorm", value: "foreignKey:StaffID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    staff: User! @goTag(key: "gorm", value: "foreignKey:StaffID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
 
     # We will know either it is product/expense depending on what is null
     # Payment for what order.
     orderId: Int
-    order: Order @goTag(key: "gorm", value: "foreignKey:OrderID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    order: Order @goTag(key: "gorm", value: "foreignKey:OrderID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
 
     expenseId: Int
-    expense: Expense @goTag(key: "gorm", value: "foreignKey:ExpenseID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    expense: Expense @goTag(key: "gorm", value: "foreignKey:ExpenseID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
 
     orderItems: [OrderItem!] @goField(forceResolver: true) @goTag(key: "gorm",value: "-")
 }
