@@ -4,7 +4,6 @@ fragment OrderParts on Order {
     type
     createdAt
     customer {
-        id
-        name
+        ...CustomerParts
     }
 }

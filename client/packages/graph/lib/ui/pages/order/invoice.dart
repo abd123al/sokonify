@@ -18,7 +18,7 @@ Future<Uint8List> generateInvoice(
     invoiceNumber: '$id',
     items: order.orderItems,
     customerName: order.customer?.name ?? "No customer",
-    customerAddress: '54 rue de Rivoli\n75001 Paris, France',
+    customerAddress: order.customer?.address ?? "",
     paymentInfo:
         '4509 Wiseman Street\nKnoxville, Tennessee(TN), 37929\n865-372-0425',
     tax: .15,
@@ -81,6 +81,10 @@ class Invoice {
         pageFormat: pageFormat,
         header: _buildHeader,
         footer: _buildFooter,
+        margin: const pw.EdgeInsets.symmetric(
+          vertical: 16,
+          horizontal: 48,
+        ),
         build: (context) => [
           _contentHeader(context),
           _contentTable(context),
@@ -101,40 +105,49 @@ class Invoice {
       children: [
         pw.Column(
           children: [
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Container(
+                      alignment: pw.Alignment.centerLeft,
+                      child: pw.Text(
+                        store.name,
+                        style: pw.TextStyle(
+                          fontWeight: pw.FontWeight.bold,
+                          fontSize: 24,
+                        ),
+                      ),
+                    ),
+                    pw.Container(
+                      alignment: pw.Alignment.centerLeft,
+                      child: pw.Text(
+                        store.description ??
+                            "Your facility \nintroduction \nwill appear here",
+                        style: const pw.TextStyle(
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                pw.Container(
+                  width: 80,
+                  height: 80,
+                  child: pw.Text(""),
+                )
+              ],
+            ),
+            pw.Divider(),
             pw.Container(
-              height: 50,
-              padding: const pw.EdgeInsets.only(left: 20),
-              alignment: pw.Alignment.centerLeft,
+              alignment: pw.Alignment.center,
               child: pw.Text(
-                'INVOICE',
+                'Invoice/Delivery Note',
                 style: pw.TextStyle(
                   fontWeight: pw.FontWeight.bold,
-                  fontSize: 40,
-                ),
-              ),
-            ),
-            pw.Container(
-              decoration: const pw.BoxDecoration(
-                borderRadius: pw.BorderRadius.all(
-                  pw.Radius.circular(2),
-                ),
-              ),
-              padding: const pw.EdgeInsets.only(
-                  left: 40, top: 10, bottom: 10, right: 20),
-              alignment: pw.Alignment.centerLeft,
-              height: 50,
-              child: pw.DefaultTextStyle(
-                style: const pw.TextStyle(
-                  fontSize: 12,
-                ),
-                child: pw.GridView(
-                  crossAxisCount: 2,
-                  children: [
-                    pw.Text('Invoice #'),
-                    pw.Text(invoiceNumber),
-                    pw.Text('Date:'),
-                    pw.Text(_formatDate(order.createdAt)),
-                  ],
+                  fontSize: 20,
                 ),
               ),
             ),
@@ -171,73 +184,48 @@ class Invoice {
   }
 
   pw.Widget _contentHeader(pw.Context context) {
-    return pw.Row(
-      crossAxisAlignment: pw.CrossAxisAlignment.start,
-      children: [
-        pw.Expanded(
-          child: pw.Container(
-            margin: const pw.EdgeInsets.symmetric(horizontal: 20),
-            height: 70,
-            child: pw.FittedBox(
-              child: pw.Text(
-                'Total: $_grandTotal',
-                style: pw.TextStyle(
-                  color: baseColor,
-                  fontStyle: pw.FontStyle.italic,
+    return pw.Padding(
+      padding: const pw.EdgeInsets.only(
+        bottom: 16,
+        top: 8,
+      ),
+      child: pw.Row(
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        children: [
+          pw.Expanded(
+            child: pw.Text("Bill to: \n$customerName \n$customerAddress"),
+          ),
+          pw.Expanded(
+            child: pw.Container(
+              decoration: const pw.BoxDecoration(
+                borderRadius: pw.BorderRadius.all(
+                  pw.Radius.circular(2),
+                ),
+              ),
+              alignment: pw.Alignment.centerLeft,
+              height: 50,
+              child: pw.DefaultTextStyle(
+                style: const pw.TextStyle(
+                  fontSize: 12,
+                ),
+                child: pw.GridView(
+                  crossAxisCount: 2,
+                  children: [
+                    pw.Text('Invoice #'),
+                    pw.Text(invoiceNumber),
+                    pw.Text('Date:'),
+                    pw.Text(_formatDate(order.createdAt)),
+                    pw.Text('TIN'),
+                    pw.Text(store.tin ?? ""),
+                    pw.Text('Total Amount'),
+                    pw.Text(_total),
+                  ],
                 ),
               ),
             ),
           ),
-        ),
-        pw.Expanded(
-          child: pw.Row(
-            children: [
-              pw.Container(
-                margin: const pw.EdgeInsets.only(left: 10, right: 10),
-                height: 70,
-                child: pw.Text(
-                  'Invoice to:',
-                  style: pw.TextStyle(
-                    color: _darkColor,
-                    fontWeight: pw.FontWeight.bold,
-                    fontSize: 12,
-                  ),
-                ),
-              ),
-              pw.Expanded(
-                child: pw.Container(
-                  height: 70,
-                  child: pw.RichText(
-                    text: pw.TextSpan(
-                      text: '$customerName\n',
-                      style: pw.TextStyle(
-                        color: _darkColor,
-                        fontWeight: pw.FontWeight.bold,
-                        fontSize: 12,
-                      ),
-                      children: [
-                        const pw.TextSpan(
-                          text: '\n',
-                          style: pw.TextStyle(
-                            fontSize: 5,
-                          ),
-                        ),
-                        pw.TextSpan(
-                          text: customerAddress,
-                          style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.normal,
-                            fontSize: 10,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -368,14 +356,6 @@ class Invoice {
   }
 
   pw.Widget _contentTable(pw.Context context) {
-    const tableHeaders = [
-      'SKU#',
-      'Item Description',
-      'Price',
-      'Quantity',
-      'Total'
-    ];
-
     return pw.Table.fromTextArray(
       border: null,
       cellAlignment: pw.Alignment.centerLeft,

@@ -4,7 +4,7 @@ query order($id: ID!) {
         type
         createdAt
         customer {
-            name
+            ...CustomerParts
         }
         orderItems {
             ...OrderItemParts

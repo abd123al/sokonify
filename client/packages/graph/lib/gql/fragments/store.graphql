@@ -1,4 +1,7 @@
 fragment StoreParts on Store {
     id
     name
+    description
+    tin
+    logo
 }
