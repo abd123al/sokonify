@@ -308,18 +308,17 @@ type Staff implements Gorm {
 }
 
 type Store implements Gorm {
-    address: String
     businessType: BusinessType!
     createdAt: Time!
     deletedAt: Time
     description: String
-    email: String
     id: ID!
     logo: String
     name: String!
     staffs: [Staff!]!
     storeType: StoreType!
     templateType: TemplateType
+    terms: String
     tin: String
     updatedAt: Time!
     user: User!
@@ -639,13 +638,12 @@ input StatsArgs {
 }
 
 input StoreInput {
-    address: String
     businessType: BusinessType!
     description: String
-    email: String
     name: String!
     storeType: StoreType! = other
     templateType: TemplateType
+    terms: String
     tin: String
 }
 

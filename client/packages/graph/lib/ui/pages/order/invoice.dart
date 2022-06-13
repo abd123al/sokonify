@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:graph/ui/helpers/helpers.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -19,9 +20,6 @@ Future<Uint8List> generateInvoice(
     items: order.orderItems,
     customerName: order.customer?.name ?? "No customer",
     customerAddress: order.customer?.address ?? "",
-    paymentInfo:
-        '4509 Wiseman Street\nKnoxville, Tennessee(TN), 37929\n865-372-0425',
-    tax: .15,
     baseColor: PdfColors.teal,
     accentColor: PdfColors.blueGrey900,
   );
@@ -37,8 +35,6 @@ class Invoice {
     required this.customerName,
     required this.customerAddress,
     required this.invoiceNumber,
-    required this.tax,
-    required this.paymentInfo,
     required this.baseColor,
     required this.accentColor,
   });
@@ -49,8 +45,6 @@ class Invoice {
   final String customerName;
   final String customerAddress;
   final String invoiceNumber;
-  final double tax;
-  final String paymentInfo;
   final PdfColor baseColor;
   final PdfColor accentColor;
 
@@ -163,13 +157,11 @@ class Invoice {
       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
       crossAxisAlignment: pw.CrossAxisAlignment.end,
       children: [
-        pw.Container(
-          height: 20,
-          width: 100,
-          child: pw.BarcodeWidget(
-            barcode: pw.Barcode.pdf417(),
-            data: invoiceNumber,
-            drawText: false,
+        pw.Text(
+          'Powered by Sokonify',
+          style: const pw.TextStyle(
+            fontSize: 12,
+            color: PdfColors.white,
           ),
         ),
         pw.Text(
@@ -238,29 +230,11 @@ class Invoice {
           child: pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
-              pw.Text(
-                'Thank you for your business',
-                style: pw.TextStyle(
-                  color: _darkColor,
-                  fontWeight: pw.FontWeight.bold,
-                ),
-              ),
               pw.Container(
                 margin: const pw.EdgeInsets.only(top: 20, bottom: 8),
                 child: pw.Text(
-                  'Payment Info:',
-                  style: pw.TextStyle(
-                    color: baseColor,
-                    fontWeight: pw.FontWeight.bold,
-                  ),
-                ),
-              ),
-              pw.Text(
-                paymentInfo,
-                style: const pw.TextStyle(
-                  fontSize: 8,
-                  lineSpacing: 5,
-                  color: _darkColor,
+                  'Signature...........................................',
+                  style: const pw.TextStyle(),
                 ),
               ),
             ],
@@ -280,21 +254,29 @@ class Invoice {
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                     pw.Text('Sub Total:'),
-                    pw.Text(_total),
+                    pw.Text(formatCurrency(_total)),
                   ],
                 ),
                 pw.SizedBox(height: 5),
                 pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
-                    pw.Text('Tax:'),
-                    pw.Text('${(tax * 100).toStringAsFixed(1)}%'),
+                    pw.Text('Total Discount:'),
+                    pw.Text(formatCurrency("0.00")),
+                  ],
+                ),
+                pw.SizedBox(height: 5),
+                pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.Text('Total Tax:'),
+                    pw.Text(formatCurrency("0.00")),
                   ],
                 ),
                 pw.Divider(color: accentColor),
                 pw.DefaultTextStyle(
                   style: pw.TextStyle(
-                    color: baseColor,
+                    color: PdfColors.black,
                     fontSize: 14,
                     fontWeight: pw.FontWeight.bold,
                   ),
@@ -302,10 +284,11 @@ class Invoice {
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                     children: [
                       pw.Text('Total:'),
-                      pw.Text(_grandTotal),
+                      pw.Text(formatCurrency(_grandTotal)),
                     ],
                   ),
                 ),
+                pw.Divider(color: accentColor),
               ],
             ),
           ),
@@ -323,24 +306,23 @@ class Invoice {
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
               pw.Container(
-                decoration: pw.BoxDecoration(
-                  border: pw.Border(top: pw.BorderSide(color: accentColor)),
-                ),
-                padding: const pw.EdgeInsets.only(top: 10, bottom: 4),
+                // decoration: pw.BoxDecoration(
+                //   border: pw.Border(top: pw.BorderSide(color: accentColor)),
+                // ),
+                //padding: const pw.EdgeInsets.only(top: 10, bottom: 4),
                 child: pw.Text(
                   'Terms & Conditions',
                   style: pw.TextStyle(
                     fontSize: 12,
-                    color: baseColor,
                     fontWeight: pw.FontWeight.bold,
                   ),
                 ),
               ),
               pw.Text(
-                pw.LoremText().paragraph(40),
+                store.terms ?? "Your terms will appear here.",
                 textAlign: pw.TextAlign.justify,
                 style: const pw.TextStyle(
-                  fontSize: 6,
+                  fontSize: 10,
                   lineSpacing: 2,
                   color: _darkColor,
                 ),
