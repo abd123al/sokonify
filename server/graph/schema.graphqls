@@ -440,13 +440,11 @@ type Store implements Gorm {
     updatedAt:Time!
     deletedAt:Time
 
-    address: String @goTag(key: "gorm", value: "size:100;")
     # This will stay under title.
-    description: String @goTag(key: "gorm", value: "size:100;")
-    email: String @goTag(key: "gorm", value: "size:100;")
+    description: String @goTag(key: "gorm", value: "size:150;")
+    terms: String @goTag(key: "gorm", value: "size:150;")
     logo: String @goTag(key: "gorm", value: "size:100;")
     name: String! @goTag(key: "gorm", value: "index;size:50;not null;default:null")
-    #phones: [String!] @goTag(key: "gorm", value: "size:50;")
     tin: String @goTag(key: "gorm", value: "size:50;")
     storeType: StoreType!
     businessType: BusinessType!
@@ -462,12 +460,10 @@ type Store implements Gorm {
 }
 
 input StoreInput {
-    address: String
     # This will stay under title.
     description: String
-    email: String
+    terms: String
     name: String!
-    #phones: [String!] @goTag(key: "gorm", value: "size:50;")
     tin: String
     storeType: StoreType! = other
     businessType: BusinessType!

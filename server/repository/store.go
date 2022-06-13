@@ -10,9 +10,7 @@ import (
 func CreateStore(db *gorm.DB, UserID int, input model.StoreInput, Multistore bool) (*model.Store, error) {
 	create := func() (*model.Store, error) {
 		var store = model.Store{
-			Address:      input.Address,
 			Description:  input.Description,
-			Email:        input.Email,
 			Name:         input.Name,
 			Tin:          input.Tin,
 			StoreType:    input.StoreType,
