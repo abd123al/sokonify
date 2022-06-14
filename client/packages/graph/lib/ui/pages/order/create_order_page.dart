@@ -98,6 +98,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                                   labelText: "Customer",
                                   hintText: "Add customer",
                                   border: OutlineInputBorder(),
+                                  helperText: "This is the customer order will be billed to",
                                 ),
                                 onChanged: (customer) {
                                   newOrderCubit.changeCustomer(customer);
@@ -109,10 +110,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                                 showClearButton: true,
                               );
                             }),
-                          const SizedBox(
-                            height: 16,
-                            width: 8,
-                          ),
+                          const Divider(),
                           DropdownSearch<Items$Query$Item>(
                             showSearchBox: true,
                             itemAsString: (u) => ItemTile.formatItemName(u!),
@@ -128,6 +126,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                               labelText: "Enter item",
                               hintText: "Type product name",
                               border: OutlineInputBorder(),
+                              helperText: "Type items to add",
                             ),
                             onChanged: (item) => setState(() {
                               _selected = item;

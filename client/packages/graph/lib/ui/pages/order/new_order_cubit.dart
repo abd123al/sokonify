@@ -70,20 +70,14 @@ class NewOrder extends Equatable {
   }
 
   String get totalPrice {
-    final arr = items.map((e) {
-      final subTotal =
-          Decimal.parse(e.customSellingPrice ?? e.item.sellingPrice) *
-              Decimal.fromInt(e.quantity);
-      return subTotal;
-    }).toList();
-
-    var sum = Decimal.parse("0.00");
-
-    for (var i = 0; i < arr.length; i++) {
-      sum += arr[i];
-    }
-
-    return formatCurrency(sum.toString());
+    return calculateTotal(
+      items.map(
+        (e) => TotalPriceArgs(
+          price: e.customSellingPrice ?? e.item.sellingPrice,
+          quantity: e.quantity,
+        ),
+      ),
+    );
   }
 
   NewOrder addItem({

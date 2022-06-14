@@ -222,6 +222,15 @@ class Invoice {
   }
 
   pw.Widget _contentFooter(pw.Context context) {
+    final total = calculateTotal(
+      items.map(
+        (e) => TotalPriceArgs(
+          price: e.price,
+          quantity: e.quantity,
+        ),
+      ),
+    );
+
     return pw.Row(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
@@ -254,7 +263,7 @@ class Invoice {
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                     pw.Text('Sub Total:'),
-                    pw.Text(formatCurrency(_total)),
+                    pw.Text(total),
                   ],
                 ),
                 pw.SizedBox(height: 5),
@@ -284,7 +293,7 @@ class Invoice {
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                     children: [
                       pw.Text('Total:'),
-                      pw.Text(formatCurrency(_grandTotal)),
+                      pw.Text(total),
                     ],
                   ),
                 ),
@@ -382,9 +391,9 @@ class Invoice {
           .map((e) => [
                 "${e.item.product.name} ${e.item.brand?.name ?? ""}",
                 e.item.unit.name,
-                e.price,
+                formatCurrency(e.price),
                 e.quantity,
-                e.subTotalPrice,
+                formatCurrency(e.subTotalPrice),
               ])
           .toList(),
     );

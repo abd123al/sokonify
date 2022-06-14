@@ -86,7 +86,14 @@ class OrderPage extends StatelessWidget {
             },
           ),
           TotalAmountTile(
-            amount: formatCurrency(data.payment?.amount ?? "0"),
+            amount: calculateTotal(
+              data.orderItems.map(
+                    (e) => TotalPriceArgs(
+                  price: e.price,
+                  quantity: e.quantity,
+                ),
+              ),
+            ),
           ),
         ];
 
