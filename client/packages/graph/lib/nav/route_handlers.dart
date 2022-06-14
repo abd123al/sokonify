@@ -108,3 +108,8 @@ var paymentPageRouterHandler = Handler(handlerFunc: (_, params) {
   final id = params["id"]![0];
   return PaymentPage(id: int.parse(id));
 });
+
+var editProductPageRouterHandler = Handler(handlerFunc: (context, params) {
+  final id = params["id"]![0];
+  return EditProductPage(id: int.parse(id));
+});

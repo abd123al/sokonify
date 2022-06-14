@@ -13,10 +13,12 @@ import 'products_list_cubit.dart';
 class ProductForm extends StatefulWidget {
   const ProductForm({
     Key? key,
-    this.product,
+    required this.product,
+    required this.id,
   }) : super(key: key);
 
-  final CreateProduct$Mutation$Product? product;
+  final Product$Query$Product? product;
+  final int? id;
 
   @override
   State<StatefulWidget> createState() {
@@ -28,6 +30,15 @@ class _CreateProductPageState extends State<ProductForm> {
   final _nameController = TextEditingController();
   final _descController = TextEditingController();
   List<Categories$Query$Category> _categories = [];
+  late bool isEdit;
+
+  @override
+  void initState() {
+    super.initState();
+    isEdit = widget.product != null && widget.id != null;
+    _nameController.text = widget.product?.name ?? "";
+    _descController.text = widget.product?.description ?? "";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,26 +57,27 @@ class _CreateProductPageState extends State<ProductForm> {
                   hintText: 'Enter Product name',
                   helperText: "eg. Paracetamol Tabs, Bicycle"),
             ),
-            QueryBuilder<ResourceListData<Categories$Query$Category>,
-                CategoriesListCubit>(
-              retry: (cubit) => cubit.fetch(),
-              builder: (context, data, _) {
-                return SearchableDropdown<
-                    Categories$Query$Category>.multiSelection(
-                  asString: (i) => i.name.toLowerCase(),
-                  data: data,
-                  labelText: "Categories (Optional)",
-                  hintText: "Select Categories (Optional)",
-                  helperText:
-                      "Grouping products into categories can help tracking them better.",
-                  onChangedMultiSelection: (item) => setState(() {
-                    _categories = item;
-                  }),
-                  selectedItems: _categories,
-                  builder: (_, i) => CategoryTile(category: i),
-                );
-              },
-            ),
+            if (!isEdit)
+              QueryBuilder<ResourceListData<Categories$Query$Category>,
+                  CategoriesListCubit>(
+                retry: (cubit) => cubit.fetch(),
+                builder: (context, data, _) {
+                  return SearchableDropdown<
+                      Categories$Query$Category>.multiSelection(
+                    asString: (i) => i.name.toLowerCase(),
+                    data: data,
+                    labelText: "Categories (Optional)",
+                    hintText: "Select Categories (Optional)",
+                    helperText:
+                        "Grouping products into categories can help tracking them better.",
+                    onChangedMultiSelection: (item) => setState(() {
+                      _categories = item;
+                    }),
+                    selectedItems: _categories,
+                    builder: (_, i) => CategoryTile(category: i),
+                  );
+                },
+              ),
             const SizedBox(
               height: 8,
             ),

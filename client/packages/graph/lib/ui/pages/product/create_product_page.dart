@@ -11,7 +11,10 @@ class CreateProductPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("New Product"),
       ),
-      body: const ProductForm(),
+      body: const ProductForm(
+        product: null,
+        id: null,
+      ),
     );
   }
 }

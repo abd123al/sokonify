@@ -18,6 +18,8 @@ class Routes {
   static String createStore = "/createStore";
   static String createUnit = "/createUnit";
 
+  static String editProduct = "/editProduct";
+
   static String brands = "/brands";
   static String categories = "/categories";
   static String expenses = "/expenses";
@@ -119,6 +121,12 @@ class Routes {
       createUnit,
       handler: createUnitRouterHandler,
       transitionType: TransitionType.materialFullScreenDialog,
+    );
+
+    router.define(
+      "$editProduct/:id",
+      handler: editProductPageRouterHandler,
+      transitionType: TransitionType.nativeModal,
     );
 
     router.define(
