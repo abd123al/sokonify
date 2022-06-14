@@ -9,7 +9,6 @@ class NewOrderItem extends Equatable {
   const NewOrderItem({
     required this.quantity,
     required this.item,
-    this.error,
     this.customSellingPrice,
   });
 
@@ -17,18 +16,11 @@ class NewOrderItem extends Equatable {
   final Items$Query$Item item;
   final String? customSellingPrice;
 
-  /// Lets say required quantity exceeds stock here is where we set that error
-  final String? error;
-
   String get subTotal {
     final sub = Decimal.parse(customSellingPrice ?? item.sellingPrice) *
         Decimal.fromInt(quantity);
 
     return formatCurrency(sub.toString());
-  }
-
-  bool get hasError {
-    return error != null;
   }
 
   NewOrderItem copyWith({
@@ -39,12 +31,11 @@ class NewOrderItem extends Equatable {
     return NewOrderItem(
       item: item ?? this.item,
       quantity: quantity ?? this.quantity,
-      error: error ?? this.error,
     );
   }
 
   @override
-  List<Object?> get props => [item, quantity, customSellingPrice, error];
+  List<Object?> get props => [item, quantity, customSellingPrice];
 }
 
 class NewOrder extends Equatable {
@@ -52,20 +43,30 @@ class NewOrder extends Equatable {
     required this.items,
     this.customer,
     this.time,
+    this.error,
   });
 
   final List<NewOrderItem> items;
   final Customers$Query$Customer? customer;
   final int? time;
 
+  /// Lets say required quantity exceeds stock here is where we set that error
+  final String? error;
+
+  bool get hasError {
+    return error != null;
+  }
+
   NewOrder copyWith({
     List<NewOrderItem>? items,
     Customers$Query$Customer? customer,
+    String? error,
   }) {
     return NewOrder(
       items: items ?? this.items,
       customer: customer ?? this.customer,
       time: DateTime.now().microsecondsSinceEpoch,
+      error: error,
     );
   }
 
@@ -81,11 +82,25 @@ class NewOrder extends Equatable {
   }
 
   NewOrder addItem({
-    required NewOrderItem item,
+    required NewOrderItem obj,
   }) {
-    return copyWith(
-      items: [item, ...items],
-    );
+    if (items.map((e) => e.item.id).contains(obj.item.id)) {
+      return copyWith(
+        error: "${obj.item.product.name} has already been added.",
+      );
+    } else {
+      if (obj.quantity <= obj.item.quantity) {
+        return copyWith(
+          items: [obj, ...items],
+        );
+      } else {
+        return copyWith(
+          error: "there only "
+              "${obj.item.quantity} ${obj.item.unit.name} "
+              "of ${obj.item.product.name}",
+        );
+      }
+    }
   }
 
   NewOrder addCustomer({
@@ -126,7 +141,12 @@ class NewOrder extends Equatable {
   }
 
   @override
-  List<Object?> get props => [items, customer, time];
+  List<Object?> get props => [
+        items,
+        customer,
+        time,
+        error,
+      ];
 }
 
 class NewOrderCubit extends Cubit<NewOrder> {
@@ -142,7 +162,7 @@ class NewOrderCubit extends Cubit<NewOrder> {
   addItem(Items$Query$Item item, int quantity) {
     emit(
       state.addItem(
-        item: NewOrderItem(
+        obj: NewOrderItem(
           quantity: quantity,
           item: item,
         ),

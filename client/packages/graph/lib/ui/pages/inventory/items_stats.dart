@@ -25,7 +25,7 @@ class InventoryStats extends StatelessWidget {
             color: Colors.blue,
           ),
           StatTile(
-            title: 'Expected Return',
+            title: 'Expected Sales',
             value: formatCurrency(data.totalReturn),
             color: Colors.grey,
           ),

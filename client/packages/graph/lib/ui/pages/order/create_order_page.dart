@@ -51,7 +51,15 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   }
 
   Widget _buildForm() {
-    return BlocBuilder<NewOrderCubit, NewOrder>(
+    return BlocConsumer<NewOrderCubit, NewOrder>(
+      listener: (context, state) {
+        if (state.hasError) {
+          displayError(
+            context: context,
+            message: state.error!,
+          );
+        }
+      },
       builder: (context, state) {
         final newOrderCubit = BlocProvider.of<NewOrderCubit>(context);
 
@@ -98,7 +106,8 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                                   labelText: "Customer",
                                   hintText: "Add customer",
                                   border: OutlineInputBorder(),
-                                  helperText: "This is the customer order will be billed to",
+                                  helperText:
+                                      "This is the customer order will be billed to",
                                 ),
                                 onChanged: (customer) {
                                   newOrderCubit.changeCustomer(customer);
@@ -122,7 +131,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                             isFilteredOnline: false,
                             mode: Mode.MENU,
                             items: itemsData.items,
-                            dropdownSearchDecoration: const InputDecoration(
+                            dropdownSearchDecoration:  const InputDecoration(
                               labelText: "Enter item",
                               hintText: "Type product name",
                               border: OutlineInputBorder(),
