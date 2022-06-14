@@ -1,5 +1,6 @@
 # Todo
 
+- resolve name by joining product/
 - backup should be encrypted.
 - in staff table add permissions separated by , only
 - add expire date in all premium server. So that they must update every year

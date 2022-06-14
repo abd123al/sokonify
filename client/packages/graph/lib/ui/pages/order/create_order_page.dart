@@ -39,7 +39,6 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   final _quantityAddController = TextEditingController();
   final _commentController = TextEditingController();
   Items$Query$Item? _selected;
-  Customers$Query$Customer? _customer;
 
   @override
   Widget build(BuildContext context) {
@@ -100,10 +99,10 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                                   hintText: "Add customer",
                                   border: OutlineInputBorder(),
                                 ),
-                                onChanged: (item) => setState(() {
-                                  _customer = item;
-                                }),
-                                selectedItem: _customer,
+                                onChanged: (customer) {
+                                  newOrderCubit.changeCustomer(customer);
+                                },
+                                selectedItem: state.customer,
                                 searchDelay: const Duration(milliseconds: 0),
                                 popupItemBuilder: (_, i, __) =>
                                     CustomerTile(customer: i),
@@ -255,7 +254,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                                         OrderInput(
                                           type: OrderType.sale,
                                           comment: _commentController.text,
-                                          customerId: _customer?.id,
+                                          customerId: state.customer?.id,
                                           items: items,
                                         ),
                                       );

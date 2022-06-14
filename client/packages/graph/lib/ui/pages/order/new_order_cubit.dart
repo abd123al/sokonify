@@ -50,9 +50,21 @@ class NewOrderItem extends Equatable {
 class NewOrder extends Equatable {
   const NewOrder({
     required this.items,
+    this.customer,
   });
 
   final List<NewOrderItem> items;
+  final Customers$Query$Customer? customer;
+
+  NewOrder copyWith({
+    List<NewOrderItem>? items,
+    Customers$Query$Customer? customer,
+  }) {
+    return NewOrder(
+      items: items ?? this.items,
+      customer: customer ?? this.customer,
+    );
+  }
 
   String get totalPrice {
     final arr = items.map((e) {
@@ -71,11 +83,19 @@ class NewOrder extends Equatable {
     return formatCurrency(sum.toString());
   }
 
-  NewOrder add({
+  NewOrder addItem({
     required NewOrderItem item,
   }) {
-    return NewOrder(
+    return copyWith(
       items: [item, ...items],
+    );
+  }
+
+  NewOrder addCustomer({
+    required Customers$Query$Customer? customer,
+  }) {
+    return copyWith(
+      customer: customer,
     );
   }
 
@@ -86,7 +106,7 @@ class NewOrder extends Equatable {
     List<NewOrderItem> copy = items;
     copy[index] = item;
 
-    return NewOrder(
+    return copyWith(
       items: copy,
     );
   }
@@ -103,13 +123,13 @@ class NewOrder extends Equatable {
     List<NewOrderItem> copy = items;
     copy.remove(items[index]);
 
-    return NewOrder(
+    return copyWith(
       items: copy,
     );
   }
 
   @override
-  List<Object?> get props => [items];
+  List<Object?> get props => [items, customer];
 }
 
 class NewOrderCubit extends Cubit<NewOrder> {
@@ -124,7 +144,7 @@ class NewOrderCubit extends Cubit<NewOrder> {
   /// todo add new items at the bottom and push that thing at the top
   addItem(Items$Query$Item item, int quantity) {
     emit(
-      state.add(
+      state.addItem(
         item: NewOrderItem(
           quantity: quantity,
           item: item,
@@ -148,6 +168,14 @@ class NewOrderCubit extends Cubit<NewOrder> {
           quantity: quantity,
         ),
         index: index,
+      ),
+    );
+  }
+
+  changeCustomer(Customers$Query$Customer? customer) {
+    emit(
+      state.addCustomer(
+        customer: customer,
       ),
     );
   }
