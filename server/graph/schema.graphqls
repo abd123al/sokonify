@@ -441,8 +441,8 @@ type Store implements Gorm {
     deletedAt:Time
 
     # This will stay under title.
-    description: String @goTag(key: "gorm", value: "size:150;")
-    terms: String @goTag(key: "gorm", value: "size:150;")
+    description: String @goTag(key: "gorm", value: "size:250;")
+    terms: String @goTag(key: "gorm", value: "size:250;")
     logo: String @goTag(key: "gorm", value: "size:100;")
     name: String! @goTag(key: "gorm", value: "index;size:50;not null;default:null")
     tin: String @goTag(key: "gorm", value: "size:50;")

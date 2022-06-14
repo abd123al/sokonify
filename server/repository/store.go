@@ -17,6 +17,7 @@ func CreateStore(db *gorm.DB, UserID int, input model.StoreInput, Multistore boo
 			BusinessType: input.BusinessType,
 			TemplateType: input.TemplateType,
 			UserID:       UserID,
+			Terms:        input.Terms,
 		}
 
 		if err := db.Transaction(func(tx *gorm.DB) error {

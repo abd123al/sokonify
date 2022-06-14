@@ -14,7 +14,7 @@ class CreateStorePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("New Store"),
+        title: const Text("New Facility"),
       ),
       body: const CreateStoreWidget(),
     );
@@ -43,59 +43,113 @@ class CreateStoreWidget extends StatefulWidget {
 }
 
 class _CreateStorePageState extends State<CreateStoreWidget> {
-  final passwordController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _tinController = TextEditingController();
+  final _descController = TextEditingController();
+  final _termsController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final children = [
+      if (widget.message != null)
+        Text(
+          widget.message!,
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+      TextField(
+        autofocus: true,
+        controller: _nameController,
+        keyboardType: TextInputType.text,
+        maxLength: 50,
+        decoration: const InputDecoration(
+          border: OutlineInputBorder(),
+          labelText: 'Facility Name',
+          hintText: 'Enter your facility here',
+          helperText: "Eg Sokonify Pharmacy, Mwanana Shop.",
+        ),
+      ),
+      TextField(
+        autofocus: true,
+        controller: _tinController,
+        keyboardType: TextInputType.text,
+        maxLength: 30,
+        decoration: const InputDecoration(
+          border: OutlineInputBorder(),
+          labelText: 'Tax Identification Number - TIN (Optional)',
+          hintText: 'Enter your facility here',
+          helperText: "Eg 123-456-789.",
+        ),
+      ),
+      TextField(
+        controller: _descController,
+        keyboardType: TextInputType.multiline,
+        maxLines: 5,
+        maxLength: 200,
+        decoration: const InputDecoration(
+          border: OutlineInputBorder(),
+          labelText: 'Facility Description (Optional)',
+          hintText: 'Example\n'
+              'P.O Box 4039 \n'
+              'Mwanza Tanzania\n'
+              'Phones: 0712 123456, 0712 654321\n'
+              'Email: duka@example.com',
+          helperText:
+              "This will appear in printed invoice below Facility Name.",
+        ),
+      ),
+      TextField(
+        controller: _termsController,
+        keyboardType: TextInputType.multiline,
+        maxLines: 5,
+        maxLength: 200,
+        decoration: const InputDecoration(
+          border: OutlineInputBorder(),
+          labelText: 'Facility Terms & Conditions (Optional)',
+          hintText: '1. Make sure your items matches this invoice.\n'
+              '2. Once delivered items will not be accepted back.\n',
+          helperText: "This will appear at the bottom of printed pages.",
+        ),
+      ),
+      MutationBuilder<CreateStore$Mutation$Store, CreateStoreCubit,
+          StoreRepository>(
+        blocCreator: (r) => CreateStoreCubit(r),
+        onSuccess: widget.onSuccess ??
+            (context, data) {
+              BlocProvider.of<StoresListCubit>(context)
+                  .addItem(Stores$Query$Store.fromJson(data.toJson()));
+            },
+        pop: widget.onSuccess == null,
+        builder: (context, cubit) {
+          return Button(
+            padding: EdgeInsets.zero,
+            callback: () {
+              cubit.submit(
+                StoreInput(
+                  name: _nameController.text,
+                  tin: _tinController.text,
+                  description: _descController.text,
+                  terms: _termsController.text,
+                  businessType: BusinessType.both,
+                  storeType: StoreType.pharmacy,
+                ),
+              );
+            },
+            title: 'Submit',
+          );
+        },
+      ),
+    ];
     return Form(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            if (widget.message != null)
-              Text(
-                widget.message!,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-            const Divider(),
-            TextField(
-              autofocus: true,
-              controller: passwordController,
-              keyboardType: TextInputType.text,
-              decoration: const InputDecoration(
-                labelText: 'Facility name',
-                hintText: 'Enter your Shop name',
-              ),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            MutationBuilder<CreateStore$Mutation$Store, CreateStoreCubit,
-                StoreRepository>(
-              blocCreator: (r) => CreateStoreCubit(r),
-              onSuccess: widget.onSuccess ??
-                  (context, data) {
-                    BlocProvider.of<StoresListCubit>(context)
-                        .addItem(Stores$Query$Store.fromJson(data.toJson()));
-                  },
-              pop: widget.onSuccess == null,
-              builder: (context, cubit) {
-                return Button(
-                  padding: EdgeInsets.zero,
-                  callback: () {
-                    cubit.submit(
-                      StoreInput(
-                        name: passwordController.text,
-                        businessType: BusinessType.both,
-                        storeType: StoreType.pharmacy,
-                      ),
-                    );
-                  },
-                  title: 'Submit',
-                );
-              },
-            ),
-          ],
+        child: ListView.separated(
+          itemBuilder: (BuildContext context, int index) {
+            return children[index];
+          },
+          itemCount: children.length,
+          separatorBuilder: (BuildContext context, int index) {
+            return const Divider();
+          },
         ),
       ),
     );
@@ -103,7 +157,10 @@ class _CreateStorePageState extends State<CreateStoreWidget> {
 
   @override
   void dispose() {
-    passwordController.dispose();
+    _nameController.dispose();
+    _tinController.dispose();
+    _descController.dispose();
+    _termsController.dispose();
     super.dispose();
   }
 }
