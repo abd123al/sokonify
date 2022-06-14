@@ -43,13 +43,15 @@ class StoreSwitcher extends StatelessWidget {
               return builder!(context, cubit);
             }
 
-            return Column(
+            return ListView(
               children: [
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    "Please select the facility you want to switch to",
-                    style: Theme.of(context).textTheme.titleMedium,
+                  child: Center(
+                    child: Text(
+                      "Please select the facility you want to switch to",
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
                   ),
                 ),
                 ListView.separated(
@@ -78,9 +80,11 @@ class StoreSwitcher extends StatelessWidget {
                     return const Divider();
                   },
                 ),
-                Text(
-                  "or",
-                  style: Theme.of(context).textTheme.titleSmall,
+                Center(
+                  child: Text(
+                    "or",
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
                 ),
                 TextButton(
                   child: const Text(
