@@ -14,6 +14,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     required this.labelText,
     this.onChangedMultiSelection,
     this.selectedItems = const [],
+    this.helperText,
   })  : isMultiSelectionMode = false,
         super(key: key);
 
@@ -27,6 +28,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     required this.labelText,
     this.onChangedMultiSelection,
     this.selectedItems = const [],
+    this.helperText,
   })  : onChanged = null,
         isMultiSelectionMode = true,
         super(key: key);
@@ -37,6 +39,7 @@ class SearchableDropdown<T> extends StatefulWidget {
   final String Function(T item) asString;
   final String hintText;
   final String labelText;
+  final String? helperText;
   final bool isMultiSelectionMode;
   final ResourceListData<T> data;
   final T? selectedItem;
@@ -81,6 +84,7 @@ class _SearchableListState<T> extends State<SearchableDropdown<T>> {
                     labelText: widget.labelText,
                     hintText: widget.hintText,
                     border: const OutlineInputBorder(),
+                    helperText: widget.helperText,
                   ),
                   onChanged: widget.onChangedMultiSelection,
                   selectedItems: widget.selectedItems,
