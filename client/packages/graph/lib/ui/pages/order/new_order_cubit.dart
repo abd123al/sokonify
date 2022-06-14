@@ -51,10 +51,12 @@ class NewOrder extends Equatable {
   const NewOrder({
     required this.items,
     this.customer,
+    this.time,
   });
 
   final List<NewOrderItem> items;
   final Customers$Query$Customer? customer;
+  final int? time;
 
   NewOrder copyWith({
     List<NewOrderItem>? items,
@@ -63,6 +65,7 @@ class NewOrder extends Equatable {
     return NewOrder(
       items: items ?? this.items,
       customer: customer ?? this.customer,
+      time: DateTime.now().microsecondsSinceEpoch,
     );
   }
 
@@ -129,7 +132,7 @@ class NewOrder extends Equatable {
   }
 
   @override
-  List<Object?> get props => [items, customer];
+  List<Object?> get props => [items, customer, time];
 }
 
 class NewOrderCubit extends Cubit<NewOrder> {

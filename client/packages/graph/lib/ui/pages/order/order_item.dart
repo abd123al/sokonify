@@ -119,8 +119,6 @@ class _OrderItemState extends State<OrderItem> {
                 label: const Text("Delete"),
                 onPressed: () {
                   cubit.deleteItem(widget.index);
-                  //This helps clearing things
-                  setState(() {});
                 },
                 icon: const Icon(
                   Icons.delete, /*color: Colors.red*/
