@@ -43,10 +43,11 @@ class ProductsListPage extends StatelessWidget {
         title: const Text("Products"),
       ),
       body: const ProductList(),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () => redirectTo(context, Routes.createProduct),
-        tooltip: 'Add',
-        child: const Icon(Icons.add),
+        tooltip: 'Add Product',
+        label: const Text("Add product"),
+        icon: const Icon(Icons.add),
       ),
     );
   }
