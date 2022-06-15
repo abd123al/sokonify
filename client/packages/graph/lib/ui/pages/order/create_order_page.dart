@@ -100,7 +100,6 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                                 helperText:
                                     "This is the customer order will be billed to",
                                 selectedItem: state.customer,
-                                builder: (_, i) => CustomerTile(customer: i),
                                 onChanged: (customer) {
                                   newOrderCubit.changeCustomer(customer);
                                 },

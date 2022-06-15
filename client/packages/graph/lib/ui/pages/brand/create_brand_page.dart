@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/brand_repository.dart';
 import '../../widgets/searchable_dropdown.dart';
-import '../product/product_tile.dart';
 import '../product/products_list_cubit.dart';
 import 'brands_list_cubit.dart';
 import 'create_brand_cubit.dart';
@@ -63,7 +62,6 @@ class _CreateBrandPageState extends State<CreateBrandPage> {
                         _product = item;
                       }),
                       selectedItem: _product,
-                      builder: (_, i) => ProductTile(product: i),
                     );
                   },
                 ),

@@ -62,7 +62,6 @@ class _CreateStorePageState extends State<CreatePaymentWidget> {
                   _method = i!;
                 });
               },
-              builder: (_, i) => Text(i.name),
               asString: (i) => i.name.toUpperCase(),
               selectedItem: _method,
               labelText: "Payment method",

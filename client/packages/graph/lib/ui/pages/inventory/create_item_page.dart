@@ -7,9 +7,7 @@ import '../../../nav/nav.dart';
 import '../../../repositories/item_repository.dart';
 import '../../widgets/widgets.dart';
 import '../brand/brand.dart';
-import '../product/product_tile.dart';
 import '../product/products_list_cubit.dart';
-import '../unit/unit_tile.dart';
 import '../unit/units_list_cubit.dart';
 import 'create_item_cubit.dart';
 import 'items_list_cubit.dart';
@@ -70,7 +68,6 @@ class _CreateItemPageState extends State<CreateItemPage> {
                   labelText: "Product",
                   hintText: "Select Product",
                   selectedItem: _product,
-                  builder: (_, i) => ProductTile(product: i),
                   onChanged: (item) => setState(() {
                     _product = item;
                     _brand = null;
@@ -98,7 +95,6 @@ class _CreateItemPageState extends State<CreateItemPage> {
                       _brand = item;
                     }),
                     selectedItem: _brand,
-                    builder: (_, i) => BrandTile(brand: i),
                   );
                 },
               ),
@@ -136,7 +132,6 @@ class _CreateItemPageState extends State<CreateItemPage> {
                         labelText: "Unit",
                         hintText: "Select Unit",
                         selectedItem: _unit,
-                        builder: (_, i) => UnitTile(unit: i),
                         onChanged: (item) => setState(() {
                           _unit = item;
                         }),

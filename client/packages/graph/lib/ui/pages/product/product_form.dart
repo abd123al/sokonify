@@ -74,7 +74,6 @@ class _CreateProductPageState extends State<ProductForm> {
                       _categories = item;
                     }),
                     selectedItems: _categories,
-                    builder: (_, i) => CategoryTile(category: i),
                   );
                 },
               ),

@@ -77,7 +77,6 @@ class _CreateStorePageState extends State<TrackExpensePage> {
                           ResourceListData<Expenses$Query$Expense>(items: cats),
                       labelText: "Select $word Category",
                       hintText: "Type $word name",
-                      builder: (_, i) => ExpenseCategoryTile(expense: i),
                       onChanged: (item) => setState(() {
                         _expense = item;
                       }),

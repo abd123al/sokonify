@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class SearchableDropdown<T> extends StatefulWidget {
   const SearchableDropdown({
     Key? key,
-    required this.builder,
+     this.builder,
     required this.asString,
     required this.data,
     required this.hintText,
@@ -20,7 +20,7 @@ class SearchableDropdown<T> extends StatefulWidget {
 
   const SearchableDropdown.multiSelection({
     Key? key,
-    required this.builder,
+    this.builder,
     required this.asString,
     required this.data,
     required this.hintText,
@@ -33,7 +33,7 @@ class SearchableDropdown<T> extends StatefulWidget {
         isMultiSelectionMode = true,
         super(key: key);
 
-  final Widget Function(BuildContext context, T item) builder;
+  final Widget Function(BuildContext context, T item)? builder;
   final Function(T? item)? onChanged;
   final Function(List<T> list)? onChangedMultiSelection;
   final String Function(T item) asString;
@@ -110,11 +110,14 @@ class _SearchableListState<T> extends State<SearchableDropdown<T>> {
                 dropdownDecoratorProps: dropdownDecoratorProps,
                 onChanged: widget.onChanged,
                 selectedItem: widget.selectedItem,
-                popupProps: const PopupProps.menu(
+                popupProps: PopupProps.menu(
                   showSearchBox: true,
                   searchFieldProps: searchFieldProps,
-                  searchDelay: Duration(milliseconds: 0),
+                  searchDelay: const Duration(milliseconds: 0),
                   isFilterOnline: false,
+                  itemBuilder: widget.builder != null
+                      ? (c, i, _) => widget.builder!(c, i)
+                      : null,
                 ),
               );
             },
