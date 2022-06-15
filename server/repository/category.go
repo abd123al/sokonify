@@ -8,9 +8,10 @@ import (
 
 func CreateCategory(db *gorm.DB, input model.CategoryInput, args helpers.UserAndStoreArgs) (*model.Category, error) {
 	category := model.Category{
-		Name:      input.Name,
-		StoreID:   &args.StoreID,
-		CreatorID: &args.UserID,
+		Name:        input.Name,
+		Description: input.Description,
+		StoreID:     &args.StoreID,
+		CreatorID:   &args.UserID,
 	}
 	result := db.Create(&category)
 	return &category, result.Error
