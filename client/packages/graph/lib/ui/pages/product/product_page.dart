@@ -24,7 +24,11 @@ class ProductPage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              redirectTo(context, "${Routes.editProduct}/$id");
+              redirectTo(
+                context,
+                "${Routes.editProduct}/$id",
+                replace: true,
+              );
             },
             icon: const Icon(Icons.edit),
           )

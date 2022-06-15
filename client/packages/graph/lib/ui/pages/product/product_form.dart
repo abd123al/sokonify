@@ -100,21 +100,39 @@ class _CreateProductPageState extends State<ProductForm> {
                 ProductRepository>(
               blocCreator: (r) => CreateProductCubit(r),
               onSuccess: (context, data) {
-                BlocProvider.of<ProductsListCubit>(context)
-                    .addItem(Products$Query$Product.fromJson(data.toJson()));
+                if (isEdit) {
+                  BlocProvider.of<ProductsListCubit>(context).updateItem(
+                    (l) => l.firstWhere((e) => e.id == widget.id),
+                    Products$Query$Product.fromJson(data.toJson()),
+                  );
+                } else {
+                  BlocProvider.of<ProductsListCubit>(context)
+                      .addItem(Products$Query$Product.fromJson(data.toJson()));
+                }
               },
               pop: true,
               builder: (context, cubit) {
                 return Button(
                   padding: EdgeInsets.zero,
                   callback: () {
-                    cubit.submit(
-                      ProductInput(
-                        name: _nameController.text,
-                        description: _descController.text,
-                        categories: _categories.map((e) => e.id).toList(),
-                      ),
-                    );
+                    if (isEdit) {
+                      cubit.edit(
+                        widget.id!,
+                        ProductInput(
+                          name: _nameController.text,
+                          description: _descController.text,
+                          //categories: _categories.map((e) => e.id).toList(),
+                        ),
+                      );
+                    } else {
+                      cubit.create(
+                        ProductInput(
+                          name: _nameController.text,
+                          description: _descController.text,
+                          categories: _categories.map((e) => e.id).toList(),
+                        ),
+                      );
+                    }
                   },
                   title: 'Submit',
                 );

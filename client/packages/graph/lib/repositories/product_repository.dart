@@ -6,6 +6,16 @@ class ProductRepository {
 
   ProductRepository( this.client);
 
+  editProduct(ProductInput input,int id) {
+    final options = MutationOptions(
+      document: EDIT_PRODUCT_MUTATION_DOCUMENT,
+      variables: EditProductArguments(input: input, id: id).toJson(),
+    );
+
+    return client.mutate(options);
+  }
+
+
   createProduct(ProductInput input) {
     final options = MutationOptions(
       document: CREATE_PRODUCT_MUTATION_DOCUMENT,
