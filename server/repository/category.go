@@ -20,7 +20,7 @@ func CreateCategory(db *gorm.DB, input model.CategoryInput, args helpers.UserAnd
 func EditCategory(DB *gorm.DB, ID int, input model.CategoryInput, args helpers.UserAndStoreArgs) (*model.Category, error) {
 	var category *model.Category
 
-	err := DB.Debug().Transaction(func(tx *gorm.DB) error {
+	err := DB.Transaction(func(tx *gorm.DB) error {
 		category = &model.Category{
 			ID:          ID,
 			Name:        input.Name,

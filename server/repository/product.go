@@ -73,7 +73,7 @@ func CreateProduct(DB *gorm.DB, input model.ProductInput, args helpers.UserAndSt
 func EditProduct(DB *gorm.DB, ID int, input model.ProductInput, args helpers.UserAndStoreArgs) (*model.Product, error) {
 	var product *model.Product
 
-	err := DB.Debug().Transaction(func(tx *gorm.DB) error {
+	err := DB.Transaction(func(tx *gorm.DB) error {
 		product = &model.Product{
 			ID:          ID,
 			Name:        input.Name,

@@ -37,8 +37,63 @@ func (r *authPayloadResolver) Store(ctx context.Context, obj *model.AuthPayload)
 	return repository.FindDefaultStore(r.DB, helpers.ForContext(ctx).UserID)
 }
 
+func (r *brandResolver) Product(ctx context.Context, obj *model.Brand) (*model.Product, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *brandResolver) Creator(ctx context.Context, obj *model.Brand) (*model.User, error) {
+	if obj.CreatorID != nil {
+		return repository.FindUser(r.DB, *obj.CreatorID)
+	}
+	return nil, nil
+}
+
+func (r *categoryResolver) Creator(ctx context.Context, obj *model.Category) (*model.User, error) {
+	if obj.CreatorID != nil {
+		return repository.FindUser(r.DB, *obj.CreatorID)
+	}
+	return nil, nil
+}
+
+func (r *categoryResolver) Store(ctx context.Context, obj *model.Category) (*model.Store, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *customerResolver) Store(ctx context.Context, obj *model.Customer) (*model.Store, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *customerResolver) User(ctx context.Context, obj *model.Customer) (*model.User, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *customerResolver) Creator(ctx context.Context, obj *model.Customer) (*model.User, error) {
+	if obj.CreatorID != nil {
+		return repository.FindUser(r.DB, *obj.CreatorID)
+	}
+	return nil, nil
+}
+
+func (r *expenseResolver) Store(ctx context.Context, obj *model.Expense) (*model.Store, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *expenseResolver) Creator(ctx context.Context, obj *model.Expense) (*model.User, error) {
+	if obj.CreatorID != nil {
+		return repository.FindUser(r.DB, *obj.CreatorID)
+	}
+	return nil, nil
+}
+
 func (r *itemResolver) BuyingPrice(ctx context.Context, obj *model.Item) (string, error) {
 	return obj.BuyingPrice, nil
+}
+
+func (r *itemResolver) Creator(ctx context.Context, obj *model.Item) (*model.User, error) {
+	if obj.CreatorID != nil {
+		return repository.FindUser(r.DB, *obj.CreatorID)
+	}
+	return nil, nil
 }
 
 func (r *itemResolver) Product(ctx context.Context, obj *model.Item) (*model.Product, error) {
@@ -311,10 +366,36 @@ func (r *paymentResolver) OrderItems(ctx context.Context, obj *model.Payment) ([
 	return nil, nil
 }
 
+func (r *productResolver) Store(ctx context.Context, obj *model.Product) (*model.Store, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *productResolver) Brands(ctx context.Context, obj *model.Product) ([]*model.Brand, error) {
 	return repository.FindBrands(r.DB, model.BrandsArgs{
 		ProductID: &obj.ID,
 	})
+}
+
+func (r *productResolver) Creator(ctx context.Context, obj *model.Product) (*model.User, error) {
+	if obj.CreatorID != nil {
+		return repository.FindUser(r.DB, *obj.CreatorID)
+	}
+	return nil, nil
+}
+
+func (r *productCategoryResolver) Category(ctx context.Context, obj *model.ProductCategory) (*model.Category, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *productCategoryResolver) Product(ctx context.Context, obj *model.ProductCategory) (*model.Product, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *productCategoryResolver) Creator(ctx context.Context, obj *model.ProductCategory) (*model.User, error) {
+	if obj.CreatorID != nil {
+		return repository.FindUser(r.DB, *obj.CreatorID)
+	}
+	return nil, nil
 }
 
 func (r *queryResolver) Admin(ctx context.Context, id int) (*model.Admin, error) {
@@ -456,6 +537,25 @@ func (r *queryResolver) ItemsStats(ctx context.Context) (*model.ItemsStats, erro
 	return repository.SumItemsCost(r.DB, helpers.ForContext(ctx).StoreID)
 }
 
+func (r *staffResolver) User(ctx context.Context, obj *model.Staff) (*model.User, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *staffResolver) Store(ctx context.Context, obj *model.Staff) (*model.Store, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *staffResolver) Creator(ctx context.Context, obj *model.Staff) (*model.User, error) {
+	if obj.CreatorID != nil {
+		return repository.FindUser(r.DB, *obj.CreatorID)
+	}
+	return nil, nil
+}
+
+func (r *storeResolver) User(ctx context.Context, obj *model.Store) (*model.User, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *subscriptionResolver) Item(ctx context.Context) (<-chan *model.Item, error) {
 	panic(fmt.Errorf("not implemented"))
 }
@@ -480,6 +580,10 @@ func (r *subscriptionResolver) TotalSalesAmount(ctx context.Context, args model.
 	panic(fmt.Errorf("not implemented"))
 }
 
+func (r *unitResolver) User(ctx context.Context, obj *model.Unit) (*model.User, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *userResolver) Password(ctx context.Context, obj *model.User) (*string, error) {
 	return nil, errors.New("field is accessible")
 }
@@ -489,6 +593,18 @@ func (r *Resolver) Admin() generated.AdminResolver { return &adminResolver{r} }
 
 // AuthPayload returns generated.AuthPayloadResolver implementation.
 func (r *Resolver) AuthPayload() generated.AuthPayloadResolver { return &authPayloadResolver{r} }
+
+// Brand returns generated.BrandResolver implementation.
+func (r *Resolver) Brand() generated.BrandResolver { return &brandResolver{r} }
+
+// Category returns generated.CategoryResolver implementation.
+func (r *Resolver) Category() generated.CategoryResolver { return &categoryResolver{r} }
+
+// Customer returns generated.CustomerResolver implementation.
+func (r *Resolver) Customer() generated.CustomerResolver { return &customerResolver{r} }
+
+// Expense returns generated.ExpenseResolver implementation.
+func (r *Resolver) Expense() generated.ExpenseResolver { return &expenseResolver{r} }
 
 // Item returns generated.ItemResolver implementation.
 func (r *Resolver) Item() generated.ItemResolver { return &itemResolver{r} }
@@ -508,23 +624,45 @@ func (r *Resolver) Payment() generated.PaymentResolver { return &paymentResolver
 // Product returns generated.ProductResolver implementation.
 func (r *Resolver) Product() generated.ProductResolver { return &productResolver{r} }
 
+// ProductCategory returns generated.ProductCategoryResolver implementation.
+func (r *Resolver) ProductCategory() generated.ProductCategoryResolver {
+	return &productCategoryResolver{r}
+}
+
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
+// Staff returns generated.StaffResolver implementation.
+func (r *Resolver) Staff() generated.StaffResolver { return &staffResolver{r} }
+
+// Store returns generated.StoreResolver implementation.
+func (r *Resolver) Store() generated.StoreResolver { return &storeResolver{r} }
+
 // Subscription returns generated.SubscriptionResolver implementation.
 func (r *Resolver) Subscription() generated.SubscriptionResolver { return &subscriptionResolver{r} }
+
+// Unit returns generated.UnitResolver implementation.
+func (r *Resolver) Unit() generated.UnitResolver { return &unitResolver{r} }
 
 // User returns generated.UserResolver implementation.
 func (r *Resolver) User() generated.UserResolver { return &userResolver{r} }
 
 type adminResolver struct{ *Resolver }
 type authPayloadResolver struct{ *Resolver }
+type brandResolver struct{ *Resolver }
+type categoryResolver struct{ *Resolver }
+type customerResolver struct{ *Resolver }
+type expenseResolver struct{ *Resolver }
 type itemResolver struct{ *Resolver }
 type mutationResolver struct{ *Resolver }
 type orderResolver struct{ *Resolver }
 type orderItemResolver struct{ *Resolver }
 type paymentResolver struct{ *Resolver }
 type productResolver struct{ *Resolver }
+type productCategoryResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+type staffResolver struct{ *Resolver }
+type storeResolver struct{ *Resolver }
 type subscriptionResolver struct{ *Resolver }
+type unitResolver struct{ *Resolver }
 type userResolver struct{ *Resolver }

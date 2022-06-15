@@ -153,10 +153,10 @@ type Category implements Gorm {
     description: String @goTag(key: "gorm", value: "type:varchar(250);default:null")
 
     creatorId: Int
-    creator: User @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    creator: User @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
 
     storeId: Int
-    store: Store @goTag(key: "gorm", value:  "foreignKey:StoreID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    store: Store @goTag(key: "gorm", value:  "foreignKey:StoreID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
 }
 
 input CategoryInput {
@@ -183,15 +183,15 @@ type Customer implements Gorm {
     dob:Time
 
     storeId: Int!
-    store: Store! @goTag(key: "gorm", value:  "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    store: Store! @goTag(key: "gorm", value:  "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
 
     # todo Will be linked by searching phone/email above
     # todo allow email/phone number edit so that users can later be linked
     userId: Int
-    user: User @goTag(key: "gorm", value:  "foreignKey:UserID;null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    user: User @goTag(key: "gorm", value:  "foreignKey:UserID;null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
 
     creatorId: Int
-    creator: User @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    creator: User @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
 }
 
 input CustomerInput {
@@ -224,10 +224,10 @@ type Expense implements Gorm {
     type: ExpenseType!
 
     storeId: Int!
-    store: Store! @goTag(key: "gorm", value: "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    store: Store! @goTag(key: "gorm", value: "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
 
     creatorId: Int
-    creator: User @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    creator: User @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
 }
 
 input ExpenseInput {
@@ -259,12 +259,12 @@ type Product implements Gorm {
 
     # We will add our custom items and user may choose from our list.
     storeId: Int
-    store: Store @goTag(key: "gorm", value: "foreignKey:StoreID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    store: Store @goTag(key: "gorm", value: "foreignKey:StoreID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
 
     brands: [Brand!]! @goTag(key: "gorm", value: "constraint:OnUpdate:CASCADE,OnDelete:RESTRICT;") @goField(forceResolver: true)
 
     creatorId: Int
-    creator: User @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    creator: User @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
 }
 
 input ProductInput {
@@ -296,13 +296,13 @@ type ProductCategory implements Gorm {
     deletedAt:Time
 
     categoryId: Int!
-    category: Category! @goTag(key: "gorm", value:  "foreignKey:CategoryID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
+    category: Category! @goTag(key: "gorm", value:  "foreignKey:CategoryID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")  @goField(forceResolver: true)
 
     productId: Int!
-    product: Product! @goTag(key: "gorm", value:  "foreignKey:ProductID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
+    product: Product! @goTag(key: "gorm", value:  "foreignKey:ProductID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")  @goField(forceResolver: true)
 
     creatorId: Int
-    creator: User @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    creator: User @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
 }
 
 # Product can be the same but with different brands
@@ -317,10 +317,10 @@ type Brand implements Gorm {
     manufacturer: String @goTag(key: "gorm", value: "type:varchar(50);default:null")
 
     productId: Int!
-    product: Product! @goTag(key: "gorm", value:  "foreignKey:ProductID;")
+    product: Product! @goTag(key: "gorm", value:  "foreignKey:ProductID;")  @goField(forceResolver: true)
 
     creatorId: Int
-    creator: User @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    creator: User @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
 }
 
 # This is used to create brand when creating product itself.
@@ -360,7 +360,7 @@ type Item implements Gorm {
     expiresAt: Time
 
     creatorId: Int
-    creator: User @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    creator: User @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
 
     productId: Int!
     product: Product! @goTag(key: "gorm", value:  "foreignKey:ProductID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;") @goField(forceResolver: true)
@@ -419,13 +419,13 @@ type Staff implements Gorm {
     default: Boolean! @goTag(key: "gorm", value: "type:boolean")
 
     userId: Int!
-    user: User! @goTag(key: "gorm", value: "foreignKey:UserID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    user: User! @goTag(key: "gorm", value: "foreignKey:UserID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
 
     storeId: Int!
-    store: Store! @goTag(key: "gorm", value: "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    store: Store! @goTag(key: "gorm", value: "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
 
     creatorId: Int
-    creator: User @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    creator: User @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
 }
 
 input StaffInput {
@@ -456,7 +456,7 @@ type Store implements Gorm {
 
     # Creator of store
     userId: Int!
-    user: User! @goTag(key: "gorm", value: "foreignKey:UserID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    user: User! @goTag(key: "gorm", value: "foreignKey:UserID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
 
     staffs: [Staff!]! @goTag(key: "gorm", value: "-")
 }
@@ -678,7 +678,7 @@ type Unit implements Gorm {
     store: Store @goTag(key: "gorm", value:  "foreignKey:StoreID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
 
     userId: Int
-    user: User @goTag(key: "gorm", value:  "foreignKey:UserID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")
+    user: User @goTag(key: "gorm", value:  "foreignKey:UserID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
 }
 
 input UnitInput {
