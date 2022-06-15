@@ -1,9 +1,9 @@
 import 'package:blocitory/blocitory.dart';
 import 'package:flutter/material.dart';
+import 'package:graph/ui/widgets/widgets.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../nav/nav.dart';
-import '../../widgets/high_builder.dart';
 import 'categories_list_cubit.dart';
 import 'category_tile.dart';
 
@@ -30,15 +30,17 @@ class CategoriesListPage extends StatelessWidget {
     return QueryBuilder<ResourceListData<Categories$Query$Category>,
         CategoriesListCubit>(
       retry: (cubit) => cubit.fetch(),
-      builder: (context, units, _) {
-        return HighList<Categories$Query$Category>(
-          builder: (context, store, color) {
+      builder: (context, data, _) {
+        return SearchableList<Categories$Query$Category>(
+          hintName: "Category",
+          data: data,
+          compare: (i) => i.name,
+          builder: (context, item, color) {
             return CategoryTile(
-              category: store,
+              category: item,
               color: color,
             );
           },
-          items: units,
         );
       },
     );

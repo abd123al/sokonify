@@ -28,15 +28,17 @@ class UnitsListPage extends StatelessWidget {
   Widget _buildListView() {
     return QueryBuilder<ResourceListData<Units$Query$Unit>, UnitsListCubit>(
       retry: (cubit) => cubit.fetch(),
-      builder: (context, units, _) {
-        return HighList<Units$Query$Unit>(
+      builder: (context, data, _) {
+        return SearchableList<Units$Query$Unit>(
+          hintName: "Unit",
+          data: data,
+          compare: (i) => i.name,
           builder: (context, item, color) {
             return UnitTile(
               unit: item,
               color: color,
             );
           },
-          items: units,
         );
       },
     );
