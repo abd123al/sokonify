@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/repositories.dart';
+import '../../widgets/searchable_dropdown.dart';
 import '../expenses_category/expense_category.dart';
 import '../home/stats/simple_stats_cubit.dart';
 import 'create_order_payment_cubit.dart';
@@ -70,28 +71,17 @@ class _CreateStorePageState extends State<TrackExpensePage> {
                     final cats =
                         data.items.where((e) => e.type == widget.type).toList();
 
-                    return DropdownSearch<Expenses$Query$Expense>(
-                      showSearchBox: true,
-                      itemAsString: (u) => u!.name,
-                      filterFn: (i, query) {
-                        return i!.name.toLowerCase().contains(query ?? "");
-                      },
-                      isFilteredOnline: false,
-                      mode: Mode.MENU,
-                      items: cats,
-                      dropdownSearchDecoration: InputDecoration(
-                        labelText: "Select $word Category",
-                        hintText: "Type $word name",
-                        border: const OutlineInputBorder(),
-                      ),
+                    return SearchableDropdown<Expenses$Query$Expense>(
+                      asString: (i) => i.name.toLowerCase(),
+                      data:
+                          ResourceListData<Expenses$Query$Expense>(items: cats),
+                      labelText: "Select $word Category",
+                      hintText: "Type $word name",
+                      builder: (_, i) => ExpenseCategoryTile(expense: i),
                       onChanged: (item) => setState(() {
                         _expense = item;
                       }),
                       selectedItem: _expense,
-                      searchDelay: const Duration(milliseconds: 0),
-                      popupItemBuilder: (_, i, __) =>
-                          ExpenseCategoryTile(expense: i),
-                      showClearButton: true,
                     );
                   },
                 ),

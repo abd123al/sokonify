@@ -1,12 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:blocitory/blocitory.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graph/ui/helpers/currency_formatter.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/repositories.dart';
+import '../../widgets/widgets.dart';
 import '../home/stats/simple_stats_cubit.dart';
 import 'create_order_payment_cubit.dart';
 import 'payments_list_cubit.dart';
@@ -54,22 +54,19 @@ class _CreateStorePageState extends State<CreatePaymentWidget> {
               ),
             ),
             const Divider(),
-            DropdownSearch<PaymentMethod>(
-              items: PaymentMethod.values,
+            SearchableDropdown<PaymentMethod>(
+              data:
+                  ResourceListData<PaymentMethod>(items: PaymentMethod.values),
               onChanged: (i) {
                 setState(() {
                   _method = i!;
                 });
               },
-              itemAsString: (i) => i!.name.toUpperCase(),
-              showSearchBox: false,
-              mode: Mode.MENU,
+              builder: (_, i) => Text(i.name),
+              asString: (i) => i.name.toUpperCase(),
               selectedItem: _method,
-              dropdownSearchDecoration: const InputDecoration(
-                labelText: "Payment method",
-                hintText: "Choose payment method used",
-                border: OutlineInputBorder(),
-              ),
+              labelText: "Payment method",
+              hintText: "Choose payment method used",
             ),
             const Divider(),
             TextField(

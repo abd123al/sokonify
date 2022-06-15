@@ -1,5 +1,4 @@
 import 'package:blocitory/blocitory.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graph/ui/pages/inventory/item_tile.dart';
@@ -8,6 +7,7 @@ import 'package:responsive_builder/responsive_builder.dart';
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/order_repository.dart';
 import '../../../repositories/payment_repository.dart';
+import '../../widgets/searchable_dropdown.dart';
 import '../customer/customer_tile.dart';
 import '../customer/customers_list_cubit.dart';
 import '../home/stats/simple_stats_cubit.dart';
@@ -91,59 +91,33 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                         final List<Widget> children = [
                           if (widget.isOrder)
                             Builder(builder: (context) {
-                              return DropdownSearch<Customers$Query$Customer>(
-                                showSearchBox: true,
-                                itemAsString: (u) => u!.name,
-                                filterFn: (i, query) {
-                                  return i!.name
-                                      .toLowerCase()
-                                      .contains(query ?? "");
-                                },
-                                isFilteredOnline: false,
-                                mode: Mode.MENU,
-                                items: customers.items,
-                                dropdownSearchDecoration: const InputDecoration(
-                                  labelText: "Customer",
-                                  hintText: "Add customer",
-                                  border: OutlineInputBorder(),
-                                  helperText:
-                                      "This is the customer order will be billed to",
-                                ),
+                              return SearchableDropdown<
+                                  Customers$Query$Customer>(
+                                asString: (i) => i.name.toLowerCase(),
+                                data: customers,
+                                labelText: "Customer",
+                                hintText: "Select Customer",
+                                helperText:
+                                    "This is the customer order will be billed to",
+                                selectedItem: state.customer,
+                                builder: (_, i) => CustomerTile(customer: i),
                                 onChanged: (customer) {
                                   newOrderCubit.changeCustomer(customer);
                                 },
-                                selectedItem: state.customer,
-                                searchDelay: const Duration(milliseconds: 0),
-                                popupItemBuilder: (_, i, __) =>
-                                    CustomerTile(customer: i),
-                                showClearButton: true,
                               );
                             }),
                           const Divider(),
-                          DropdownSearch<Items$Query$Item>(
-                            showSearchBox: true,
-                            itemAsString: (u) => ItemTile.formatItemName(u!),
-                            filterFn: (i, query) {
-                              return ItemTile.formatItemName(i!)
-                                  .toLowerCase()
-                                  .contains(query ?? "");
-                            },
-                            isFilteredOnline: false,
-                            mode: Mode.MENU,
-                            items: itemsData.items,
-                            dropdownSearchDecoration:  const InputDecoration(
-                              labelText: "Enter item",
-                              hintText: "Type product name",
-                              border: OutlineInputBorder(),
-                              helperText: "Type items to add",
-                            ),
+                          SearchableDropdown<Items$Query$Item>(
+                            asString: (i) => ItemTile.formatItemName(i),
+                            data: itemsData,
+                            labelText: "Enter item",
+                            hintText: "Type product name",
+                            helperText: "Type items to add",
+                            selectedItem: _selected,
+                            builder: (_, i) => ItemTile(item: i),
                             onChanged: (item) => setState(() {
                               _selected = item;
                             }),
-                            selectedItem: _selected,
-                            searchDelay: const Duration(milliseconds: 0),
-                            popupItemBuilder: (_, i, __) => ItemTile(item: i),
-                            showClearButton: true,
                           ),
                           const SizedBox(
                             height: 16,

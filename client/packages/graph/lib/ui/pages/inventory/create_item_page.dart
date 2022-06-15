@@ -1,5 +1,4 @@
 import 'package:blocitory/blocitory.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -65,28 +64,17 @@ class _CreateItemPageState extends State<CreateItemPage> {
                   );
                 }
 
-                return DropdownSearch<Products$Query$Product>(
-                  showSearchBox: true,
-                  itemAsString: (u) => u!.name,
-                  filterFn: (i, query) {
-                    return i!.name.toLowerCase().contains(query ?? "");
-                  },
-                  isFilteredOnline: false,
-                  mode: Mode.MENU,
-                  items: products.items,
-                  dropdownSearchDecoration: const InputDecoration(
-                    labelText: "Select Product",
-                    hintText: "Type product name",
-                    border: OutlineInputBorder(),
-                  ),
+                return SearchableDropdown<Products$Query$Product>(
+                  asString: (i) => i.name.toLowerCase(),
+                  data: products,
+                  labelText: "Product",
+                  hintText: "Select Product",
+                  selectedItem: _product,
+                  builder: (_, i) => ProductTile(product: i),
                   onChanged: (item) => setState(() {
                     _product = item;
                     _brand = null;
                   }),
-                  selectedItem: _product,
-                  searchDelay: const Duration(milliseconds: 0),
-                  popupItemBuilder: (_, i, __) => ProductTile(product: i),
-                  showClearButton: true,
                 );
               },
             ),
@@ -142,30 +130,19 @@ class _CreateItemPageState extends State<CreateItemPage> {
                         );
                       }
 
-                      return DropdownSearch<Units$Query$Unit>(
-                        showSearchBox: true,
-                        itemAsString: (u) => u!.name,
-                        filterFn: (i, query) {
-                          return i!.name.toLowerCase().contains(query ?? "");
-                        },
-                        isFilteredOnline: false,
-                        mode: Mode.MENU,
-                        items: units.items,
-                        dropdownSearchDecoration: const InputDecoration(
-                          labelText: "Select Unit",
-                          hintText: "Type unit name",
-                        ),
+                      return SearchableDropdown<Units$Query$Unit>(
+                        asString: (i) => i.name.toLowerCase(),
+                        data: units,
+                        labelText: "Unit",
+                        hintText: "Select Unit",
+                        selectedItem: _unit,
+                        builder: (_, i) => UnitTile(unit: i),
                         onChanged: (item) => setState(() {
                           _unit = item;
                         }),
-                        selectedItem: _unit,
-                        searchDelay: const Duration(milliseconds: 0),
-                        popupItemBuilder: (_, i, __) => UnitTile(unit: i),
-                        showClearButton: true,
                       );
                     },
                   ),
-
                   TextField(
                     controller: _buyingPriceController,
                     keyboardType:
