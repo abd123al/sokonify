@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../nav/nav.dart';
@@ -33,13 +32,6 @@ class SokonifyDrawer extends StatelessWidget {
           return Column(
             children: [
               ListTile(
-                title: const Text('Product Categories'),
-                trailing: const Icon(Icons.category_outlined),
-                onTap: () {
-                  redirectTo(context, Routes.categories);
-                },
-              ),
-              ListTile(
                 title: const Text('Products'),
                 trailing: const Icon(Icons.dashboard_outlined),
                 onTap: () {
@@ -47,17 +39,17 @@ class SokonifyDrawer extends StatelessWidget {
                 },
               ),
               ListTile(
-                title: const Text('Brands'),
-                trailing: const Icon(Icons.branding_watermark_outlined),
-                onTap: () {
-                  redirectTo(context, Routes.brands);
-                },
-              ),
-              ListTile(
                 title: const Text('Units'),
                 trailing: const Icon(Icons.brightness_1_rounded),
                 onTap: () {
                   redirectTo(context, Routes.units);
+                },
+              ),
+              ListTile(
+                title: const Text('Brands'),
+                trailing: const Icon(Icons.branding_watermark_outlined),
+                onTap: () {
+                  redirectTo(context, Routes.brands);
                 },
               ),
               // const Divider(),
@@ -68,6 +60,14 @@ class SokonifyDrawer extends StatelessWidget {
               //     redirectTo(context, Routes.gains);
               //   },
               // ),
+              const Divider(),
+              ListTile(
+                title: const Text('Product Categories'),
+                trailing: const Icon(Icons.category_outlined),
+                onTap: () {
+                  redirectTo(context, Routes.categories);
+                },
+              ),
               ListTile(
                 title: const Text('Expense Categories'),
                 trailing: const Icon(Icons.category_outlined),
@@ -96,45 +96,45 @@ class SokonifyDrawer extends StatelessWidget {
           );
         },
       ),
-      const Divider(),
-      ListTile(
-        title: const Text('Help/Feedback'),
-        trailing: const Icon(Icons.help),
-        onTap: () {},
-      ),
-      ListTile(
-        title: const Text('Join Telegram Group'),
-        trailing: const Icon(Icons.link),
-        onTap: () {
-          _openURL('https://t.me/STG_app');
-        },
-      ),
-      ListTile(
-        title: const Text('About this app'),
-        //subtitle: const Text("I would love to know my score."),
-        trailing: const Icon(Icons.info),
-        onTap: () {},
-      ),
-      ListTile(
-        title: const Text('Rate this app'),
-        //subtitle: const Text("I would love to know my score."),
-        trailing: const Icon(Icons.star),
-        onTap: () {
-          _openURL(
-              "https://play.google.com/store/apps/details?id=com.kateile.stg.plus");
-        },
-      ),
-      ListTile(
-        title: const Text('Share this app'),
-        //subtitle: const Text("Share with your loved ones."),
-        trailing: const Icon(Icons.share),
-        onTap: () {
-          Share.share(
-            'Hey, I am using a new STG Pro App. Download it here\n'
-            'https://play.google.com/store/apps/details?id=com.kateile.stg.plus',
-          );
-        },
-      ),
+      // const Divider(),
+      // ListTile(
+      //   title: const Text('Help/Feedback'),
+      //   trailing: const Icon(Icons.help),
+      //   onTap: () {},
+      // ),
+      // ListTile(
+      //   title: const Text('Join Telegram Group'),
+      //   trailing: const Icon(Icons.link),
+      //   onTap: () {
+      //     _openURL('https://t.me/STG_app');
+      //   },
+      // ),
+      // ListTile(
+      //   title: const Text('About this app'),
+      //   //subtitle: const Text("I would love to know my score."),
+      //   trailing: const Icon(Icons.info),
+      //   onTap: () {},
+      // ),
+      // ListTile(
+      //   title: const Text('Rate this app'),
+      //   //subtitle: const Text("I would love to know my score."),
+      //   trailing: const Icon(Icons.star),
+      //   onTap: () {
+      //     _openURL(
+      //         "https://play.google.com/store/apps/details?id=com.kateile.stg.plus");
+      //   },
+      // ),
+      // ListTile(
+      //   title: const Text('Share this app'),
+      //   //subtitle: const Text("Share with your loved ones."),
+      //   trailing: const Icon(Icons.share),
+      //   onTap: () {
+      //     Share.share(
+      //       'Hey, I am using a new STG Pro App. Download it here\n'
+      //       'https://play.google.com/store/apps/details?id=com.kateile.stg.plus',
+      //     );
+      //   },
+      // ),
       const Divider(),
       ListTile(
         title: const Text(
