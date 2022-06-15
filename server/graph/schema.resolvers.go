@@ -136,7 +136,10 @@ func (r *mutationResolver) EditBrand(ctx context.Context, id int, input model.Br
 }
 
 func (r *mutationResolver) EditCategory(ctx context.Context, id int, input model.CategoryInput) (*model.Category, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.EditCategory(r.DB, id, input, helpers.UserAndStoreArgs{
+		UserID:  helpers.ForContext(ctx).UserID,
+		StoreID: helpers.ForContext(ctx).StoreID,
+	})
 }
 
 func (r *mutationResolver) EditCustomer(ctx context.Context, id int, input model.CustomerInput) (*model.Customer, error) {
