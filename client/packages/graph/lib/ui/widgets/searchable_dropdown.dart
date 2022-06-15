@@ -67,55 +67,55 @@ class _SearchableListState<T> extends State<SearchableDropdown<T>> {
           padding: const EdgeInsets.only(top: 8.0),
           child: Builder(
             builder: (context) {
-              if (widget.isMultiSelectionMode) {
-                return DropdownSearch<T>.multiSelection(
-                  showSearchBox: true,
-                  itemAsString: (u) => widget.asString(u as T),
-                  filterFn: (i, query) {
-                    return widget
-                        .asString(i as T)
-                        .toLowerCase()
-                        .contains(query ?? "");
-                  },
-                  isFilteredOnline: false,
-                  mode: Mode.MENU,
-                  items: items,
-                  dropdownSearchDecoration: InputDecoration(
-                    labelText: widget.labelText,
-                    hintText: widget.hintText,
-                    border: const OutlineInputBorder(),
-                    helperText: widget.helperText,
-                  ),
-                  onChanged: widget.onChangedMultiSelection,
-                  selectedItems: widget.selectedItems,
-                  searchDelay: const Duration(milliseconds: 0),
-                  popupItemBuilder: (ont, i, __) => widget.builder(ont, i),
-                  showClearButton: true,
-                );
-              }
-
-              return DropdownSearch<T>(
-                showSearchBox: true,
-                itemAsString: (u) => widget.asString(u as T),
-                filterFn: (i, query) {
-                  return widget
-                      .asString(i as T)
-                      .toLowerCase()
-                      .contains(query ?? "");
-                },
-                isFilteredOnline: false,
-                mode: Mode.MENU,
-                items: items,
+              final dropdownDecoratorProps = DropDownDecoratorProps(
                 dropdownSearchDecoration: InputDecoration(
                   labelText: widget.labelText,
                   hintText: widget.hintText,
                   border: const OutlineInputBorder(),
                 ),
+              );
+
+              const searchFieldProps = TextFieldProps(
+                decoration: InputDecoration(
+                  hintText: "Type here to search....",
+                  border: OutlineInputBorder(),
+                ),
+              );
+
+              if (widget.isMultiSelectionMode) {
+                return DropdownSearch<T>.multiSelection(
+                  itemAsString: (u) => widget.asString(u),
+                  filterFn: (i, query) {
+                    return widget.asString(i).toLowerCase().contains(query);
+                  },
+                  items: items,
+                  dropdownDecoratorProps: dropdownDecoratorProps,
+                  onChanged: widget.onChangedMultiSelection,
+                  selectedItems: widget.selectedItems,
+                  popupProps: const PopupPropsMultiSelection.menu(
+                    showSearchBox: true,
+                    searchFieldProps: searchFieldProps,
+                    searchDelay: Duration(milliseconds: 0),
+                    isFilterOnline: false,
+                  ),
+                );
+              }
+
+              return DropdownSearch<T>(
+                itemAsString: (u) => widget.asString(u),
+                filterFn: (i, query) {
+                  return widget.asString(i).toLowerCase().contains(query);
+                },
+                items: items,
+                dropdownDecoratorProps: dropdownDecoratorProps,
                 onChanged: widget.onChanged,
                 selectedItem: widget.selectedItem,
-                searchDelay: const Duration(milliseconds: 0),
-                popupItemBuilder: (ont, i, __) => widget.builder(ont, i),
-                showClearButton: true,
+                popupProps: const PopupProps.menu(
+                  showSearchBox: true,
+                  searchFieldProps: searchFieldProps,
+                  searchDelay: Duration(milliseconds: 0),
+                  isFilterOnline: false,
+                ),
               );
             },
           ),
