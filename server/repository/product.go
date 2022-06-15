@@ -70,6 +70,30 @@ func CreateProduct(DB *gorm.DB, input model.ProductInput, args helpers.UserAndSt
 	return product, nil
 }
 
+func EditProduct(DB *gorm.DB, ID int, input model.ProductInput, args helpers.UserAndStoreArgs) (*model.Product, error) {
+	var product *model.Product
+
+	err := DB.Debug().Transaction(func(tx *gorm.DB) error {
+		product = &model.Product{
+			ID:          ID,
+			Name:        input.Name,
+			Description: input.Description,
+		}
+
+		if err := tx.Model(&product).Where(&model.Product{ID: ID, StoreID: &args.StoreID}).Updates(&product).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return product, nil
+}
+
 func FindProducts(DB *gorm.DB, args model.ProductsArgs, StoreID int) ([]*model.Product, error) {
 	var items []*model.Product
 	var result *gorm.DB
@@ -89,8 +113,8 @@ func FindProducts(DB *gorm.DB, args model.ProductsArgs, StoreID int) ([]*model.P
 	return items, result.Error
 }
 
-func FindProduct(db *gorm.DB, ID int) (*model.Product, error) {
+func FindProduct(db *gorm.DB, ID int, StoreID int) (*model.Product, error) {
 	var product *model.Product
-	result := db.Where(&model.Product{ID: ID}).First(&product)
+	result := db.Where(&model.Product{ID: ID, StoreID: &StoreID}).First(&product)
 	return product, result.Error
 }

@@ -42,7 +42,7 @@ func (r *itemResolver) BuyingPrice(ctx context.Context, obj *model.Item) (string
 }
 
 func (r *itemResolver) Product(ctx context.Context, obj *model.Item) (*model.Product, error) {
-	return repository.FindProduct(r.DB, obj.ProductID)
+	return repository.FindProduct(r.DB, obj.ProductID, helpers.ForContext(ctx).StoreID)
 }
 
 func (r *itemResolver) Brand(ctx context.Context, obj *model.Item) (*model.Brand, error) {
@@ -387,7 +387,7 @@ func (r *queryResolver) Payments(ctx context.Context, args model.PaymentsArgs) (
 }
 
 func (r *queryResolver) Product(ctx context.Context, id int) (*model.Product, error) {
-	return repository.FindProduct(r.DB, id)
+	return repository.FindProduct(r.DB, id, helpers.ForContext(ctx).StoreID)
 }
 
 func (r *queryResolver) Products(ctx context.Context, args model.ProductsArgs) ([]*model.Product, error) {
