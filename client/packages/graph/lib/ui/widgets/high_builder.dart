@@ -34,11 +34,14 @@ class HighList<T> extends StatelessWidget {
       itemBuilder: (context, index) {
         final item = items.items[index];
         final isNew = items.newItems.contains(item);
+        final isEdited = items.updatedItems.contains(item);
 
         Color? color;
 
         if (isNew) {
           color = Theme.of(context).secondaryHeaderColor;
+        } else if (isEdited) {
+          color = Colors.green.shade50;
         }
 
         return builder(context, item, color);
