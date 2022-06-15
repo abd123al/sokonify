@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
+import '../../../nav/nav.dart';
 
 class CategoryTile extends StatelessWidget {
   const CategoryTile({
@@ -22,6 +23,9 @@ class CategoryTile extends StatelessWidget {
           category.name,
           style: Theme.of(context).textTheme.headlineSmall,
         ),
+        onTap: () {
+          redirectTo(context, "${Routes.category}/${category.id}");
+        },
       ),
     );
   }

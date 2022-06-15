@@ -1,0 +1,4 @@
+fragment CreatorParts on User {
+    id
+    name
+}

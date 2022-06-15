@@ -1,0 +1,5 @@
+mutation editCategory($id: ID!,$input:CategoryInput!) {
+    editCategory(id: $id,input: $input) {
+        ...CategoryParts
+    }
+}

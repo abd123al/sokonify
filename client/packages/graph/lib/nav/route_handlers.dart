@@ -113,3 +113,13 @@ var editProductPageRouterHandler = Handler(handlerFunc: (context, params) {
   final id = params["id"]![0];
   return EditProductPage(id: int.parse(id));
 });
+
+var categoryPageRouterHandler = Handler(handlerFunc: (context, params) {
+  final id = params["id"]![0];
+  return CategoryPage(id: int.parse(id));
+});
+
+var editCategoryPageRouterHandler = Handler(handlerFunc: (context, params) {
+  final id = params["id"]![0];
+  return EditCategoryPage(id: int.parse(id));
+});

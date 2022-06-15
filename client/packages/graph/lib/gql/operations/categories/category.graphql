@@ -1,13 +1,10 @@
-query product($id: ID!) {
-    product(id: $id) {
+query category($id:ID!) {
+    category(id: $id) {
         name
         description
         createdAt
         creator {
             ...CreatorParts
-        }
-        brands {
-            ...BrandParts
         }
     }
 }
