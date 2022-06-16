@@ -35,9 +35,9 @@ class _ItemFormState extends State<ItemForm> {
   final _expireDateController = TextEditingController();
   final _sellingPriceController = TextEditingController();
   final _quantityController = TextEditingController();
-  Products$Query$Product? _product;
-  Units$Query$Unit? _unit;
-  Brands$Query$Brand? _brand;
+  int? _productId;
+  int? _unitId;
+  int? _brandId;
   DateTime? _selectedDate;
   late bool isEdit;
 
@@ -45,6 +45,10 @@ class _ItemFormState extends State<ItemForm> {
   void initState() {
     super.initState();
     isEdit = widget.item != null && widget.id != null;
+
+    _productId = widget.item?.product.id;
+    _unitId = widget.item?.unit.id;
+    _brandId = widget.item?.brand?.id;
 
     _batchPriceController.text = widget.item?.batch ?? "";
     _buyingPriceController.text = widget.item?.buyingPrice ?? "";
@@ -95,21 +99,21 @@ class _ItemFormState extends State<ItemForm> {
                   data: products,
                   labelText: "Product",
                   hintText: "Select Product",
-                  selectedItem: _product,
-                  onChanged: (item) => setState(() {
-                    _product = item;
-                    _brand = null;
+                  initialItem: (e) => e.id == _productId,
+                  onChanged: (p) => setState(() {
+                    _productId = p?.id;
+                    _brandId = null;
                   }),
                 );
               },
             ),
-            if (_product != null)
+            if (_productId != null)
               QueryBuilder<ResourceListData<Brands$Query$Brand>,
                   BrandsListCubit>(
                 retry: (cubit) => cubit.fetch(),
                 builder: (context, data, _) {
                   final List<Brands$Query$Brand> brands = data.items
-                      .where((e) => e.productId == _product!.id)
+                      .where((e) => e.productId == _productId)
                       .toList();
 
                   return SearchableDropdown<Brands$Query$Brand>(
@@ -119,14 +123,14 @@ class _ItemFormState extends State<ItemForm> {
                     ),
                     labelText: "Brand (Optional)",
                     hintText: "Select Brand (Optional)",
+                    initialItem: (e) => e.id == _brandId,
                     onChanged: (item) => setState(() {
-                      _brand = item;
+                      _brandId = item?.id;
                     }),
-                    selectedItem: _brand,
                   );
                 },
               ),
-            if (_product != null || isEdit)
+            if (_productId != null || isEdit)
               FormList(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
@@ -160,9 +164,9 @@ class _ItemFormState extends State<ItemForm> {
                         data: units,
                         labelText: "Unit",
                         hintText: "Select Unit",
-                        selectedItem: _unit,
+                        initialItem: (e) => e.id == _unitId,
                         onChanged: (item) => setState(() {
-                          _unit = item;
+                          _unitId = item?.id;
                         }),
                       );
                     },
@@ -220,28 +224,38 @@ class _ItemFormState extends State<ItemForm> {
                       ItemRepository>(
                     blocCreator: (r) => CreateItemCubit(r),
                     onSuccess: (context, data) {
-                      BlocProvider.of<ItemsListCubit>(context)
-                          .addItem(Items$Query$Item.fromJson(data.toJson()));
+                      if (!isEdit) {
+                        BlocProvider.of<ItemsListCubit>(context)
+                            .addItem(Items$Query$Item.fromJson(data.toJson()));
+                      } else {
+                        BlocProvider.of<ItemsListCubit>(context).updateItem(
+                          (l) => l.firstWhere((e) => e.id == widget.id),
+                          Items$Query$Item.fromJson(data.toJson()),
+                        );
+                      }
                     },
                     pop: true,
                     builder: (context, cubit) {
                       return Button(
                         padding: EdgeInsets.zero,
                         callback: () {
-                          cubit.submit(
-                            ItemInput(
-                              quantity:
-                                  int.tryParse(_quantityController.text) ?? 0,
-                              sellingPrice: _sellingPriceController.text,
-                              buyingPrice: _buyingPriceController.text,
-                              unitId: _unit!.id,
-                              description: _descriptionPriceController.text,
-                              batch: _batchPriceController.text,
-                              productId: _product!.id,
-                              expiresAt: _selectedDate,
-                              brandId: _brand?.id,
-                            ),
+                          final input = ItemInput(
+                            quantity: int.parse(_quantityController.text),
+                            sellingPrice: _sellingPriceController.text,
+                            buyingPrice: _buyingPriceController.text,
+                            unitId: _unitId!,
+                            description: _descriptionPriceController.text,
+                            batch: _batchPriceController.text,
+                            productId: _productId!,
+                            expiresAt: _selectedDate,
+                            brandId: _brandId,
                           );
+
+                          if (!isEdit) {
+                            cubit.create(input);
+                          } else {
+                            cubit.edit(widget.id!, input);
+                          }
                         },
                         title: 'Submit',
                       );

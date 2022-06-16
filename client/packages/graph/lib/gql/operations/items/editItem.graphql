@@ -1,0 +1,5 @@
+mutation editItem($id: ID!,$input:ItemInput!) {
+    editItem(id: $id,input: $input) {
+        ...ItemParts
+    }
+}

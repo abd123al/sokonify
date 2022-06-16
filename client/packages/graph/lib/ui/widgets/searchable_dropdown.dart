@@ -1,11 +1,12 @@
 import 'package:blocitory/helpers/resource_list_data.dart';
+import 'package:collection/collection.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
 class SearchableDropdown<T> extends StatefulWidget {
   const SearchableDropdown({
     Key? key,
-     this.builder,
+    this.builder,
     required this.asString,
     required this.data,
     required this.hintText,
@@ -15,6 +16,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     this.onChangedMultiSelection,
     this.selectedItems = const [],
     this.helperText,
+    this.initialItem,
   })  : isMultiSelectionMode = false,
         super(key: key);
 
@@ -29,6 +31,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     this.onChangedMultiSelection,
     this.selectedItems = const [],
     this.helperText,
+    this.initialItem,
   })  : onChanged = null,
         isMultiSelectionMode = true,
         super(key: key);
@@ -43,6 +46,7 @@ class SearchableDropdown<T> extends StatefulWidget {
   final bool isMultiSelectionMode;
   final ResourceListData<T> data;
   final T? selectedItem;
+  final bool Function(T)? initialItem;
   final List<T> selectedItems;
 
   @override
@@ -109,7 +113,9 @@ class _SearchableListState<T> extends State<SearchableDropdown<T>> {
                 items: items,
                 dropdownDecoratorProps: dropdownDecoratorProps,
                 onChanged: widget.onChanged,
-                selectedItem: widget.selectedItem,
+                selectedItem: widget.initialItem != null
+                    ? items.firstWhereOrNull((e) => widget.initialItem!(e))
+                    : null,
                 popupProps: PopupProps.menu(
                   showSearchBox: true,
                   searchFieldProps: searchFieldProps,
