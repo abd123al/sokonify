@@ -32,6 +32,13 @@ class SokonifyDrawer extends StatelessWidget {
           return Column(
             children: [
               ListTile(
+                title: const Text('Store'),
+                trailing: const Icon(Icons.store),
+                onTap: () {
+                  redirectTo(context, Routes.products);
+                },
+              ),
+              ListTile(
                 title: const Text('Products'),
                 trailing: const Icon(Icons.dashboard_outlined),
                 onTap: () {

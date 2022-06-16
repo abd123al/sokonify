@@ -41,29 +41,17 @@ class PaymentPage extends StatelessWidget {
       retry: (cubit) => cubit.fetch(id),
       initializer: (cubit) => cubit.fetch(id),
       builder: (context, data, _) {
-        _buildTile(String key, String? value, {VoidCallback? onTap}) {
-          if (value == null || value.isEmpty) {
-            return const SizedBox.shrink();
-          }
-
-          return ListTile(
-            title: Text(
-              value,
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            subtitle: Text(key),
-          );
-        }
-
         return ListView(
           children: [
-            _buildTile("Amount", formatCurrency(data.amount)),
+            ShortDetailTile(
+                subtitle: "Amount", value: formatCurrency(data.amount)),
             if (data.expense != null)
-              _buildTile("Expenses Category", data.expense?.name),
-            _buildTile("Description", data.description),
-            const Divider(),
-            _buildTile("Submitted By", data.staff.name),
-            _buildTile("Submitted on", data.createdAt.toString()),
+              ShortDetailTile(
+                  subtitle: "Expenses Category", value: data.expense?.name),
+            ShortDetailTile(subtitle: "Description", value: data.description),
+            ShortDetailTile(subtitle: "Submitted By", value: data.staff.name),
+            ShortDetailTile(
+                subtitle: "Submitted on", value: data.createdAt.toString()),
             if (data.orderItems != null) const WordDivider(text: 'Items'),
             if (data.orderItems != null)
               Builder(

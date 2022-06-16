@@ -36,41 +36,23 @@ class ItemPage extends StatelessWidget {
   }
 
   Widget builder(BuildContext context, Item$Query$Item data) {
-    _buildTile(
-      String key,
-      String? value, {
-      VoidCallback? onTap,
-      VoidCallback? onEdit,
-    }) {
-      return ListTile(
-        title: Text(
-          value ?? "",
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-        subtitle: Text(key),
-        trailing: onEdit != null
-            ? TextButton.icon(
-                onPressed: onEdit,
-                icon: const Icon(Icons.edit),
-                label: const Text("Edit"),
-              )
-            : null,
-      );
-    }
-
     return DetailsList(
       children: [
-        _buildTile("Item Name", data.product.name),
-        _buildTile("Brand Name", data.brand?.name, onEdit: () {}),
-        _buildTile("Quantity", data.quantity.toString()),
-        _buildTile("Unit", data.unit.name, onEdit: () {}),
-        _buildTile("Buying Price", formatCurrency(data.buyingPrice)),
-        _buildTile("Selling Price", formatCurrency(data.sellingPrice)),
-        _buildTile("Description", data.description, onEdit: () {}),
-        _buildTile("Expires at", data.expiresAt?.toString(), onEdit: () {}),
-        _buildTile("Batch", data.batch, onEdit: () {}),
-        _buildTile("Added By", data.creator?.name),
-        _buildTile("Added on", data.createdAt.toString()),
+        ShortDetailTile(subtitle: "Item Name", value: data.product.name),
+        ShortDetailTile(subtitle: "Brand Name", value: data.brand?.name),
+        ShortDetailTile(subtitle: "Quantity", value: data.quantity.toString()),
+        ShortDetailTile(subtitle: "Unit", value: data.unit.name),
+        ShortDetailTile(
+            subtitle: "Buying Price", value: formatCurrency(data.buyingPrice)),
+        ShortDetailTile(
+            subtitle: "Selling Price",
+            value: formatCurrency(data.sellingPrice)),
+        ShortDetailTile(subtitle: "Description", value: data.description),
+        ShortDetailTile(
+            subtitle: "Expires at", value: data.expiresAt?.toString()),
+        ShortDetailTile(subtitle: "Batch", value: data.batch),
+        ShortDetailTile(subtitle: "Added By", value: data.creator?.name),
+        ShortDetailTile(subtitle: "Added on", value: data.createdAt.toString()),
       ],
     );
   }

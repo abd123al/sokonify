@@ -8,6 +8,7 @@ import 'package:responsive_builder/responsive_builder.dart';
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/order_repository.dart';
 import '../../helpers/currency_formatter.dart';
+import '../../widgets/widgets.dart';
 import '../../widgets/word_divider.dart';
 import '../payment/create_order_payment_page.dart';
 import 'order_item_tile.dart';
@@ -48,25 +49,16 @@ class OrderPage extends StatelessWidget {
       retry: (cubit) => cubit.fetch(id),
       initializer: (cubit) => cubit.fetch(id),
       builder: (context, data, _) {
-        _buildTile(String key, String value) {
-          return ListTile(
-            title: Text(
-              value,
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            subtitle: Text(
-              key,
-            ),
-          );
-        }
-
         final left = [
           if (data.customer?.name != null)
-            _buildTile("Customer", "${data.customer?.name}"),
-          _buildTile("Created At", "${data.createdAt}"),
-          _buildTile("Status", describeEnum(data.status)),
+            ShortDetailTile(
+                subtitle: "Customer", value: "${data.customer?.name}"),
+          ShortDetailTile(subtitle: "Created At", value: "${data.createdAt}"),
+          ShortDetailTile(subtitle: "Status", value: describeEnum(data.status)),
           if (data.payment != null)
-            _buildTile("Paid Amount", formatCurrency(data.payment!.amount)),
+            ShortDetailTile(
+                subtitle: "Paid Amount",
+                value: formatCurrency(data.payment!.amount)),
         ];
 
         final right = [
@@ -88,7 +80,7 @@ class OrderPage extends StatelessWidget {
           TotalAmountTile(
             amount: calculateTotal(
               data.orderItems.map(
-                    (e) => TotalPriceArgs(
+                (e) => TotalPriceArgs(
                   price: e.price,
                   quantity: e.quantity,
                 ),

@@ -42,28 +42,15 @@ class ProductPage extends StatelessWidget {
   }
 
   Widget builder(BuildContext context, Product$Query$Product data) {
-    _buildTile(
-      String key,
-      String? value, {
-      VoidCallback? onTap,
-    }) {
-      return ListTile(
-        title: Text(
-          value ?? "",
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-        subtitle: Text(key),
-      );
-    }
-
     return ListView(
       children: [
-        _buildTile("Product Name", data.name),
+        ShortDetailTile(subtitle: "Product Name", value: data.name),
         const Divider(),
-        _buildTile("Description", data.description),
+        ShortDetailTile(subtitle: "Description", value: data.description),
         const Divider(),
-        _buildTile("Created By", data.creator?.name),
-        _buildTile("Created on", data.createdAt.toString()),
+        ShortDetailTile(subtitle: "Created By", value: data.creator?.name),
+        ShortDetailTile(
+            subtitle: "Created on", value: data.createdAt.toString()),
         const WordDivider(text: 'Brands'),
         Builder(
           builder: (context) {
