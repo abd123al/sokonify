@@ -21,6 +21,7 @@ class Routes {
   static String editCategory = "/editCategory";
   static String editItem = "/editItem";
   static String editProduct = "/editProduct";
+  static String editStore = "/editStore";
 
   static String brands = "/brands";
   static String categories = "/categories";
@@ -32,6 +33,7 @@ class Routes {
   static String payment = "/payment";
   static String products = "/products";
   static String product = "/product";
+  static String store = "/store";
   static String units = "/units";
 
   /// [:params] should be defined here.
@@ -145,6 +147,12 @@ class Routes {
     );
 
     router.define(
+      editStore,
+      handler: editProductPageRouterHandler,
+      transitionType: TransitionType.nativeModal,
+    );
+
+    router.define(
       brands,
       handler: brandsPagePageRouterHandler,
       transitionType: TransitionType.inFromLeft,
@@ -195,6 +203,12 @@ class Routes {
     router.define(
       "$order/:id",
       handler: orderPageRouterHandler,
+      transitionType: TransitionType.inFromLeft,
+    );
+
+    router.define(
+      store,
+      handler: storePagePageRouterHandler,
       transitionType: TransitionType.inFromLeft,
     );
 
