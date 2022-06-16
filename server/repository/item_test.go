@@ -26,15 +26,36 @@ func TestItem(t *testing.T) {
 		require.GreaterOrEqual(t, item.ID, 1)
 	})
 
-	var create = func() {
-		_, _ = repository.CreateItem(DB, model.ItemInput{
+	var create = func() *model.Item {
+		i, _ := repository.CreateItem(DB, model.ItemInput{
 			Quantity:     12,
 			BuyingPrice:  "2000",
 			UnitID:       unit.ID,
 			SellingPrice: "5000",
 			ProductID:    product.ID,
 		}, *product.CreatorID)
+
+		return i
 	}
+
+	t.Run("EditItem", func(t *testing.T) {
+		i := create()
+
+		item, err := repository.EditItem(DB, i.ID, model.ItemInput{
+			UnitID:       unit.ID,
+			Quantity:     12,
+			BuyingPrice:  "2000",
+			SellingPrice: "5000",
+			Batch:        nil,
+			Description:  nil,
+			ExpiresAt:    nil,
+			BrandID:      nil,
+			ProductID:    product.ID,
+		}, *i.CreatorID)
+
+		require.Nil(t, err)
+		require.NotNil(t, item)
+	})
 
 	t.Run("FindItems by store", func(t *testing.T) {
 		create()

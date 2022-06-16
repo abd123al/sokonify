@@ -202,7 +202,7 @@ func (r *mutationResolver) EditCustomer(ctx context.Context, id int, input model
 }
 
 func (r *mutationResolver) EditItem(ctx context.Context, id int, input model.ItemInput) (*model.Item, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.EditItem(r.DB, id, input, helpers.ForContext(ctx).UserID)
 }
 
 func (r *mutationResolver) EditOrder(ctx context.Context, id int, input model.OrderInput) (*model.Order, error) {

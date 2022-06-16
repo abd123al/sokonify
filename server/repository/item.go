@@ -25,6 +25,28 @@ func CreateItem(DB *gorm.DB, input model.ItemInput, CreatorID int) (*model.Item,
 	return &item, result.Error
 }
 
+func EditItem(DB *gorm.DB, ID int, input model.ItemInput, CreatorID int) (*model.Item, error) {
+	update := model.Item{
+		ID:           ID,
+		Quantity:     input.Quantity,
+		Batch:        input.Batch,
+		Description:  input.Description,
+		BuyingPrice:  input.BuyingPrice,
+		SellingPrice: input.SellingPrice,
+		ExpiresAt:    input.ExpiresAt,
+		ProductID:    input.ProductID,
+		BrandID:      input.BrandID,
+		UnitID:       input.UnitID,
+		CreatorID:    &CreatorID,
+	}
+
+	if err := DB.Model(&model.Item{}).Where(&model.Item{ID: ID, CreatorID: &CreatorID}).Updates(&update).Error; err != nil {
+		return nil, err
+	}
+
+	return &update, nil
+}
+
 func FindItems(DB *gorm.DB, args model.ItemsArgs, StoreID int) ([]*model.Item, error) {
 	var items []*model.Item
 	var result *gorm.DB
