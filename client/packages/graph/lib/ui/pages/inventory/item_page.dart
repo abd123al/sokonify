@@ -1,11 +1,10 @@
-import 'package:blocitory/blocitory.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graph/ui/helpers/helpers.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
-import '../../../repositories/item_repository.dart';
-import 'item_page_cubit.dart';
+import '../../../nav/nav.dart';
+import '../../widgets/widgets.dart';
+import 'item_wrapper.dart';
 
 /// There is no need at all to edit posted order.
 class ItemPage extends StatelessWidget {
@@ -19,67 +18,60 @@ class ItemPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Item #$id"),
-      ),
-      body: BlocProvider(
-        create: (context) {
-          return ItemPageCubit(
-            RepositoryProvider.of<ItemRepository>(context),
+      appBar: DetailsAppBar(
+        label: "Item",
+        onPressed: () {
+          redirectTo(
+            context,
+            "${Routes.editItem}/$id",
+            replace: true,
           );
         },
-        child: _build(),
+      ),
+      body: ItemWrapper(
+        id: id,
+        builder: builder,
       ),
     );
   }
 
-  Widget _build() {
-    return QueryBuilder<Item$Query$Item, ItemPageCubit>(
-      retry: (cubit) => cubit.fetch(id),
-      initializer: (cubit) => cubit.fetch(id),
-      builder: (context, data, _) {
-        _buildTile(
-          String key,
-          String? value, {
-          VoidCallback? onTap,
-          VoidCallback? onEdit,
-        }) {
-          return ListTile(
-            title: Text(
-              value ?? "",
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            subtitle: Text(key),
-            trailing: onEdit != null
-                ? TextButton.icon(
-                    onPressed: onEdit,
-                    icon: const Icon(Icons.edit),
-                    label: const Text("Edit"),
-                  )
-                : null,
-          );
-        }
+  Widget builder(BuildContext context, Item$Query$Item data) {
+    _buildTile(
+      String key,
+      String? value, {
+      VoidCallback? onTap,
+      VoidCallback? onEdit,
+    }) {
+      return ListTile(
+        title: Text(
+          value ?? "",
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        subtitle: Text(key),
+        trailing: onEdit != null
+            ? TextButton.icon(
+                onPressed: onEdit,
+                icon: const Icon(Icons.edit),
+                label: const Text("Edit"),
+              )
+            : null,
+      );
+    }
 
-        return ListView(
-          children: [
-            _buildTile("Product Name", data.product.name),
-            _buildTile("Brand Name", data.brand?.name, onEdit: () {}),
-            const Divider(),
-            _buildTile("Quantity", data.quantity.toString()),
-            _buildTile("Unit", data.unit.name, onEdit: () {}),
-            const Divider(),
-            _buildTile("Buying Price", formatCurrency(data.buyingPrice)),
-            _buildTile("Selling Price", formatCurrency(data.sellingPrice)),
-            const Divider(),
-            _buildTile("Description", data.description, onEdit: () {}),
-            _buildTile("Expires at", data.expiresAt?.toString(), onEdit: () {}),
-            _buildTile("Batch", data.batch, onEdit: () {}),
-            const Divider(),
-            _buildTile("Added By", data.creator?.name),
-            _buildTile("Added on", data.createdAt.toString()),
-          ],
-        );
-      },
+    return DetailsList(
+      children: [
+        _buildTile("Item Name", data.product.name),
+        _buildTile("Brand Name", data.brand?.name, onEdit: () {}),
+        _buildTile("Quantity", data.quantity.toString()),
+        _buildTile("Unit", data.unit.name, onEdit: () {}),
+        _buildTile("Buying Price", formatCurrency(data.buyingPrice)),
+        _buildTile("Selling Price", formatCurrency(data.sellingPrice)),
+        _buildTile("Description", data.description, onEdit: () {}),
+        _buildTile("Expires at", data.expiresAt?.toString(), onEdit: () {}),
+        _buildTile("Batch", data.batch, onEdit: () {}),
+        _buildTile("Added By", data.creator?.name),
+        _buildTile("Added on", data.createdAt.toString()),
+      ],
     );
   }
 }

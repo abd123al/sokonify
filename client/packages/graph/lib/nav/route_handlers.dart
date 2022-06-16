@@ -123,3 +123,8 @@ var editCategoryPageRouterHandler = Handler(handlerFunc: (context, params) {
   final id = params["id"]![0];
   return EditCategoryPage(id: int.parse(id));
 });
+
+var editItemPageRouterHandler = Handler(handlerFunc: (context, params) {
+  final id = params["id"]![0];
+  return EditItemPage(id: int.parse(id));
+});

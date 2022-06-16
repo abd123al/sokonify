@@ -6,7 +6,6 @@ import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/product_repository.dart';
 import '../../widgets/searchable_dropdown.dart';
 import '../category/categories_list_cubit.dart';
-import '../category/category_tile.dart';
 import 'create_product_cubit.dart';
 import 'products_list_cubit.dart';
 
