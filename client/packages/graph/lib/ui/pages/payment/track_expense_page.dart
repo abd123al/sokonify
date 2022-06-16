@@ -80,7 +80,7 @@ class _CreateStorePageState extends State<TrackExpensePage> {
                       onChanged: (item) => setState(() {
                         _expense = item;
                       }),
-                      selectedItem: _expense,
+                      selectedItem: (e) => e == _expense,
                     );
                   },
                 ),

@@ -63,7 +63,7 @@ class _CreateStorePageState extends State<CreatePaymentWidget> {
                 });
               },
               asString: (i) => i.name.toUpperCase(),
-              selectedItem: _method,
+              selectedItem: (e) => e == _method,
               labelText: "Payment method",
               hintText: "Choose payment method used",
             ),

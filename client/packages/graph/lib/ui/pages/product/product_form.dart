@@ -72,7 +72,7 @@ class _CreateProductPageState extends State<ProductForm> {
                     onChangedMultiSelection: (item) => setState(() {
                       _categories = item;
                     }),
-                    selectedItems: _categories,
+                    selectedItems: (i) => i == _categories,
                   );
                 },
               ),

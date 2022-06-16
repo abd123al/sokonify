@@ -14,10 +14,9 @@ class SearchableDropdown<T> extends StatefulWidget {
     this.selectedItem,
     required this.labelText,
     this.onChangedMultiSelection,
-    this.selectedItems = const [],
     this.helperText,
-    this.initialItem,
   })  : isMultiSelectionMode = false,
+        selectedItems = null,
         super(key: key);
 
   const SearchableDropdown.multiSelection({
@@ -29,9 +28,8 @@ class SearchableDropdown<T> extends StatefulWidget {
     this.selectedItem,
     required this.labelText,
     this.onChangedMultiSelection,
-    this.selectedItems = const [],
+    this.selectedItems,
     this.helperText,
-    this.initialItem,
   })  : onChanged = null,
         isMultiSelectionMode = true,
         super(key: key);
@@ -45,9 +43,8 @@ class SearchableDropdown<T> extends StatefulWidget {
   final String? helperText;
   final bool isMultiSelectionMode;
   final ResourceListData<T> data;
-  final T? selectedItem;
-  final bool Function(T)? initialItem;
-  final List<T> selectedItems;
+  final bool Function(T)? selectedItem;
+  final bool Function(List<T>)? selectedItems;
 
   @override
   State<StatefulWidget> createState() {
@@ -95,7 +92,7 @@ class _SearchableListState<T> extends State<SearchableDropdown<T>> {
                   items: items,
                   dropdownDecoratorProps: dropdownDecoratorProps,
                   onChanged: widget.onChangedMultiSelection,
-                  selectedItems: widget.selectedItems,
+                  //selectedItems: widget.selectedItems, todo
                   popupProps: const PopupPropsMultiSelection.menu(
                     showSearchBox: true,
                     searchFieldProps: searchFieldProps,
@@ -113,8 +110,8 @@ class _SearchableListState<T> extends State<SearchableDropdown<T>> {
                 items: items,
                 dropdownDecoratorProps: dropdownDecoratorProps,
                 onChanged: widget.onChanged,
-                selectedItem: widget.initialItem != null
-                    ? items.firstWhereOrNull((e) => widget.initialItem!(e))
+                selectedItem: widget.selectedItem != null
+                    ? items.firstWhereOrNull((e) => widget.selectedItem!(e))
                     : null,
                 popupProps: PopupProps.menu(
                   showSearchBox: true,

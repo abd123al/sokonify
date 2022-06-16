@@ -8,7 +8,6 @@ import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/order_repository.dart';
 import '../../../repositories/payment_repository.dart';
 import '../../widgets/searchable_dropdown.dart';
-import '../customer/customer_tile.dart';
 import '../customer/customers_list_cubit.dart';
 import '../home/stats/simple_stats_cubit.dart';
 import '../inventory/items_list_cubit.dart';
@@ -38,7 +37,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   final _quantityEditController = TextEditingController();
   final _quantityAddController = TextEditingController();
   final _commentController = TextEditingController();
-  Items$Query$Item? _selected;
+  Items$Query$Item? _item;
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +98,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                                 hintText: "Select Customer",
                                 helperText:
                                     "This is the customer order will be billed to",
-                                selectedItem: state.customer,
+                                selectedItem: (e) => e.id == state.customer?.id,
                                 onChanged: (customer) {
                                   newOrderCubit.changeCustomer(customer);
                                 },
@@ -112,17 +111,17 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                             labelText: "Enter item",
                             hintText: "Type product name",
                             helperText: "Type items to add",
-                            selectedItem: _selected,
+                            selectedItem: (e) => e == _item,
                             builder: (_, i) => ItemTile(item: i),
                             onChanged: (item) => setState(() {
-                              _selected = item;
+                              _item = item;
                             }),
                           ),
                           const SizedBox(
                             height: 16,
                             width: 8,
                           ),
-                          if (_selected != null)
+                          if (_item != null)
                             TextField(
                               controller: _quantityAddController,
                               textInputAction: TextInputAction.send,
@@ -135,14 +134,14 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                                 suffixIcon: TextButton.icon(
                                   onPressed: () {
                                     newOrderCubit.addItem(
-                                      _selected!,
+                                      _item!,
                                       int.parse(_quantityAddController.text),
                                     );
 
                                     //Resetting fields
                                     _quantityAddController.text = "";
                                     setState(() {
-                                      _selected = null;
+                                      _item = null;
                                     });
                                   },
                                   icon: const Icon(Icons.add_box, size: 40),

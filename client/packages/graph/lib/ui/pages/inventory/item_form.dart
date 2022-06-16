@@ -99,7 +99,7 @@ class _ItemFormState extends State<ItemForm> {
                   data: products,
                   labelText: "Product",
                   hintText: "Select Product",
-                  initialItem: (e) => e.id == _productId,
+                  selectedItem: (e) => e.id == _productId,
                   onChanged: (p) => setState(() {
                     _productId = p?.id;
                     _brandId = null;
@@ -123,7 +123,7 @@ class _ItemFormState extends State<ItemForm> {
                     ),
                     labelText: "Brand (Optional)",
                     hintText: "Select Brand (Optional)",
-                    initialItem: (e) => e.id == _brandId,
+                    selectedItem: (e) => e.id == _brandId,
                     onChanged: (item) => setState(() {
                       _brandId = item?.id;
                     }),
@@ -164,7 +164,7 @@ class _ItemFormState extends State<ItemForm> {
                         data: units,
                         labelText: "Unit",
                         hintText: "Select Unit",
-                        initialItem: (e) => e.id == _unitId,
+                        selectedItem: (e) => e.id == _unitId,
                         onChanged: (item) => setState(() {
                           _unitId = item?.id;
                         }),

@@ -22,7 +22,7 @@ class CreateBrandPage extends StatefulWidget {
 
 class _CreateBrandPageState extends State<CreateBrandPage> {
   final _nameController = TextEditingController();
-  Products$Query$Product? _product;
+  int? _productId;
 
   @override
   Widget build(BuildContext context) {
@@ -59,14 +59,14 @@ class _CreateBrandPageState extends State<CreateBrandPage> {
                       labelText: "Product",
                       hintText: "Select Product",
                       onChanged: (item) => setState(() {
-                        _product = item;
+                        _productId = item?.id;
                       }),
-                      selectedItem: _product,
+                      selectedItem: (e) => e.id == _productId,
                     );
                   },
                 ),
                 const SizedBox(height: 8),
-                if (_product != null) ...[
+                if (_productId != null) ...[
                   TextField(
                     controller: _nameController,
                     keyboardType: TextInputType.text,
@@ -82,7 +82,7 @@ class _CreateBrandPageState extends State<CreateBrandPage> {
                       cubit.submit(
                         BrandInput(
                           name: _nameController.text,
-                          productId: _product!.id,
+                          productId: _productId!,
                         ),
                       );
                     },
