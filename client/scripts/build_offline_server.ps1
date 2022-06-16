@@ -26,10 +26,14 @@ flutter build windows `
                     --split-debug-info=./build/app/outputs/symbols `
                     --release
 
+$build = 16
+$path = [Environment]::GetFolderPath("Desktop")
+
 flutter pub run msix:create `
-                    --version "1.0.0.13" `
+                    --version "1.0.0.$build" `
                     --install-certificate true `
                     --build-windows false `
+                    -o "$path" `
                     -c "$PSScriptRoot\sokonify_server.pfx" `
                     -p "#50k0n1f4" `
                     -n "sokonify_server" `
