@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
 
@@ -22,7 +23,7 @@ Future<Box> tokenBox() async {
   var encryptionKey = base64Url.decode(rawKey!);
 
   final box = await Hive.openBox(
-    'tokenVault',
+    kReleaseMode ? 'tokenVault' : 'tokenVaultDebug',
     encryptionCipher: HiveAesCipher(encryptionKey),
   );
 

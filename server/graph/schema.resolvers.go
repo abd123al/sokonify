@@ -585,7 +585,7 @@ func (r *unitResolver) User(ctx context.Context, obj *model.Unit) (*model.User, 
 }
 
 func (r *userResolver) Password(ctx context.Context, obj *model.User) (*string, error) {
-	return nil, errors.New("field is accessible")
+	return nil, errors.New("field is not accessible")
 }
 
 // Admin returns generated.AdminResolver implementation.
