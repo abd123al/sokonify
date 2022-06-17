@@ -61,6 +61,25 @@ func CreateStore(db *gorm.DB, UserID int, input model.StoreInput, Multistore boo
 	}
 }
 
+func EditStore(db *gorm.DB, input model.StoreInput, args helpers.UserAndStoreArgs) (*model.Store, error) {
+	var store = model.Store{
+		ID:           args.StoreID,
+		Description:  input.Description,
+		Name:         input.Name,
+		Tin:          input.Tin,
+		StoreType:    input.StoreType,
+		BusinessType: input.BusinessType,
+		TemplateType: input.TemplateType,
+		Terms:        input.Terms,
+	}
+
+	if err := db.Model(&model.Store{}).Where(&model.Store{ID: args.StoreID, UserID: args.UserID}).Updates(&store).Error; err != nil {
+		return nil, err
+	}
+
+	return &store, nil
+}
+
 func FindStores(db *gorm.DB, UserId int) ([]*model.Store, error) {
 	var stores []*model.Store
 	result := db.Table("stores").Joins("inner join staffs on staffs.store_id = stores.id AND staffs.user_id = ?", UserId).Find(&stores)

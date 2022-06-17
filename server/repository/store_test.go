@@ -23,6 +23,19 @@ func TestStore(t *testing.T) {
 		assert.NotNil(t, store)
 	})
 
+	t.Run("EditStore", func(t *testing.T) {
+		store := util.CreateStore(DB, &UserID)
+		result, err := repository.EditStore(DB, model.StoreInput{
+			Name: "New Name",
+		}, helpers.UserAndStoreArgs{
+			UserID:  UserID,
+			StoreID: store.ID,
+		})
+
+		assert.Nil(t, err)
+		assert.NotNil(t, result)
+	})
+
 	t.Run("should fail to CreateStore when there is one", func(t *testing.T) {
 		util.CreateStore(DB, nil)
 

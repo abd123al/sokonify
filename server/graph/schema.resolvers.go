@@ -221,7 +221,10 @@ func (r *mutationResolver) EditStaff(ctx context.Context, id int, input model.St
 }
 
 func (r *mutationResolver) EditStore(ctx context.Context, id int, input model.StoreInput) (*model.Store, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.EditStore(r.DB, input, helpers.UserAndStoreArgs{
+		UserID:  helpers.ForContext(ctx).UserID,
+		StoreID: id,
+	})
 }
 
 func (r *mutationResolver) EditUnit(ctx context.Context, id int, input model.UnitInput) (*model.Unit, error) {
