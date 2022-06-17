@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/store_repository.dart';
 import '../../widgets/store_builder_cubit.dart';
+import '../../widgets/widgets.dart';
 import 'create_store_cubit.dart';
 import 'stores_list_cubit.dart';
 
@@ -38,6 +39,8 @@ class _FormStoreState extends State<StoreForm> {
   final _termsController = TextEditingController();
   final _tinController = TextEditingController();
   late bool isEdit;
+  late StoreType? _storeType;
+  late BusinessType? _businessType;
 
   @override
   void initState() {
@@ -48,6 +51,9 @@ class _FormStoreState extends State<StoreForm> {
     _nameController.text = widget.store?.name ?? "";
     _termsController.text = widget.store?.terms ?? "";
     _tinController.text = widget.store?.tin ?? "";
+
+    _storeType = widget.store?.storeType ?? StoreType.pharmacy;
+    _businessType = widget.store?.businessType ?? BusinessType.retail;
   }
 
   @override
@@ -111,6 +117,30 @@ class _FormStoreState extends State<StoreForm> {
           helperText: "This will appear at the bottom of printed pages.",
         ),
       ),
+      SearchableDropdown<StoreType>(
+        asString: (i) => i.name.toUpperCase(),
+        data: ResourceListData(
+          items: StoreType.values, //todo remove unknown
+        ),
+        labelText: "Facility Type",
+        hintText: "Select Facility Type",
+        selectedItem: (e) => e == _storeType,
+        onChanged: (p) => setState(() {
+          _storeType = p;
+        }),
+      ),
+      SearchableDropdown<BusinessType>(
+        asString: (i) => i.name.toUpperCase(),
+        data: ResourceListData(
+          items: BusinessType.values, //todo remove unknown
+        ),
+        labelText: "Business Type",
+        hintText: "Select Business Type",
+        selectedItem: (e) => e == _businessType,
+        onChanged: (p) => setState(() {
+          _businessType = p;
+        }),
+      ),
       MutationBuilder<CreateStore$Mutation$Store, CreateStoreCubit,
           StoreRepository>(
         blocCreator: (r) => CreateStoreCubit(r),
@@ -139,8 +169,8 @@ class _FormStoreState extends State<StoreForm> {
                 tin: _tinController.text,
                 description: _descController.text,
                 terms: _termsController.text,
-                businessType: BusinessType.both,
-                storeType: StoreType.pharmacy,
+                businessType: _businessType!,
+                storeType: _storeType!,
               );
 
               if (!isEdit) {
