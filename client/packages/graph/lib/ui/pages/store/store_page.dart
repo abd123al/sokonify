@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../nav/nav.dart';
 import '../../widgets/widgets.dart';
+import 'store_wrapper.dart';
 
 class StorePage extends StatelessWidget {
   const StorePage({
@@ -12,33 +13,33 @@ class StorePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DetailsAppBar(
-        label: "Store",
+        label: "Facility",
         onPressed: () {
           redirectTo(
             context,
             Routes.editStore,
+            replace: true,
           );
         },
       ),
-      body: StoreBuilder(
-        noBuilder: (context) => const SizedBox(),
+      body: StoreWrapper(
         builder: (context, store) {
           return DetailsList(
             children: [
               ShortDetailTile(
-                subtitle: "Store Name",
+                subtitle: "'Facility Name",
                 value: store.name,
               ),
               ShortDetailTile(
-                subtitle: "Description",
-                value: store.description,
-              ),
-              ShortDetailTile(
-                subtitle: "Tin",
+                subtitle: "'Facility TIN",
                 value: store.tin,
               ),
               ShortDetailTile(
-                subtitle: "Terms",
+                subtitle: "'Facility Description",
+                value: store.description,
+              ),
+              ShortDetailTile(
+                subtitle: "'Facility Terms & Conditions",
                 value: store.terms,
               ),
             ],

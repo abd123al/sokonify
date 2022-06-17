@@ -148,7 +148,7 @@ class Routes {
 
     router.define(
       editStore,
-      handler: editProductPageRouterHandler,
+      handler: editStoreRouterHandler,
       transitionType: TransitionType.nativeModal,
     );
 

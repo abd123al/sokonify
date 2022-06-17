@@ -10,5 +10,5 @@ export 'order/order.dart';
 export 'payment/payment.dart';
 export 'product/product.dart';
 export 'store/create_store_page.dart';
-export 'store/stores.dart';
+export 'store/store.dart';
 export 'unit/unit.dart';

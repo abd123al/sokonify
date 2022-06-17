@@ -2,7 +2,6 @@ import 'package:fluro/fluro.dart';
 
 import '../gql/generated/graphql_api.graphql.dart';
 import '../ui/pages/pages.dart';
-import '../ui/pages/store/store_page.dart';
 
 var rootHandler = Handler(handlerFunc: (_, __) {
   return const HomePage();
@@ -10,6 +9,10 @@ var rootHandler = Handler(handlerFunc: (_, __) {
 
 var createStoreRouterHandler = Handler(handlerFunc: (_, __) {
   return const CreateStorePage();
+});
+
+var editStoreRouterHandler = Handler(handlerFunc: (_, __) {
+  return const EditStorePage();
 });
 
 var createCategoryRouterHandler = Handler(handlerFunc: (_, __) {

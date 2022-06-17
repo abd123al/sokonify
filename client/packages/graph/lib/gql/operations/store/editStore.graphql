@@ -1,0 +1,5 @@
+mutation editStore($id: ID!,$input:StoreInput!) {
+    editStore(id: $id,input: $input) {
+        ...StoreParts
+    }
+}
