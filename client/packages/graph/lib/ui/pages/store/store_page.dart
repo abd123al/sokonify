@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../nav/nav.dart';
@@ -41,6 +42,14 @@ class StorePage extends StatelessWidget {
               ShortDetailTile(
                 subtitle: "Facility Terms & Conditions",
                 value: store.terms,
+              ),
+              ShortDetailTile(
+                subtitle: "Facility Type",
+                value: describeEnum(store.storeType).toUpperCase(),
+              ),
+              ShortDetailTile(
+                subtitle: "Business Type",
+                value: describeEnum(store.businessType).toUpperCase(),
               ),
             ],
           );

@@ -12,7 +12,7 @@ class EditStorePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Edit Store"),
+        title: const Text("Edit Facility"),
       ),
       body: StoreWrapper(
         builder: (context, product) {
