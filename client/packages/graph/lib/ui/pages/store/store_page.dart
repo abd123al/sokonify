@@ -27,19 +27,19 @@ class StorePage extends StatelessWidget {
           return DetailsList(
             children: [
               ShortDetailTile(
-                subtitle: "'Facility Name",
+                subtitle: "Facility Name",
                 value: store.name,
               ),
               ShortDetailTile(
-                subtitle: "'Facility TIN",
+                subtitle: "Facility TIN",
                 value: store.tin,
               ),
               ShortDetailTile(
-                subtitle: "'Facility Description",
+                subtitle: "Facility Description",
                 value: store.description,
               ),
               ShortDetailTile(
-                subtitle: "'Facility Terms & Conditions",
+                subtitle: "Facility Terms & Conditions",
                 value: store.terms,
               ),
             ],

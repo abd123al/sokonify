@@ -244,13 +244,13 @@ class Invoice {
                     child: pw.GridView(
                       crossAxisCount: 2,
                       children: [
-                        pw.Text('Invoice #'),
+                        pw.Text('Invoice Number:'),
                         pw.Text(invoiceNumber),
                         pw.Text('Date Created:'),
                         pw.Text(_formatDate(order.createdAt)),
-                        pw.Text('TIN'),
+                        pw.Text('TIN:'),
                         pw.Text(store.tin ?? ""),
-                        pw.Text('Total Amount'),
+                        pw.Text('Total Amount:'),
                         pw.Text(total),
                         pw.Text('Payment Status:'),
                         pw.Text(describeEnum(order.status).toUpperCase()),
