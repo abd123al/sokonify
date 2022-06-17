@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:graph/ui/helpers/helpers.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
@@ -63,6 +64,15 @@ class Invoice {
   //String? _bgShape;
 
   Future<Uint8List> buildPdf(PdfPageFormat pageFormat) async {
+    final total = calculateTotal(
+      items.map(
+        (e) => TotalPriceArgs(
+          price: e.price,
+          quantity: e.quantity,
+        ),
+      ),
+    );
+
     // Create a PDF document.
     final doc = pw.Document();
 
@@ -80,10 +90,10 @@ class Invoice {
           horizontal: 48,
         ),
         build: (context) => [
-          _contentHeader(context),
+          _contentHeader(context, total),
           _contentTable(context),
           pw.SizedBox(height: 20),
-          _contentFooter(context),
+          _contentFooter(context, total),
           pw.SizedBox(height: 20),
           _termsAndConditions(context),
         ],
@@ -105,24 +115,18 @@ class Invoice {
                 pw.Column(
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: [
-                    pw.Container(
-                      alignment: pw.Alignment.centerLeft,
-                      child: pw.Text(
-                        store.name,
-                        style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold,
-                          fontSize: 24,
-                        ),
+                    pw.Text(
+                      store.name,
+                      style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        fontSize: 24,
                       ),
                     ),
-                    pw.Container(
-                      alignment: pw.Alignment.centerLeft,
-                      child: pw.Text(
-                        store.description ??
-                            "Your facility \nintroduction \nwill appear here",
-                        style: const pw.TextStyle(
-                          fontSize: 14,
-                        ),
+                    pw.Text(
+                      store.description ??
+                          "Your facility \ndescription \nwill appear here...",
+                      style: const pw.TextStyle(
+                        fontSize: 14,
                       ),
                     ),
                   ],
@@ -175,7 +179,9 @@ class Invoice {
     );
   }
 
-  pw.Widget _contentHeader(pw.Context context) {
+  pw.Widget _contentHeader(pw.Context context, String total) {
+    const height = 80.0;
+    const padding = pw.EdgeInsets.all(8);
     return pw.Padding(
       padding: const pw.EdgeInsets.only(
         bottom: 16,
@@ -185,8 +191,35 @@ class Invoice {
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
           pw.Expanded(
-            child: pw.Text("Bill to: \n$customerName \n$customerAddress"),
+            child: pw.DecoratedBox(
+              decoration: pw.BoxDecoration(
+                border: pw.Border.all(
+                  color: PdfColors.black,
+                ),
+              ),
+              child: pw.SizedBox(
+                height: height,
+                child: pw.Padding(
+                  padding: padding,
+                  child: pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: [
+                      pw.Text("Bill to:"),
+                      pw.Text(
+                        customerName,
+                        style: pw.TextStyle(
+                          fontWeight: pw.FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                      pw.Text(customerAddress),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
+          pw.SizedBox(width: 8),
           pw.Expanded(
             child: pw.Container(
               decoration: const pw.BoxDecoration(
@@ -195,23 +228,35 @@ class Invoice {
                 ),
               ),
               alignment: pw.Alignment.centerLeft,
-              height: 50,
+              height: height,
               child: pw.DefaultTextStyle(
                 style: const pw.TextStyle(
                   fontSize: 12,
                 ),
-                child: pw.GridView(
-                  crossAxisCount: 2,
-                  children: [
-                    pw.Text('Invoice #'),
-                    pw.Text(invoiceNumber),
-                    pw.Text('Date:'),
-                    pw.Text(_formatDate(order.createdAt)),
-                    pw.Text('TIN'),
-                    pw.Text(store.tin ?? ""),
-                    pw.Text('Total Amount'),
-                    pw.Text(_total),
-                  ],
+                child: pw.DecoratedBox(
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(
+                      color: PdfColors.black,
+                    ),
+                  ),
+                  child: pw.Padding(
+                    padding: padding,
+                    child: pw.GridView(
+                      crossAxisCount: 2,
+                      children: [
+                        pw.Text('Invoice #'),
+                        pw.Text(invoiceNumber),
+                        pw.Text('Date Created:'),
+                        pw.Text(_formatDate(order.createdAt)),
+                        pw.Text('TIN'),
+                        pw.Text(store.tin ?? ""),
+                        pw.Text('Total Amount'),
+                        pw.Text(total),
+                        pw.Text('Payment Status:'),
+                        pw.Text(describeEnum(order.status).toUpperCase()),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -221,16 +266,7 @@ class Invoice {
     );
   }
 
-  pw.Widget _contentFooter(pw.Context context) {
-    final total = calculateTotal(
-      items.map(
-        (e) => TotalPriceArgs(
-          price: e.price,
-          quantity: e.quantity,
-        ),
-      ),
-    );
-
+  pw.Widget _contentFooter(pw.Context context, String total) {
     return pw.Row(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
@@ -239,13 +275,13 @@ class Invoice {
           child: pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
-              pw.Container(
-                margin: const pw.EdgeInsets.only(top: 20, bottom: 8),
-                child: pw.Text(
-                  'Signature...........................................',
-                  style: const pw.TextStyle(),
-                ),
-              ),
+              pw.Text("Order Prepared by: ${order.staff.name}"),
+              pw.Text('Signature.........................'),
+              pw.SizedBox(height: 8),
+              if (order.payment != null) ...[
+                pw.Text("Payment Processed by: ${order.payment!.staff.name}"),
+                pw.Text('Signature.........................'),
+              ]
             ],
           ),
         ),

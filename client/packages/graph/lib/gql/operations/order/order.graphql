@@ -13,6 +13,12 @@ query order($id: ID!) {
             id
             amount
             receiptId
+            staff {
+                name
+            }
+        }
+        staff {
+            name
         }
     }
 }
