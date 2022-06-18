@@ -83,13 +83,13 @@ class Invoice {
     doc.addPage(
       pw.MultiPage(
         pageFormat: pageFormat,
-        header: _buildHeader,
         footer: _buildFooter,
         margin: const pw.EdgeInsets.symmetric(
           vertical: 16,
           horizontal: 48,
         ),
         build: (context) => [
+          _buildHeader(context),
           _contentHeader(context, total),
           _contentTable(context),
           pw.SizedBox(height: 20),
@@ -107,51 +107,46 @@ class Invoice {
   pw.Widget _buildHeader(pw.Context context) {
     return pw.Column(
       children: [
-        pw.Column(
+        pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
           children: [
-            pw.Row(
-              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+            pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
-                pw.Column(
-                  crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  children: [
-                    pw.Text(
-                      store.name,
-                      style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        fontSize: 24,
-                      ),
-                    ),
-                    pw.Text(
-                      store.description ??
-                          "Your facility \ndescription \nwill appear here...",
-                      style: const pw.TextStyle(
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
+                pw.Text(
+                  store.name,
+                  style: pw.TextStyle(
+                    fontWeight: pw.FontWeight.bold,
+                    fontSize: 24,
+                  ),
                 ),
-                pw.Container(
-                  width: 80,
-                  height: 80,
-                  child: pw.Text(""),
-                )
+                pw.Text(
+                  store.description ??
+                      "Your facility \ndescription \nwill appear here...",
+                  style: const pw.TextStyle(
+                    fontSize: 14,
+                  ),
+                ),
               ],
             ),
-            pw.Divider(),
             pw.Container(
-              alignment: pw.Alignment.center,
-              child: pw.Text(
-                'Invoice/Delivery Note',
-                style: pw.TextStyle(
-                  fontWeight: pw.FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-            ),
+              width: 80,
+              height: 80,
+              child: pw.Text(""),
+            )
           ],
         ),
-        if (context.pageNumber > 1) pw.SizedBox(height: 20)
+        pw.Divider(),
+        pw.Container(
+          alignment: pw.Alignment.center,
+          child: pw.Text(
+            'Invoice/Delivery Note',
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+              fontSize: 20,
+            ),
+          ),
+        ),
       ],
     );
   }
