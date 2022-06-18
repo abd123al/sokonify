@@ -94,8 +94,6 @@ class Invoice {
           _contentTable(context),
           pw.SizedBox(height: 20),
           _contentFooter(context, total),
-          pw.SizedBox(height: 20),
-          _termsAndConditions(context),
         ],
       ),
     );
@@ -155,6 +153,7 @@ class Invoice {
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
+        pw.SizedBox(height: 8),
         pw.Text(
           'Signature ..................................',
           style: const pw.TextStyle(
@@ -281,28 +280,66 @@ class Invoice {
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
         pw.Expanded(
-          flex: 2,
           child: pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
-              pw.Text("Order Prepared by: ${order.staff.name}"),
-              pw.SizedBox(height: 8),
-              if (order.payment != null) ...[
-                pw.Text("Payment Processed by: ${order.payment!.staff.name}"),
-              ]
+              pw.Column(
+                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                children: [
+                  pw.Container(
+                    // decoration: pw.BoxDecoration(
+                    //   border: pw.Border(top: pw.BorderSide(color: accentColor)),
+                    // ),
+                    //padding: const pw.EdgeInsets.only(top: 10, bottom: 4),
+                    child: pw.Text(
+                      'Terms & Conditions',
+                      style: pw.TextStyle(
+                        fontSize: 12,
+                        fontWeight: pw.FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  pw.Text(
+                    store.terms ?? "Your terms will appear here.",
+                    textAlign: pw.TextAlign.justify,
+                    style: const pw.TextStyle(
+                      fontSize: 10,
+                      lineSpacing: 2,
+                      color: _darkColor,
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
         pw.Expanded(
-          flex: 1,
           child: pw.DefaultTextStyle(
             style: const pw.TextStyle(
               fontSize: 10,
-              color: _darkColor,
             ),
             child: pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
+                pw.Text(
+                  "Payment",
+                  style: pw.TextStyle(
+                    fontSize: 12,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                ),
+                pw.Text(
+                  "Order Prepared by: ${order.staff.name}",
+                  overflow: pw.TextOverflow.clip,
+                ),
+                pw.SizedBox(height: 8),
+                if (order.payment != null) ...[
+                  pw.Text(
+                    "Payment Processed by: ${order.payment!.staff.name}",
+                    overflow: pw.TextOverflow.clip,
+                  ),
+                ],
+                pw.Divider(),
                 pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
@@ -345,46 +382,6 @@ class Invoice {
               ],
             ),
           ),
-        ),
-      ],
-    );
-  }
-
-  pw.Widget _termsAndConditions(pw.Context context) {
-    return pw.Row(
-      crossAxisAlignment: pw.CrossAxisAlignment.end,
-      children: [
-        pw.Expanded(
-          child: pw.Column(
-            crossAxisAlignment: pw.CrossAxisAlignment.start,
-            children: [
-              pw.Container(
-                // decoration: pw.BoxDecoration(
-                //   border: pw.Border(top: pw.BorderSide(color: accentColor)),
-                // ),
-                //padding: const pw.EdgeInsets.only(top: 10, bottom: 4),
-                child: pw.Text(
-                  'Terms & Conditions',
-                  style: pw.TextStyle(
-                    fontSize: 12,
-                    fontWeight: pw.FontWeight.bold,
-                  ),
-                ),
-              ),
-              pw.Text(
-                store.terms ?? "Your terms will appear here.",
-                textAlign: pw.TextAlign.justify,
-                style: const pw.TextStyle(
-                  fontSize: 10,
-                  lineSpacing: 2,
-                  color: _darkColor,
-                ),
-              ),
-            ],
-          ),
-        ),
-        pw.Expanded(
-          child: pw.SizedBox(),
         ),
       ],
     );
