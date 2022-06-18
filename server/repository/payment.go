@@ -111,7 +111,14 @@ func CreateOrderPayment(DB *gorm.DB, StaffID int, input model.OrderPaymentInput)
 
 			//This will make the whole process abort since item is out of stock.
 			if result.RowsAffected == 0 {
-				return errors.New(fmt.Sprintf("Item %d is out of stock", i.ID))
+				err := CheckAvailableQuantity(DB, &model.OrderItemInput{
+					Quantity: i.Quantity,
+					ItemID:   i.ItemID,
+				})
+
+				if err != nil {
+					return err
+				}
 			}
 
 			if result.Error != nil {
