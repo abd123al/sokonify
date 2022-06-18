@@ -152,24 +152,39 @@ class Invoice {
   }
 
   pw.Widget _buildFooter(pw.Context context) {
-    return pw.Row(
-      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: pw.CrossAxisAlignment.end,
+    return pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
         pw.Text(
-          'Powered by Sokonify',
+          'Signature ..................................',
           style: const pw.TextStyle(
             fontSize: 12,
-            color: PdfColors.white,
           ),
         ),
-        pw.Text(
-          'Page ${context.pageNumber}/${context.pagesCount}',
-          style: const pw.TextStyle(
-            fontSize: 12,
-            color: PdfColors.white,
-          ),
-        ),
+        pw.SizedBox(height: 8),
+        pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+          children: [
+            pw.Container(
+              child: pw.Text(
+                'Powered by Sokonify',
+                style: pw.TextStyle(
+                  fontSize: 12,
+                  fontStyle: pw.FontStyle.italic,
+                ),
+              ),
+            ),
+            pw.Container(
+              child: pw.Text(
+                'Page ${context.pageNumber} of ${context.pagesCount}',
+                style: pw.TextStyle(
+                  fontSize: 12,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        )
       ],
     );
   }
@@ -271,11 +286,9 @@ class Invoice {
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
               pw.Text("Order Prepared by: ${order.staff.name}"),
-              pw.Text('Signature.........................'),
               pw.SizedBox(height: 8),
               if (order.payment != null) ...[
                 pw.Text("Payment Processed by: ${order.payment!.staff.name}"),
-                pw.Text('Signature.........................'),
               ]
             ],
           ),
