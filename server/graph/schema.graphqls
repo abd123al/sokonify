@@ -390,6 +390,11 @@ type PriceCategory implements Gorm {
     store: Store! @goTag(key: "gorm", value:  "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;") @goField(forceResolver: true)
 }
 
+input PriceCategoryInput {
+    name: String!
+    description: String
+}
+
 type Price implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
 
@@ -407,6 +412,12 @@ type Price implements Gorm {
 
     itemId: Int!
     item: Item! @goTag(key: "gorm", value:  "foreignKey:ItemID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
+}
+
+input PriceInput {
+    amount: String!
+    categoryId: ID!
+    itemId: Int!
 }
 
 input ItemInput {
