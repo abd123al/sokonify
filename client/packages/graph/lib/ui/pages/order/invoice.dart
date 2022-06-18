@@ -50,14 +50,7 @@ class Invoice {
   final PdfColor accentColor;
 
   static const _darkColor = PdfColors.blueGrey800;
-  static const _lightColor = PdfColors.white;
-
-  PdfColor get _baseTextColor => baseColor.isLight ? _lightColor : _darkColor;
-
-  String get _total =>
-      items.map<String>((p) => p.price).reduce((a, b) => a + b);
-
-  String get _grandTotal => _total;
+  //static const _lightColor = PdfColors.white;
 
   //String? _logo;
 
@@ -322,20 +315,20 @@ class Invoice {
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
                 pw.Text(
-                  "Payment",
+                  "Payment Info",
                   style: pw.TextStyle(
                     fontSize: 12,
                     fontWeight: pw.FontWeight.bold,
                   ),
                 ),
                 pw.Text(
-                  "Order Prepared by: ${order.staff.name}",
+                  "Order prepared by: ${order.staff.name}",
                   overflow: pw.TextOverflow.clip,
                 ),
                 pw.SizedBox(height: 8),
                 if (order.payment != null) ...[
                   pw.Text(
-                    "Payment Processed by: ${order.payment!.staff.name}",
+                    "Payment processed by: ${order.payment!.staff.name}",
                     overflow: pw.TextOverflow.clip,
                   ),
                 ],
@@ -391,9 +384,11 @@ class Invoice {
     return pw.Table.fromTextArray(
       border: null,
       cellAlignment: pw.Alignment.centerLeft,
-      headerDecoration: pw.BoxDecoration(
+      headerDecoration:  pw.BoxDecoration(
+        border: pw.Border.all(
+          color: _darkColor,
+        ),
         borderRadius: const pw.BorderRadius.all(pw.Radius.circular(2)),
-        color: baseColor,
       ),
       headerHeight: 25,
       cellHeight: 40,
@@ -405,7 +400,6 @@ class Invoice {
         4: pw.Alignment.centerRight,
       },
       headerStyle: pw.TextStyle(
-        color: _baseTextColor,
         fontSize: 10,
         fontWeight: pw.FontWeight.bold,
       ),

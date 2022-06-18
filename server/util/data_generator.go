@@ -137,7 +137,9 @@ func CreateItem(DB *gorm.DB, args *CreateItemArgs, StoreId *int) *model.Item {
 	} else {
 		//creating the needed product
 		if StoreId != nil {
-			ProductID = CreateProduct(DB, &CreateProductArgs{StoreID: *StoreId}).ID
+			Product := CreateProduct(DB, &CreateProductArgs{StoreID: *StoreId})
+			ProductID = Product.ID
+			CreatorID = *Product.CreatorID
 		} else {
 			Product := CreateProduct(DB, nil)
 			ProductID = Product.ID

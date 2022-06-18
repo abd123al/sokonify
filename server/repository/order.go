@@ -1,30 +1,26 @@
 package repository
 
 import (
-	"errors"
 	"fmt"
 	"gorm.io/gorm"
 	"mahesabu/graph/model"
 	"mahesabu/helpers"
-	"strconv"
 )
 
 func CreateOrder(DB *gorm.DB, UserId int, input model.OrderInput, StoreID int) (*model.Order, error) {
 	var items []*model.OrderItem
 
-	for _, k := range input.Items {
-		//Checking item's quantity if is enough for fulfilling order...
-		var item *model.Item
-		result := DB.Where(&model.Item{ID: k.ItemID}).Where("quantity >= " + strconv.Itoa(k.Quantity)).Find(&item)
-		if result.RowsAffected == 0 {
-			//todo friendly message with product name
-			return nil, errors.New(fmt.Sprintf("Item %d stock is not enough", k.ItemID))
+	for _, required := range input.Items {
+		err := CheckAvailableQuantity(DB, required)
+
+		if err != nil {
+			return nil, err
 		}
 
 		i := model.OrderItem{
-			Price:    k.Price,
-			ItemID:   k.ItemID,
-			Quantity: k.Quantity,
+			Price:    required.Price,
+			ItemID:   required.ItemID,
+			Quantity: required.Quantity,
 		}
 
 		items = append(items, &i)

@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"fmt"
 	"gorm.io/gorm"
 	"mahesabu/graph/model"
@@ -84,4 +85,26 @@ func SumItemsCost(db *gorm.DB, StoreID int) (*model.ItemsStats, error) {
 	}
 
 	return profit, nil
+}
+
+type FindItemNameAndQuantityResult struct {
+	Name     string
+	Quantity int
+}
+
+func CheckAvailableQuantity(db *gorm.DB, input *model.OrderItemInput) error {
+	var available *FindItemNameAndQuantityResult
+
+	//Checking item's quantity if is enough for fulfilling order...
+	err := db.Model(&model.Item{}).Joins("inner join products on items.product_id = products.id AND items.id = ? ", input.ItemID).Select("products.name as name, quantity").First(&available).Error
+
+	if err != nil {
+		return err
+	}
+
+	if available.Quantity < input.Quantity {
+		return errors.New(fmt.Sprintf("%s's available quantity is %d which is not enough for %d required", available.Name, available.Quantity, input.Quantity))
+	}
+
+	return nil
 }
