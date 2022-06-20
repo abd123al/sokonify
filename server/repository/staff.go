@@ -32,7 +32,7 @@ func CreateStaff(db *gorm.DB, input model.StaffInput, args helpers.UserAndStoreA
 	staff := model.Staff{
 		UserID:    input.UserID, //This is user who is about to get membership
 		StoreID:   args.StoreID,
-		Role:      input.Role,
+		RoleID:    input.RoleID,
 		Default:   !hasDefault,
 		CreatorID: &args.UserID,
 	}

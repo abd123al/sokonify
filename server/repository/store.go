@@ -25,9 +25,20 @@ func CreateStore(db *gorm.DB, UserID int, input model.StoreInput, Multistore boo
 				return err
 			}
 
+			role, er := CreateRole(db, model.RoleInput{
+				Name: "Admins",
+			}, helpers.UserAndStoreArgs{
+				UserID:  UserID,
+				StoreID: store.ID,
+			})
+
+			if er != nil {
+				return er
+			}
+
 			_, err := CreateStaff(tx, model.StaffInput{
 				UserID: UserID,
-				Role:   model.StaffRoleOwner,
+				RoleID: role.ID,
 			}, helpers.UserAndStoreArgs{
 				UserID:  UserID,
 				StoreID: store.ID,

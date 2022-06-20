@@ -438,7 +438,7 @@ type Staff implements Gorm {
     default: Boolean! @goTag(key: "gorm", value: "type:boolean")
 
     roleId: Int!
-    role: Role! @goTag(key: "gorm", value: "foreignKey:UserID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
+    role: Role! @goTag(key: "gorm", value: "foreignKey:RoleID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
 
     userId: Int!
     user: User! @goTag(key: "gorm", value: "foreignKey:UserID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
@@ -452,8 +452,8 @@ type Staff implements Gorm {
 }
 
 input StaffInput {
-    userId: Int!
-    role: StaffRole!
+    userId: ID!
+    roleId: ID!
 }
 
 
@@ -716,13 +716,13 @@ type Permission implements Gorm {
     creatorId: Int!
     creator: User! @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
 
-    categoryId: Int!
-    category: Role! @goTag(key: "gorm", value:  "foreignKey:CategoryID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
+    roleId: Int!
+    role: Role! @goTag(key: "gorm", value:  "foreignKey:RoleID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
 }
 
 input PermissionInput {
     permission: PermissionType!
-    categoryId: Int!
+    roleId: ID!
 }
 
 # We will seed common units and each store can add more units to fit their needs

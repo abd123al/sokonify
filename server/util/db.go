@@ -66,7 +66,7 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 
 	if err = db.AutoMigrate(
 		&model.Admin{}, &model.Customer{}, &model.Expense{}, &model.Staff{}, &model.Item{}, &model.Store{}, &model.Order{}, model.OrderItem{},
-		&model.User{}, &model.Payment{}, &model.Product{}, &model.ProductCategory{}, &model.Brand{}, &model.Unit{}, &model.RolesCategory{}, &model.RoleType{},
+		&model.User{}, &model.Payment{}, &model.Product{}, &model.ProductCategory{}, &model.Brand{}, &model.Unit{}, &model.Role{}, &model.Permission{},
 	); err != nil {
 		panic(fmt.Sprintf("failed to auto migrate with error: %s", err.Error()))
 	}

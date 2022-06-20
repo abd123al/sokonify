@@ -13,12 +13,16 @@ func TestStaff(t *testing.T) {
 	DB := util.InitTestDB()
 	UserID := util.CreateUser(DB).ID
 	StoreID := util.CreateStore(DB, nil).ID
+	RoleID := util.CreateRole(DB, helpers.UserAndStoreArgs{
+		UserID:  UserID,
+		StoreID: StoreID,
+	}).ID
 
 	t.Run("CreateStaff", func(t *testing.T) {
 		fn := func() (*model.Staff, error) {
 			input := model.StaffInput{
 				UserID: UserID,
-				Role:   model.StaffRoleStaff,
+				RoleID: RoleID,
 			}
 			return repository.CreateStaff(DB, input, helpers.UserAndStoreArgs{
 				UserID:  UserID,

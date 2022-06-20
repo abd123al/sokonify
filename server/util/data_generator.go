@@ -45,6 +45,17 @@ func CreateStore(DB *gorm.DB, UserID *int) *model.Store {
 	return store
 }
 
+func CreateRole(DB *gorm.DB, args helpers.UserAndStoreArgs) *model.Role {
+	role, _ := repository.CreateRole(DB, model.RoleInput{
+		Name: "Admins",
+	}, helpers.UserAndStoreArgs{
+		UserID:  args.UserID,
+		StoreID: args.StoreID,
+	})
+
+	return role
+}
+
 type CreateStaffArgs struct {
 	UserID  int
 	StoreID int
@@ -62,9 +73,14 @@ func CreateStaff(DB *gorm.DB, Args *CreateStaffArgs) *model.Staff {
 		StoreID = CreateStore(DB, nil).ID
 	}
 
+	role := CreateRole(DB, helpers.UserAndStoreArgs{
+		UserID:  UserID,
+		StoreID: StoreID,
+	})
+
 	staff, _ := repository.CreateStaff(DB, model.StaffInput{
 		UserID: UserID,
-		Role:   model.StaffRoleStaff,
+		RoleID: role.ID,
 	}, helpers.UserAndStoreArgs{
 		UserID:  UserID,
 		StoreID: StoreID,
