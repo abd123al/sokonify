@@ -404,6 +404,27 @@ enum StaffRole {
     owner @enumInt(value: 1)
 }
 
+enum PermissionType {
+    create_order
+    edit_order
+
+    add_stock
+    edit_stock
+
+    create_payment
+    create_sales
+
+    add_staff
+    edit_staff
+    remove_staff
+
+    register_customer
+    edit_customer
+    view_customer
+
+    view_stats
+}
+
 # Even suppliers/customers can be termed as staffs
 # todo we should allow specifying name here may be for handling customers
 type Staff implements Gorm {
@@ -412,15 +433,17 @@ type Staff implements Gorm {
     createdAt:Time!
     updatedAt:Time!
     deletedAt:Time
-    # null means user has not been configured yet.
-    role: StaffRole! #@goTag(key: "gorm", value: "type:SMALLINT")
 
     # Defaults store when user logs in like youtube
     default: Boolean! @goTag(key: "gorm", value: "type:boolean")
 
+    roleId: Int!
+    role: Role! @goTag(key: "gorm", value: "foreignKey:UserID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
+
     userId: Int!
     user: User! @goTag(key: "gorm", value: "foreignKey:UserID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
 
+    #todo remove this role is enough...
     storeId: Int!
     store: Store! @goTag(key: "gorm", value: "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
 
@@ -657,6 +680,49 @@ input StatsArgs {
     startDate:Time
     endDate:Time
     timeframe: TimeframeType
+}
+
+type Role implements Gorm {
+    id:ID! @goTag(key: "gorm", value: "primaryKey;")
+
+    createdAt:Time!
+    updatedAt:Time!
+    deletedAt:Time
+
+    name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(50);default:null")
+    description: String @goTag(key: "gorm", value: "type:varchar(250);default:null")
+
+    creatorId: Int!
+    creator: User! @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
+
+    storeId: Int!
+    store: Store! @goTag(key: "gorm", value:  "foreignKey:StoreID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
+}
+
+input RoleInput {
+    name: String!
+    description: String
+}
+
+type Permission implements Gorm {
+    id:ID! @goTag(key: "gorm", value: "primaryKey;")
+
+    createdAt:Time!
+    updatedAt:Time!
+    deletedAt:Time
+
+    permission: PermissionType! @goTag(key: "gorm", value: "type:varchar(250);default:null")
+
+    creatorId: Int!
+    creator: User! @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
+
+    categoryId: Int!
+    category: Role! @goTag(key: "gorm", value:  "foreignKey:CategoryID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
+}
+
+input PermissionInput {
+    permission: PermissionType!
+    categoryId: Int!
 }
 
 # We will seed common units and each store can add more units to fit their needs

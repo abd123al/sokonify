@@ -369,6 +369,14 @@ func (r *paymentResolver) OrderItems(ctx context.Context, obj *model.Payment) ([
 	return nil, nil
 }
 
+func (r *permissionResolver) Creator(ctx context.Context, obj *model.Permission) (*model.User, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *permissionResolver) Category(ctx context.Context, obj *model.Permission) (*model.Role, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *productResolver) Store(ctx context.Context, obj *model.Product) (*model.Store, error) {
 	panic(fmt.Errorf("not implemented"))
 }
@@ -540,6 +548,18 @@ func (r *queryResolver) ItemsStats(ctx context.Context) (*model.ItemsStats, erro
 	return repository.SumItemsCost(r.DB, helpers.ForContext(ctx).StoreID)
 }
 
+func (r *roleResolver) Creator(ctx context.Context, obj *model.Role) (*model.User, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *roleResolver) Store(ctx context.Context, obj *model.Role) (*model.Store, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *staffResolver) Role(ctx context.Context, obj *model.Staff) (*model.Role, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *staffResolver) User(ctx context.Context, obj *model.Staff) (*model.User, error) {
 	panic(fmt.Errorf("not implemented"))
 }
@@ -624,6 +644,9 @@ func (r *Resolver) OrderItem() generated.OrderItemResolver { return &orderItemRe
 // Payment returns generated.PaymentResolver implementation.
 func (r *Resolver) Payment() generated.PaymentResolver { return &paymentResolver{r} }
 
+// Permission returns generated.PermissionResolver implementation.
+func (r *Resolver) Permission() generated.PermissionResolver { return &permissionResolver{r} }
+
 // Product returns generated.ProductResolver implementation.
 func (r *Resolver) Product() generated.ProductResolver { return &productResolver{r} }
 
@@ -634,6 +657,9 @@ func (r *Resolver) ProductCategory() generated.ProductCategoryResolver {
 
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
+
+// Role returns generated.RoleResolver implementation.
+func (r *Resolver) Role() generated.RoleResolver { return &roleResolver{r} }
 
 // Staff returns generated.StaffResolver implementation.
 func (r *Resolver) Staff() generated.StaffResolver { return &staffResolver{r} }
@@ -661,9 +687,11 @@ type mutationResolver struct{ *Resolver }
 type orderResolver struct{ *Resolver }
 type orderItemResolver struct{ *Resolver }
 type paymentResolver struct{ *Resolver }
+type permissionResolver struct{ *Resolver }
 type productResolver struct{ *Resolver }
 type productCategoryResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+type roleResolver struct{ *Resolver }
 type staffResolver struct{ *Resolver }
 type storeResolver struct{ *Resolver }
 type subscriptionResolver struct{ *Resolver }
