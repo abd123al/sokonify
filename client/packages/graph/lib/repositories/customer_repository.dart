@@ -1,5 +1,6 @@
-import 'package:graph/gql/generated/graphql_api.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+
+import '../gql/generated/graphql_api.graphql.dart';
 
 class CustomerRepository {
   final GraphQLClient client;

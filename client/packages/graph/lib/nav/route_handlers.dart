@@ -48,7 +48,7 @@ var createOrderPageRouterHandler = Handler(handlerFunc: (_, __) {
 });
 
 var createSalePageRouterHandler = Handler(handlerFunc: (_, __) {
-  return const CreateOrderPage(
+  return const OrderForm(
     isOrder: false,
   );
 });
@@ -135,4 +135,9 @@ var editCategoryPageRouterHandler = Handler(handlerFunc: (context, params) {
 var editItemPageRouterHandler = Handler(handlerFunc: (context, params) {
   final id = params["id"]![0];
   return EditItemPage(id: int.parse(id));
+});
+
+var editOrderPageRouterHandler = Handler(handlerFunc: (context, params) {
+  final id = params["id"]![0];
+  return EditOrderPage(id: int.parse(id));
 });

@@ -3,6 +3,7 @@ query order($id: ID!) {
         status
         type
         createdAt
+        comment
         customer {
             ...CustomerParts
         }
