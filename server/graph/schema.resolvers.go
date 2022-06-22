@@ -142,6 +142,10 @@ func (r *mutationResolver) CreateOrder(ctx context.Context, input model.OrderInp
 	return repository.CreateOrder(r.DB, helpers.ForContext(ctx).UserID, input, helpers.ForContext(ctx).StoreID)
 }
 
+func (r *mutationResolver) CreateOrderItem(ctx context.Context, id int, input model.OrderItemInput) (*model.OrderItem, error) {
+	return repository.CreateOrderItem(r.DB, id, input)
+}
+
 func (r *mutationResolver) CreateOrderPayment(ctx context.Context, input model.OrderPaymentInput) (*model.Payment, error) {
 	return repository.CreateOrderPayment(r.DB, helpers.ForContext(ctx).UserID, input)
 }
@@ -209,6 +213,10 @@ func (r *mutationResolver) EditOrder(ctx context.Context, id int, input model.Or
 	panic(fmt.Errorf("not implemented"))
 }
 
+func (r *mutationResolver) EditOrderItem(ctx context.Context, id int, input model.OrderItemInput) (*model.OrderItem, error) {
+	return repository.EditOrderItem(r.DB, id, input)
+}
+
 func (r *mutationResolver) EditProduct(ctx context.Context, id int, input model.ProductInput) (*model.Product, error) {
 	return repository.EditProduct(r.DB, id, input, helpers.UserAndStoreArgs{
 		UserID:  helpers.ForContext(ctx).UserID,
@@ -233,6 +241,10 @@ func (r *mutationResolver) EditUnit(ctx context.Context, id int, input model.Uni
 
 func (r *mutationResolver) DeleteItem(ctx context.Context, id int) (*model.Item, error) {
 	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) DeleteOrderItem(ctx context.Context, orderID int, itemID int) (*model.OrderItem, error) {
+	return repository.DeleteOrderItem(r.DB, orderID, itemID)
 }
 
 func (r *mutationResolver) Ping(ctx context.Context) (string, error) {

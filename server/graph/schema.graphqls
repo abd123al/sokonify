@@ -748,6 +748,7 @@ type Mutation {
     createExpense(input: ExpenseInput!): Expense! @isAuthenticated  @hasRole(role: owner)
     createItem(input: ItemInput!): Item! @isAuthenticated  @hasRole(role: owner)
     createOrder(input: OrderInput!): Order! @isAuthenticated @hasRole(role: staff)
+    createOrderItem(id:ID!,input: OrderItemInput!): OrderItem! @isAuthenticated @hasRole(role: staff)
     createOrderPayment(input: OrderPaymentInput!): Payment! @isAuthenticated  @hasRole(role: staff)
     createExpensePayment(input: ExpensePaymentInput!): Payment! @isAuthenticated  @hasRole(role: staff)
     createProduct(input: ProductInput!): Product! @isAuthenticated  @hasRole(role: owner)
@@ -764,12 +765,14 @@ type Mutation {
     editCustomer(id: ID!,input: CustomerInput!): Customer! @isAuthenticated  @hasRole(role: staff)
     editItem(id: ID!,input: ItemInput!): Item! @isAuthenticated  @hasRole(role: owner)
     editOrder(id: ID!,input: OrderInput!): Order!  @isAuthenticated
+    editOrderItem(id: ID!,input: OrderItemInput!): OrderItem! @isAuthenticated @hasRole(role: staff)
     editProduct(id: ID!,input: ProductInput!): Product!  @isAuthenticated
     editStaff(id: ID!,input: StaffInput!): Staff! @isAuthenticated  @hasRole(role: owner)
     editStore(id: ID!,input: StoreInput!): Store! @isAuthenticated  @hasRole(role: owner)
     editUnit(id: ID!,input: UnitInput!): Unit! @isAuthenticated  @hasRole(role: owner)
 
     deleteItem(id: ID!): Item!  @isAuthenticated @hasRole(role: owner)
+    deleteOrderItem(orderId: ID!,itemId: ID!): OrderItem! @isAuthenticated @hasRole(role: staff)
 
     # For testing if local ip works. Otherwise client will have to reconfigure.
     ping: String!
