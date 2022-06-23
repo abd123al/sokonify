@@ -24,4 +24,13 @@ class OrdersListCubit extends ResourceListCubit<Orders$Query$Order> {
       },
     );
   }
+
+  changeOrderStatus(int id,OrderStatus status) {
+    final order = findItem((e) => e.id == id);
+
+    if (order != null) {
+      order.status = status;
+      super.updateItem((l) => l.firstWhere((e) => e.id == id), order);
+    }
+  }
 }

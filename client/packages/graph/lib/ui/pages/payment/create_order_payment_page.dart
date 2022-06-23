@@ -7,6 +7,7 @@ import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/repositories.dart';
 import '../../widgets/widgets.dart';
 import '../home/stats/simple_stats_cubit.dart';
+import '../order/orders_list_cubit.dart';
 import 'create_order_payment_cubit.dart';
 import 'payments_list_cubit.dart';
 
@@ -85,11 +86,11 @@ class _CreateStorePageState extends State<CreatePaymentPage> {
                       keyboardType: TextInputType.text,
                       maxLength: 50,
                       decoration: const InputDecoration(
-                        labelText: 'Comment (Optional)',
-                        hintText: 'Enter anything..',
-                        border: OutlineInputBorder(),
-                        helperText: "Anything that will make you remember this payment."
-                      ),
+                          labelText: 'Comment (Optional)',
+                          hintText: 'Enter anything..',
+                          border: OutlineInputBorder(),
+                          helperText:
+                              "Anything that will make you remember this payment."),
                     ),
                     const Expanded(child: SizedBox()),
                   ],
@@ -103,6 +104,9 @@ class _CreateStorePageState extends State<CreatePaymentPage> {
                 onSuccess: (context, data) {
                   BlocProvider.of<PaymentsListCubit>(context)
                       .addItem(Payments$Query$Payment.fromJson(data.toJson()));
+
+                  BlocProvider.of<OrdersListCubit>(context)
+                      .changeOrderStatus(widget.orderId, OrderStatus.completed);
                 },
                 pop: true,
                 builder: (context, cubit) {
