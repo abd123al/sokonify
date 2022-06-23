@@ -24,18 +24,19 @@ class EditOrderPage extends StatelessWidget {
         builder: (context, o) {
           return BlocProvider(
             create: (context) {
-              return EditOrderCubit()
-                ..changeCustomer(
-                  o.customer != null
+              return EditOrderCubit(
+                NewOrder(
+                  customer: o.customer != null
                       ? Customers$Query$Customer.fromJson(o.customer!.toJson())
                       : null,
-                )
-                ..addItems(o.orderItems
-                    .map((e) => NewOrderItem(
-                          item: Items$Query$Item.fromJson(e.item.toJson()),
-                          quantity: e.quantity,
-                        ))
-                    .toList());
+                  items: o.orderItems
+                      .map((e) => NewOrderItem(
+                            item: Items$Query$Item.fromJson(e.item.toJson()),
+                            quantity: e.quantity,
+                          ))
+                      .toList(),
+                ),
+              );
             },
             child: const OrderForm<EditOrderCubit>(
               isOrder: true,

@@ -170,14 +170,6 @@ class OrderCubit extends Cubit<NewOrder> {
     );
   }
 
-  addItems(List<NewOrderItem> items) {
-    emit(
-      state.copyWith(
-        items: items,
-      ),
-    );
-  }
-
   deleteItem(int index) {
     emit(
       state.delete(index: index),
@@ -211,5 +203,5 @@ class NewOrderCubit extends OrderCubit {
 }
 
 class EditOrderCubit extends OrderCubit {
-  EditOrderCubit() : super(const NewOrder(items: []).empty());
+  EditOrderCubit(NewOrder initial) : super(initial);
 }
