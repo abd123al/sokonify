@@ -38,8 +38,10 @@ class EditOrderPage extends StatelessWidget {
                 ),
               );
             },
-            child: const OrderForm<EditOrderCubit>(
+            child:  OrderForm<EditOrderCubit>(
               isOrder: true,
+              order: o,
+              id: id,
             ),
           );
         },
