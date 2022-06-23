@@ -143,7 +143,8 @@ func (r *mutationResolver) CreateOrder(ctx context.Context, input model.OrderInp
 }
 
 func (r *mutationResolver) CreateOrderItem(ctx context.Context, id int, input model.OrderItemInput) (*model.OrderItem, error) {
-	return repository.CreateOrderItem(r.DB, id, input)
+	//return repository.CreateOrderItems(r.DB, id, input)
+	return nil, nil
 }
 
 func (r *mutationResolver) CreateOrderPayment(ctx context.Context, input model.OrderPaymentInput) (*model.Payment, error) {

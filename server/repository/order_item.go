@@ -19,20 +19,14 @@ func isOrderCompleted(db *gorm.DB, OrderID int) error {
 	return nil
 }
 
-func CreateOrderItem(db *gorm.DB, OrderID int, input model.OrderItemInput) (*model.OrderItem, error) {
+func CreateOrderItems(db *gorm.DB, OrderID int, input []*model.OrderItem) ([]*model.OrderItem, error) {
 	e := isOrderCompleted(db, OrderID)
 	if e != nil {
 		return nil, e
 	}
 
-	o := model.OrderItem{
-		Quantity: input.Quantity,
-		Price:    input.Price,
-		ItemID:   input.ItemID,
-		OrderID:  OrderID,
-	}
-	result := db.Create(&o)
-	return &o, result.Error
+	result := db.Model(&model.OrderItem{}).Create(&input)
+	return input, result.Error
 }
 
 func EditOrderItem(db *gorm.DB, OrderID int, input model.OrderItemInput) (*model.OrderItem, error) {
@@ -78,6 +72,18 @@ func FindOrderItems(DB *gorm.DB, OrderID int) ([]*model.OrderItem, error) {
 	var items []*model.OrderItem
 
 	result := DB.Where(&model.OrderItem{OrderID: OrderID}).Find(&items)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return items, nil
+}
+
+func DeleteOrderItems(DB *gorm.DB, OrderID int) ([]*model.OrderItem, error) {
+	var items []*model.OrderItem
+
+	result := DB.Where(&model.OrderItem{OrderID: OrderID}).Delete(&items)
 
 	if result.Error != nil {
 		return nil, result.Error

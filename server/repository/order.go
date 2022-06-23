@@ -7,6 +7,15 @@ import (
 	"mahesabu/helpers"
 )
 
+func contains(s []*model.OrderItem, e int) bool {
+	for _, a := range s {
+		if a.ItemID == e {
+			return true
+		}
+	}
+	return false
+}
+
 func CreateOrder(DB *gorm.DB, UserId int, input model.OrderInput, StoreID int) (*model.Order, error) {
 	var items []*model.OrderItem
 
@@ -34,12 +43,75 @@ func CreateOrder(DB *gorm.DB, UserId int, input model.OrderInput, StoreID int) (
 		Type:       input.Type,
 		OrderItems: items,
 		Status:     model.OrderStatusPending, //Important
+		Comment:    input.Comment,
 	}
 
 	//fmt.Printf("%+v\n\n", order.Items[0].ItemID)
 
 	result := DB.Create(&order)
 	return &order, result.Error
+}
+
+func EditOrder(DB *gorm.DB, ID int, input model.OrderInput, args helpers.UserAndStoreArgs) (*model.Order, error) {
+	var items []*model.OrderItem
+	var order *model.Order
+
+	err := DB.Transaction(func(tx *gorm.DB) error {
+		e := isOrderCompleted(tx, ID)
+		if e != nil {
+			return e
+		}
+
+		//Finding previous order items and then compare them
+		_, err := DeleteOrderItems(tx, ID)
+
+		if err != nil {
+			return err
+		}
+
+		for _, u := range input.Items {
+			err := CheckAvailableQuantity(tx, u)
+
+			if err != nil {
+				return err
+			}
+
+			i := model.OrderItem{
+				OrderID:  ID,
+				Price:    u.Price,
+				ItemID:   u.ItemID,
+				Quantity: u.Quantity,
+			}
+
+			items = append(items, &i)
+		}
+
+		order = &model.Order{
+			ReceiverID: input.ReceiverID,
+			CustomerID: input.CustomerID,
+			StaffID:    args.UserID,
+			Comment:    input.Comment,
+		}
+
+		if err := tx.Model(&order).Where(&model.Order{ID: ID, StaffID: args.UserID}).Updates(&order).Error; err != nil {
+			return err
+		}
+
+		orderItems, err := CreateOrderItems(tx, ID, items)
+		if err != nil {
+			return err
+		}
+
+		order.OrderItems = orderItems
+
+		return nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return order, nil
 }
 
 func FindOrders(DB *gorm.DB, args model.OrdersArgs, StoreID int) ([]*model.Order, error) {

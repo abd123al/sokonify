@@ -3,6 +3,7 @@ package repository_test
 import (
 	"github.com/stretchr/testify/require"
 	"mahesabu/graph/model"
+	"mahesabu/helpers"
 	"mahesabu/repository"
 	"mahesabu/util"
 	"testing"
@@ -85,6 +86,33 @@ func TestOrders(t *testing.T) {
 	t.Run("FindOrderCustomerName", func(t *testing.T) {
 		orderResult := util.CreateOrder(DB, nil)
 		name, err := repository.FindOrderCustomerName(DB, orderResult.Order.ID)
+
+		require.Nil(t, err)
+		require.NotEmpty(t, name)
+	})
+
+	t.Run("EditOrder", func(t *testing.T) {
+		item2 := util.CreateItem(DB, nil, &store.ID)
+
+		orderResult := util.CreateOrder(DB, nil)
+		name, err := repository.EditOrder(DB, orderResult.Order.ID, model.OrderInput{
+			Type: model.OrderTypeSale,
+			Items: []*model.OrderItemInput{
+				{
+					Quantity: item.Quantity - 1,
+					Price:    item.SellingPrice,
+					ItemID:   item.ID,
+				},
+				{
+					Quantity: item2.Quantity - 1,
+					Price:    item2.SellingPrice,
+					ItemID:   item2.ID,
+				},
+			},
+		}, helpers.UserAndStoreArgs{
+			UserID:  orderResult.StaffId,
+			StoreID: orderResult.IssuerID,
+		})
 
 		require.Nil(t, err)
 		require.NotEmpty(t, name)
