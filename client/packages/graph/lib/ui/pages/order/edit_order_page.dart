@@ -38,11 +38,21 @@ class EditOrderPage extends StatelessWidget {
                 ),
               );
             },
-            child:  OrderForm<EditOrderCubit>(
-              isOrder: true,
-              order: o,
-              id: id,
-            ),
+            child: Builder(builder: (context) {
+              if (o.status != OrderStatus.pending) {
+                return Center(
+                  child: Text(
+                    "You can't edit this this order",
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                );
+              }
+              return OrderForm<EditOrderCubit>(
+                isOrder: true,
+                order: o,
+                id: id,
+              );
+            }),
           );
         },
       ),
