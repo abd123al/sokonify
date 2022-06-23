@@ -65,7 +65,9 @@ class NewOrder extends Equatable {
     return NewOrder(
       items: items ?? this.items,
       customer: customer ?? this.customer,
-      time: DateTime.now().microsecondsSinceEpoch,
+      time: DateTime
+          .now()
+          .microsecondsSinceEpoch,
       error: error,
     );
   }
@@ -73,10 +75,11 @@ class NewOrder extends Equatable {
   String get totalPrice {
     return calculateTotal(
       items.map(
-        (e) => TotalPriceArgs(
-          price: e.customSellingPrice ?? e.item.sellingPrice,
-          quantity: e.quantity,
-        ),
+            (e) =>
+            TotalPriceArgs(
+              price: e.customSellingPrice ?? e.item.sellingPrice,
+              quantity: e.quantity,
+            ),
       ),
     );
   }
@@ -141,7 +144,8 @@ class NewOrder extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
+  List<Object?> get props =>
+      [
         items,
         customer,
         time,
@@ -149,8 +153,8 @@ class NewOrder extends Equatable {
       ];
 }
 
-class NewOrderCubit extends Cubit<NewOrder> {
-  NewOrderCubit() : super(const NewOrder(items: []).empty());
+class _OrderCubit extends Cubit<NewOrder> {
+  _OrderCubit(NewOrder initialState) : super(initialState);
 
   reset() {
     emit(const NewOrder(items: []).empty());
@@ -196,4 +200,12 @@ class NewOrderCubit extends Cubit<NewOrder> {
       ),
     );
   }
+}
+
+class NewOrderCubit extends _OrderCubit {
+  NewOrderCubit() :super(const NewOrder(items: []).empty());
+}
+
+class EditOrderCubit extends _OrderCubit {
+  EditOrderCubit(NewOrder initialState) : super(initialState);
 }

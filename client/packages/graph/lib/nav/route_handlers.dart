@@ -48,7 +48,7 @@ var createOrderPageRouterHandler = Handler(handlerFunc: (_, __) {
 });
 
 var createSalePageRouterHandler = Handler(handlerFunc: (_, __) {
-  return const OrderForm(
+  return const CreateOrderPage(
     isOrder: false,
   );
 });
