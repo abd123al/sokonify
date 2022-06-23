@@ -15,6 +15,15 @@ class OrderRepository {
     return client.mutate(options);
   }
 
+  editOrder(EditOrderArguments args) {
+    final options = MutationOptions(
+      document: EDIT_ORDER_MUTATION_DOCUMENT,
+      variables: args.toJson(),
+    );
+
+    return client.mutate(options);
+  }
+
   fetchOrders(OrdersArgs args) {
     final options = QueryOptions(
       document: ORDERS_QUERY_DOCUMENT,

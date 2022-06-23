@@ -80,8 +80,15 @@ class _OrderFormState<T extends OrderCubit> extends State<OrderForm<T>> {
               onSuccess: (context, data) {
                 newOrderCubit.reset();
 
-                BlocProvider.of<PaymentsListCubit>(context)
-                    .addItem(Payments$Query$Payment.fromJson(data.toJson()));
+                if (_isEdit) {
+                  BlocProvider.of<OrdersListCubit>(context).updateItem(
+                    (l) => l.firstWhere((e) => e.id == widget.id),
+                    Orders$Query$Order.fromJson(data.toJson()),
+                  );
+                } else {
+                  BlocProvider.of<PaymentsListCubit>(context)
+                      .addItem(Payments$Query$Payment.fromJson(data.toJson()));
+                }
               },
               pop: true,
               builder: (context, salesCubit) {
@@ -237,14 +244,23 @@ class _OrderFormState<T extends OrderCubit> extends State<OrderForm<T>> {
                                         .toList();
 
                                     if (widget.isOrder) {
-                                      cubit.submit(
-                                        OrderInput(
-                                          type: OrderType.sale,
-                                          comment: _commentController.text,
-                                          customerId: state.customer?.id,
-                                          items: items,
-                                        ),
+                                      final input = OrderInput(
+                                        type: OrderType.sale,
+                                        comment: _commentController.text,
+                                        customerId: state.customer?.id,
+                                        items: items,
                                       );
+
+                                      if (_isEdit) {
+                                        cubit.edit(
+                                          EditOrderArguments(
+                                            input: input,
+                                            id: widget.id!,
+                                          ),
+                                        );
+                                      } else {
+                                        cubit.submit(input);
+                                      }
                                     } else {
                                       salesCubit.submitSalesPayment(
                                         SalesInput(

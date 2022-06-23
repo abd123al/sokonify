@@ -211,7 +211,10 @@ func (r *mutationResolver) EditItem(ctx context.Context, id int, input model.Ite
 }
 
 func (r *mutationResolver) EditOrder(ctx context.Context, id int, input model.OrderInput) (*model.Order, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.EditOrder(r.DB, id, input, helpers.UserAndStoreArgs{
+		UserID:  helpers.ForContext(ctx).UserID,
+		StoreID: helpers.ForContext(ctx).StoreID,
+	})
 }
 
 func (r *mutationResolver) EditOrderItem(ctx context.Context, id int, input model.OrderItemInput) (*model.OrderItem, error) {
