@@ -46,10 +46,13 @@ class _CreateStorePageState extends State<CreatePaymentWidget> {
           children: [
             Container(
               color: Theme.of(context).secondaryHeaderColor,
-              child: Center(
-                child: AutoSizeText(
-                  formatCurrency(widget.amount),
-                  style: Theme.of(context).textTheme.headlineLarge,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Center(
+                  child: AutoSizeText(
+                    widget.amount,
+                    style: Theme.of(context).textTheme.headlineLarge,
+                  ),
                 ),
               ),
             ),

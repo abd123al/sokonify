@@ -49,11 +49,21 @@ class OrderPage extends StatelessWidget {
                 subtitle: "Customer", value: "${data.customer?.name}"),
           ShortDetailTile(subtitle: "Created At", value: "${data.createdAt}"),
           ShortDetailTile(subtitle: "Status", value: describeEnum(data.status)),
+          ShortDetailTile(subtitle: "Comment", value: data.comment),
           if (data.payment != null)
             ShortDetailTile(
                 subtitle: "Paid Amount",
                 value: formatCurrency(data.payment!.amount)),
         ];
+
+        final total = calculateTotal(
+          data.orderItems.map(
+            (e) => TotalPriceArgs(
+              price: e.price,
+              quantity: e.quantity,
+            ),
+          ),
+        );
 
         final right = [
           ListView.separated(
@@ -72,14 +82,7 @@ class OrderPage extends StatelessWidget {
             },
           ),
           TotalAmountTile(
-            amount: calculateTotal(
-              data.orderItems.map(
-                (e) => TotalPriceArgs(
-                  price: e.price,
-                  quantity: e.quantity,
-                ),
-              ),
-            ),
+            amount: total,
           ),
         ];
 
@@ -186,7 +189,7 @@ class OrderPage extends StatelessWidget {
                               context: context,
                               builder: (context) {
                                 return CreatePaymentWidget(
-                                  amount: '36677',
+                                  amount: total,
                                   orderId: id,
                                 );
                               },
