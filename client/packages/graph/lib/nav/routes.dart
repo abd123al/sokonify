@@ -13,6 +13,7 @@ class Routes {
   static String createCustomPayment = "/createCustomPayment";
   static String createItem = "/createItem";
   static String createOrder = "/createOrder";
+  static String createOrderPayment = "/createOrderPayment";
   static String createProduct = "/createProduct";
   static String createSales = "/createSales";
   static String createStore = "/createStore";
@@ -109,6 +110,12 @@ class Routes {
       createSales,
       handler: createSalePageRouterHandler,
       transitionType: TransitionType.inFromLeft,
+    );
+
+    router.define(
+      "$createOrderPayment/:orderId/:amount",
+      handler: createPaymentPageRouterHandler,
+      transitionType: TransitionType.nativeModal,
     );
 
     router.define(

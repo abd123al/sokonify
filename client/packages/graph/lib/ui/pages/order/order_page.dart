@@ -7,7 +7,6 @@ import '../../../nav/nav.dart';
 import '../../helpers/currency_formatter.dart';
 import '../../'
     'widgets/widgets.dart';
-import '../payment/create_order_payment_page.dart';
 import 'order_item_tile.dart';
 import 'order_wrapper.dart';
 import 'print.dart';
@@ -185,14 +184,10 @@ class OrderPage extends StatelessWidget {
                           "Complete Payment",
                           Icons.payment,
                           () {
-                            showModalBottomSheet(
-                              context: context,
-                              builder: (context) {
-                                return CreatePaymentWidget(
-                                  amount: total,
-                                  orderId: id,
-                                );
-                              },
+                            redirectTo(
+                              context,
+                              "${Routes.createOrderPayment}/$id/$total",
+                              replace: true,
                             );
                           },
                         ),
