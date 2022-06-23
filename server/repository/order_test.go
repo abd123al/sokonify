@@ -95,8 +95,11 @@ func TestOrders(t *testing.T) {
 		item2 := util.CreateItem(DB, nil, &store.ID)
 
 		orderResult := util.CreateOrder(DB, nil)
+		Comment := "oooooooooooooooo"
+
 		name, err := repository.EditOrder(DB, orderResult.Order.ID, model.OrderInput{
-			Type: model.OrderTypeSale,
+			Type:    model.OrderTypeSale,
+			Comment: &Comment,
 			Items: []*model.OrderItemInput{
 				{
 					Quantity: item.Quantity - 1,

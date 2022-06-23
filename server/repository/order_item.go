@@ -6,21 +6,21 @@ import (
 	"mahesabu/graph/model"
 )
 
-func isOrderCompleted(db *gorm.DB, OrderID int) error {
+func isOrderCompleted(db *gorm.DB, OrderID int) (*model.Order, error) {
 	order, err := FindOrder(db, OrderID)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	if order.Status != model.OrderStatusPending {
-		return fmt.Errorf("order is already %s", order.Status)
+		return nil, fmt.Errorf("order is already %s", order.Status)
 	}
 
-	return nil
+	return order, nil
 }
 
 func CreateOrderItems(db *gorm.DB, OrderID int, input []*model.OrderItem) ([]*model.OrderItem, error) {
-	e := isOrderCompleted(db, OrderID)
+	_, e := isOrderCompleted(db, OrderID)
 	if e != nil {
 		return nil, e
 	}
@@ -30,7 +30,7 @@ func CreateOrderItems(db *gorm.DB, OrderID int, input []*model.OrderItem) ([]*mo
 }
 
 func EditOrderItem(db *gorm.DB, OrderID int, input model.OrderItemInput) (*model.OrderItem, error) {
-	e := isOrderCompleted(db, OrderID)
+	_, e := isOrderCompleted(db, OrderID)
 	if e != nil {
 		return nil, e
 	}
@@ -50,7 +50,7 @@ func EditOrderItem(db *gorm.DB, OrderID int, input model.OrderItemInput) (*model
 }
 
 func DeleteOrderItem(db *gorm.DB, OrderID int, ItemID int) (*model.OrderItem, error) {
-	e := isOrderCompleted(db, OrderID)
+	_, e := isOrderCompleted(db, OrderID)
 	if e != nil {
 		return nil, e
 	}

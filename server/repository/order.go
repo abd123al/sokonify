@@ -57,9 +57,20 @@ func EditOrder(DB *gorm.DB, ID int, input model.OrderInput, args helpers.UserAnd
 	var order *model.Order
 
 	err := DB.Transaction(func(tx *gorm.DB) error {
-		e := isOrderCompleted(tx, ID)
-		if e != nil {
-			return e
+		if err := tx.Where(&model.Order{ID: ID, StaffID: args.UserID}).First(&order).Error; err != nil {
+			return err
+		}
+
+		if order.Status != model.OrderStatusPending {
+			return fmt.Errorf(`order is already %s, you can't edit it`, order.Status)
+		}
+
+		order.ReceiverID = input.ReceiverID
+		order.CustomerID = input.CustomerID
+		order.Comment = input.Comment
+
+		if err := tx.Save(&order).Error; err != nil {
+			return err
 		}
 
 		//Finding previous order items and then compare them
@@ -84,17 +95,6 @@ func EditOrder(DB *gorm.DB, ID int, input model.OrderInput, args helpers.UserAnd
 			}
 
 			items = append(items, &i)
-		}
-
-		order = &model.Order{
-			ReceiverID: input.ReceiverID,
-			CustomerID: input.CustomerID,
-			StaffID:    args.UserID,
-			Comment:    input.Comment,
-		}
-
-		if err := tx.Model(&order).Where(&model.Order{ID: ID, StaffID: args.UserID}).Updates(&order).Error; err != nil {
-			return err
 		}
 
 		orderItems, err := CreateOrderItems(tx, ID, items)
