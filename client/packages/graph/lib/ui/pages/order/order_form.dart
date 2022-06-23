@@ -19,7 +19,7 @@ import 'order_item.dart';
 import 'orders_list_cubit.dart';
 import 'total_amount_tile.dart';
 
-class OrderForm extends StatefulWidget {
+class OrderForm<T extends OrderCubit> extends StatefulWidget {
   const OrderForm({
     Key? key,
     required this.isOrder,
@@ -33,11 +33,11 @@ class OrderForm extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _OrderFormState();
+    return _OrderFormState<T>();
   }
 }
 
-class _OrderFormState extends State<OrderForm> {
+class _OrderFormState<T extends OrderCubit> extends State<OrderForm<T>> {
   final _quantityEditController = TextEditingController();
   final _quantityAddController = TextEditingController();
   final _commentController = TextEditingController();
@@ -57,7 +57,7 @@ class _OrderFormState extends State<OrderForm> {
   }
 
   Widget _buildForm() {
-    return BlocConsumer<NewOrderCubit, NewOrder>(
+    return BlocConsumer<T, NewOrder>(
       listener: (context, state) {
         if (state.hasError) {
           displayError(
@@ -67,7 +67,7 @@ class _OrderFormState extends State<OrderForm> {
         }
       },
       builder: (context, state) {
-        final newOrderCubit = BlocProvider.of<NewOrderCubit>(context);
+        final newOrderCubit = BlocProvider.of<T>(context);
 
         return QueryBuilder<ResourceListData<Items$Query$Item>, ItemsListCubit>(
           retry: (cubit) => cubit.fetch(),

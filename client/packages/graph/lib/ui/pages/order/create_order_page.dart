@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'new_order_cubit.dart';
 import 'order_form.dart';
 
 class CreateOrderPage extends StatelessWidget {
@@ -16,7 +17,7 @@ class CreateOrderPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(isOrder ? "New Order" : "New Sales"),
       ),
-      body: OrderForm(
+      body: OrderForm<NewOrderCubit>(
         isOrder: isOrder,
       ),
     );

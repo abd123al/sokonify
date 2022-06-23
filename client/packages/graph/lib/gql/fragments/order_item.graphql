@@ -4,14 +4,6 @@ fragment OrderItemParts on OrderItem {
     price
     subTotalPrice
     item {
-        product {
-            name
-        }
-        brand {
-            name
-        }
-        unit {
-            name
-        }
+        ...ItemParts
     }
 }

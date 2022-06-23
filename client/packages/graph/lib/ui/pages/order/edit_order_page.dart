@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../gql/generated/graphql_api.graphql.dart';
+import 'new_order_cubit.dart';
 import 'order_form.dart';
 import 'order_wrapper.dart';
 
@@ -18,9 +21,25 @@ class EditOrderPage extends StatelessWidget {
       ),
       body: OrderWrapper(
         id: id,
-        builder: (context, order) {
-          return const OrderForm(
-            isOrder: true,
+        builder: (context, o) {
+          return BlocProvider(
+            create: (context) {
+              return EditOrderCubit()
+                ..changeCustomer(
+                  o.customer != null
+                      ? Customers$Query$Customer.fromJson(o.customer!.toJson())
+                      : null,
+                )
+                ..addItems(o.orderItems
+                    .map((e) => NewOrderItem(
+                          item: Items$Query$Item.fromJson(e.item.toJson()),
+                          quantity: e.quantity,
+                        ))
+                    .toList());
+            },
+            child: const OrderForm<EditOrderCubit>(
+              isOrder: true,
+            ),
           );
         },
       ),
