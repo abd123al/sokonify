@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
+import '../../../nav/nav.dart';
 
 class CustomerTile extends StatelessWidget {
   const CustomerTile({
@@ -25,6 +26,9 @@ class CustomerTile extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
             dense: true,
+            onTap: () {
+              redirectTo(context, "${Routes.customer}/${customer.id}");
+            },
           );
         },
       ),

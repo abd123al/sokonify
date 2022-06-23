@@ -20,6 +20,7 @@ class Routes {
   static String createUnit = "/createUnit";
 
   static String editCategory = "/editCategory";
+  static String editCustomer = "/editCustomer";
   static String editItem = "/editItem";
   static String editOrder = "/editOrder";
   static String editProduct = "/editProduct";
@@ -28,6 +29,7 @@ class Routes {
   static String brands = "/brands";
   static String categories = "/categories";
   static String category = "/category";
+  static String customer = "/customer";
   static String expenses = "/expenses";
   static String item = "/item";
   static String gains = "/gains";
@@ -143,6 +145,12 @@ class Routes {
     );
 
     router.define(
+      "$editCustomer/:id",
+      handler: editCustomerPageRouterHandler,
+      transitionType: TransitionType.nativeModal,
+    );
+
+    router.define(
       "$editItem/:id",
       handler: editItemPageRouterHandler,
       transitionType: TransitionType.nativeModal,
@@ -187,6 +195,12 @@ class Routes {
     router.define(
       "$category/:id",
       handler: categoryPageRouterHandler,
+      transitionType: TransitionType.inFromLeft,
+    );
+
+    router.define(
+      "$customer/:id",
+      handler: customerPageRouterHandler,
       transitionType: TransitionType.inFromLeft,
     );
 

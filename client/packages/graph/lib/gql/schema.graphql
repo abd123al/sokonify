@@ -147,6 +147,7 @@ type Mutation {
     createExpensePayment(input: ExpensePaymentInput!): Payment!
     createItem(input: ItemInput!): Item!
     createOrder(input: OrderInput!): Order!
+    createOrderItem(id: ID!, input: OrderItemInput!): OrderItem!
     createOrderPayment(input: OrderPaymentInput!): Payment!
     createProduct(input: ProductInput!): Product!
     createSales(input: SalesInput!): Payment!
@@ -154,11 +155,13 @@ type Mutation {
     createStore(input: StoreInput!): Store!
     createUnit(input: UnitInput!): Unit!
     deleteItem(id: ID!): Item!
+    deleteOrderItem(itemId: ID!, orderId: ID!): OrderItem!
     editBrand(id: ID!, input: BrandInput!): Brand!
     editCategory(id: ID!, input: CategoryInput!): Category!
     editCustomer(id: ID!, input: CustomerInput!): Customer!
     editItem(id: ID!, input: ItemInput!): Item!
     editOrder(id: ID!, input: OrderInput!): Order!
+    editOrderItem(id: ID!, input: OrderItemInput!): OrderItem!
     editProduct(id: ID!, input: ProductInput!): Product!
     editStaff(id: ID!, input: StaffInput!): Staff!
     editStore(id: ID!, input: StoreInput!): Store!
@@ -499,6 +502,7 @@ input ChangePasswordInput {
 
 input CustomerInput {
     address: String
+    comment: String
     dob: Time
     email: String
     gender: GenderType
