@@ -230,6 +230,7 @@ type Payment implements Gorm {
 
 type Product implements Gorm {
     brands: [Brand!]!
+    categories: [Category!]
     createdAt: Time!
     creator: User
     creatorId: Int
@@ -455,6 +456,16 @@ enum StaffRole {
     staff
 }
 
+enum StatsFilter {
+    brand
+    category
+    customer
+    item
+    priceGroup
+    product
+    staff
+}
+
 enum StoreType {
     other
     pharmacy
@@ -640,8 +651,10 @@ input StaffInput {
 
 input StatsArgs {
     endDate: Time
+    filter: StatsFilter
     startDate: Time
     timeframe: TimeframeType
+    value: ID
 }
 
 input StoreInput {

@@ -6,6 +6,7 @@ import 'package:graph/ui/widgets/widgets.dart';
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../nav/routes.dart';
 import '../brand/brand_tile.dart';
+import '../category/category_tile.dart';
 import 'product_wrapper.dart';
 
 class ProductPage extends StatelessWidget {
@@ -52,6 +53,7 @@ class ProductPage extends StatelessWidget {
         ShortDetailTile(
             subtitle: "Created on", value: data.createdAt.toString()),
         const WordDivider(text: 'Brands'),
+        //todo use tab for showing brands and categories
         Builder(
           builder: (context) {
             final items = data.brands
@@ -75,7 +77,32 @@ class ProductPage extends StatelessWidget {
               },
             );
           },
-        )
+        ),
+        const WordDivider(text: 'Categories'),
+        Builder(
+          builder: (context) {
+            final items = data.categories
+                ?.map((e) => Categories$Query$Category.fromJson(e.toJson()))
+                .toList();
+
+            final cats = ResourceListData<Categories$Query$Category>(
+              items: items,
+            );
+
+            return HighList<Categories$Query$Category>(
+              items: cats,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              emptyWord: "No categories found",
+              builder: (context, item, color) {
+                return CategoryTile(
+                  category: item,
+                  color: color,
+                );
+              },
+            );
+          },
+        ),
       ],
     );
   }

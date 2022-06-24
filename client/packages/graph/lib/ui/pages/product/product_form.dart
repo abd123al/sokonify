@@ -28,7 +28,8 @@ class ProductForm extends StatefulWidget {
 class _CreateProductPageState extends State<ProductForm> {
   final _nameController = TextEditingController();
   final _descController = TextEditingController();
-  List<Categories$Query$Category> _categories = [];
+  late List<Categories$Query$Category> _categories;
+
   late bool isEdit;
 
   @override
@@ -37,6 +38,10 @@ class _CreateProductPageState extends State<ProductForm> {
     isEdit = widget.product != null && widget.id != null;
     _nameController.text = widget.product?.name ?? "";
     _descController.text = widget.product?.description ?? "";
+    _categories = widget.product?.categories
+            ?.map((e) => Categories$Query$Category.fromJson(e.toJson()))
+            .toList() ??
+        [];
   }
 
   @override
@@ -56,26 +61,25 @@ class _CreateProductPageState extends State<ProductForm> {
                   hintText: 'Enter Product name',
                   helperText: "eg. Paracetamol Tabs, Bicycle"),
             ),
-            if (!isEdit)
-              QueryBuilder<ResourceListData<Categories$Query$Category>,
-                  CategoriesListCubit>(
-                retry: (cubit) => cubit.fetch(),
-                builder: (context, data, _) {
-                  return SearchableDropdown<
-                      Categories$Query$Category>.multiSelection(
-                    asString: (i) => i.name.toLowerCase(),
-                    data: data,
-                    labelText: "Categories (Optional)",
-                    hintText: "Select Categories (Optional)",
-                    helperText:
-                        "Grouping products into categories can help tracking them better.",
-                    onChangedMultiSelection: (item) => setState(() {
-                      _categories = item;
-                    }),
-                    selectedItems: (i) => i == _categories,
-                  );
-                },
-              ),
+            QueryBuilder<ResourceListData<Categories$Query$Category>,
+                CategoriesListCubit>(
+              retry: (cubit) => cubit.fetch(),
+              builder: (context, data, _) {
+                return SearchableDropdown<
+                    Categories$Query$Category>.multiSelection(
+                  asString: (i) => i.name.toLowerCase(),
+                  data: data,
+                  labelText: "Categories (Optional)",
+                  hintText: "Select Categories (Optional)",
+                  helperText:
+                      "Grouping products into categories can help tracking them better.",
+                  onChangedMultiSelection: (item) => setState(() {
+                    _categories = item;
+                  }),
+                  selectedItems: _categories,
+                );
+              },
+            ),
             const SizedBox(
               height: 8,
             ),
@@ -113,23 +117,16 @@ class _CreateProductPageState extends State<ProductForm> {
                 return Button(
                   padding: EdgeInsets.zero,
                   callback: () {
+                    final input = ProductInput(
+                      name: _nameController.text,
+                      description: _descController.text,
+                      categories: _categories.map((e) => e.id).toList(),
+                    );
+
                     if (isEdit) {
-                      cubit.edit(
-                        widget.id!,
-                        ProductInput(
-                          name: _nameController.text,
-                          description: _descController.text,
-                          //categories: _categories.map((e) => e.id).toList(),
-                        ),
-                      );
+                      cubit.edit(widget.id!, input);
                     } else {
-                      cubit.create(
-                        ProductInput(
-                          name: _nameController.text,
-                          description: _descController.text,
-                          categories: _categories.map((e) => e.id).toList(),
-                        ),
-                      );
+                      cubit.create(input);
                     }
                   },
                   title: 'Submit',
