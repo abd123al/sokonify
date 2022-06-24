@@ -402,6 +402,10 @@ func (r *productResolver) Creator(ctx context.Context, obj *model.Product) (*mod
 	return nil, nil
 }
 
+func (r *productResolver) Categories(ctx context.Context, obj *model.Product) ([]*model.Category, error) {
+	return repository.FindProductCategories(r.DB, obj.ID)
+}
+
 func (r *productCategoryResolver) Category(ctx context.Context, obj *model.ProductCategory) (*model.Category, error) {
 	panic(fmt.Errorf("not implemented"))
 }

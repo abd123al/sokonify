@@ -266,6 +266,8 @@ type Product implements Gorm {
 
     creatorId: Int
     creator: User @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
+
+    categories: [Category!] @goTag(key: "gorm", value: "-") @goField(forceResolver: true)
 }
 
 input ProductInput {

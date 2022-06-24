@@ -48,6 +48,14 @@ func FindCategories(db *gorm.DB, storeID int) ([]*model.Category, error) {
 	return categories, result.Error
 }
 
+func FindProductCategories(db *gorm.DB, ProductID int) ([]*model.Category, error) {
+	var categories []*model.Category
+	if err := db.Table("categories").Joins("inner join product_categories on product_categories.category_id = categories.id AND product_categories.product_id = ?", ProductID).Find(&categories).Error; err != nil {
+		return nil, err
+	}
+	return categories, nil
+}
+
 func FindCategory(db *gorm.DB, ID int) (*model.Category, error) {
 	var category *model.Category
 	result := db.Where(&model.Category{ID: ID}).First(&category)
