@@ -169,3 +169,12 @@ var statsPageRouterHandler = Handler(handlerFunc: (_, __) {
 var ordersPageRouterHandler = Handler(handlerFunc: (_, __) {
   return const OrdersPaginatedPage();
 });
+
+var paymentsPageRouterHandler = Handler(handlerFunc: (context, params) {
+  final word = params["word"]![0];
+
+  return PaymentsPaginatedPage(
+    word: word,
+    type: context?.settings?.arguments as PaymentType,
+  );
+});

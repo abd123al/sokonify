@@ -34,7 +34,6 @@
           <value>
             <list>
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/artemis-7.8.0-beta/lib" />
-              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/artemis-7.7.0-beta/lib" />
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/artemis-7.9.0-beta/lib" />
             </list>
           </value>
@@ -659,7 +658,6 @@
           <value>
             <list>
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/json_annotation-4.5.0/lib" />
-              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/json_annotation-4.4.0/lib" />
             </list>
           </value>
         </entry>
@@ -667,7 +665,6 @@
           <value>
             <list>
               <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/json_serializable-6.2.0/lib" />
-              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/json_serializable-6.1.6/lib" />
             </list>
           </value>
         </entry>
@@ -1331,7 +1328,6 @@
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/analyzer-3.4.1/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/archive-3.3.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/args-2.3.1/lib" />
-      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/artemis-7.7.0-beta/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/artemis-7.8.0-beta/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/artemis-7.9.0-beta/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.8.2/lib" />
@@ -1436,9 +1432,7 @@
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/intl-0.17.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/io-1.0.3/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/js-0.6.4/lib" />
-      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/json_annotation-4.4.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/json_annotation-4.5.0/lib" />
-      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/json_serializable-6.1.6/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/json_serializable-6.2.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/lint-1.8.2/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/lints-1.0.1/lib" />

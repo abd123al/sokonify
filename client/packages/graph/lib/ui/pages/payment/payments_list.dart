@@ -2,6 +2,7 @@ import 'package:blocitory/blocitory.dart';
 import 'package:flutter/material.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
+import '../../../nav/nav.dart';
 import '../../widgets/widgets.dart';
 import 'payment_tile.dart';
 import 'payments_list_cubit.dart';
@@ -37,6 +38,13 @@ class PaymentsList extends StatelessWidget {
             topper,
             Topper(
               label: "Today ${word()}",
+              onPressed: () {
+                redirectTo(
+                  context,
+                  "${Routes.payments}/${word()}",
+                  args: type,
+                );
+              },
             ),
             HighList<Payments$Query$Payment>(
               shrinkWrap: true,
