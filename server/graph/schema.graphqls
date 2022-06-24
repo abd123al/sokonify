@@ -653,11 +653,23 @@ enum TimeframeType {
     thisYear
 }
 
+enum StatsFilter {
+    brand
+    category
+    item
+    product
+    staff #How much staff sold
+    customer #Anasa hii ya queries
+    priceGroup
+}
+
 # We may use duration
 input StatsArgs {
     startDate:Time
     endDate:Time
     timeframe: TimeframeType
+    filter: StatsFilter
+    value: ID
 }
 
 # We will seed common units and each store can add more units to fit their needs
