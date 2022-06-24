@@ -203,7 +203,7 @@ func (r *mutationResolver) EditCategory(ctx context.Context, id int, input model
 }
 
 func (r *mutationResolver) EditCustomer(ctx context.Context, id int, input model.CustomerInput) (*model.Customer, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.EditCustomer(r.DB, id, input, helpers.ForContext(ctx).StoreID)
 }
 
 func (r *mutationResolver) EditItem(ctx context.Context, id int, input model.ItemInput) (*model.Item, error) {

@@ -36,6 +36,24 @@ func CreateCustomer(DB *gorm.DB, input model.CustomerInput, StoreID int) (*model
 	return &customer, result.Error
 }
 
+func EditCustomer(DB *gorm.DB, ID int, input model.CustomerInput, StoreID int) (*model.Customer, error) {
+	customer := model.Customer{
+		Name:    input.Name,
+		Type:    input.Type,
+		Gender:  input.Gender,
+		Dob:     input.Dob,
+		Email:   input.Email,
+		Address: input.Address,
+		Phone:   input.Phone,
+	}
+
+	if err := DB.Model(&model.Customer{}).Where(&model.Customer{ID: ID, StoreID: StoreID}).Updates(&customer).Error; err != nil {
+		return nil, err
+	}
+
+	return &customer, nil
+}
+
 func FindCustomers(DB *gorm.DB, storeID int) ([]*model.Customer, error) {
 	var customers []*model.Customer
 	result := DB.Where(&model.Customer{StoreID: storeID}).Order("id DESC").Find(&customers)
