@@ -3,9 +3,10 @@ package repository
 import (
 	"gorm.io/gorm"
 	"mahesabu/graph/model"
+	"mahesabu/helpers"
 )
 
-func CreateCustomer(DB *gorm.DB, input model.CustomerInput, StoreID int) (*model.Customer, error) {
+func CreateCustomer(DB *gorm.DB, input model.CustomerInput, args helpers.UserAndStoreArgs) (*model.Customer, error) {
 	var user *model.User
 	email := input.Email
 	phone := input.Phone
@@ -18,14 +19,18 @@ func CreateCustomer(DB *gorm.DB, input model.CustomerInput, StoreID int) (*model
 	}
 
 	customer := model.Customer{
-		Name:    input.Name,
-		StoreID: StoreID,
-		Type:    input.Type,
-		Gender:  input.Gender,
-		Dob:     input.Dob,
-		Email:   input.Email,
-		Address: input.Address,
-		Phone:   input.Phone,
+		Address:   input.Address,
+		Comment:   input.Comment,
+		Email:     input.Email,
+		Name:      input.Name,
+		Phone:     input.Phone,
+		Tin:       input.Tin,
+		Type:      input.Type,
+		Gender:    input.Gender,
+		Dob:       input.Dob,
+		StoreID:   args.StoreID,
+		UserID:    &user.ID,
+		CreatorID: &args.UserID,
 	}
 
 	if user != nil {
@@ -36,18 +41,23 @@ func CreateCustomer(DB *gorm.DB, input model.CustomerInput, StoreID int) (*model
 	return &customer, result.Error
 }
 
-func EditCustomer(DB *gorm.DB, ID int, input model.CustomerInput, StoreID int) (*model.Customer, error) {
+func EditCustomer(DB *gorm.DB, ID int, input model.CustomerInput, args helpers.UserAndStoreArgs) (*model.Customer, error) {
 	customer := model.Customer{
-		Name:    input.Name,
-		Type:    input.Type,
-		Gender:  input.Gender,
-		Dob:     input.Dob,
-		Email:   input.Email,
-		Address: input.Address,
-		Phone:   input.Phone,
+		ID:        ID,
+		Address:   input.Address,
+		Comment:   input.Comment,
+		Email:     input.Email,
+		Name:      input.Name,
+		Phone:     input.Phone,
+		Tin:       input.Tin,
+		Type:      input.Type,
+		Gender:    input.Gender,
+		Dob:       input.Dob,
+		StoreID:   args.StoreID,
+		CreatorID: &args.UserID,
 	}
 
-	if err := DB.Model(&model.Customer{}).Where(&model.Customer{ID: ID, StoreID: StoreID}).Updates(&customer).Error; err != nil {
+	if err := DB.Model(&model.Customer{}).Where(&model.Customer{ID: ID, StoreID: args.StoreID}).Updates(&customer).Error; err != nil {
 		return nil, err
 	}
 

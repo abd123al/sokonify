@@ -165,3 +165,7 @@ var createPaymentPageRouterHandler = Handler(handlerFunc: (context, params) {
 var statsPageRouterHandler = Handler(handlerFunc: (_, __) {
   return const StatsPage();
 });
+
+var ordersPageRouterHandler = Handler(handlerFunc: (_, __) {
+  return const OrdersPaginatedPage();
+});

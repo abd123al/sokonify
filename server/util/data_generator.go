@@ -26,7 +26,10 @@ func CreateCustomer(DB *gorm.DB, StoreId int) *model.Customer {
 	customer, _ := repository.CreateCustomer(DB, model.CustomerInput{
 		Name: faker.Name(),
 		Type: model.CustomerTypeCustomer,
-	}, StoreId)
+	}, helpers.UserAndStoreArgs{
+		UserID:  CreateUser(DB).ID, //todo Problem
+		StoreID: StoreId,
+	})
 
 	return customer
 }

@@ -5,5 +5,6 @@ export 'new_order_cubit.dart';
 export 'order_form.dart';
 export 'order_page.dart';
 export 'order_page_cubit.dart';
+export 'orders_paginated_list.dart';
 export 'orders_list.dart';
 export 'orders_list_cubit.dart';

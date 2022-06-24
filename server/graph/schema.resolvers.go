@@ -124,7 +124,10 @@ func (r *mutationResolver) CreateCategory(ctx context.Context, input model.Categ
 }
 
 func (r *mutationResolver) CreateCustomer(ctx context.Context, input model.CustomerInput) (*model.Customer, error) {
-	return repository.CreateCustomer(r.DB, input, helpers.ForContext(ctx).StoreID)
+	return repository.CreateCustomer(r.DB, input, helpers.UserAndStoreArgs{
+		UserID:  helpers.ForContext(ctx).UserID,
+		StoreID: helpers.ForContext(ctx).StoreID,
+	})
 }
 
 func (r *mutationResolver) CreateExpense(ctx context.Context, input model.ExpenseInput) (*model.Expense, error) {
@@ -203,7 +206,10 @@ func (r *mutationResolver) EditCategory(ctx context.Context, id int, input model
 }
 
 func (r *mutationResolver) EditCustomer(ctx context.Context, id int, input model.CustomerInput) (*model.Customer, error) {
-	return repository.EditCustomer(r.DB, id, input, helpers.ForContext(ctx).StoreID)
+	return repository.EditCustomer(r.DB, id, input, helpers.UserAndStoreArgs{
+		UserID:  helpers.ForContext(ctx).UserID,
+		StoreID: helpers.ForContext(ctx).StoreID,
+	})
 }
 
 func (r *mutationResolver) EditItem(ctx context.Context, id int, input model.ItemInput) (*model.Item, error) {
