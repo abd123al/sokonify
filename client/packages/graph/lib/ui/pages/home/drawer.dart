@@ -91,7 +91,7 @@ class SokonifyDrawer extends StatelessWidget {
               ListTile(
                 title: const Text('Stats'),
                 trailing: const Icon(Icons.query_stats_outlined),
-                onTap: () {},
+                onTap: () => redirectTo(context, Routes.stats),
               ),
               const Divider(),
               ListTile(

@@ -163,6 +163,7 @@ class UniBlocProviderState extends State<UniBlocProvider> {
               RepositoryProvider(create: (context) => customerRepository),
               RepositoryProvider(create: (context) => paymentRepository),
               RepositoryProvider(create: (context) => expenseRepository),
+              RepositoryProvider(create: (context) => statsRepository),
             ],
             child: widget.child,
           ),

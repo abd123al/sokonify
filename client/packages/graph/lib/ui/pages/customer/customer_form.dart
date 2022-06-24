@@ -151,10 +151,12 @@ class _CreateCustomerPageState extends State<CustomerForm> {
                     );
 
                     if (isEdit) {
-                      cubit.edit(EditCustomerArguments(
-                        id: widget.id!,
-                        input: input,
-                      ));
+                      cubit.edit(
+                        EditCustomerArguments(
+                          id: widget.id!,
+                          input: input,
+                        ),
+                      );
                     } else {
                       cubit.create(input);
                     }

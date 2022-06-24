@@ -200,6 +200,7 @@ input CustomerInput {
     dob:Time
     name: String!
     email: String
+    comment: String
     phone: String
     address: String
     tin: String
