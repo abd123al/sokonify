@@ -15,7 +15,7 @@ func CreateCustomer(DB *gorm.DB, input model.CustomerInput, args helpers.UserAnd
 	if email != nil {
 		DB.Where(&model.User{Email: *email}).First(&user)
 	} else if phone != nil {
-		DB.Where(&model.User{Phone: *phone}).First(&user)
+		DB.Where(&model.User{Phone: phone}).First(&user)
 	}
 
 	customer := model.Customer{

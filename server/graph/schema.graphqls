@@ -98,7 +98,7 @@ type User implements Gorm {
     name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(50);default:null")
     email: String! @goTag(key: "gorm", value: "unique;not null;type:varchar(100);default:null")
     username: String @goTag(key: "gorm", value: "unique;type:varchar(100);default:null")
-    phone: String! @goTag(key: "gorm", value: "unique;null;type:varchar(20);default:null")
+    phone: String @goTag(key: "gorm", value: "unique;null;type:varchar(20);default:null")
     password: String @goTag(key: "gorm", value: "type:varchar(100);default:null") @goField(forceResolver: true)
 
     isVerified: Boolean! @goTag(key: "gorm", value: "not null;default:false")
@@ -116,6 +116,13 @@ input SignUpInput {
     username : String #@validate(constraint: "optional")
     email : String! @validate(constraint: "required,email")
     password : String! @validate(constraint: "required")
+}
+
+input ProfileInput {
+    name : String! @validate(constraint: "required")
+    username : String #@validate(constraint: "optional")
+    phone : String #@validate(constraint: "optional")
+    email : String! @validate(constraint: "required,email")
 }
 
 input SwitchStoreInput {
@@ -782,6 +789,7 @@ type Mutation {
     editOrder(id: ID!,input: OrderInput!): Order!  @isAuthenticated
     editOrderItem(id: ID!,input: OrderItemInput!): OrderItem! @isAuthenticated @hasRole(role: staff)
     editProduct(id: ID!,input: ProductInput!): Product!  @isAuthenticated
+    editProfile(input: ProfileInput!): User!  @isAuthenticated
     editStaff(id: ID!,input: StaffInput!): Staff! @isAuthenticated  @hasRole(role: owner)
     editStore(id: ID!,input: StoreInput!): Store! @isAuthenticated  @hasRole(role: owner)
     editUnit(id: ID!,input: UnitInput!): Unit! @isAuthenticated  @hasRole(role: owner)

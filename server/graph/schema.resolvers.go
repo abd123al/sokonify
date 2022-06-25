@@ -234,6 +234,10 @@ func (r *mutationResolver) EditProduct(ctx context.Context, id int, input model.
 	})
 }
 
+func (r *mutationResolver) EditProfile(ctx context.Context, input model.ProfileInput) (*model.User, error) {
+	return repository.EditProfile(r.DB, helpers.ForContext(ctx).UserID, input)
+}
+
 func (r *mutationResolver) EditStaff(ctx context.Context, id int, input model.StaffInput) (*model.Staff, error) {
 	panic(fmt.Errorf("not implemented"))
 }

@@ -64,6 +64,23 @@ func SignIn(db *gorm.DB, input model.SignInInput) (*model.AuthPayload, error) {
 	return nil, err
 }
 
+// EditProfile todo check email and username
+func EditProfile(db *gorm.DB, ID int, input model.ProfileInput) (*model.User, error) {
+	user := model.User{
+		ID:       ID,
+		Name:     input.Name,
+		Email:    input.Email,
+		Username: input.Username,
+		Phone:    input.Phone,
+	}
+
+	if err := db.Model(&user).Where(&model.Product{ID: ID}).Updates(&user).Error; err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
 func SwitchStore(db *gorm.DB, args helpers.UserAndStoreArgs) (*model.AuthPayload, error) {
 	var payload *model.AuthPayload
 	var err = errors.New("switch to other store failed")
