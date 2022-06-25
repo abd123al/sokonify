@@ -10,7 +10,7 @@ func CreateProductCategories(db *gorm.DB, ProductID int, Categories []int) ([]*m
 
 	for _, k := range Categories {
 		ProductCategory := model.ProductCategory{
-			ProductID:  ProductID,
+			ProductID:  &ProductID,
 			CategoryID: k,
 		}
 
@@ -24,7 +24,7 @@ func CreateProductCategories(db *gorm.DB, ProductID int, Categories []int) ([]*m
 func DeleteProductCategories(DB *gorm.DB, ProductID int) ([]*model.ProductCategory, error) {
 	var categories []*model.ProductCategory
 
-	if err := DB.Where(&model.ProductCategory{ProductID: ProductID}).Delete(&categories).Error; err != nil {
+	if err := DB.Where(&model.ProductCategory{ProductID: &ProductID}).Delete(&categories).Error; err != nil {
 		return nil, err
 	}
 

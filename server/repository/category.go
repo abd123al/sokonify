@@ -10,6 +10,7 @@ func CreateCategory(db *gorm.DB, input model.CategoryInput, args helpers.UserAnd
 	category := model.Category{
 		Name:        input.Name,
 		Description: input.Description,
+		Type:        &input.Type,
 		StoreID:     &args.StoreID,
 		CreatorID:   &args.UserID,
 	}
@@ -25,6 +26,7 @@ func EditCategory(DB *gorm.DB, ID int, input model.CategoryInput, args helpers.U
 			ID:          ID,
 			Name:        input.Name,
 			Description: input.Description,
+			Type:        &input.Type,
 			CreatorID:   &args.UserID, //We just make this as creator
 		}
 

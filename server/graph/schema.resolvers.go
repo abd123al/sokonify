@@ -424,6 +424,10 @@ func (r *productCategoryResolver) Product(ctx context.Context, obj *model.Produc
 	panic(fmt.Errorf("not implemented"))
 }
 
+func (r *productCategoryResolver) Item(ctx context.Context, obj *model.ProductCategory) (*model.Item, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *productCategoryResolver) Creator(ctx context.Context, obj *model.ProductCategory) (*model.User, error) {
 	if obj.CreatorID != nil {
 		return repository.FindUser(r.DB, *obj.CreatorID)

@@ -42,11 +42,11 @@ func CreateProduct(DB *gorm.DB, input model.ProductInput, args helpers.UserAndSt
 			var cat *model.ProductCategory
 
 			//First() causes panic, so Find works here better
-			tx.Where(&model.ProductCategory{ProductID: product.ID, CategoryID: k}).Limit(1).Find(&cat)
+			tx.Where(&model.ProductCategory{ProductID: &product.ID, CategoryID: k}).Limit(1).Find(&cat)
 
 			if cat != nil {
 				ProductCategory := model.ProductCategory{
-					ProductID:  product.ID,
+					ProductID:  &product.ID,
 					CategoryID: k,
 				}
 

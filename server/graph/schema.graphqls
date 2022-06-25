@@ -148,6 +148,11 @@ input ChangePasswordInput {
     newPassword : String!
 }
 
+enum CategoryType {
+    category #default
+    subcategory
+}
+
 
 type Category implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey;")
@@ -158,6 +163,7 @@ type Category implements Gorm {
 
     name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(50);default:null")
     description: String @goTag(key: "gorm", value: "type:varchar(250);default:null")
+    type: CategoryType
 
     creatorId: Int
     creator: User @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
@@ -169,6 +175,7 @@ type Category implements Gorm {
 input CategoryInput {
     name: String!
     description: String
+    type: CategoryType!
 }
 
 #todo find better name to reflect customer and supplier
@@ -308,8 +315,11 @@ type ProductCategory implements Gorm {
     categoryId: Int!
     category: Category! @goTag(key: "gorm", value:  "foreignKey:CategoryID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")  @goField(forceResolver: true)
 
-    productId: Int!
-    product: Product! @goTag(key: "gorm", value:  "foreignKey:ProductID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")  @goField(forceResolver: true)
+    productId: Int
+    product: Product @goTag(key: "gorm", value:  "foreignKey:ProductID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")  @goField(forceResolver: true)
+
+    itemId: Int
+    item: Item @goTag(key: "gorm", value:  "foreignKey:ItemID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")  @goField(forceResolver: true)
 
     creatorId: Int
     creator: User @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
@@ -394,6 +404,7 @@ input ItemInput {
 
     brandId: Int
     productId: Int!
+    categories: [ID!]
 }
 
 enum ItemsBy {

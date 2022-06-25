@@ -1,5 +1,7 @@
 # Todo
 
+- add item freeze so that user kan sell users first 
+- add sub kategory 4 traking only items categories
 - resolve name by joining product/
 - backup should be encrypted.
 - in staff table add permissions separated by , only
