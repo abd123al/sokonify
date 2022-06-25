@@ -39,6 +39,7 @@ class Routes {
   static String payments = "/payments";
   static String products = "/products";
   static String product = "/product";
+  static String settings = "/settings";
   static String stats = "/stats";
   static String store = "/store";
   static String units = "/units";
@@ -246,6 +247,12 @@ class Routes {
     router.define(
       store,
       handler: storePagePageRouterHandler,
+      transitionType: TransitionType.inFromLeft,
+    );
+
+    router.define(
+      settings,
+      handler: settingsPageRouterHandler,
       transitionType: TransitionType.inFromLeft,
     );
 

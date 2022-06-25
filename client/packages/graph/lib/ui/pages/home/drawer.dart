@@ -96,8 +96,8 @@ class SokonifyDrawer extends StatelessWidget {
               const Divider(),
               ListTile(
                 title: const Text('Settings'),
-                trailing: const Icon(Icons.settings_outlined),
-                onTap: () {},
+                trailing: const Icon(Icons.settings),
+                onTap: () => redirectTo(context, Routes.settings),
               ),
             ],
           );

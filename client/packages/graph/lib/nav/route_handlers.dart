@@ -170,6 +170,10 @@ var ordersPageRouterHandler = Handler(handlerFunc: (_, __) {
   return const OrdersPaginatedPage();
 });
 
+var settingsPageRouterHandler = Handler(handlerFunc: (_, __) {
+  return const SettingsPage();
+});
+
 var paymentsPageRouterHandler = Handler(handlerFunc: (context, params) {
   final word = params["word"]![0];
 

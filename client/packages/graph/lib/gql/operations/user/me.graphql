@@ -3,6 +3,8 @@ query me{
         id
         name
         email
+        username
+        phone
         createdAt
     }
 }
