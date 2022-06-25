@@ -174,6 +174,10 @@ var settingsPageRouterHandler = Handler(handlerFunc: (_, __) {
   return const SettingsPage();
 });
 
+var editUserPageRouterHandler = Handler(handlerFunc: (_, __) {
+  return const EditUserPage();
+});
+
 var paymentsPageRouterHandler = Handler(handlerFunc: (context, params) {
   final word = params["word"]![0];
 

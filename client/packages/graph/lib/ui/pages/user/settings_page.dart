@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../nav/nav.dart';
 import '../../widgets/widgets.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -47,7 +48,13 @@ class SettingsPage extends StatelessWidget {
                 ),
                 actions: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      redirectTo(
+                        context,
+                        Routes.editProfile,
+                        replace: true,
+                      );
+                    },
                     icon: const Icon(Icons.edit),
                   )
                 ],

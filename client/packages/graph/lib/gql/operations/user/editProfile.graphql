@@ -1,0 +1,5 @@
+mutation editProfile($input:ProfileInput!) {
+    editProfile(input: $input) {
+        ...MeParts
+    }
+}

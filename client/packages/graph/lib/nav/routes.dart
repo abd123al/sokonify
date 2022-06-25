@@ -24,6 +24,7 @@ class Routes {
   static String editItem = "/editItem";
   static String editOrder = "/editOrder";
   static String editProduct = "/editProduct";
+  static String editProfile = "/editProfile";
   static String editStore = "/editStore";
 
   static String brands = "/brands";
@@ -169,6 +170,12 @@ class Routes {
     router.define(
       "$editProduct/:id",
       handler: editProductPageRouterHandler,
+      transitionType: TransitionType.nativeModal,
+    );
+
+    router.define(
+      editProfile,
+      handler: editUserPageRouterHandler,
       transitionType: TransitionType.nativeModal,
     );
 
