@@ -22,8 +22,25 @@ func CreateItem(DB *gorm.DB, input model.ItemInput, CreatorID int) (*model.Item,
 		CreatorID:    &CreatorID,
 	}
 
-	result := DB.Create(&item)
-	return &item, result.Error
+	err := DB.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Create(&item).Error; err != nil {
+			return err
+		}
+
+		_, er := CreateProductCategories(tx, item.ID, model.CategoryTypeSubcategory, input.Categories, CreatorID)
+
+		if er != nil {
+			return er
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &item, nil
 }
 
 func EditItem(DB *gorm.DB, ID int, input model.ItemInput, CreatorID int) (*model.Item, error) {

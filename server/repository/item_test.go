@@ -13,6 +13,7 @@ func TestItem(t *testing.T) {
 	DB := util.InitTestDB()
 	product := util.CreateProduct(DB, nil)
 	unit := util.CreateUnit(DB, product.StoreID, nil)
+	cat := util.CreateCategory(DB, *product.StoreID, model.CategoryTypeSubcategory)
 
 	t.Run("CreateItem", func(t *testing.T) {
 		item, _ := repository.CreateItem(DB, model.ItemInput{
@@ -21,9 +22,15 @@ func TestItem(t *testing.T) {
 			Quantity:     12,
 			BuyingPrice:  "2000",
 			SellingPrice: "5000",
+			Categories:   []int{cat.ID},
 		}, *product.CreatorID)
 
 		require.GreaterOrEqual(t, item.ID, 1)
+
+		//Test finding its categories
+		res, err := repository.FindProductCategories(DB, model.CategoryTypeSubcategory, item.ID)
+		require.Nil(t, err)
+		require.GreaterOrEqual(t, len(res), 1)
 	})
 
 	var create = func() *model.Item {

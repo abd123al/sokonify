@@ -55,7 +55,7 @@ func FindProductCategories(db *gorm.DB, Type model.CategoryType, ProductID int) 
 	var categories []*model.Category
 	var word string
 
-	if Type != model.CategoryTypeCategory {
+	if Type == model.CategoryTypeCategory {
 		word = "product_id"
 	} else {
 		word = "item_id"

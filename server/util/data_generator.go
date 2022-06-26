@@ -76,10 +76,11 @@ func CreateStaff(DB *gorm.DB, Args *CreateStaffArgs) *model.Staff {
 	return staff
 }
 
-func CreateCategory(DB *gorm.DB, StoreID int) *model.Category {
+func CreateCategory(DB *gorm.DB, StoreID int, categoryType model.CategoryType) *model.Category {
 	category := model.Category{
 		Name:    faker.Name(),
 		StoreID: &StoreID,
+		Type:    categoryType,
 	}
 
 	DB.Create(&category)
