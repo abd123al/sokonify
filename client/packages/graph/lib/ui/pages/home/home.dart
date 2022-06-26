@@ -109,19 +109,21 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildBody() {
+    final List<Widget> list = [
+      const POS(),
+      const OrdersListScaffold(),
+      const Inventory(),
+      const Expenses(),
+      const Customers(),
+    ];
+
     return SizedBox.expand(
       child: PageView(
         controller: _pageController,
         onPageChanged: (index) {
           setState(() => _currentIndex = index);
         },
-        children: const <Widget>[
-          POS(),
-          OrdersListScaffold(),
-          Inventory(),
-          Expenses(),
-          Customers(),
-        ],
+        children: list,
       ),
     );
   }

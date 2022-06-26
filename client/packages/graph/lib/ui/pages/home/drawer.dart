@@ -14,6 +14,7 @@ class SokonifyDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final children = <Widget>[
       UserBuilder(
+        loadingWidget: const SizedBox(),
         builder: (context, data) {
           return UserAccountsDrawerHeader(
             accountEmail: Text(data.email),
@@ -27,6 +28,7 @@ class SokonifyDrawer extends StatelessWidget {
         },
       ),
       StoreBuilder(
+        loadingWidget: const SizedBox(),
         noBuilder: (context) => const SizedBox(),
         builder: (context, _) {
           ///All these need someone to have store
