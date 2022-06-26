@@ -27,8 +27,8 @@ func EditCategory(DB *gorm.DB, ID int, input model.CategoryInput, args helpers.U
 			ID:          ID,
 			Name:        input.Name,
 			Description: input.Description,
-			Type:        input.Type,
-			CreatorID:   &args.UserID, //We just make this as creator
+			//Type:        input.Type, no need
+			CreatorID: &args.UserID, //We just make this as creator
 		}
 
 		if err := tx.Model(&category).Where(&model.Category{ID: ID, StoreID: &args.StoreID}).Updates(&category).Error; err != nil {

@@ -58,7 +58,25 @@ func EditItem(DB *gorm.DB, ID int, input model.ItemInput, CreatorID int) (*model
 		CreatorID:    &CreatorID,
 	}
 
-	if err := DB.Model(&model.Item{}).Where(&model.Item{ID: ID, CreatorID: &CreatorID}).Updates(&update).Error; err != nil {
+	err := DB.Transaction(func(tx *gorm.DB) error {
+		if err := DB.Model(&model.Item{}).Where(&model.Item{ID: ID, CreatorID: &CreatorID}).Updates(&update).Error; err != nil {
+			return err
+		}
+
+		_, err := DeleteProductCategories(tx, ID, model.CategoryTypeSubcategory)
+		if err != nil {
+			return err
+		}
+
+		_, err = CreateProductCategories(tx, ID, model.CategoryTypeSubcategory, input.Categories, CreatorID)
+
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+
+	if err != nil {
 		return nil, err
 	}
 
