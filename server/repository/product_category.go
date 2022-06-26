@@ -5,12 +5,20 @@ import (
 	"mahesabu/graph/model"
 )
 
-func CreateProductCategories(db *gorm.DB, ProductID int, Categories []int) ([]*model.ProductCategory, error) {
+func CreateProductCategories(db *gorm.DB, Id int, Type model.CategoryType, Categories []int) ([]*model.ProductCategory, error) {
 	var cats []*model.ProductCategory
+	var ProductID, ItemID *int
+
+	if Type == model.CategoryTypeCategory {
+		ProductID = &Id
+	} else {
+		ItemID = &Id
+	}
 
 	for _, k := range Categories {
 		ProductCategory := model.ProductCategory{
-			ProductID:  &ProductID,
+			ItemID:     ItemID,
+			ProductID:  ProductID,
 			CategoryID: k,
 		}
 
@@ -21,10 +29,18 @@ func CreateProductCategories(db *gorm.DB, ProductID int, Categories []int) ([]*m
 	return cats, result.Error
 }
 
-func DeleteProductCategories(DB *gorm.DB, ProductID int) ([]*model.ProductCategory, error) {
+// DeleteProductCategories todo not delete categories just update
+func DeleteProductCategories(DB *gorm.DB, ID int, Type model.CategoryType) ([]*model.ProductCategory, error) {
 	var categories []*model.ProductCategory
+	var ProductID, ItemID *int
 
-	if err := DB.Where(&model.ProductCategory{ProductID: &ProductID}).Delete(&categories).Error; err != nil {
+	if Type == model.CategoryTypeCategory {
+		ProductID = &ID
+	} else {
+		ItemID = &ID
+	}
+
+	if err := DB.Where(&model.ProductCategory{ProductID: ProductID, ItemID: ItemID}).Delete(&categories).Error; err != nil {
 		return nil, err
 	}
 

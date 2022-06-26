@@ -84,7 +84,7 @@ func EditProduct(DB *gorm.DB, ID int, input model.ProductInput, args helpers.Use
 			return err
 		}
 
-		_, err := DeleteProductCategories(tx, ID)
+		_, err := DeleteProductCategories(tx, ID, model.CategoryTypeCategory)
 		if err != nil {
 			return err
 		}
@@ -92,7 +92,7 @@ func EditProduct(DB *gorm.DB, ID int, input model.ProductInput, args helpers.Use
 		//making sure ids are unique
 		categories := helpers.RemoveDuplicatedInt(input.Categories)
 
-		_, err = CreateProductCategories(tx, ID, categories)
+		_, err = CreateProductCategories(tx, ID, model.CategoryTypeCategory, categories)
 
 		if err != nil {
 			return err
