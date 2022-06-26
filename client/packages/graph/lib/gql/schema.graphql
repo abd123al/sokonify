@@ -72,6 +72,7 @@ type Category implements Gorm {
     name: String!
     store: Store
     storeId: Int
+    type: CategoryType!
     updatedAt: Time!
 }
 
@@ -115,6 +116,7 @@ type Item implements Gorm {
     brand: Brand
     brandId: Int
     buyingPrice: String!
+    categories: [Category!]
     createdAt: Time!
     creator: User
     creatorId: Int
@@ -252,8 +254,10 @@ type ProductCategory implements Gorm {
     creatorId: Int
     deletedAt: Time
     id: ID!
-    product: Product!
-    productId: Int!
+    item: Item
+    itemId: Int
+    product: Product
+    productId: Int
     updatedAt: Time!
 }
 
@@ -373,6 +377,11 @@ enum BusinessType {
     both
     retail
     wholesale
+}
+
+enum CategoryType {
+    category
+    subcategory
 }
 
 enum CustomerType {
@@ -505,6 +514,7 @@ input BrandsArgs {
 input CategoryInput {
     description: String
     name: String!
+    type: CategoryType!
 }
 
 input ChangePasswordInput {
@@ -548,6 +558,7 @@ input ItemInput {
     batch: String
     brandId: Int
     buyingPrice: String!
+    categories: [ID!]
     description: String
     expiresAt: Time
     productId: Int!

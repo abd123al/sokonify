@@ -7,6 +7,7 @@ import '../../../nav/nav.dart';
 import '../../../repositories/item_repository.dart';
 import '../../widgets/widgets.dart';
 import '../brand/brand.dart';
+import '../category/categories_list_cubit.dart';
 import '../product/products_list_cubit.dart';
 import '../unit/units_list_cubit.dart';
 import 'create_item_cubit.dart';
@@ -39,6 +40,8 @@ class _ItemFormState extends State<ItemForm> {
   int? _unitId;
   int? _brandId;
   DateTime? _selectedDate;
+  late List<Categories$Query$Category> _categories;
+
   late bool isEdit;
 
   @override
@@ -49,6 +52,10 @@ class _ItemFormState extends State<ItemForm> {
     _productId = widget.item?.product.id;
     _unitId = widget.item?.unit.id;
     _brandId = widget.item?.brand?.id;
+    _categories = widget.item?.categories
+            ?.map((e) => Categories$Query$Category.fromJson(e.toJson()))
+            .toList() ??
+        [];
 
     _batchPriceController.text = widget.item?.batch ?? "";
     _buyingPriceController.text = widget.item?.buyingPrice ?? "";
@@ -127,6 +134,35 @@ class _ItemFormState extends State<ItemForm> {
                     onChanged: (item) => setState(() {
                       _brandId = item?.id;
                     }),
+                  );
+                },
+              ),
+            if (_productId != null)
+              QueryBuilder<ResourceListData<Categories$Query$Category>,
+                  CategoriesListCubit>(
+                retry: (cubit) => cubit.fetch(),
+                builder: (context, data, _) {
+                  final List<Categories$Query$Category> cats = data.items
+                      .where((e) => e.type == CategoryType.subcategory)
+                      .toList();
+
+                  if (cats.isEmpty) {
+                    return const SizedBox();
+                  }
+
+                  return SearchableDropdown<
+                      Categories$Query$Category>.multiSelection(
+                    asString: (i) => i.name.toLowerCase(),
+                    data: ResourceListData<Categories$Query$Category>()
+                        .copyWith(items: cats),
+                    labelText: "Stock Categories (Optional)",
+                    hintText: "Select Stock Categories (Optional)",
+                    helperText:
+                        "Grouping stocks into categories can help tracking them better.",
+                    onChangedMultiSelection: (item) => setState(() {
+                      _categories = item;
+                    }),
+                    selectedItems: _categories,
                   );
                 },
               ),
@@ -249,6 +285,7 @@ class _ItemFormState extends State<ItemForm> {
                             productId: _productId!,
                             expiresAt: _selectedDate,
                             brandId: _brandId,
+                            categories: _categories.map((e) => e.id).toList(),
                           );
 
                           if (!isEdit) {

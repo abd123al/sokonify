@@ -1,9 +1,11 @@
+import 'package:blocitory/helpers/resource_list_data.dart';
 import 'package:flutter/material.dart';
 import 'package:graph/ui/helpers/helpers.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../nav/nav.dart';
 import '../../widgets/widgets.dart';
+import '../category/category_tile.dart';
 import 'item_wrapper.dart';
 
 /// There is no need at all to edit posted order.
@@ -53,6 +55,32 @@ class ItemPage extends StatelessWidget {
         ShortDetailTile(subtitle: "Batch", value: data.batch),
         ShortDetailTile(subtitle: "Added By", value: data.creator?.name),
         ShortDetailTile(subtitle: "Added on", value: data.createdAt.toString()),
+        const WordDivider(text: 'Categories'),
+        //todo share one widget
+        Builder(
+          builder: (context) {
+            final items = data.categories
+                ?.map((e) => Categories$Query$Category.fromJson(e.toJson()))
+                .toList();
+
+            final cats = ResourceListData<Categories$Query$Category>(
+              items: items,
+            );
+
+            return HighList<Categories$Query$Category>(
+              items: cats,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              emptyWord: "No categories found",
+              builder: (context, item, color) {
+                return CategoryTile(
+                  category: item,
+                  color: color,
+                );
+              },
+            );
+          },
+        ),
       ],
     );
   }

@@ -12,9 +12,11 @@ class CategoryForm extends StatefulWidget {
     Key? key,
     required this.category,
     required this.id,
+    required this.type,
   }) : super(key: key);
 
   final Category$Query$Category? category;
+  final CategoryType type;
   final int? id;
 
   @override
@@ -91,21 +93,16 @@ class _CreateCategoryPageState extends State<CategoryForm> {
                 return Button(
                   padding: EdgeInsets.zero,
                   callback: () {
+                    final input = CategoryInput(
+                      name: _nameController.text,
+                      description: _descController.text,
+                      type: widget.type,
+                    );
+
                     if (isEdit) {
-                      cubit.edit(
-                        widget.id!,
-                        CategoryInput(
-                          name: _nameController.text,
-                          description: _descController.text,
-                        ),
-                      );
+                      cubit.edit(widget.id!, input);
                     } else {
-                      cubit.create(
-                        CategoryInput(
-                          name: _nameController.text,
-                          description: _descController.text,
-                        ),
-                      );
+                      cubit.create(input);
                     }
                   },
                   title: 'Submit',

@@ -15,12 +15,16 @@ var editStoreRouterHandler = Handler(handlerFunc: (_, __) {
   return const EditStorePage();
 });
 
-var createCategoryRouterHandler = Handler(handlerFunc: (_, __) {
-  return const CreateCategoryPage();
+var createCategoryRouterHandler = Handler(handlerFunc: (context, __) {
+  return CreateCategoryPage(
+    type: context?.settings?.arguments as CategoryType,
+  );
 });
 
-var categoriesListRouterHandler = Handler(handlerFunc: (_, __) {
-  return const CategoriesListPage();
+var categoriesListRouterHandler = Handler(handlerFunc: (context, __) {
+  return CategoriesListPage(
+    type: context?.settings?.arguments as CategoryType,
+  );
 });
 
 var createItemRouterHandler = Handler(handlerFunc: (_, __) {

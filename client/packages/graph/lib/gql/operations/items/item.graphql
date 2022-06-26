@@ -22,5 +22,8 @@ query item($id: ID!) {
             id
             name
         }
+        categories {
+            ...CategoryParts
+        }
     }
 }

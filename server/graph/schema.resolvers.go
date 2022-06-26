@@ -466,7 +466,7 @@ func (r *queryResolver) Category(ctx context.Context, id int) (*model.Category, 
 	return repository.FindCategory(r.DB, id)
 }
 
-func (r *queryResolver) Categories(ctx context.Context) ([]*model.Category, error) {
+func (r *queryResolver) Categories(ctx context.Context, args model.CategoriesArgs) ([]*model.Category, error) {
 	return repository.FindCategories(r.DB, helpers.ForContext(ctx).StoreID)
 }
 

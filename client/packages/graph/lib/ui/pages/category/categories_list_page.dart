@@ -8,17 +8,32 @@ import 'categories_list_cubit.dart';
 import 'category_tile.dart';
 
 class CategoriesListPage extends StatelessWidget {
-  const CategoriesListPage({Key? key}) : super(key: key);
+  const CategoriesListPage({
+    Key? key,
+    required this.type,
+  }) : super(key: key);
+  final CategoryType type;
 
   @override
   Widget build(BuildContext context) {
+    word() {
+      if (type == CategoryType.subcategory) {
+        return "Stock";
+      }
+      return "Product";
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Product Categories"),
+        title: Text("${word()} Categories"),
       ),
       body: _buildListView(),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => redirectTo(context, Routes.createCategory),
+        onPressed: () => redirectTo(
+          context,
+          Routes.createCategory,
+          args: type,
+        ),
         tooltip: 'Add',
         icon: const Icon(Icons.add),
         label: const Text("Add Category"),
@@ -31,9 +46,13 @@ class CategoriesListPage extends StatelessWidget {
         CategoriesListCubit>(
       retry: (cubit) => cubit.fetch(),
       builder: (context, data, _) {
+        final List<Categories$Query$Category> cats =
+            data.items.where((e) => e.type == type).toList();
+
         return SearchableList<Categories$Query$Category>(
           hintName: "Category",
-          data: data,
+          data: ResourceListData<Categories$Query$Category>()
+              .copyWith(items: cats),
           compare: (i) => i.name,
           builder: (context, item, color) {
             return CategoryTile(

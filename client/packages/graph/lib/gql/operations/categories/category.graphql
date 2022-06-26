@@ -3,6 +3,7 @@ query category($id:ID!) {
         name
         description
         createdAt
+        type
         creator {
             ...CreatorParts
         }

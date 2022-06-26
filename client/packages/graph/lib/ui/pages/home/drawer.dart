@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:graph/gql/generated/graphql_api.graphql.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../nav/nav.dart';
@@ -72,7 +73,22 @@ class SokonifyDrawer extends StatelessWidget {
                 title: const Text('Product Categories'),
                 trailing: const Icon(Icons.category_outlined),
                 onTap: () {
-                  redirectTo(context, Routes.categories);
+                  redirectTo(
+                    context,
+                    Routes.categories,
+                    args: CategoryType.category,
+                  );
+                },
+              ),
+              ListTile(
+                title: const Text('Stock Categories'),
+                trailing: const Icon(Icons.category_outlined),
+                onTap: () {
+                  redirectTo(
+                    context,
+                    Routes.categories,
+                    args: CategoryType.subcategory,
+                  );
                 },
               ),
               ListTile(
