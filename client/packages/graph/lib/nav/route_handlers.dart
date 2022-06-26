@@ -182,6 +182,10 @@ var editUserPageRouterHandler = Handler(handlerFunc: (_, __) {
   return const EditUserPage();
 });
 
+var changePassPageRouterHandler = Handler(handlerFunc: (_, __) {
+  return const ChangePasswordPage();
+});
+
 var paymentsPageRouterHandler = Handler(handlerFunc: (context, params) {
   final word = params["word"]![0];
 

@@ -22,4 +22,13 @@ class UserRepository {
 
     return client.mutate(options);
   }
+
+  changePassword(ChangePasswordInput input) {
+    final options = MutationOptions(
+      document: CHANGE_PASSWORD_MUTATION_DOCUMENT,
+      variables: ChangePasswordArguments(input: input).toJson(),
+    );
+
+    return client.mutate(options);
+  }
 }

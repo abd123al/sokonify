@@ -19,6 +19,7 @@ class Routes {
   static String createStore = "/createStore";
   static String createUnit = "/createUnit";
 
+  static String changePassword = "/changePassword";
   static String editCategory = "/editCategory";
   static String editCustomer = "/editCustomer";
   static String editItem = "/editItem";
@@ -140,6 +141,12 @@ class Routes {
     router.define(
       createUnit,
       handler: createUnitRouterHandler,
+      transitionType: TransitionType.materialFullScreenDialog,
+    );
+
+    router.define(
+      changePassword,
+      handler: changePassPageRouterHandler,
       transitionType: TransitionType.materialFullScreenDialog,
     );
 

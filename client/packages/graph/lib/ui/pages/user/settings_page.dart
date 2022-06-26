@@ -27,9 +27,15 @@ class SettingsPage extends StatelessWidget {
               value: user.phone,
             ),
             const SizedBox(height: 16),
-            const ListTile(
-              title: Text("Change Password"),
-              trailing: Icon(Icons.password),
+            ListTile(
+              title: const Text("Change Password"),
+              trailing: const Icon(Icons.password),
+              onTap: () {
+                redirectTo(
+                  context,
+                  Routes.changePassword,
+                );
+              },
             ),
           ];
 

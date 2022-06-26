@@ -141,7 +141,7 @@ type ItemsStats {
 }
 
 type Mutation {
-    changePassword(input: ChangePasswordInput!): User!
+    changePassword(input: ChangePasswordInput!): Boolean!
     createBrand(input: BrandInput!): Brand!
     createCategory(input: CategoryInput!): Category!
     createCustomer(input: CustomerInput!): Customer!

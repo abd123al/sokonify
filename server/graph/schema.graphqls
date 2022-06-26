@@ -793,7 +793,7 @@ type Mutation {
     # Only admins can create new user.
     createUnit(input: UnitInput!): Unit! @isAuthenticated  @hasRole(role: owner)
 
-    changePassword(input: ChangePasswordInput!): User! @isAuthenticated
+    changePassword(input: ChangePasswordInput!): Boolean! @isAuthenticated
 
     editBrand(id: ID!,input: BrandInput!): Brand! @isAuthenticated  @hasRole(role: owner)
     editCategory(id: ID!,input: CategoryInput!): Category! @isAuthenticated  @hasRole(role: owner)

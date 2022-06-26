@@ -201,8 +201,8 @@ func (r *mutationResolver) CreateUnit(ctx context.Context, input model.UnitInput
 	})
 }
 
-func (r *mutationResolver) ChangePassword(ctx context.Context, input model.ChangePasswordInput) (*model.User, error) {
-	panic(fmt.Errorf("not implemented"))
+func (r *mutationResolver) ChangePassword(ctx context.Context, input model.ChangePasswordInput) (bool, error) {
+	return repository.ChangePassword(r.DB, helpers.ForContext(ctx).UserID, input)
 }
 
 func (r *mutationResolver) EditBrand(ctx context.Context, id int, input model.BrandInput) (*model.Brand, error) {
@@ -466,7 +466,7 @@ func (r *queryResolver) Category(ctx context.Context, id int) (*model.Category, 
 	return repository.FindCategory(r.DB, id)
 }
 
-func (r *queryResolver) Categories(ctx context.Context, args model.CategoriesArgs) ([]*model.Category, error) {
+func (r *queryResolver) Categories(ctx context.Context) ([]*model.Category, error) {
 	return repository.FindCategories(r.DB, helpers.ForContext(ctx).StoreID)
 }
 
