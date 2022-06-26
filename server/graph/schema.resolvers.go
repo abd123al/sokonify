@@ -48,6 +48,13 @@ func (r *brandResolver) Creator(ctx context.Context, obj *model.Brand) (*model.U
 	return nil, nil
 }
 
+func (r *categoryResolver) Type(ctx context.Context, obj *model.Category) (model.CategoryType, error) {
+	if obj.Type == "" {
+		return model.CategoryTypeCategory, nil
+	}
+	return model.CategoryTypeSubcategory, nil
+}
+
 func (r *categoryResolver) Creator(ctx context.Context, obj *model.Category) (*model.User, error) {
 	if obj.CreatorID != nil {
 		return repository.FindUser(r.DB, *obj.CreatorID)
@@ -110,6 +117,10 @@ func (r *itemResolver) Brand(ctx context.Context, obj *model.Item) (*model.Brand
 
 func (r *itemResolver) Unit(ctx context.Context, obj *model.Item) (*model.Unit, error) {
 	return repository.FindUnit(r.DB, obj.UnitID)
+}
+
+func (r *itemResolver) Categories(ctx context.Context, obj *model.Item) ([]*model.Category, error) {
+	return repository.FindProductCategories(r.DB, model.CategoryTypeSubcategory, obj.ID)
 }
 
 func (r *mutationResolver) CreateBrand(ctx context.Context, input model.BrandInput) (*model.Brand, error) {
@@ -413,7 +424,7 @@ func (r *productResolver) Creator(ctx context.Context, obj *model.Product) (*mod
 }
 
 func (r *productResolver) Categories(ctx context.Context, obj *model.Product) ([]*model.Category, error) {
-	return repository.FindProductCategories(r.DB, obj.ID)
+	return repository.FindProductCategories(r.DB, model.CategoryTypeCategory, obj.ID)
 }
 
 func (r *productCategoryResolver) Category(ctx context.Context, obj *model.ProductCategory) (*model.Category, error) {

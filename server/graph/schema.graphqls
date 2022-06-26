@@ -163,7 +163,7 @@ type Category implements Gorm {
 
     name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(50);default:null")
     description: String @goTag(key: "gorm", value: "type:varchar(250);default:null")
-    type: CategoryType
+    type: CategoryType! @goField(forceResolver: true) #todo after migrate remove this
 
     creatorId: Int
     creator: User @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
@@ -391,6 +391,8 @@ type Item implements Gorm {
 
     unitId: Int!
     unit: Unit! @goTag(key: "gorm", value:  "foreignKey:UnitID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;") @goField(forceResolver: true)
+
+    categories: [Category!] @goTag(key: "gorm", value: "-") @goField(forceResolver: true)
 }
 
 input ItemInput {
