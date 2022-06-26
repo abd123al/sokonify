@@ -20,6 +20,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   final _currentController = TextEditingController();
   final _newController = TextEditingController();
   final _confirmController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +35,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Form(
+              key: _formKey,
               child: FormList(
-                shrinkWrap: true,
                 children: [
                   TextFormField(
                     decoration: const InputDecoration(
@@ -80,12 +81,14 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   ),
                   Button(
                     callback: () {
-                      cubit.submit(
-                        ChangePasswordInput(
-                          newPassword: _newController.text,
-                          currentPassword: _currentController.text,
-                        ),
-                      );
+                      if (_formKey.currentState!.validate()) {
+                        cubit.submit(
+                          ChangePasswordInput(
+                            newPassword: _newController.text,
+                            currentPassword: _currentController.text,
+                          ),
+                        );
+                      }
                     },
                     title: 'Submit',
                   ),
