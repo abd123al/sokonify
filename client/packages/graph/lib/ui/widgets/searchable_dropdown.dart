@@ -4,7 +4,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
 class SearchableDropdown<T> extends StatefulWidget {
-  SearchableDropdown({
+  const SearchableDropdown({
     Key? key,
     this.builder,
     required this.asString,
@@ -15,6 +15,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     required this.labelText,
     this.onChangedMultiSelection,
     this.helperText,
+    this.isOptional = true,
   })  : isMultiSelectionMode = false,
         selectedItems = null,
         super(key: key);
@@ -30,6 +31,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     this.onChangedMultiSelection,
     this.selectedItems,
     this.helperText,
+    this.isOptional = true,
   })  : onChanged = null,
         isMultiSelectionMode = true,
         super(key: key);
@@ -45,6 +47,7 @@ class SearchableDropdown<T> extends StatefulWidget {
   final ResourceListData<T> data;
   final bool Function(T)? selectedItem;
   final List<T>? selectedItems;
+  final bool isOptional;
 
   @override
   State<StatefulWidget> createState() {
@@ -124,6 +127,13 @@ class _SearchableListState<T> extends State<SearchableDropdown<T>> {
                       ? (c, i, _) => widget.builder!(c, i)
                       : null,
                 ),
+                validator: (s) {
+                  if (s == null && !widget.isOptional) {
+                    return "This field is required.";
+                  }
+
+                  return null;
+                },
               );
             },
           ),

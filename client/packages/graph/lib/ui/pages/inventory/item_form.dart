@@ -1,6 +1,7 @@
 import 'package:blocitory/blocitory.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../nav/nav.dart';
@@ -32,6 +33,7 @@ class ItemForm extends StatefulWidget {
 class _ItemFormState extends State<ItemForm> {
   final _batchPriceController = TextEditingController();
   final _buyingPriceController = TextEditingController();
+  final _dateController = TextEditingController();
   final _descriptionPriceController = TextEditingController();
   final _expireDateController = TextEditingController();
   final _sellingPriceController = TextEditingController();
@@ -39,10 +41,12 @@ class _ItemFormState extends State<ItemForm> {
   int? _productId;
   int? _unitId;
   int? _brandId;
-  DateTime? _selectedDate;
+  DateTime? _expireDate;
   late List<Categories$Query$Category> _categories;
 
   late bool isEdit;
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -63,6 +67,8 @@ class _ItemFormState extends State<ItemForm> {
     _expireDateController.text = widget.item?.expiresAt.toString() ?? "";
     _sellingPriceController.text = widget.item?.sellingPrice.toString() ?? "";
     _quantityController.text = widget.item?.quantity.toString() ?? "";
+    _expireDate = widget.item?.expiresAt;
+    _dateController.text = formatDate(widget.item?.expiresAt) ?? "";
   }
 
   @override
@@ -74,6 +80,7 @@ class _ItemFormState extends State<ItemForm> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Form(
+        key: _formKey,
         child: FormList(
           children: [
             if (isEdit)
@@ -105,6 +112,7 @@ class _ItemFormState extends State<ItemForm> {
                   asString: (i) => i.name.toLowerCase(),
                   data: products,
                   labelText: "Product",
+                  isOptional: false,
                   hintText: "Select Product",
                   selectedItem: (e) => e.id == _productId,
                   onChanged: (p) => setState(() {
@@ -114,196 +122,223 @@ class _ItemFormState extends State<ItemForm> {
                 );
               },
             ),
-            if (_productId != null)
-              QueryBuilder<ResourceListData<Brands$Query$Brand>,
-                  BrandsListCubit>(
-                retry: (cubit) => cubit.fetch(),
-                builder: (context, data, _) {
-                  final List<Brands$Query$Brand> brands = data.items
-                      .where((e) => e.productId == _productId)
-                      .toList();
+            QueryBuilder<ResourceListData<Brands$Query$Brand>, BrandsListCubit>(
+              retry: (cubit) => cubit.fetch(),
+              builder: (context, data, _) {
+                final List<Brands$Query$Brand> brands =
+                    data.items.where((e) => e.productId == _productId).toList();
 
-                  return SearchableDropdown<Brands$Query$Brand>(
-                    asString: (i) => i.name.toLowerCase(),
-                    data: data.copyWith(
-                      items: brands,
-                    ),
-                    labelText: "Brand (Optional)",
-                    hintText: "Select Brand (Optional)",
-                    selectedItem: (e) => e.id == _brandId,
-                    onChanged: (item) => setState(() {
-                      _brandId = item?.id;
-                    }),
-                  );
-                },
-              ),
-            if (_productId != null)
-              QueryBuilder<ResourceListData<Categories$Query$Category>,
-                  CategoriesListCubit>(
-                retry: (cubit) => cubit.fetch(),
-                builder: (context, data, _) {
-                  final List<Categories$Query$Category> cats = data.items
-                      .where((e) => e.type == CategoryType.subcategory)
-                      .toList();
-
-                  if (cats.isEmpty) {
-                    return const SizedBox();
-                  }
-
-                  return SearchableDropdown<
-                      Categories$Query$Category>.multiSelection(
-                    asString: (i) => i.name.toLowerCase(),
-                    data: ResourceListData<Categories$Query$Category>()
-                        .copyWith(items: cats),
-                    labelText: "Stock Categories (Optional)",
-                    hintText: "Select Stock Categories (Optional)",
-                    helperText:
-                        "Grouping stocks into categories can help tracking them better.",
-                    onChangedMultiSelection: (item) => setState(() {
-                      _categories = item;
-                    }),
-                    selectedItems: _categories,
-                  );
-                },
-              ),
-            if (_productId != null || isEdit)
-              FormList(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                children: [
-                  TextField(
-                    autofocus: !isEdit,
-                    controller: _quantityController,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Quantity',
-                      hintText: 'The number of items',
-                    ),
+                return SearchableDropdown<Brands$Query$Brand>(
+                  asString: (i) => i.name.toLowerCase(),
+                  data: data.copyWith(
+                    items: brands,
                   ),
-                  QueryBuilder<ResourceListData<Units$Query$Unit>,
-                      UnitsListCubit>(
-                    retry: (cubit) => cubit.fetch(),
-                    loadingWidget: const LoadingIndicator.small(),
-                    retryWidget: const Icon(Icons.refresh),
-                    builder: (context, units, _) {
-                      if (units.items.isEmpty) {
-                        return CreateButton(
-                          title: "Units",
-                          onPressed: () =>
-                              redirectTo(context, Routes.createUnit),
-                        );
-                      }
+                  isOptional: true,
+                  labelText: "Brand (Optional)",
+                  hintText: "Select Brand (Optional)",
+                  selectedItem: (e) => e.id == _brandId,
+                  onChanged: (item) => setState(() {
+                    _brandId = item?.id;
+                  }),
+                );
+              },
+            ),
+            QueryBuilder<ResourceListData<Categories$Query$Category>,
+                CategoriesListCubit>(
+              retry: (cubit) => cubit.fetch(),
+              builder: (context, data, _) {
+                final List<Categories$Query$Category> cats = data.items
+                    .where((e) => e.type == CategoryType.subcategory)
+                    .toList();
 
-                      return SearchableDropdown<Units$Query$Unit>(
-                        asString: (i) => i.name.toLowerCase(),
-                        data: units,
-                        labelText: "Unit",
-                        hintText: "Select Unit",
-                        selectedItem: (e) => e.id == _unitId,
-                        onChanged: (item) => setState(() {
-                          _unitId = item?.id;
-                        }),
+                if (cats.isEmpty) {
+                  return const SizedBox();
+                }
+
+                return SearchableDropdown<
+                    Categories$Query$Category>.multiSelection(
+                  asString: (i) => i.name.toLowerCase(),
+                  data: ResourceListData<Categories$Query$Category>()
+                      .copyWith(items: cats),
+                  labelText: "Stock Categories (Optional)",
+                  hintText: "Select Stock Categories (Optional)",
+                  helperText:
+                      "Grouping stocks into categories can help tracking them better.",
+                  onChangedMultiSelection: (item) => setState(() {
+                    _categories = item;
+                  }),
+                  selectedItems: _categories,
+                );
+              },
+            ),
+            TextFormField(
+              autofocus: !isEdit,
+              controller: _quantityController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Quantity',
+                hintText: 'The number of items',
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty || value == "0") {
+                  return 'Please valid enter quantity..';
+                }
+                return null;
+              },
+            ),
+            QueryBuilder<ResourceListData<Units$Query$Unit>, UnitsListCubit>(
+              retry: (cubit) => cubit.fetch(),
+              loadingWidget: const LoadingIndicator.small(),
+              retryWidget: const Icon(Icons.refresh),
+              builder: (context, units, _) {
+                if (units.items.isEmpty) {
+                  return CreateButton(
+                    title: "Units",
+                    onPressed: () => redirectTo(context, Routes.createUnit),
+                  );
+                }
+
+                return SearchableDropdown<Units$Query$Unit>(
+                  asString: (i) => i.name.toLowerCase(),
+                  data: units,
+                  isOptional: false,
+                  labelText: "Unit",
+                  hintText: "Select Unit",
+                  selectedItem: (e) => e.id == _unitId,
+                  onChanged: (item) => setState(() {
+                    _unitId = item?.id;
+                  }),
+                );
+              },
+            ),
+            TextFormField(
+              controller: _buyingPriceController,
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Buying Price',
+                hintText: 'Enter item buying price',
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty || value == "0") {
+                  return 'Please valid price';
+                }
+                return null;
+              },
+            ),
+            TextField(
+              controller: _sellingPriceController,
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Selling Price',
+                hintText: 'Enter item selling price',
+              ),
+            ),
+            TextField(
+              controller: _descriptionPriceController,
+              keyboardType: TextInputType.text,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Description (Optional)',
+                hintText: 'Enter item selling price',
+              ),
+            ),
+            TextField(
+              controller: _batchPriceController,
+              keyboardType: TextInputType.text,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Batch (Optional)',
+                hintText: 'Enter batch number',
+              ),
+            ),
+            TextFormField(
+              keyboardType: TextInputType.datetime,
+              controller: _dateController,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Expire Date (Optional)',
+                hintText: 'Enter expire date here',
+              ),
+              onTap: () async {
+                // Below line stops keyboard from appearing
+                FocusScope.of(context).requestFocus(FocusNode());
+
+                final v = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  lastDate: DateTime.now().add(const Duration(days: 365 * 9)),
+                  firstDate: DateTime.now(),
+                );
+
+                setState(() {
+                  _expireDate = v;
+                });
+
+                //For just showing
+                _dateController.text = formatDate(v) ?? "";
+              },
+            ),
+            MutationBuilder<CreateItem$Mutation$Item, CreateItemCubit,
+                ItemRepository>(
+              blocCreator: (r) => CreateItemCubit(r),
+              onSuccess: (context, data) {
+                if (!isEdit) {
+                  BlocProvider.of<ItemsListCubit>(context)
+                      .addItem(Items$Query$Item.fromJson(data.toJson()));
+                } else {
+                  BlocProvider.of<ItemsListCubit>(context).updateItem(
+                    (l) => l.firstWhere((e) => e.id == widget.id),
+                    Items$Query$Item.fromJson(data.toJson()),
+                  );
+                }
+              },
+              pop: true,
+              builder: (context, cubit) {
+                return Button(
+                  padding: EdgeInsets.zero,
+                  callback: () {
+                    if (_formKey.currentState!.validate()) {
+                      final input = ItemInput(
+                        quantity: int.parse(_quantityController.text),
+                        sellingPrice: _sellingPriceController.text,
+                        buyingPrice: _buyingPriceController.text,
+                        unitId: _unitId!,
+                        description: _descriptionPriceController.text,
+                        batch: _batchPriceController.text,
+                        productId: _productId!,
+                        expiresAt: _expireDate,
+                        brandId: _brandId,
+                        categories: _categories.map((e) => e.id).toList(),
                       );
-                    },
-                  ),
-                  TextField(
-                    controller: _buyingPriceController,
-                    keyboardType:
-                        const TextInputType.numberWithOptions(decimal: true),
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Buying Price',
-                      hintText: 'Enter item buying price',
-                    ),
-                  ),
-                  TextField(
-                    controller: _sellingPriceController,
-                    keyboardType:
-                        const TextInputType.numberWithOptions(decimal: true),
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Selling Price',
-                      hintText: 'Enter item selling price',
-                    ),
-                  ),
-                  TextField(
-                    controller: _descriptionPriceController,
-                    keyboardType: TextInputType.text,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Description (Optional)',
-                      hintText: 'Enter item selling price',
-                    ),
-                  ),
-                  TextField(
-                    controller: _batchPriceController,
-                    keyboardType: TextInputType.text,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Batch (Optional)',
-                      hintText: 'Enter batch number',
-                    ),
-                  ),
-                  InputDatePickerFormField(
-                    firstDate: DateTime.now(),
-                    fieldLabelText: 'Expire Date (Optional)',
-                    fieldHintText: 'dd/mm/yyyy',
-                    lastDate: DateTime.now().add(const Duration(days: 366 * 9)),
-                    onDateSubmitted: (date) {
-                      setState(() {
-                        _selectedDate = date;
-                      });
-                    },
-                  ),
-                  MutationBuilder<CreateItem$Mutation$Item, CreateItemCubit,
-                      ItemRepository>(
-                    blocCreator: (r) => CreateItemCubit(r),
-                    onSuccess: (context, data) {
+
                       if (!isEdit) {
-                        BlocProvider.of<ItemsListCubit>(context)
-                            .addItem(Items$Query$Item.fromJson(data.toJson()));
+                        cubit.create(input);
                       } else {
-                        BlocProvider.of<ItemsListCubit>(context).updateItem(
-                          (l) => l.firstWhere((e) => e.id == widget.id),
-                          Items$Query$Item.fromJson(data.toJson()),
-                        );
+                        cubit.edit(widget.id!, input);
                       }
-                    },
-                    pop: true,
-                    builder: (context, cubit) {
-                      return Button(
-                        padding: EdgeInsets.zero,
-                        callback: () {
-                          final input = ItemInput(
-                            quantity: int.parse(_quantityController.text),
-                            sellingPrice: _sellingPriceController.text,
-                            buyingPrice: _buyingPriceController.text,
-                            unitId: _unitId!,
-                            description: _descriptionPriceController.text,
-                            batch: _batchPriceController.text,
-                            productId: _productId!,
-                            expiresAt: _selectedDate,
-                            brandId: _brandId,
-                            categories: _categories.map((e) => e.id).toList(),
-                          );
-
-                          if (!isEdit) {
-                            cubit.create(input);
-                          } else {
-                            cubit.edit(widget.id!, input);
-                          }
-                        },
-                        title: 'Submit',
-                      );
-                    },
-                  ),
-                ],
-              )
+                    }
+                  },
+                  title: 'Submit',
+                );
+              },
+            ),
           ],
         ),
       ),
     );
+  }
+
+  String? formatDate(DateTime? v) {
+    if (v != null) {
+      return DateFormat('dd/MM/yyyy').format(v);
+    }
+
+    return null;
   }
 
   @override
@@ -312,6 +347,7 @@ class _ItemFormState extends State<ItemForm> {
     _buyingPriceController.dispose();
     _sellingPriceController.dispose();
     _descriptionPriceController.dispose();
+    _dateController.dispose();
     _batchPriceController.dispose();
     _expireDateController.dispose();
     super.dispose();
