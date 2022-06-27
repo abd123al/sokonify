@@ -225,6 +225,18 @@ type Payment implements Gorm {
     updatedAt: Time!
 }
 
+type Permission implements Gorm {
+    createdAt: Time!
+    creator: User!
+    creatorId: Int!
+    deletedAt: Time
+    id: ID!
+    permission: PermissionType!
+    role: Role!
+    roleId: Int!
+    updatedAt: Time!
+}
+
 type Product implements Gorm {
     brands: [Brand!]!
     createdAt: Time!
@@ -294,6 +306,19 @@ type Query {
     users: [User!]!
 }
 
+type Role implements Gorm {
+    createdAt: Time!
+    creator: User!
+    creatorId: Int!
+    deletedAt: Time
+    description: String
+    id: ID!
+    name: String!
+    store: Store!
+    storeId: Int!
+    updatedAt: Time!
+}
+
 type Staff implements Gorm {
     createdAt: Time!
     creator: User
@@ -301,7 +326,8 @@ type Staff implements Gorm {
     default: Boolean!
     deletedAt: Time
     id: ID!
-    role: StaffRole!
+    role: Role!
+    roleId: Int!
     store: Store!
     storeId: Int!
     updatedAt: Time!
@@ -435,6 +461,22 @@ enum PaymentsBy {
     customer
     staff
     store
+}
+
+enum PermissionType {
+    add_staff
+    add_stock
+    create_order
+    create_payment
+    create_sales
+    edit_customer
+    edit_order
+    edit_staff
+    edit_stock
+    register_customer
+    remove_staff
+    view_customer
+    view_stats
 }
 
 enum ProductsBy {
@@ -594,6 +636,11 @@ input PaymentsArgs {
     value: ID
 }
 
+input PermissionInput {
+    permission: PermissionType!
+    roleId: ID!
+}
+
 input ProductBrandInput {
     manufacturer: String
     name: String!
@@ -610,6 +657,11 @@ input ProductsArgs {
     by: ProductsBy = store
     storeType: StoreType
     value: ID
+}
+
+input RoleInput {
+    description: String
+    name: String!
 }
 
 input SalesInput {
@@ -630,8 +682,8 @@ input SignUpInput {
 }
 
 input StaffInput {
-    role: StaffRole!
-    userId: Int!
+    roleId: ID!
+    userId: ID!
 }
 
 input StatsArgs {
