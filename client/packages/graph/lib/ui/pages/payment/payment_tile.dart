@@ -9,11 +9,12 @@ class PaymentTile extends StatelessWidget {
     Key? key,
     required this.payment,
     this.currency = "TZS",
-    this.color,
+    this.color, required this.word,
   }) : super(key: key);
 
   final Payments$Query$Payment payment;
   final String currency;
+  final String word;
   final Color? color;
 
   @override
@@ -41,7 +42,7 @@ class PaymentTile extends StatelessWidget {
                 color: amountColor,
               ),
         ),
-        onTap: () => redirectTo(context, "${Routes.payment}/${payment.id}"),
+        onTap: () => redirectTo(context, "${Routes.payment}/${payment.id}/$word"),
       ),
     );
   }

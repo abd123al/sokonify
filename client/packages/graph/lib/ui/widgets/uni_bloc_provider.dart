@@ -140,6 +140,11 @@ class UniBlocProviderState extends State<UniBlocProvider> {
             ),
             BlocProvider(
               create: (context) {
+                return ExpensesListCubit(paymentRepository)..fetch();
+              },
+            ),
+            BlocProvider(
+              create: (context) {
                 return ExpensesCategoriesListCubit(expenseRepository)..fetch();
               },
             ),

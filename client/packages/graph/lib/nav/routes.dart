@@ -229,7 +229,7 @@ class Routes {
     );
 
     router.define(
-      "$payment/:id",
+      "$payment/:id/:word",
       handler: paymentPageRouterHandler,
       transitionType: TransitionType.inFromLeft,
     );

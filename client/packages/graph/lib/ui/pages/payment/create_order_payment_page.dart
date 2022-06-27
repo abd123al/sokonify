@@ -102,7 +102,7 @@ class _CreateStorePageState extends State<CreatePaymentPage> {
                   BlocProvider.of<SimpleStatsCubit>(context).fetch();
                 }),
                 onSuccess: (context, data) {
-                  BlocProvider.of<PaymentsListCubit>(context)
+                  BlocProvider.of<ParentPaymentsListCubit>(context)
                       .addItem(Payments$Query$Payment.fromJson(data.toJson()));
 
                   BlocProvider.of<OrdersListCubit>(context)

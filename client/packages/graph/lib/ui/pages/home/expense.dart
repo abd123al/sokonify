@@ -3,6 +3,7 @@ import 'package:graph/gql/generated/graphql_api.graphql.dart';
 
 import '../../../nav/nav.dart';
 import '../payment/payments_list.dart';
+import '../payment/payments_list_cubit.dart';
 
 class Expenses extends StatelessWidget {
   const Expenses({Key? key}) : super(key: key);
@@ -10,7 +11,7 @@ class Expenses extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const PaymentsList(
+      body: const PaymentsList<ExpensesListCubit>(
         type: PaymentType.expense,
         topper: SizedBox(),
       ),

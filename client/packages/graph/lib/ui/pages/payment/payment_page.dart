@@ -15,15 +15,17 @@ class PaymentPage extends StatelessWidget {
   const PaymentPage({
     Key? key,
     required this.id,
+    required this.word,
   }) : super(key: key);
 
   final int id;
+  final String word;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Payment #$id"),
+        title: Text("$word #$id"),
       ),
       body: BlocProvider(
         create: (context) {

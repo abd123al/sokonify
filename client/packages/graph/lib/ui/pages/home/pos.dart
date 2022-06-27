@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../nav/nav.dart';
 import '../payment/payments_list.dart';
+import '../payment/payments_list_cubit.dart';
 import 'stats/simple_stats.dart';
 
 class POS extends StatelessWidget {
@@ -10,7 +11,7 @@ class POS extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const PaymentsList(
+      body: const PaymentsList<PaymentsListCubit>(
         topper: SimpleStats(),
       ),
       floatingActionButton: FloatingActionButton.extended(

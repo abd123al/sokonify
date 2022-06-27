@@ -26,6 +26,7 @@ class OrdersPaginatedPage extends StatelessWidget {
           return RepositoryProvider.of<OrderRepository>(context).fetchOrders(
             OrdersArgs(
               offset: skip,
+              limit: 10,
               mode: FetchMode.pagination,
               by: OrdersBy.store,
               type: OrderType.sale,

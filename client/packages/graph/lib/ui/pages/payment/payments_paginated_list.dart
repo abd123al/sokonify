@@ -34,6 +34,7 @@ class PaymentsPaginatedPage extends StatelessWidget {
               .fetchPayments(
             PaymentsArgs(
               offset: skip,
+              limit: 10,
               mode: FetchMode.pagination,
               by: PaymentsBy.store,
               type: type,
@@ -44,6 +45,7 @@ class PaymentsPaginatedPage extends StatelessWidget {
         widgetBuilder: (context, i) {
           return PaymentTile(
             payment: i,
+            word: word,
           );
         },
       ),

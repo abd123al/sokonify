@@ -86,7 +86,7 @@ class _OrderFormState<T extends OrderCubit> extends State<OrderForm<T>> {
                     Orders$Query$Order.fromJson(data.toJson()),
                   );
                 } else {
-                  BlocProvider.of<PaymentsListCubit>(context)
+                  BlocProvider.of<ParentPaymentsListCubit>(context)
                       .addItem(Payments$Query$Payment.fromJson(data.toJson()));
                 }
               },
