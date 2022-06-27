@@ -24,8 +24,8 @@ class StatsView extends StatelessWidget {
     //todo in large display use Grid/ but in phones ListView
     return Builder(
       builder: (context) {
-        final netIncome = Decimal.parse(data.totalSalesAmount) -
-            Decimal.parse(data.totalExpensesAmount.replaceAll("-", ""));
+        final netProfit = Decimal.parse(data.grossProfit.real) -
+                Decimal.parse(data.totalExpensesAmount.replaceAll("-", ""));
 
         final List<StatTile> children = [
           StatTile(
@@ -40,13 +40,13 @@ class StatsView extends StatelessWidget {
             color: Colors.red,
           ),
           StatTile(
-            title: 'Net Income',
-            value: formatCurrency(netIncome.toString()),
+            title: 'Gross Profit',
+            value: formatCurrency(data.grossProfit.real),
             color: Colors.blue,
           ),
           StatTile(
-            title: 'Gross Profit',
-            value: formatCurrency(data.grossProfit.real),
+            title: 'Net Profit',
+            value: formatCurrency(netProfit.toString()),
             color: Colors.green,
           ),
         ];
