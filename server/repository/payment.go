@@ -179,18 +179,24 @@ func FindPaymentByOrderId(db *gorm.DB, OrderID int) (*model.Payment, error) {
 func FindPayments(DB *gorm.DB, args model.PaymentsArgs, StoreID int) ([]*model.Payment, error) {
 	var payments []*model.Payment
 	var result *gorm.DB
+	var typeColumn string
+
+	if args.Type == model.PaymentTypeOrder {
+		typeColumn = "order_id"
+	} else {
+		typeColumn = "expense_id"
+	}
 
 	sort := "payments.id " + "DESC" //todo use sortBy var
 	By := args.By
-	//Type := args.Type
-	//Limit := args.Limit
-	//Offset := args.Offset
+	Limit := args.Limit
+	Offset := args.Offset
 
-	q := DB //.Debug() //todo filter payments
-
-	//partialQuery := q.Table("payments").Order("id DESC").Offset(*Offset).Limit(*Limit).Order(sort)
+	db := DB.Debug() //todo filter payments
 
 	if By == model.PaymentsByStore {
+		q := db.Table("payments").Order(sort).Joins(fmt.Sprintf("inner join staffs on payments.staff_id = staffs.user_id AND staffs.store_id = ? AND payments.%s IS NOT NULL", typeColumn), StoreID)
+
 		if args.Mode == model.FetchModeFull {
 			StartDate, EndDate := helpers.HandleStatsDates(model.StatsArgs{
 				StartDate: args.StartDate,
@@ -198,10 +204,9 @@ func FindPayments(DB *gorm.DB, args model.PaymentsArgs, StoreID int) ([]*model.P
 				Timeframe: args.Timeframe,
 			})
 
-			result = q.Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate).Order(sort).Joins("inner join staffs on payments.staff_id = staffs.user_id AND staffs.store_id = ?", StoreID).Find(&payments)
+			result = q.Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate).Find(&payments)
 		} else {
-			//This will return all payments store processed.
-			//result = partialQuery.Joins("inner join staffs on payments.staff_id = staffs.user_id AND staffs.store_id = ?", args.Value).Find(&payments)
+			result = q.Offset(*Offset).Limit(*Limit).Find(&payments)
 		}
 	} else if By == model.PaymentsByStaff {
 		//This will return payments processed by a specific staff.

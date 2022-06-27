@@ -659,7 +659,7 @@ input PaymentsArgs {
     offset: Int = 0
     sortBy: SortBy = DESC
     method: PaymentMethod
-    type: PaymentType
+    type: PaymentType!
     timeframe: TimeframeType
     startDate:Time
     endDate:Time

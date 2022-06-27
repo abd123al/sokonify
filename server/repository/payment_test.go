@@ -66,15 +66,43 @@ func TestPayment(t *testing.T) {
 		require.NotNil(t, err)
 	})
 
-	t.Run("FindPayments by store", func(t *testing.T) {
-		re := util.CreatePayment(DB, nil, false)
+	pay := func() *util.CreatePaymentResult {
+		re := util.CreatePayment(DB, &util.CreatePaymentArgs{
+			StoreID:    store.ID,
+			StaffID:    user.ID,
+			CustomerID: nil,
+		}, false)
 
-		paymentType := model.PaymentTypeExpense
+		return &re
+	}
+
+	t.Run("FindPayments by store", func(t *testing.T) {
+		re := pay()
+		require.NotNil(t, re.Payment)
 
 		paymentsByCustomer, err := repository.FindPayments(DB, model.PaymentsArgs{
 			By:   model.PaymentsByStore,
 			Mode: model.FetchModeFull,
-			Type: &paymentType,
+			Type: model.PaymentTypeExpense,
+		}, re.StoreID)
+
+		require.Nil(t, err)
+		require.NotEmpty(t, paymentsByCustomer)
+	})
+
+	t.Run("FindPayments by store with pagination", func(t *testing.T) {
+		re := pay()
+		_ = pay()
+
+		offset := 1
+		limit := 10
+
+		paymentsByCustomer, err := repository.FindPayments(DB, model.PaymentsArgs{
+			By:     model.PaymentsByStore,
+			Mode:   model.FetchModePagination,
+			Limit:  &limit,
+			Offset: &offset,
+			Type:   model.PaymentTypeExpense,
 		}, re.StoreID)
 
 		require.Nil(t, err)
