@@ -6,9 +6,10 @@ import (
 )
 
 // WeekStart https://stackoverflow.com/a/52303730/8150077
-func WeekStart(year, week int) time.Time {
+func WeekStart(week int) time.Time {
+	now := time.Now()
 	// Start from the middle of the year:
-	t := time.Date(year, 7, 1, 0, 0, 0, 0, time.UTC)
+	t := time.Date(now.Year(), 7, 1, 0, 0, 0, 0, now.Location())
 
 	// Roll back to Monday:
 	if wd := t.Weekday(); wd == time.Sunday {
@@ -25,7 +26,7 @@ func WeekStart(year, week int) time.Time {
 }
 
 func WeekRange(week int) (start, end time.Time) {
-	start = WeekStart(time.Now().Year(), week)
+	start = WeekStart(week)
 	end = start.AddDate(0, 0, 7).Add(-time.Second)
 	return
 }
