@@ -13,11 +13,15 @@ class StatsView extends StatelessWidget {
     required this.data,
     required this.title,
     this.onPressed,
+    this.overall = true,
   }) : super(key: key);
 
   final Stats$Query data;
   final String title;
   final VoidCallback? onPressed;
+
+  /// If not overall we will show gross and sales only.
+  final bool overall;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +29,7 @@ class StatsView extends StatelessWidget {
     return Builder(
       builder: (context) {
         final netProfit = Decimal.parse(data.grossProfit.real) -
-                Decimal.parse(data.totalExpensesAmount.replaceAll("-", ""));
+            Decimal.parse(data.totalExpensesAmount.replaceAll("-", ""));
 
         final List<StatTile> children = [
           StatTile(
