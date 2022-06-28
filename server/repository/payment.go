@@ -192,28 +192,35 @@ func FindPayments(DB *gorm.DB, args model.PaymentsArgs, StoreID int) ([]*model.P
 	Limit := args.Limit
 	Offset := args.Offset
 
+	StartDate, EndDate := helpers.HandleStatsDates(model.StatsArgs{
+		StartDate: args.StartDate,
+		EndDate:   args.EndDate,
+		Timeframe: args.Timeframe,
+	})
+
 	db := DB.Debug() //todo filter payments
 
 	if By == model.PaymentsByStore {
 		q := db.Table("payments").Order(sort).Joins(fmt.Sprintf("inner join staffs on payments.staff_id = staffs.user_id AND staffs.store_id = ? AND payments.%s IS NOT NULL", typeColumn), StoreID)
 
 		if args.Mode == model.FetchModeFull {
-			StartDate, EndDate := helpers.HandleStatsDates(model.StatsArgs{
-				StartDate: args.StartDate,
-				EndDate:   args.EndDate,
-				Timeframe: args.Timeframe,
-			})
-
 			result = q.Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate).Find(&payments)
 		} else {
 			result = q.Offset(*Offset).Limit(*Limit).Find(&payments)
 		}
 	} else if By == model.PaymentsByStaff {
 		//This will return payments processed by a specific staff.
-		//result = partialQuery.Where(&model.Payment{StaffID: *args.Value}).Find(&payments)
+		panic(fmt.Errorf("not implemented"))
 	} else if By == model.PaymentsByCustomer {
 		//This will return payments by specific customer.
-		//result = partialQuery.Joins("inner join orders on payments.order_id = orders.id AND orders.customer_id = ?", args.Value).Find(&payments)
+		a := db.Table("payments").Order(sort)
+		b := a.Joins("inner join orders on orders.id = payments.order_id AND orders.customer_id = ?", args.Value)
+
+		if args.Mode == model.FetchModeFull {
+			result = b.Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate).Find(&payments)
+		} else {
+			result = b.Offset(*Offset).Limit(*Limit).Find(&payments)
+		}
 	} else {
 		panic(fmt.Errorf("not implemented"))
 	}
