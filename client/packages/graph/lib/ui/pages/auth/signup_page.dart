@@ -77,6 +77,7 @@ class _SignupPageState extends State<SignupPage> {
                             ),
                             controller: _nameController,
                             keyboardType: TextInputType.text,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             validator: (s) {
                               if ((s?.length ?? 0) < 4) {
                                 return "Name must contain at least 4 characters";
@@ -92,6 +93,7 @@ class _SignupPageState extends State<SignupPage> {
                               labelText: 'Email',
                               helperText: "Example: example@gmail.com",
                             ),
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             controller: _emailController,
                             keyboardType: TextInputType.emailAddress,
                             validator: (s) {
@@ -114,6 +116,7 @@ class _SignupPageState extends State<SignupPage> {
                             ),
                             controller: _newPasswordController,
                             keyboardType: TextInputType.visiblePassword,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             obscureText: true,
                             validator: (s) {
                               if ((s?.length ?? 0) < 8) {
