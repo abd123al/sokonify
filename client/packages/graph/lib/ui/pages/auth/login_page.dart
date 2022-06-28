@@ -35,6 +35,7 @@ class _LoginInPageState extends State<LoginInPage> {
             color: Colors.white,
           ),
         ),
+        showPopUpSuccess: false,
         builder: (context, cubit) {
           const padding = EdgeInsets.only(top: 8.0);
 

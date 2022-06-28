@@ -18,9 +18,11 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
-  final _passwordController = TextEditingController();
+  final _newPasswordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   final _emailController = TextEditingController();
   final _nameController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +38,7 @@ class _SignupPageState extends State<SignupPage> {
             color: Colors.white,
           ),
         ),
+        showPopUpSuccess: false,
         builder: (context, cubit) {
           const padding = EdgeInsets.only(top: 8.0);
 
@@ -50,6 +53,7 @@ class _SignupPageState extends State<SignupPage> {
                     vertical: 8,
                   ),
                   child: Form(
+                    key: _formKey,
                     child: ListView(
                       shrinkWrap: true,
                       children: [
@@ -69,9 +73,16 @@ class _SignupPageState extends State<SignupPage> {
                           child: TextFormField(
                             decoration: const InputDecoration(
                               labelText: 'Full name',
+                              helperText: "Example: Bikolimana Sabibi.",
                             ),
                             controller: _nameController,
                             keyboardType: TextInputType.text,
+                            validator: (s) {
+                              if ((s?.length ?? 0) < 4) {
+                                return "Name must contain at least 4 characters";
+                              }
+                              return null;
+                            },
                           ),
                         ),
                         Padding(
@@ -79,9 +90,18 @@ class _SignupPageState extends State<SignupPage> {
                           child: TextFormField(
                             decoration: const InputDecoration(
                               labelText: 'Email',
+                              helperText: "Example: example@gmail.com",
                             ),
                             controller: _emailController,
                             keyboardType: TextInputType.emailAddress,
+                            validator: (s) {
+                              if (s == null ||
+                                  !s.contains("@") ||
+                                  !s.contains(".")) {
+                                return "Please enter valid email";
+                              }
+                              return null;
+                            },
                           ),
                         ),
                         Padding(
@@ -89,10 +109,18 @@ class _SignupPageState extends State<SignupPage> {
                           child: TextFormField(
                             decoration: const InputDecoration(
                               labelText: 'New Password',
+                              helperText:
+                                  "Password should contain at least 8 characters.",
                             ),
-                            controller: _passwordController,
+                            controller: _newPasswordController,
                             keyboardType: TextInputType.visiblePassword,
                             obscureText: true,
+                            validator: (s) {
+                              if ((s?.length ?? 0) < 8) {
+                                return "New Password must contain at least 8 characters";
+                              }
+                              return null;
+                            },
                           ),
                         ),
                         Padding(
@@ -100,21 +128,32 @@ class _SignupPageState extends State<SignupPage> {
                           child: TextFormField(
                             decoration: const InputDecoration(
                               labelText: 'Confirm Password',
+                              helperText:
+                                  "This should match with above password",
                             ),
-                            controller: _passwordController,
+                            controller: _confirmPasswordController,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             keyboardType: TextInputType.visiblePassword,
                             obscureText: true,
+                            validator: (s) {
+                              if (s != _newPasswordController.text) {
+                                return "Password don't match!";
+                              }
+                              return null;
+                            },
                           ),
                         ),
                         Button(
                           callback: () {
-                            cubit.signUp(
-                              SignUpInput(
-                                password: _passwordController.text,
-                                email: _emailController.text,
-                                name: _nameController.text,
-                              ),
-                            );
+                            if (_formKey.currentState!.validate()) {
+                              cubit.signUp(
+                                SignUpInput(
+                                  password: _newPasswordController.text,
+                                  email: _emailController.text,
+                                  name: _nameController.text,
+                                ),
+                              );
+                            }
                           },
                           title: 'Sign Up',
                         ),
@@ -160,7 +199,8 @@ class _SignupPageState extends State<SignupPage> {
 
   @override
   void dispose() {
-    _passwordController.dispose();
+    _newPasswordController.dispose();
+    _confirmPasswordController.dispose();
     _emailController.dispose();
     _nameController.dispose();
 
