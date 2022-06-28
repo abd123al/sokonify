@@ -196,14 +196,17 @@ class _OrderFormState<T extends OrderCubit> extends State<OrderForm<T>> {
                       TotalAmountTile(
                         amount: state.totalPrice,
                       ),
+                      const Divider(),
                       TextField(
                         controller: _commentController,
                         keyboardType: TextInputType.text,
                         decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
                           hintText: 'Add optional comment',
                           labelText: "Comment (Optional)",
                         ),
                       ),
+                      const Divider(),
                       MutationBuilder<CreateOrder$Mutation$Order,
                           CreateOrderCubit, OrderRepository>(
                         blocCreator: (r) => CreateOrderCubit(r),
