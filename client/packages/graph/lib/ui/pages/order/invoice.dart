@@ -14,11 +14,14 @@ Future<Uint8List> generateInvoice(
   int id,
   CurrentStore$Query$Store store,
 ) async {
+  final List<Order$Query$Order$OrderItem> items = order.orderItems;
+  items.sort((a, b) => a.item.product.name.compareTo(b.item.product.name));
+
   final invoice = Invoice(
     store: store,
     order: order,
     invoiceNumber: '$id',
-    items: order.orderItems,
+    items: items,
     customerName: order.customer?.name ?? "No customer",
     customerAddress: order.customer?.address ?? "",
     baseColor: PdfColors.teal,
@@ -50,6 +53,7 @@ class Invoice {
   final PdfColor accentColor;
 
   static const _darkColor = PdfColors.blueGrey800;
+
   //static const _lightColor = PdfColors.white;
 
   //String? _logo;
@@ -384,7 +388,7 @@ class Invoice {
     return pw.Table.fromTextArray(
       border: null,
       cellAlignment: pw.Alignment.centerLeft,
-      headerDecoration:  pw.BoxDecoration(
+      headerDecoration: pw.BoxDecoration(
         border: pw.Border.all(
           color: _darkColor,
         ),
