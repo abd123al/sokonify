@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:graph/gql/generated/graphql_api.dart';
 
 import '../../../nav/nav.dart';
+import '../order/orders_paginated_list.dart';
 import 'customer_details.dart';
 
 class CustomerTab {
@@ -30,9 +32,21 @@ class _HomePageState extends State<CustomerPage> {
     super.initState();
 
     list = [
-      CustomerTab("Details", CustomerDetails(id: widget.id)),
-      CustomerTab("Orders", CustomerDetails(id: widget.id)),
-      CustomerTab("Payments", CustomerDetails(id: widget.id)),
+      CustomerTab(
+        "Details",
+        CustomerDetails(id: widget.id),
+      ),
+      CustomerTab(
+        "Payments",
+        CustomerDetails(id: widget.id),
+      ),
+      CustomerTab(
+        "Orders",
+        OrdersPaginationList(
+          value: widget.id,
+          by: OrdersBy.customer,
+        ),
+      ),
     ];
   }
 
