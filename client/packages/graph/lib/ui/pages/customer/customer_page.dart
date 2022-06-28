@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 
 import '../../../nav/nav.dart';
-import '../../widgets/widgets.dart';
-import 'customer_wrapper.dart';
+import 'customer_details.dart';
 
-class CustomerPage extends StatelessWidget {
+class CustomerTab {
+  final Widget widget;
+  final String title;
+
+  CustomerTab(this.title, this.widget);
+}
+
+class CustomerPage extends StatefulWidget {
   const CustomerPage({
     Key? key,
     required this.id,
@@ -13,50 +19,55 @@ class CustomerPage extends StatelessWidget {
   final int id;
 
   @override
+  State<CustomerPage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<CustomerPage> {
+  late List<CustomerTab> list;
+
+  @override
+  void initState() {
+    super.initState();
+
+    list = [
+      CustomerTab("Details", CustomerDetails(id: widget.id)),
+      CustomerTab("Orders", CustomerDetails(id: widget.id)),
+      CustomerTab("Payments", CustomerDetails(id: widget.id)),
+    ];
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: DetailsAppBar(
-        label: "Customer",
-        onPressed: () {
-          redirectTo(
-            context,
-            "${Routes.editCustomer}/$id",
-            replace: true,
-          );
-        },
-      ),
-      body: CustomerWrapper(
-        id: id,
-        builder: (context, store) {
-          return DetailsList(
-            children: [
-              ShortDetailTile(
-                subtitle: "Name",
-                value: store.name,
-              ),
-              ShortDetailTile(
-                subtitle: "Address",
-                value: store.address,
-              ),
-              ShortDetailTile(
-                subtitle: "Phone",
-                value: store.phone,
-              ),
-              ShortDetailTile(
-                subtitle: "Email",
-                value: store.email,
-              ),
-              ShortDetailTile(
-                subtitle: "TIN",
-                value: store.tin,
-              ),
-              ShortDetailTile(
-                subtitle: "Comment",
-                value: store.comment,
-              ),
-            ],
-          );
-        },
+    return DefaultTabController(
+      length: list.length,
+      child: Scaffold(
+        appBar: AppBar(
+          bottom: TabBar(
+            isScrollable: false,
+            tabs: list
+                .map(
+                  (e) => Tab(text: e.title),
+                )
+                .toList(),
+          ),
+          title: const Text("Customer"),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.edit),
+              tooltip: 'Edit Customer Details',
+              onPressed: () {
+                redirectTo(
+                  context,
+                  "${Routes.editCustomer}/${widget.id}",
+                  replace: true,
+                );
+              },
+            ),
+          ],
+        ),
+        body: TabBarView(
+          children: list.map((e) => e.widget).toList(),
+        ),
       ),
     );
   }
