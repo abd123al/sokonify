@@ -3,6 +3,7 @@ import 'package:graph/gql/generated/graphql_api.dart';
 
 import '../../../nav/nav.dart';
 import '../order/orders_paginated_list.dart';
+import '../payment/payments_paginated_list.dart';
 import 'customer_details.dart';
 
 class CustomerTab {
@@ -38,7 +39,11 @@ class _HomePageState extends State<CustomerPage> {
       ),
       CustomerTab(
         "Payments",
-        CustomerDetails(id: widget.id),
+        PaymentsPaginationList(
+          value: widget.id,
+          by: PaymentsBy.customer,
+          word: 'Payments',
+        ),
       ),
       CustomerTab(
         "Orders",
