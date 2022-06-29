@@ -21,7 +21,7 @@ func CreatePrice(db *gorm.DB, input model.PriceInput, UserID int) (*model.Price,
 	}
 
 	if count > 0 {
-		return nil, errors.New("price in this category was already added")
+		return nil, errors.New("price in this category was already added. just edit it")
 	}
 
 	result := db.Create(&price)

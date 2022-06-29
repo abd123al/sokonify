@@ -311,7 +311,7 @@ func (r *orderResolver) TotalPrice(ctx context.Context, obj *model.Order) (*stri
 	return &total, nil
 }
 
-func (r *orderResolver) Category(ctx context.Context, obj *model.Order) (*model.PriceCategory, error) {
+func (r *orderResolver) Category(ctx context.Context, obj *model.Order) (*model.Category, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
@@ -414,15 +414,7 @@ func (r *priceResolver) Creator(ctx context.Context, obj *model.Price) (*model.U
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *priceResolver) Category(ctx context.Context, obj *model.Price) (*model.PriceCategory, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
-func (r *priceCategoryResolver) Creator(ctx context.Context, obj *model.PriceCategory) (*model.User, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
-func (r *priceCategoryResolver) Store(ctx context.Context, obj *model.PriceCategory) (*model.Store, error) {
+func (r *priceResolver) Category(ctx context.Context, obj *model.Price) (*model.Category, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
@@ -692,9 +684,6 @@ func (r *Resolver) Payment() generated.PaymentResolver { return &paymentResolver
 // Price returns generated.PriceResolver implementation.
 func (r *Resolver) Price() generated.PriceResolver { return &priceResolver{r} }
 
-// PriceCategory returns generated.PriceCategoryResolver implementation.
-func (r *Resolver) PriceCategory() generated.PriceCategoryResolver { return &priceCategoryResolver{r} }
-
 // Product returns generated.ProductResolver implementation.
 func (r *Resolver) Product() generated.ProductResolver { return &productResolver{r} }
 
@@ -733,7 +722,6 @@ type orderResolver struct{ *Resolver }
 type orderItemResolver struct{ *Resolver }
 type paymentResolver struct{ *Resolver }
 type priceResolver struct{ *Resolver }
-type priceCategoryResolver struct{ *Resolver }
 type productResolver struct{ *Resolver }
 type productCategoryResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }

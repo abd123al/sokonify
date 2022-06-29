@@ -151,6 +151,7 @@ input ChangePasswordInput {
 enum CategoryType {
     category #default
     subcategory
+    pricing
 }
 
 
@@ -395,28 +396,6 @@ type Item implements Gorm {
     categories: [Category!] @goTag(key: "gorm", value: "-") @goField(forceResolver: true)
 }
 
-type PriceCategory implements Gorm {
-    id:ID! @goTag(key: "gorm", value: "primaryKey")
-
-    createdAt:Time!
-    updatedAt:Time!
-    deletedAt:Time
-
-    name: String! @goTag(key: "gorm", value: "size:20")
-    description: String @goTag(key: "gorm", value: "size:250")
-
-    creatorId: Int
-    creator: User @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
-
-    storeId: Int!
-    store: Store! @goTag(key: "gorm", value:  "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;") @goField(forceResolver: true)
-}
-
-input PriceCategoryInput {
-    name: String!
-    description: String
-}
-
 type Price implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
 
@@ -430,7 +409,7 @@ type Price implements Gorm {
     creator: User! @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
 
     categoryId: Int!
-    category: PriceCategory! @goTag(key: "gorm", value: "foreignKey:CategoryID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
+    category: Category! @goTag(key: "gorm", value: "foreignKey:CategoryID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
 
     itemId: Int!
     item: Item! @goTag(key: "gorm", value:  "foreignKey:ItemID;not null;constraint:OnUpdate:RESTRICT,OnDelete:CASCADE;")
@@ -557,7 +536,7 @@ type Order implements Gorm {
 
     # This will state what floor price used for generating order.
     categoryId: Int!
-    category: PriceCategory! @goTag(key: "gorm", value: "foreignKey:CategoryID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
+    category: Category! @goTag(key: "gorm", value: "foreignKey:CategoryID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
 
     # todo depending on order type this can be supplier
     # Customer can be nullable. Since POS don't have to register customer.
