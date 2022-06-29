@@ -14,6 +14,7 @@ func TestItem(t *testing.T) {
 	product := util.CreateProduct(DB, nil)
 	unit := util.CreateUnit(DB, product.StoreID, nil)
 	cat := util.CreateCategory(DB, *product.StoreID, model.CategoryTypeSubcategory)
+	priceCategory := util.CreateCategory(DB, *product.StoreID, model.CategoryTypePricing)
 
 	t.Run("CreateItem", func(t *testing.T) {
 		item, _ := repository.CreateItem(DB, model.ItemInput{
@@ -23,6 +24,9 @@ func TestItem(t *testing.T) {
 			BuyingPrice:  "2000",
 			SellingPrice: "5000",
 			Categories:   []int{cat.ID},
+			Prices: []*model.PriceInput{
+				{Amount: "500.00", CategoryID: priceCategory.ID},
+			},
 		}, *product.CreatorID)
 
 		require.GreaterOrEqual(t, item.ID, 1)
@@ -40,6 +44,9 @@ func TestItem(t *testing.T) {
 			UnitID:       unit.ID,
 			SellingPrice: "5000",
 			ProductID:    product.ID,
+			Prices: []*model.PriceInput{
+				{Amount: "500.00", CategoryID: priceCategory.ID},
+			},
 		}, *product.CreatorID)
 
 		return i
@@ -73,6 +80,7 @@ func TestItem(t *testing.T) {
 
 		for i := 0; i < len(items); i++ {
 			fmt.Println(items[i].ID)
+			require.NotNil(t, items[i].Prices[0].Amount)
 		}
 
 		require.Nil(t, err)

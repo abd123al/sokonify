@@ -7,16 +7,16 @@ import (
 	"mahesabu/helpers"
 )
 
-func CreatePrice(db *gorm.DB, input model.PriceInput, UserID int) (*model.Price, error) {
+func CreatePrice(db *gorm.DB, ItemID int, input model.PriceInput, args helpers.UserAndStoreArgs) (*model.Price, error) {
 	var count int64
 	price := model.Price{
 		Amount:     input.Amount,
-		CreatorID:  UserID,
+		CreatorID:  args.UserID,
 		CategoryID: input.CategoryID,
-		ItemID:     input.ItemID,
+		ItemID:     ItemID,
 	}
 
-	if err := db.Where(&model.Price{ItemID: input.ItemID, CategoryID: input.CategoryID}).Count(&count).Error; err != nil {
+	if err := db.Where(&model.Price{ItemID: ItemID, CategoryID: input.CategoryID}).Count(&count).Error; err != nil {
 		return nil, err
 	}
 
@@ -36,7 +36,7 @@ func EditPrice(DB *gorm.DB, ID int, input model.PriceInput, args helpers.UserAnd
 		Amount:     input.Amount,
 		CreatorID:  args.UserID,
 		CategoryID: input.CategoryID,
-		ItemID:     input.ItemID,
+		ItemID:     ID,
 	}
 
 	if err := DB.Model(&model.Price{}).Where(&model.Price{ID: ID, CreatorID: args.UserID}).Updates(&price).Error; err != nil {
@@ -46,14 +46,14 @@ func EditPrice(DB *gorm.DB, ID int, input model.PriceInput, args helpers.UserAnd
 	return price, nil
 }
 
-func FindPrices(db *gorm.DB, ItemID int) ([]*model.Price, error) {
-	var categories []*model.Price
-	result := db.Where(&model.Price{ItemID: ItemID}).Find(&categories)
-	return categories, result.Error
-}
-
-func FindPrice(db *gorm.DB, ID int) (*model.Price, error) {
-	var price *model.Price
-	result := db.Where(&model.Price{ID: ID}).First(&price)
-	return price, result.Error
-}
+//func FindPrices(db *gorm.DB, ItemID int) ([]*model.Price, error) {
+//	var categories []*model.Price
+//	result := db.Where(&model.Price{ItemID: ItemID}).Find(&categories)
+//	return categories, result.Error
+//}
+//
+//func FindPrice(db *gorm.DB, ID int) (*model.Price, error) {
+//	var price *model.Price
+//	result := db.Where(&model.Price{ID: ID}).First(&price)
+//	return price, result.Error
+//}

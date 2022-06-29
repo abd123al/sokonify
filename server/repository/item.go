@@ -9,6 +9,18 @@ import (
 
 // CreateItem Items can have the same brand but different price and batch
 func CreateItem(DB *gorm.DB, input model.ItemInput, CreatorID int) (*model.Item, error) {
+	var Prices []*model.Price
+
+	for _, k := range input.Prices {
+		price := model.Price{
+			Amount:     k.Amount,
+			CreatorID:  CreatorID,
+			CategoryID: k.CategoryID,
+		}
+
+		Prices = append(Prices, &price)
+	}
+
 	item := model.Item{
 		Quantity:     input.Quantity,
 		Batch:        input.Batch,
@@ -20,6 +32,7 @@ func CreateItem(DB *gorm.DB, input model.ItemInput, CreatorID int) (*model.Item,
 		BrandID:      input.BrandID,
 		UnitID:       input.UnitID,
 		CreatorID:    &CreatorID,
+		Prices:       Prices,
 	}
 
 	err := DB.Transaction(func(tx *gorm.DB) error {
@@ -87,14 +100,14 @@ func FindItems(DB *gorm.DB, args model.ItemsArgs, StoreID int) ([]*model.Item, e
 	var items []*model.Item
 	var result *gorm.DB
 
-	query := DB.Table("items").Where("items.quantity > 0")
+	b := DB.Preload("Prices").Table("items").Where("items.quantity > 0")
 
 	if args.By == model.ItemsByStore {
-		result = query.Joins("inner join products on products.id = items.product_id AND products.store_id = ?", StoreID).Find(&items)
+		result = b.Joins("inner join products on products.id = items.product_id AND products.store_id = ?", StoreID).Find(&items)
 	} else if args.By == model.ItemsByCategory {
-		result = query.Joins("inner join products on products.id = items.product_id inner join categories on categories.id = products.category_id AND categories.id = ?", args.Value).Find(&items)
+		result = b.Joins("inner join products on products.id = items.product_id inner join categories on categories.id = products.category_id AND categories.id = ?", args.Value).Find(&items)
 	} else if args.By == model.ItemsByProduct {
-		result = query.Where(&model.Item{ProductID: args.Value}).Find(&items)
+		result = b.Where(&model.Item{ProductID: args.Value}).Find(&items)
 	} else {
 		panic(fmt.Errorf("not implemented"))
 	}
