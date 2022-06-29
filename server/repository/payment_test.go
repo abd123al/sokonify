@@ -248,7 +248,7 @@ func TestPayment(t *testing.T) {
 	})
 
 	t.Run("CreateSale", func(t *testing.T) {
-		item := util.CreateItem(DB, nil, &store.ID)
+		item := util.CreateItem(DB, &store.ID)
 
 		payment, err := repository.CreateSalePayment(DB, model.SalesInput{
 			Items: []*model.OrderItemInput{

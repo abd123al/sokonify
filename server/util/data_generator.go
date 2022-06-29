@@ -129,29 +129,26 @@ type CreateItemArgs struct {
 	ProductID int
 }
 
-func CreateItem(DB *gorm.DB, args *CreateItemArgs, StoreId *int) *model.Item {
+func CreateItem(DB *gorm.DB, StoreId *int) *model.Item {
 	var BrandID *int
+	var Product *model.Product
 	var ProductID int
 	var CreatorID int
 
-	//Here what is required is ProductID
-	if args != nil {
-		BrandID = args.BrandID
-		ProductID = args.ProductID
+	//creating the needed product
+	if StoreId != nil {
+		Product = CreateProduct(DB, &CreateProductArgs{StoreID: *StoreId})
+		ProductID = Product.ID
+		CreatorID = *Product.CreatorID
 	} else {
-		//creating the needed product
-		if StoreId != nil {
-			Product := CreateProduct(DB, &CreateProductArgs{StoreID: *StoreId})
-			ProductID = Product.ID
-			CreatorID = *Product.CreatorID
-		} else {
-			Product := CreateProduct(DB, nil)
-			ProductID = Product.ID
-			CreatorID = *Product.CreatorID
-		}
+		Product = CreateProduct(DB, nil)
+		ProductID = Product.ID
+		CreatorID = *Product.CreatorID
 	}
 
-	unit := CreateUnit(DB, nil, nil)
+	unit := CreateUnit(DB, Product.StoreID, nil)
+
+	priceCategory := CreateCategory(DB, ProductID, model.CategoryTypePricing)
 
 	item, _ := repository.CreateItem(DB, model.ItemInput{
 		Quantity:     10,
@@ -163,6 +160,9 @@ func CreateItem(DB *gorm.DB, args *CreateItemArgs, StoreId *int) *model.Item {
 		BrandID:      BrandID,
 		ProductID:    ProductID,
 		UnitID:       unit.ID,
+		Prices: []*model.PriceInput{
+			{Amount: "500.00", CategoryID: priceCategory.ID},
+		},
 	}, CreatorID)
 
 	return item
@@ -212,9 +212,9 @@ func CreateOrder(DB *gorm.DB, args *CreateOrderArgs) CreateOrderResult {
 		CustomerID = CreateCustomer(DB, IssuerID).ID
 
 		Items = []*model.Item{
-			CreateItem(DB, nil, &IssuerID),
-			CreateItem(DB, nil, &IssuerID),
-			CreateItem(DB, nil, &IssuerID),
+			CreateItem(DB, &IssuerID),
+			CreateItem(DB, &IssuerID),
+			CreateItem(DB, &IssuerID),
 		}
 	}
 
@@ -294,7 +294,7 @@ func CreatePayment(DB *gorm.DB, Args *CreatePaymentArgs, Order bool) CreatePayme
 	}
 
 	if Order {
-		item := CreateItem(DB, nil, &StoreID)
+		item := CreateItem(DB, &StoreID)
 		order := CreateOrder(DB, &CreateOrderArgs{
 			IssuerID:   StoreID,
 			StaffId:    StaffID,
