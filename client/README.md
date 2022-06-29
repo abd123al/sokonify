@@ -1,3 +1,5 @@
+- print invoice and receipt from payment page too
+- add receipt layout.
 - when we click eg total sales show how items contributed to that amount. mfano panadol sold items 20 amount 1000. show na percent comtribution ili mtu afurahie
 - Above can be implemented like when we view items/brand/categories pia inaonyesha today stats and it cam even show yearly and montly stats
 - in customers tab we may search for payments/pending orders/etc. everything associated with
