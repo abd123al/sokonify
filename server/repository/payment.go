@@ -198,7 +198,7 @@ func FindPayments(DB *gorm.DB, args model.PaymentsArgs, StoreID int) ([]*model.P
 		Timeframe: args.Timeframe,
 	})
 
-	db := DB.Debug() //todo filter payments
+	db := DB //.Debug() //todo filter payments
 
 	if By == model.PaymentsByStore {
 		q := db.Table("payments").Order(sort).Joins(fmt.Sprintf("inner join staffs on payments.staff_id = staffs.user_id AND staffs.store_id = ? AND payments.%s IS NOT NULL", typeColumn), StoreID)

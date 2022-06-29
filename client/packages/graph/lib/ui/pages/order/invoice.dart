@@ -54,6 +54,7 @@ class Invoice {
 
   static const _darkColor = PdfColors.blueGrey800;
 
+  final borderRadius = const pw.BorderRadius.all(pw.Radius.circular(2));
   //static const _lightColor = PdfColors.white;
 
   //String? _logo;
@@ -202,6 +203,7 @@ class Invoice {
                 border: pw.Border.all(
                   color: PdfColors.black,
                 ),
+                borderRadius: borderRadius,
               ),
               child: pw.SizedBox(
                 height: height,
@@ -228,10 +230,8 @@ class Invoice {
           pw.SizedBox(width: 8),
           pw.Expanded(
             child: pw.Container(
-              decoration: const pw.BoxDecoration(
-                borderRadius: pw.BorderRadius.all(
-                  pw.Radius.circular(2),
-                ),
+              decoration:  pw.BoxDecoration(
+                borderRadius: borderRadius,
               ),
               alignment: pw.Alignment.centerLeft,
               height: height,
@@ -244,6 +244,7 @@ class Invoice {
                     border: pw.Border.all(
                       color: PdfColors.black,
                     ),
+                    borderRadius: borderRadius,
                   ),
                   child: pw.Padding(
                     padding: padding,
@@ -392,7 +393,7 @@ class Invoice {
         border: pw.Border.all(
           color: _darkColor,
         ),
-        borderRadius: const pw.BorderRadius.all(pw.Radius.circular(2)),
+        borderRadius: borderRadius,
       ),
       headerHeight: 25,
       cellHeight: 40,
