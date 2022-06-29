@@ -151,15 +151,14 @@ func CreateItem(DB *gorm.DB, StoreId *int) *model.Item {
 	priceCategory := CreateCategory(DB, ProductID, model.CategoryTypePricing)
 
 	item, _ := repository.CreateItem(DB, model.ItemInput{
-		Quantity:     10,
-		BuyingPrice:  "2000.00", //todo fake all these
-		SellingPrice: "5000.00",
-		Batch:        nil,
-		Description:  nil,
-		ExpiresAt:    nil,
-		BrandID:      BrandID,
-		ProductID:    ProductID,
-		UnitID:       unit.ID,
+		Quantity:    10,
+		BuyingPrice: "2000.00", //todo fake all these
+		Batch:       nil,
+		Description: nil,
+		ExpiresAt:   nil,
+		BrandID:     BrandID,
+		ProductID:   ProductID,
+		UnitID:      unit.ID,
 		Prices: []*model.PriceInput{
 			{Amount: "500.00", CategoryID: priceCategory.ID},
 		},
@@ -220,7 +219,7 @@ func CreateOrder(DB *gorm.DB, args *CreateOrderArgs) CreateOrderResult {
 
 	for i, item := range Items {
 		input := model.OrderItemInput{
-			Quantity: i + 2, Price: item.SellingPrice, ItemID: item.ID,
+			Quantity: i + 2, Price: item.Prices[0].Amount, ItemID: item.ID,
 		}
 
 		ItemsInput = append(ItemsInput, &input)

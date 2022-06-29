@@ -21,7 +21,7 @@ func TestOrders(t *testing.T) {
 			Items: []*model.OrderItemInput{
 				{
 					Quantity: item.Quantity,
-					Price:    item.SellingPrice,
+					Price:    item.Prices[0].Amount,
 					ItemID:   item.ID,
 				},
 			},
@@ -37,7 +37,7 @@ func TestOrders(t *testing.T) {
 			Items: []*model.OrderItemInput{
 				{
 					Quantity: item.Quantity + 1,
-					Price:    item.SellingPrice,
+					Price:    item.Prices[0].Amount,
 					ItemID:   item.ID,
 				},
 			},
@@ -103,12 +103,12 @@ func TestOrders(t *testing.T) {
 			Items: []*model.OrderItemInput{
 				{
 					Quantity: item.Quantity - 1,
-					Price:    item.SellingPrice,
+					Price:    item.Prices[0].Amount,
 					ItemID:   item.ID,
 				},
 				{
 					Quantity: item2.Quantity - 1,
-					Price:    item2.SellingPrice,
+					Price:    item.Prices[0].Amount,
 					ItemID:   item2.ID,
 				},
 			},

@@ -18,12 +18,11 @@ func TestItem(t *testing.T) {
 
 	t.Run("CreateItem", func(t *testing.T) {
 		item, _ := repository.CreateItem(DB, model.ItemInput{
-			ProductID:    product.ID,
-			UnitID:       unit.ID,
-			Quantity:     12,
-			BuyingPrice:  "2000",
-			SellingPrice: "5000",
-			Categories:   []int{cat.ID},
+			ProductID:   product.ID,
+			UnitID:      unit.ID,
+			Quantity:    12,
+			BuyingPrice: "2000",
+			Categories:  []int{cat.ID},
 			Prices: []*model.PriceInput{
 				{Amount: "500.00", CategoryID: priceCategory.ID},
 			},
@@ -39,11 +38,10 @@ func TestItem(t *testing.T) {
 
 	var create = func() *model.Item {
 		i, _ := repository.CreateItem(DB, model.ItemInput{
-			Quantity:     12,
-			BuyingPrice:  "2000",
-			UnitID:       unit.ID,
-			SellingPrice: "5000",
-			ProductID:    product.ID,
+			Quantity:    12,
+			BuyingPrice: "2000",
+			UnitID:      unit.ID,
+			ProductID:   product.ID,
 			Prices: []*model.PriceInput{
 				{Amount: "500.00", CategoryID: priceCategory.ID},
 			},
@@ -56,15 +54,14 @@ func TestItem(t *testing.T) {
 		i := create()
 
 		item, err := repository.EditItem(DB, i.ID, model.ItemInput{
-			UnitID:       unit.ID,
-			Quantity:     12,
-			BuyingPrice:  "2000",
-			SellingPrice: "5000",
-			Batch:        nil,
-			Description:  nil,
-			ExpiresAt:    nil,
-			BrandID:      nil,
-			ProductID:    product.ID,
+			UnitID:      unit.ID,
+			Quantity:    12,
+			BuyingPrice: "2000",
+			Batch:       nil,
+			Description: nil,
+			ExpiresAt:   nil,
+			BrandID:     nil,
+			ProductID:   product.ID,
 		}, *i.CreatorID)
 
 		require.Nil(t, err)

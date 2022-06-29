@@ -377,7 +377,6 @@ type Item implements Gorm {
     # Prices should be zero for non expenses
     # empty string for non admins
     buyingPrice: String!  @goTag(key: "gorm", value: "type:numeric;not null;unsigned") @goField(forceResolver: true)
-    sellingPrice: String!  @goTag(key: "gorm", value: "type:numeric;not null;unsigned") #todo remove
     expiresAt: Time
 
     creatorId: Int
@@ -426,7 +425,6 @@ input ItemInput {
     unitId: Int!
     quantity: Int!
     buyingPrice: String!
-    sellingPrice: String!
     batch: String
     description: String
     expiresAt: Time

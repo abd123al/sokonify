@@ -254,7 +254,7 @@ func TestPayment(t *testing.T) {
 			Items: []*model.OrderItemInput{
 				{
 					Quantity: item.Quantity,
-					Price:    item.SellingPrice,
+					Price:    item.Prices[0].Amount,
 					ItemID:   item.ID,
 				},
 			},
