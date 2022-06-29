@@ -311,6 +311,10 @@ func (r *orderResolver) TotalPrice(ctx context.Context, obj *model.Order) (*stri
 	return &total, nil
 }
 
+func (r *orderResolver) Category(ctx context.Context, obj *model.Order) (*model.PriceCategory, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *orderResolver) Customer(ctx context.Context, obj *model.Order) (*model.Customer, error) {
 	if obj.CustomerID != nil {
 		return repository.FindCustomer(r.DB, *obj.CustomerID)
@@ -404,6 +408,22 @@ func (r *paymentResolver) OrderItems(ctx context.Context, obj *model.Payment) ([
 	}
 
 	return nil, nil
+}
+
+func (r *priceResolver) Creator(ctx context.Context, obj *model.Price) (*model.User, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *priceResolver) Category(ctx context.Context, obj *model.Price) (*model.PriceCategory, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *priceCategoryResolver) Creator(ctx context.Context, obj *model.PriceCategory) (*model.User, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *priceCategoryResolver) Store(ctx context.Context, obj *model.PriceCategory) (*model.Store, error) {
+	panic(fmt.Errorf("not implemented"))
 }
 
 func (r *productResolver) Store(ctx context.Context, obj *model.Product) (*model.Store, error) {
@@ -669,6 +689,12 @@ func (r *Resolver) OrderItem() generated.OrderItemResolver { return &orderItemRe
 // Payment returns generated.PaymentResolver implementation.
 func (r *Resolver) Payment() generated.PaymentResolver { return &paymentResolver{r} }
 
+// Price returns generated.PriceResolver implementation.
+func (r *Resolver) Price() generated.PriceResolver { return &priceResolver{r} }
+
+// PriceCategory returns generated.PriceCategoryResolver implementation.
+func (r *Resolver) PriceCategory() generated.PriceCategoryResolver { return &priceCategoryResolver{r} }
+
 // Product returns generated.ProductResolver implementation.
 func (r *Resolver) Product() generated.ProductResolver { return &productResolver{r} }
 
@@ -706,6 +732,8 @@ type mutationResolver struct{ *Resolver }
 type orderResolver struct{ *Resolver }
 type orderItemResolver struct{ *Resolver }
 type paymentResolver struct{ *Resolver }
+type priceResolver struct{ *Resolver }
+type priceCategoryResolver struct{ *Resolver }
 type productResolver struct{ *Resolver }
 type productCategoryResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
