@@ -1,31 +1,26 @@
 package repository
 
 import (
-	"errors"
 	"gorm.io/gorm"
 	"mahesabu/graph/model"
 	"mahesabu/helpers"
 )
 
 func CreatePrice(db *gorm.DB, ItemID int, input model.PriceInput, args helpers.UserAndStoreArgs) (*model.Price, error) {
-	var count int64
-	price := model.Price{
+	var price *model.Price
+
+	price = &model.Price{
 		Amount:     input.Amount,
 		CreatorID:  args.UserID,
 		CategoryID: input.CategoryID,
 		ItemID:     ItemID,
 	}
 
-	if err := db.Where(&model.Price{ItemID: ItemID, CategoryID: input.CategoryID}).Count(&count).Error; err != nil {
+	if err := db.Table("prices").Where(&model.Price{ItemID: ItemID, CategoryID: input.CategoryID}).FirstOrInit(&price).Error; err != nil {
 		return nil, err
 	}
 
-	if count > 0 {
-		return nil, errors.New("price in this category was already added. just edit it")
-	}
-
-	result := db.Create(&price)
-	return &price, result.Error
+	return price, nil
 }
 
 func EditPrice(DB *gorm.DB, ID int, input model.PriceInput, args helpers.UserAndStoreArgs) (*model.Price, error) {

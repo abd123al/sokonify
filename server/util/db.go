@@ -68,8 +68,21 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 	}
 
 	if err = db.AutoMigrate(
-		&model.Admin{}, &model.Customer{}, &model.Expense{}, &model.Staff{}, &model.Item{}, &model.Store{}, &model.Order{}, model.OrderItem{},
-		&model.User{}, &model.Payment{}, &model.Price{}, &model.Product{}, &model.ProductCategory{}, &model.Brand{}, &model.Unit{},
+		&model.Admin{},
+		&model.Customer{},
+		&model.Expense{},
+		&model.Staff{},
+		&model.Item{},
+		&model.Store{},
+		&model.Order{},
+		&model.OrderItem{},
+		&model.User{},
+		&model.Payment{},
+		&model.Price{},
+		&model.Product{},
+		&model.ProductCategory{},
+		&model.Brand{},
+		&model.Unit{},
 	); err != nil {
 		panic(fmt.Sprintf("failed to auto migrate with error: %s", err.Error()))
 	}
@@ -79,8 +92,7 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 			var stores []*model.Store
 
 			if err = tx.Find(&stores).Error; err != nil {
-				log.Printf("error in finding stores %e", err)
-				return err
+				return fmt.Errorf("error in finding stores %e", err)
 			}
 
 			for _, s := range stores {
@@ -94,8 +106,7 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 				err := tx.Table("items").Joins("inner join products on products.id = items.product_id AND products.store_id = ?", s.ID).Scan(&items).Error
 
 				if err != nil {
-					log.Printf("error in finding items %e", err)
-					return err
+					return fmt.Errorf("error in finding items %e", err)
 				}
 
 				cat, err := repository.CreateCategory(tx, model.CategoryInput{
@@ -106,11 +117,15 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 					StoreID: s.ID,
 				})
 
+				if err != nil {
+					return fmt.Errorf("error in create category %e", err)
+				}
+
 				var prices []*model.Price
 
-				for _, i := range items {
-					p, err := repository.CreatePrice(tx, i.ID, model.PriceInput{
-						Amount:     i.SellingPrice,
+				for _, item := range items {
+					p, err := repository.CreatePrice(tx, item.ID, model.PriceInput{
+						Amount:     item.SellingPrice,
 						CategoryID: cat.ID,
 					}, helpers.UserAndStoreArgs{
 						UserID:  s.UserID,
@@ -118,26 +133,24 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 					})
 
 					if err != nil {
-						log.Printf("error in creating price for item %d %e", i.ID, err)
-						return err
+						return fmt.Errorf("error in creating price for item %d %e", item.ID, err)
 					}
 
 					prices = append(prices, p)
 				}
 			}
 
-			//if len(prices) > 0 && len(items) > 0 {
-			//err := tx.Migrator().DropColumn(&model.Item{}, "selling_price")
-			//if err != nil {
-			//	log.Printf("error in dropping selling price column %e", err)
-			//}
-			//}
+			err = tx.Migrator().DropColumn(&model.Item{}, "selling_price")
+
+			if err != nil {
+				return fmt.Errorf("error in dropping selling price column %e", err)
+			}
 
 			return nil
 		})
 
 		if err != nil {
-			log.Printf("Migration failed %e", err)
+			log.Printf("Migration failed with error: %e", err)
 		}
 	}
 
