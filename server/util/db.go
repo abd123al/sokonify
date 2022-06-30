@@ -5,7 +5,10 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"log"
 	"mahesabu/graph/model"
+	"mahesabu/helpers"
+	"mahesabu/repository"
 )
 
 type InitDbArgs struct {
@@ -69,6 +72,72 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 		&model.User{}, &model.Payment{}, &model.Price{}, &model.Product{}, &model.ProductCategory{}, &model.Brand{}, &model.Unit{},
 	); err != nil {
 		panic(fmt.Sprintf("failed to auto migrate with error: %s", err.Error()))
+	}
+
+	if (db.Migrator().HasColumn(&model.Item{}, "selling_price")) {
+		err = db.Transaction(func(tx *gorm.DB) error {
+			var stores []*model.Store
+
+			if err = tx.Find(&stores).Error; err != nil {
+				log.Printf("error in finding stores %e", err)
+				return err
+			}
+
+			for _, s := range stores {
+				type ItemResult struct {
+					ID           int
+					SellingPrice string
+				}
+				var items []ItemResult
+
+				err := tx.Joins("inner join products on products.id = items.product_id AND products.store_id = ?", s.ID).Scan(&items).Error
+
+				if err != nil {
+					log.Printf("error in finding items %e", err)
+					return err
+				}
+
+				cat, err := repository.CreateCategory(tx, model.CategoryInput{
+					Name: "Pricing",
+					Type: model.CategoryTypePricing,
+				}, helpers.UserAndStoreArgs{
+					UserID:  s.UserID,
+					StoreID: s.ID,
+				})
+
+				var prices []*model.Price
+
+				for _, i := range items {
+					p, err := repository.CreatePrice(tx, i.ID, model.PriceInput{
+						Amount:     i.SellingPrice,
+						CategoryID: cat.ID,
+					}, helpers.UserAndStoreArgs{
+						UserID:  s.UserID,
+						StoreID: s.ID,
+					})
+
+					if err != nil {
+						log.Printf("error in creating price for item %d %e", i.ID, err)
+						return err
+					}
+
+					prices = append(prices, p)
+				}
+			}
+
+			//if len(prices) > 0 && len(items) > 0 {
+			//err := tx.Migrator().DropColumn(&model.Item{}, "selling_price")
+			//if err != nil {
+			//	log.Printf("error in dropping selling price column %e", err)
+			//}
+			//}
+
+			return nil
+		})
+
+		if err != nil {
+			log.Printf("Migration failed %e", err)
+		}
 	}
 
 	return db

@@ -19,17 +19,17 @@ func CreateCustomer(DB *gorm.DB, input model.CustomerInput, args helpers.UserAnd
 	}
 
 	customer := model.Customer{
-		Address:   input.Address,
-		Comment:   input.Comment,
-		Email:     input.Email,
-		Name:      input.Name,
-		Phone:     input.Phone,
-		Tin:       input.Tin,
-		Type:      input.Type,
-		Gender:    input.Gender,
-		Dob:       input.Dob,
-		StoreID:   args.StoreID,
-		UserID:    &user.ID,
+		Address: input.Address,
+		Comment: input.Comment,
+		Email:   input.Email,
+		Name:    input.Name,
+		Phone:   input.Phone,
+		Tin:     input.Tin,
+		Type:    input.Type,
+		Gender:  input.Gender,
+		Dob:     input.Dob,
+		StoreID: args.StoreID,
+		//UserID:    &user.ID,
 		CreatorID: &args.UserID,
 	}
 
