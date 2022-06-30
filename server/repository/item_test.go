@@ -77,7 +77,7 @@ func TestItem(t *testing.T) {
 
 		for i := 0; i < len(items); i++ {
 			fmt.Println(items[i].ID)
-			require.NotNil(t, items[i].Prices[0].Amount)
+			require.NotEqual(t, items[i].ID, 0)
 		}
 
 		require.Nil(t, err)

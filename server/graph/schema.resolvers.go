@@ -117,7 +117,7 @@ func (r *itemResolver) Categories(ctx context.Context, obj *model.Item) ([]*mode
 }
 
 func (r *itemResolver) Prices(ctx context.Context, obj *model.Item) ([]*model.Price, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.FindPrices(r.DB, obj.ID)
 }
 
 func (r *mutationResolver) CreateBrand(ctx context.Context, input model.BrandInput) (*model.Brand, error) {

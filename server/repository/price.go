@@ -49,12 +49,12 @@ func EditPrice(DB *gorm.DB, ID int, input model.PriceInput, args helpers.UserAnd
 	return price, nil
 }
 
-//func FindPrices(db *gorm.DB, ItemID int) ([]*model.Price, error) {
-//	var categories []*model.Price
-//	result := db.Where(&model.Price{ItemID: ItemID}).Find(&categories)
-//	return categories, result.Error
-//}
-//
+func FindPrices(db *gorm.DB, ItemID int) ([]*model.Price, error) {
+	var categories []*model.Price
+	result := db.Where(&model.Price{ItemID: ItemID}).Find(&categories)
+	return categories, result.Error
+}
+
 //func FindPrice(db *gorm.DB, ID int) (*model.Price, error) {
 //	var price *model.Price
 //	result := db.Where(&model.Price{ID: ID}).First(&price)
