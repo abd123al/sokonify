@@ -65,10 +65,16 @@ class _CreateProductPageState extends State<ProductForm> {
                 CategoriesListCubit>(
               retry: (cubit) => cubit.fetch(),
               builder: (context, data, _) {
+                final List<Categories$Query$Category> cats = data.items
+                    .where((e) => e.type == CategoryType.category)
+                    .toList();
+
                 return SearchableDropdown<
                     Categories$Query$Category>.multiSelection(
                   asString: (i) => i.name.toLowerCase(),
-                  data: data,
+                  data: data.copyWith(
+                    items: cats,
+                  ),
                   labelText: "Categories (Optional)",
                   hintText: "Select Categories (Optional)",
                   helperText:
