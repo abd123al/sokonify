@@ -19,6 +19,8 @@ class CategoriesListPage extends StatelessWidget {
     word() {
       if (type == CategoryType.subcategory) {
         return "Stock";
+      } else if (type == CategoryType.pricing) {
+        return "Pricing";
       }
       return "Product";
     }

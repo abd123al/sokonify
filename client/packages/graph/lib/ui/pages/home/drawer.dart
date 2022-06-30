@@ -94,6 +94,17 @@ class SokonifyDrawer extends StatelessWidget {
                 },
               ),
               ListTile(
+                title: const Text('Pricing Categories'),
+                trailing: const Icon(Icons.category_outlined),
+                onTap: () {
+                  redirectTo(
+                    context,
+                    Routes.categories,
+                    args: CategoryType.pricing,
+                  );
+                },
+              ),
+              ListTile(
                 title: const Text('Expense Categories'),
                 trailing: const Icon(Icons.category_outlined),
                 onTap: () {
