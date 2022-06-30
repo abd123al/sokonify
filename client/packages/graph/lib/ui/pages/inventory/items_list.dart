@@ -37,10 +37,7 @@ class ItemsList extends StatelessWidget {
                   isScrollable: false,
                   tabs: cats.map((e) => Tab(text: e.name)).toList(),
                   labelColor: Theme.of(context).primaryColorDark,
-                  // indicator: BoxDecoration(
-                  //   borderRadius: BorderRadius.circular(40),
-                  // ),
-                  // splashBorderRadius: BorderRadius.circular(40),
+                  indicatorWeight: 4.0,
                 ),
                 Expanded(
                   child: TabBarView(

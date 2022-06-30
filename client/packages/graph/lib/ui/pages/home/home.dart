@@ -118,11 +118,8 @@ class _HomePageState extends State<HomePage> {
     ];
 
     return SizedBox.expand(
-      child: PageView(
-        controller: _pageController,
-        onPageChanged: (index) {
-          setState(() => _currentIndex = index);
-        },
+      child: IndexedStack(
+        index: _currentIndex,
         children: list,
       ),
     );
