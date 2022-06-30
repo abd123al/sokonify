@@ -9,7 +9,7 @@ class CreateItemPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("New Item"),
+        title: const Text("New Stock"),
       ),
       body: const ItemForm(
         item: null,

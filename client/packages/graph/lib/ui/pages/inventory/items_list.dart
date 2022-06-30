@@ -2,6 +2,7 @@ import 'package:blocitory/blocitory.dart';
 import 'package:flutter/material.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
+import '../../../nav/nav.dart';
 import '../../widgets/widgets.dart';
 import '../category/pricing_builder.dart';
 import 'item_tile.dart';
@@ -31,20 +32,33 @@ class ItemsList extends StatelessWidget {
         } else {
           return DefaultTabController(
             length: cats.length,
-            child: Column(
-              children: [
-                TabBar(
-                  isScrollable: false,
-                  tabs: cats.map((e) => Tab(text: e.name)).toList(),
-                  labelColor: Theme.of(context).primaryColorDark,
-                  indicatorWeight: 4.0,
-                ),
-                Expanded(
-                  child: TabBarView(
-                    children: cats.map((e) => _build()).toList(),
+            child: Scaffold(
+              body: Column(
+                children: [
+                  TabBar(
+                    isScrollable: false,
+                    tabs: cats.map((e) => Tab(text: e.name)).toList(),
+                    labelColor: Theme.of(context).primaryColorDark,
+                    indicatorWeight: 4.0,
                   ),
-                )
-              ],
+                  Expanded(
+                    child: TabBarView(
+                      children: cats.map((e) => _build()).toList(),
+                    ),
+                  ),
+                ],
+              ),
+              floatingActionButton: FloatingActionButton.extended(
+                onPressed: () => redirectTo(
+                  context,
+                  Routes.createItem,
+                  args: 1,
+                ),
+                tooltip: 'Add',
+                backgroundColor: Colors.teal,
+                icon: const Icon(Icons.add),
+                label: const Text("Add Stock"),
+              ),
             ),
           );
         }

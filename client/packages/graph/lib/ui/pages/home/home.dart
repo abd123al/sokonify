@@ -112,7 +112,7 @@ class _HomePageState extends State<HomePage> {
     final List<Widget> list = [
       const POS(),
       const OrdersListScaffold(),
-      const Inventory(),
+      const ItemsList(),
       const Expenses(),
       const Customers(),
     ];
