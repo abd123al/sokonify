@@ -16,7 +16,8 @@ func TestStore(t *testing.T) {
 
 	t.Run("CreateStore", func(t *testing.T) {
 		store, err := repository.CreateStore(DB, UserID, model.StoreInput{
-			Name: faker.Name(),
+			Name:         faker.Name(),
+			BusinessType: model.BusinessTypeBoth,
 		}, false)
 
 		assert.Nil(t, err)
