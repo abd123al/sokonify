@@ -107,7 +107,7 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 
 				var items []*ItemResult
 
-				err := tx.Table("items").Joins("inner join products on products.id = items.product_id AND products.store_id = ?", s.ID).Scan(&items).Error
+				err := tx.Table("items").Select("items.selling_price, items.id").Joins("inner join products on products.id = items.product_id AND products.store_id = ?", s.ID).Scan(&items).Error
 
 				log.Printf("items found: %v\n", items)
 
@@ -132,6 +132,8 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 				var prices []*model.Price
 
 				for _, item := range items {
+					log.Printf("current item: %d\n", item.ID)
+
 					p, err := repository.CreatePrice(tx, item.ID, model.PriceInput{
 						Amount:     item.SellingPrice,
 						CategoryID: cat.ID,
@@ -159,7 +161,7 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 			log.Printf("Prices were inserted: %d\n", count)
 
 			if count > 0 {
-				//err = tx.Migrator().DropColumn(&model.Item{}, "selling_price")
+				err = tx.Migrator().DropColumn(&model.Item{}, "selling_price")
 			} else {
 				return fmt.Errorf("no new prices were insrted")
 			}
