@@ -85,12 +85,13 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 
 			for _, s := range stores {
 				type ItemResult struct {
-					ID           int
-					SellingPrice string
+					ID           int    `json:"id" gorm:"primaryKey"`
+					SellingPrice string `json:"sellingPrice" gorm:"type:numeric;not null;unsigned"`
 				}
-				var items []ItemResult
 
-				err := tx.Joins("inner join products on products.id = items.product_id AND products.store_id = ?", s.ID).Scan(&items).Error
+				var items []*ItemResult
+
+				err := tx.Table("items").Joins("inner join products on products.id = items.product_id AND products.store_id = ?", s.ID).Scan(&items).Error
 
 				if err != nil {
 					log.Printf("error in finding items %e", err)
