@@ -46,10 +46,10 @@ class ItemTile extends StatelessWidget {
               style: Theme.of(context).textTheme.titleSmall,
             ),
             dense: true,
-            trailing: Text(
-              formatCurrency(item.sellingPrice),
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
+            // trailing: Text(
+            //   formatCurrency(item.sellingPrice),
+            //   style: Theme.of(context).textTheme.titleMedium,
+            // ),
             onTap: () => redirectTo(context, "${Routes.item}/${item.id}"),
           );
         },

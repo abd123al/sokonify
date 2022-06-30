@@ -46,9 +46,7 @@ class ItemPage extends StatelessWidget {
         ShortDetailTile(subtitle: "Unit", value: data.unit.name),
         ShortDetailTile(
             subtitle: "Buying Price", value: formatCurrency(data.buyingPrice)),
-        ShortDetailTile(
-            subtitle: "Selling Price",
-            value: formatCurrency(data.sellingPrice)),
+        //ShortDetailTile(subtitle: "Selling Price", value: formatCurrency(data.sellingPrice)),
         ShortDetailTile(subtitle: "Description", value: data.description),
         ShortDetailTile(
             subtitle: "Expires at", value: data.expiresAt?.toString()),

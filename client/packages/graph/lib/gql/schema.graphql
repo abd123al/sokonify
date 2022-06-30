@@ -125,10 +125,10 @@ type Item implements Gorm {
     expiresAt: Time
     id: ID!
     name: String
+    prices: [Price!]!
     product: Product!
     productId: Int!
     quantity: Int!
-    sellingPrice: String!
     unit: Unit!
     unitId: Int!
     updatedAt: Time!
@@ -176,6 +176,8 @@ type Mutation {
 }
 
 type Order implements Gorm {
+    category: Category!
+    categoryId: Int!
     comment: String
     createdAt: Time!
     customer: Customer
@@ -231,6 +233,20 @@ type Payment implements Gorm {
     updatedAt: Time!
 }
 
+type Price implements Gorm {
+    amount: String!
+    category: Category!
+    categoryId: Int!
+    createdAt: Time!
+    creator: User!
+    creatorId: Int!
+    deletedAt: Time
+    id: ID!
+    item: Item!
+    itemId: Int!
+    updatedAt: Time!
+}
+
 type Product implements Gorm {
     brands: [Brand!]!
     categories: [Category!]
@@ -262,6 +278,7 @@ type ProductCategory implements Gorm {
 }
 
 type Profit {
+    categoryId: Int!
     expected: String!
     real: String!
 }
@@ -381,6 +398,7 @@ enum BusinessType {
 
 enum CategoryType {
     category
+    pricing
     subcategory
 }
 
@@ -561,9 +579,9 @@ input ItemInput {
     categories: [ID!]
     description: String
     expiresAt: Time
+    prices: [PriceInput!]!
     productId: Int!
     quantity: Int!
-    sellingPrice: String!
     unitId: Int!
 }
 
@@ -617,8 +635,13 @@ input PaymentsArgs {
     sortBy: SortBy = DESC
     startDate: Time
     timeframe: TimeframeType
-    type: PaymentType
+    type: PaymentType!
     value: ID
+}
+
+input PriceInput {
+    amount: String!
+    categoryId: ID!
 }
 
 input ProductBrandInput {

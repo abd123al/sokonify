@@ -4,7 +4,10 @@ query item($id: ID!) {
         createdAt
         description
         expiresAt
-        sellingPrice
+        prices {
+            amount
+            categoryId
+        }
         batch
         quantity
         brand {

@@ -65,7 +65,7 @@ class _ItemFormState extends State<ItemForm> {
     _buyingPriceController.text = widget.item?.buyingPrice ?? "";
     _descriptionPriceController.text = widget.item?.description ?? "";
     _expireDateController.text = widget.item?.expiresAt.toString() ?? "";
-    _sellingPriceController.text = widget.item?.sellingPrice.toString() ?? "";
+    //_sellingPriceController.text = widget.item?.sellingPrice.toString() ?? "";
     _quantityController.text = widget.item?.quantity.toString() ?? "";
     _expireDate = widget.item?.expiresAt;
     _dateController.text = formatDate(widget.item?.expiresAt) ?? "";
@@ -305,7 +305,7 @@ class _ItemFormState extends State<ItemForm> {
                     if (_formKey.currentState!.validate()) {
                       final input = ItemInput(
                         quantity: int.parse(_quantityController.text),
-                        sellingPrice: _sellingPriceController.text,
+                        //sellingPrice: _sellingPriceController.text,
                         buyingPrice: _buyingPriceController.text,
                         unitId: _unitId!,
                         description: _descriptionPriceController.text,
@@ -314,6 +314,7 @@ class _ItemFormState extends State<ItemForm> {
                         expiresAt: _expireDate,
                         brandId: _brandId,
                         categories: _categories.map((e) => e.id).toList(),
+                        prices: [],
                       );
 
                       if (!isEdit) {

@@ -239,7 +239,7 @@ class _OrderFormState<T extends OrderCubit> extends State<OrderForm<T>> {
                                         .map(
                                           (e) => OrderItemInput(
                                             price: e.customSellingPrice ??
-                                                e.item.sellingPrice,
+                                                e.item.prices[0].amount,
                                             itemId: e.item.id,
                                             quantity: e.quantity,
                                           ),

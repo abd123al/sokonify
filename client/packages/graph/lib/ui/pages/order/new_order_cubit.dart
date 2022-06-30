@@ -17,7 +17,7 @@ class NewOrderItem extends Equatable {
   final String? customSellingPrice;
 
   String get subTotal {
-    final sub = Decimal.parse(customSellingPrice ?? item.sellingPrice) *
+    final sub = Decimal.parse(customSellingPrice ??"0" /*item.sellingPrice*/) *
         Decimal.fromInt(quantity);
 
     return formatCurrency(sub.toString());
@@ -74,7 +74,7 @@ class NewOrder extends Equatable {
     return calculateTotal(
       items.map(
         (e) => TotalPriceArgs(
-          price: e.customSellingPrice ?? e.item.sellingPrice,
+          price: e.customSellingPrice ??"", //e.item.sellingPrice,
           quantity: e.quantity,
         ),
       ),
