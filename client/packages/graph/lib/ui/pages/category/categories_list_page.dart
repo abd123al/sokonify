@@ -53,7 +53,9 @@ class CategoriesListPage extends StatelessWidget {
 
         return SearchableList<Categories$Query$Category>(
           hintName: "Category",
-          data: data.copyWith(items: cats),
+          data: data.copyWith(
+            items: cats,
+          ),
           compare: (i) => i.name,
           builder: (context, item, color) {
             return CategoryTile(

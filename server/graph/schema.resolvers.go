@@ -48,13 +48,6 @@ func (r *brandResolver) Creator(ctx context.Context, obj *model.Brand) (*model.U
 	return nil, nil
 }
 
-func (r *categoryResolver) Type(ctx context.Context, obj *model.Category) (model.CategoryType, error) {
-	if obj.Type == "" {
-		return model.CategoryTypeCategory, nil
-	}
-	return model.CategoryTypeSubcategory, nil
-}
-
 func (r *categoryResolver) Creator(ctx context.Context, obj *model.Category) (*model.User, error) {
 	if obj.CreatorID != nil {
 		return repository.FindUser(r.DB, *obj.CreatorID)

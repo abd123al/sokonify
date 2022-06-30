@@ -164,7 +164,7 @@ type Category implements Gorm {
 
     name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(50);default:null")
     description: String @goTag(key: "gorm", value: "type:varchar(250);default:null")
-    type: CategoryType! @goField(forceResolver: true) #todo after migrate remove this
+    type: CategoryType!
 
     creatorId: Int
     creator: User @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
