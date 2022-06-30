@@ -9,6 +9,12 @@ import (
 func CreatePrice(db *gorm.DB, ItemID int, input model.PriceInput, args helpers.UserAndStoreArgs) (*model.Price, error) {
 	var price *model.Price
 
+	result := db.Where(&model.Price{ItemID: ItemID, CategoryID: input.CategoryID}).Find(&price)
+
+	if result.RowsAffected > 0 {
+		return price, nil
+	}
+
 	price = &model.Price{
 		Amount:     input.Amount,
 		CreatorID:  args.UserID,
@@ -16,7 +22,9 @@ func CreatePrice(db *gorm.DB, ItemID int, input model.PriceInput, args helpers.U
 		ItemID:     ItemID,
 	}
 
-	if err := db.Table("prices").Where(&model.Price{ItemID: ItemID, CategoryID: input.CategoryID}).FirstOrInit(&price).Error; err != nil {
+	err := db.Create(&price).Error
+
+	if err != nil {
 		return nil, err
 	}
 

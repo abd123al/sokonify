@@ -95,7 +95,11 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 				return fmt.Errorf("error in finding stores %e", err)
 			}
 
+			log.Printf("stores found: %d\n", len(stores))
+
 			for _, s := range stores {
+				log.Printf("current store: %d\n", s.ID)
+
 				type ItemResult struct {
 					ID           int    `json:"id" gorm:"primaryKey"`
 					SellingPrice string `json:"sellingPrice" gorm:"type:numeric;not null;unsigned"`
@@ -104,6 +108,8 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 				var items []*ItemResult
 
 				err := tx.Table("items").Joins("inner join products on products.id = items.product_id AND products.store_id = ?", s.ID).Scan(&items).Error
+
+				log.Printf("items found: %v\n", items)
 
 				if err != nil {
 					return fmt.Errorf("error in finding items %e", err)
@@ -121,6 +127,8 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 					return fmt.Errorf("error in create category %e", err)
 				}
 
+				log.Printf("category created: %d\n", cat.ID)
+
 				var prices []*model.Price
 
 				for _, item := range items {
@@ -136,11 +144,25 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 						return fmt.Errorf("error in creating price for item %d %e", item.ID, err)
 					}
 
+					log.Printf("price created: %d\n", p.ID)
+
 					prices = append(prices, p)
 				}
 			}
 
-			err = tx.Migrator().DropColumn(&model.Item{}, "selling_price")
+			var count int64
+
+			if err := tx.Model(&model.Price{}).Count(&count).Error; err != nil {
+				return fmt.Errorf("error counting prices %e", err)
+			}
+
+			log.Printf("Prices were inserted: %d\n", count)
+
+			if count > 0 {
+				//err = tx.Migrator().DropColumn(&model.Item{}, "selling_price")
+			} else {
+				return fmt.Errorf("no new prices were insrted")
+			}
 
 			if err != nil {
 				return fmt.Errorf("error in dropping selling price column %e", err)

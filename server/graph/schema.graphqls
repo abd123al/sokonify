@@ -394,7 +394,7 @@ type Item implements Gorm {
 
     categories: [Category!] @goTag(key: "gorm", value: "-") @goField(forceResolver: true)
 
-    prices: [Price!]! @goTag(key: "gorm", value: "constraint:OnUpdate:CASCADE,OnDelete:RESTRICT;")
+    prices: [Price!]! @goTag(key: "gorm", value: "-") @goField(forceResolver: true)
 }
 
 type Price implements Gorm {
