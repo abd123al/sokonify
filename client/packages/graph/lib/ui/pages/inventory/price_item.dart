@@ -40,11 +40,18 @@ class _PriceItemState extends State<PriceItem> {
         style: Theme.of(context).textTheme.titleMedium,
       ),
       subtitle: _editing
-          ? TextField(
+          ? TextFormField(
               controller: _aController,
               textInputAction: TextInputAction.send,
               keyboardType: TextInputType.number,
               autofocus: true,
+              autovalidateMode: AutovalidateMode.always,
+              validator: (value) {
+                if (value == null || value.isEmpty || value == "0") {
+                  return 'Please enter valid selling price..';
+                }
+                return null;
+              },
               decoration: InputDecoration(
                 hintText: 'Enter Quantity',
                 suffix: Row(

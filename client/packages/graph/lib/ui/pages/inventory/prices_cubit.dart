@@ -142,6 +142,18 @@ class PricingCubit extends Cubit<NewPrice> {
       ),
     );
   }
+
+  bool validate() {
+    if (state.prices.isEmpty) {
+      emit(
+        state.copyWith(
+          error: "Please set valid selling price",
+        ),
+      );
+    }
+
+    return state.prices.isNotEmpty;
+  }
 }
 
 class NewPriceCubit extends PricingCubit {
