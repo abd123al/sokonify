@@ -47,12 +47,13 @@ class ItemsList extends StatelessWidget {
               QueryBuilder<ResourceListData<Items$Query$Item>, ItemsListCubit>(
             retry: (cubit) => cubit.fetch(),
             builder: (context, data, _) {
-              // final List<Categories$Query$Category> cats = data.items
-              //     .map(
-              //       (e) =>
-              //           e.prices.where((element) => element.categoryId == categoryId),
-              //     )
-              //     .toList();
+              List<Items$Query$Item> cats = [];
+
+              for (var e in data.items) {
+                if (e.prices.map((e) => e.categoryId).contains(cat.id)) {
+                  cats.add(e);
+                }
+              }
 
               return ListView(
                 children: [
@@ -60,7 +61,9 @@ class ItemsList extends StatelessWidget {
                   const SizedBox(height: 8),
                   SearchableList<Items$Query$Item>(
                     hintName: "Item",
-                    data: data,
+                    data: data.copyWith(
+                      items: cats,
+                    ),
                     mainAxisSize: MainAxisSize.min,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
