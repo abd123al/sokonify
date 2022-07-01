@@ -100,8 +100,10 @@ func TestItem(t *testing.T) {
 
 		itemsStat, _ := repository.SumItemsCost(DB, *product.StoreID)
 
-		require.NotNil(t, itemsStat.ExpectedProfit)
-		require.NotNil(t, itemsStat.TotalCost)
-		require.NotNil(t, itemsStat.TotalReturn)
+		fmt.Printf("stats %v", itemsStat)
+
+		require.NotEmpty(t, itemsStat.ExpectedProfit)
+		require.NotEmpty(t, itemsStat.TotalCost)
+		require.NotEmpty(t, itemsStat.TotalReturn)
 	})
 }

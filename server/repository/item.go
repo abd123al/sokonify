@@ -126,7 +126,7 @@ func FindItem(db *gorm.DB, ID int) (*model.Item, error) {
 func SumItemsCost(db *gorm.DB, StoreID int) (*model.ItemsStats, error) {
 	var profit *model.ItemsStats
 
-	if err := db.Table("items").Joins("inner join products on items.product_id = products.id AND products.store_id = ?", StoreID).Where("items.quantity > 0").Select("sum((items.selling_price - items.buying_price) * items.quantity) AS expected_profit, sum(items.buying_price * items.quantity) AS total_cost,sum(items.selling_price * items.quantity) AS total_return ").Scan(&profit).Error; err != nil {
+	if err := db.Debug().Table("items").Joins("inner join products on items.product_id = products.id AND products.store_id = ?", StoreID).Joins("inner join prices on prices.item_id = items.id AND prices.category_id = ?", 1).Having("items.quantity > 0").Select("sum((prices.amount - items.buying_price) * items.quantity) AS expected_profit, sum(items.buying_price * items.quantity) AS total_cost,sum(prices.amount * items.quantity) AS total_return ").Scan(&profit).Error; err != nil {
 		return nil, err
 	}
 

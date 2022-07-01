@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:graph/ui/helpers/helpers.dart';
 
-import '../../../gql/generated/graphql_api.graphql.dart';
 import 'prices_cubit.dart';
 
 class PriceItem extends StatefulWidget {
@@ -71,8 +71,7 @@ class _PriceItemState extends State<PriceItem> {
                       onPressed: () {
                         setState(() {
                           _editing = false;
-                          _aController.text =
-                              widget.item.amount.toString();
+                          _aController.text = widget.item.amount.toString();
                         });
                       },
                       icon: const Icon(Icons.cancel),
@@ -84,7 +83,7 @@ class _PriceItemState extends State<PriceItem> {
             )
           : null,
       trailing: Text(
-        widget.item.amount,
+        formatCurrency(widget.item.amount),
         style: Theme.of(context).textTheme.titleLarge,
       ),
       children: [

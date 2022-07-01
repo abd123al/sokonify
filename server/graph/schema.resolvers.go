@@ -591,7 +591,8 @@ func (r *queryResolver) AverageDailySalesAmount(ctx context.Context, args model.
 }
 
 func (r *queryResolver) ItemsStats(ctx context.Context) (*model.ItemsStats, error) {
-	return repository.SumItemsCost(r.DB, helpers.ForContext(ctx).StoreID)
+	return nil, nil
+	//return repository.SumItemsCost(r.DB, helpers.ForContext(ctx).StoreID)
 }
 
 func (r *staffResolver) User(ctx context.Context, obj *model.Staff) (*model.User, error) {

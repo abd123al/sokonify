@@ -28,7 +28,7 @@ class ItemsList extends StatelessWidget {
             ),
           );
         } else if (cats.length == 1) {
-          return _build();
+          return _build(cats[0]);
         } else {
           return DefaultTabController(
             length: cats.length,
@@ -41,23 +41,18 @@ class ItemsList extends StatelessWidget {
                     labelColor: Theme.of(context).primaryColorDark,
                     indicatorWeight: 4.0,
                   ),
-                  Expanded(
-                    child: TabBarView(
-                      children: cats.map((e) => _build()).toList(),
-                    ),
+                  Builder(
+                    builder: (context) {
+                      final i = DefaultTabController.of(context)?.index ?? 0;
+                      print(i);
+                      return Expanded(
+                        child: TabBarView(
+                          children: cats.map((e) => _build(cats[i])).toList(),
+                        ),
+                      );
+                    },
                   ),
                 ],
-              ),
-              floatingActionButton: FloatingActionButton.extended(
-                onPressed: () => redirectTo(
-                  context,
-                  Routes.createItem,
-                  args: 1,
-                ),
-                tooltip: 'Add',
-                backgroundColor: Colors.teal,
-                icon: const Icon(Icons.add),
-                label: const Text("Add Stock"),
               ),
             ),
           );
@@ -66,36 +61,54 @@ class ItemsList extends StatelessWidget {
     );
   }
 
-  Widget _build() {
-    return QueryBuilder<ResourceListData<Items$Query$Item>, ItemsListCubit>(
-      retry: (cubit) => cubit.fetch(),
-      builder: (context, data, _) {
-        // final List<Categories$Query$Category> cats = data.items
-        //     .map(
-        //       (e) =>
-        //           e.prices.where((element) => element.categoryId == categoryId),
-        //     )
-        //     .toList();
+  Widget _build(Categories$Query$Category cat) {
+    return Builder(
+      builder: (context) {
+        return Scaffold(
+          body:
+              QueryBuilder<ResourceListData<Items$Query$Item>, ItemsListCubit>(
+            retry: (cubit) => cubit.fetch(),
+            builder: (context, data, _) {
+              // final List<Categories$Query$Category> cats = data.items
+              //     .map(
+              //       (e) =>
+              //           e.prices.where((element) => element.categoryId == categoryId),
+              //     )
+              //     .toList();
 
-        return ListView(
-          children: [
-            const InventoryStats(),
-            const SizedBox(height: 8),
-            SearchableList<Items$Query$Item>(
-              hintName: "Item",
-              data: data,
-              mainAxisSize: MainAxisSize.min,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              compare: (i) => ItemTile.formatItemName(i),
-              builder: (context, item, color) {
-                return ItemTile(
-                  item: item,
-                  color: color,
-                );
-              },
+              return ListView(
+                children: [
+                  const InventoryStats(),
+                  const SizedBox(height: 8),
+                  SearchableList<Items$Query$Item>(
+                    hintName: "Item",
+                    data: data,
+                    mainAxisSize: MainAxisSize.min,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    compare: (i) => ItemTile.formatItemName(i),
+                    builder: (context, item, color) {
+                      return ItemTile(
+                        item: item,
+                        color: color,
+                      );
+                    },
+                  ),
+                ],
+              );
+            },
+          ),
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: () => redirectTo(
+              context,
+              Routes.createItem,
+              args: cat,
             ),
-          ],
+            tooltip: 'Add',
+            backgroundColor: Colors.teal,
+            icon: const Icon(Icons.add),
+            label: const Text("Add Stock"),
+          ),
         );
       },
     );

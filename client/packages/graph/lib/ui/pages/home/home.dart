@@ -9,7 +9,6 @@ import '../pages.dart';
 import 'customers.dart';
 import 'drawer.dart';
 import 'expense.dart';
-import 'inventory.dart';
 import 'pos.dart';
 
 class HomePage extends StatefulWidget {

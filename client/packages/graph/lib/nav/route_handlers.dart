@@ -27,8 +27,10 @@ var categoriesListRouterHandler = Handler(handlerFunc: (context, __) {
   );
 });
 
-var createItemRouterHandler = Handler(handlerFunc: (_, __) {
-  return const CreateItemPage();
+var createItemRouterHandler = Handler(handlerFunc: (context, __) {
+  return CreateItemPage(
+    pricing: context?.settings?.arguments as Categories$Query$Category,
+  );
 });
 
 var unitsListPageRouterHandler = Handler(handlerFunc: (_, __) {
