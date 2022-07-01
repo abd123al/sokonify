@@ -30,31 +30,9 @@ class ItemsList extends StatelessWidget {
         } else if (cats.length == 1) {
           return _build(cats[0]);
         } else {
-          return DefaultTabController(
-            length: cats.length,
-            child: Scaffold(
-              body: Column(
-                children: [
-                  TabBar(
-                    isScrollable: false,
-                    tabs: cats.map((e) => Tab(text: e.name)).toList(),
-                    labelColor: Theme.of(context).primaryColorDark,
-                    indicatorWeight: 4.0,
-                  ),
-                  Builder(
-                    builder: (context) {
-                      final i = DefaultTabController.of(context)?.index ?? 0;
-                      print(i);
-                      return Expanded(
-                        child: TabBarView(
-                          children: cats.map((e) => _build(cats[i])).toList(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
+          return _Tabbed(
+            builder: (context, cat) => _build(cat),
+            categories: cats,
           );
         }
       },
@@ -112,5 +90,70 @@ class ItemsList extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+class _Tabbed extends StatefulWidget {
+  const _Tabbed({
+    Key? key,
+    required this.builder,
+    required this.categories,
+  }) : super(key: key);
+
+  final Widget Function(BuildContext context, Categories$Query$Category)
+      builder;
+  final List<Categories$Query$Category> categories;
+
+  @override
+  State<StatefulWidget> createState() {
+    return _TabbedState();
+  }
+}
+
+class _TabbedState extends State<_Tabbed> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    _tabController = TabController(
+      length: widget.categories.length,
+      vsync: this,
+    );
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final tabs = widget.categories.map((e) => Tab(text: e.name)).toList();
+
+    return Column(
+      children: [
+        TabBar(
+          controller: _tabController,
+          isScrollable: false,
+          tabs: tabs,
+          labelColor: Theme.of(context).primaryColorDark,
+          indicatorWeight: 4.0,
+        ),
+        Builder(
+          builder: (context) {
+            return Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: widget.categories
+                    .map((e) => widget.builder(context, e))
+                    .toList(),
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 }
