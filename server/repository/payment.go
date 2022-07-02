@@ -285,7 +285,7 @@ func SumGrossProfit(db *gorm.DB, StoreID int, args model.StatsArgs) (*model.Prof
 	g := f.Select("sum((prices.amount - items.buying_price) * order_items.quantity) AS expected, sum((order_items.price - items.buying_price) * order_items.quantity) AS real")
 
 	if args.PricingID != nil {
-		h := g.Where("prices.category_id =? ", args.PricingID)
+		h := g.Where("prices.category_id =? AND orders.pricing_id = ?", args.PricingID, args.PricingID)
 		if err := h.Scan(&profit).Error; err != nil {
 			return nil, err
 		}
