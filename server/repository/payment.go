@@ -276,16 +276,23 @@ func SumGrossProfit(db *gorm.DB, StoreID int, args model.StatsArgs) (*model.Prof
 	var Real, Expected string
 	StartDate, EndDate := helpers.HandleStatsDates(args)
 
-	a := db.Debug().Table("order_items")
+	a := db.Table("order_items")
 	b := a.Joins("inner join items on order_items.item_id = items.id")
 	c := b.Joins("inner join orders on order_items.order_id = orders.id AND orders.issuer_id = ?", StoreID)
 	d := c.Joins("inner join payments on orders.id = payments.order_id")
-	e := d.Joins("inner join prices on prices.item_id = items.id AND prices.category_id =? ", args.PricingID)
+	e := d.Joins("inner join prices on prices.item_id = items.id")
 	f := e.Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate)
-	j := f.Select("sum((prices.amount - items.buying_price) * order_items.quantity) AS expected, sum((order_items.price - items.buying_price) * order_items.quantity) AS real")
+	g := f.Select("sum((prices.amount - items.buying_price) * order_items.quantity) AS expected, sum((order_items.price - items.buying_price) * order_items.quantity) AS real")
 
-	if err := j.Scan(&profit).Error; err != nil {
-		return nil, err
+	if args.PricingID != nil {
+		h := g.Where("prices.category_id =? ", args.PricingID)
+		if err := h.Scan(&profit).Error; err != nil {
+			return nil, err
+		}
+	} else {
+		if err := g.Scan(&profit).Error; err != nil {
+			return nil, err
+		}
 	}
 
 	Real = profit.Real

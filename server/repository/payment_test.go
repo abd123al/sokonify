@@ -288,13 +288,14 @@ func TestPayment(t *testing.T) {
 	})
 
 	t.Run("SumGrossProfit to return zero when nothing found", func(t *testing.T) {
-		timeframe := model.TimeframeTypeYesterday
+		timeframe := model.TimeframeTypeToday
 
 		profit, err := repository.SumGrossProfit(DB, store.ID, model.StatsArgs{
 			Timeframe: &timeframe,
 		})
-		fmt.Print(profit)
+
 		require.Nil(t, err)
+		require.NotNil(t, profit)
 		//require.NotEmpty(t, profit[0].Real)
 		//require.NotEmpty(t, profit[0].Expected)
 	})
