@@ -6,7 +6,10 @@ query item($id: ID!) {
         expiresAt
         prices {
             amount
-            categoryId
+            category {
+                id
+                name
+            }
         }
         batch
         quantity

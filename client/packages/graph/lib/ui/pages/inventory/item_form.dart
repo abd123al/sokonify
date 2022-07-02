@@ -91,7 +91,7 @@ class _ItemFormState extends State<ItemForm> {
   Widget _buildForm() {
     return Builder(
       builder: (context) {
-        final _priceCubit = BlocProvider.of<NewPriceCubit>(context);
+        final priceCubit = BlocProvider.of<NewPriceCubit>(context);
 
         return BlocConsumer<NewPriceCubit, NewPrice>(
           listener: (context, state) {
@@ -303,7 +303,7 @@ class _ItemFormState extends State<ItemForm> {
                                   border: const OutlineInputBorder(),
                                   suffixIcon: TextButton.icon(
                                     onPressed: () {
-                                      _priceCubit.addItem(
+                                      priceCubit.addItem(
                                         _item!,
                                         _amountController.text,
                                       );
@@ -404,7 +404,7 @@ class _ItemFormState extends State<ItemForm> {
                         return Button(
                           padding: EdgeInsets.zero,
                           callback: () {
-                            if (_priceCubit.validate()) {
+                            if (priceCubit.validate()) {
                               if (_formKey.currentState!.validate()) {
                                 final input = ItemInput(
                                   quantity: int.parse(_quantityController.text),

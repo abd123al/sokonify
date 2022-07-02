@@ -46,7 +46,27 @@ class ItemPage extends StatelessWidget {
         ShortDetailTile(subtitle: "Unit", value: data.unit.name),
         ShortDetailTile(
             subtitle: "Buying Price", value: formatCurrency(data.buyingPrice)),
-        //ShortDetailTile(subtitle: "Selling Price", value: formatCurrency(data.sellingPrice)),
+        const WordDivider(text: "Selling Prices"),
+        Builder(
+          builder: (context) {
+            return ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: data.prices.length,
+              itemBuilder: (context, index) {
+                final item = data.prices[index];
+
+                return ListTile(
+                  subtitle: Text(item.category.name),
+                  title: Text(
+                    item.amount,
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                );
+              },
+            );
+          },
+        ),
         ShortDetailTile(subtitle: "Description", value: data.description),
         ShortDetailTile(
             subtitle: "Expires at", value: data.expiresAt?.toString()),

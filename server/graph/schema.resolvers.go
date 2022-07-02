@@ -412,7 +412,7 @@ func (r *priceResolver) Creator(ctx context.Context, obj *model.Price) (*model.U
 }
 
 func (r *priceResolver) Category(ctx context.Context, obj *model.Price) (*model.Category, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.FindCategory(r.DB, obj.CategoryID)
 }
 
 func (r *productResolver) Store(ctx context.Context, obj *model.Product) (*model.Store, error) {
