@@ -4,6 +4,7 @@ query order($id: ID!) {
         type
         createdAt
         comment
+        pricingId
         customer {
             ...CustomerParts
         }

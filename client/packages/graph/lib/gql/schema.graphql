@@ -176,8 +176,6 @@ type Mutation {
 }
 
 type Order implements Gorm {
-    category: Category!
-    categoryId: Int!
     comment: String
     createdAt: Time!
     customer: Customer
@@ -188,6 +186,8 @@ type Order implements Gorm {
     issuerId: Int!
     orderItems: [OrderItem!]!
     payment: Payment
+    pricing: Category!
+    pricingId: Int!
     receiver: Store
     receiverId: Int
     staff: User!
@@ -594,6 +594,7 @@ input OrderInput {
     comment: String
     customerId: Int
     items: [OrderItemInput!]!
+    pricingId: Int!
     receiverId: Int
     type: OrderType!
 }
@@ -672,6 +673,7 @@ input ProfileInput {
 input SalesInput {
     comment: String
     items: [OrderItemInput!]!
+    pricingId: Int!
 }
 
 input SignInInput {

@@ -4,9 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../helpers/currency_formatter.dart';
+import '../inventory/item_tile.dart';
 
 class NewOrderItem extends Equatable {
   const NewOrderItem({
+    required this.pricingId,
     required this.quantity,
     required this.item,
     this.customSellingPrice,
@@ -15,27 +17,31 @@ class NewOrderItem extends Equatable {
   final int quantity;
   final Items$Query$Item item;
   final String? customSellingPrice;
+  final int pricingId;
 
   String get subTotal {
-    final sub = Decimal.parse(customSellingPrice ??"0" /*item.sellingPrice*/) *
-        Decimal.fromInt(quantity);
+    final sub =
+        Decimal.parse(customSellingPrice ?? ItemTile.price(item, pricingId)) *
+            Decimal.fromInt(quantity);
 
     return formatCurrency(sub.toString());
   }
 
   NewOrderItem copyWith({
     int? quantity,
+    int? pricingId,
     Items$Query$Item? item,
     String? error,
   }) {
     return NewOrderItem(
       item: item ?? this.item,
       quantity: quantity ?? this.quantity,
+      pricingId: pricingId ?? this.pricingId,
     );
   }
 
   @override
-  List<Object?> get props => [item, quantity, customSellingPrice];
+  List<Object?> get props => [item, quantity, customSellingPrice, pricingId];
 }
 
 class NewOrder extends Equatable {
@@ -74,7 +80,7 @@ class NewOrder extends Equatable {
     return calculateTotal(
       items.map(
         (e) => TotalPriceArgs(
-          price: e.customSellingPrice ??"", //e.item.sellingPrice,
+          price: e.customSellingPrice ?? ItemTile.price(e.item, e.pricingId),
           quantity: e.quantity,
         ),
       ),
@@ -159,12 +165,17 @@ class OrderCubit extends Cubit<NewOrder> {
   /// todo return error for duplicated items
   /// todo add it to the top
   /// todo add new items at the bottom and push that thing at the top
-  addItem(Items$Query$Item item, int quantity) {
+  addItem({
+    required Items$Query$Item item,
+    required int quantity,
+    required int pricingId,
+  }) {
     emit(
       state.addItem(
         obj: NewOrderItem(
           quantity: quantity,
           item: item,
+          pricingId: pricingId,
         ),
       ),
     );

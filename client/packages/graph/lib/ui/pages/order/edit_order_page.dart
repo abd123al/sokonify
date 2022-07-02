@@ -33,6 +33,7 @@ class EditOrderPage extends StatelessWidget {
                       .map((e) => NewOrderItem(
                             item: Items$Query$Item.fromJson(e.item.toJson()),
                             quantity: e.quantity,
+                            pricingId: o.pricingId,
                           ))
                       .toList(),
                 ),

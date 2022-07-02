@@ -30,7 +30,7 @@ class ItemsList extends StatelessWidget {
         } else if (cats.length == 1) {
           return _build(cats[0]);
         } else {
-          return _Tabbed(
+          return Tabbed(
             builder: (context, cat) => _build(cat),
             categories: cats,
           );
@@ -72,6 +72,7 @@ class ItemsList extends StatelessWidget {
                       return ItemTile(
                         item: item,
                         color: color,
+                        pricingId: cat.id,
                       );
                     },
                   ),
@@ -96,15 +97,17 @@ class ItemsList extends StatelessWidget {
   }
 }
 
-class _Tabbed extends StatefulWidget {
-  const _Tabbed({
+class Tabbed extends StatefulWidget {
+  const Tabbed({
     Key? key,
     required this.builder,
     required this.categories,
   }) : super(key: key);
 
-  final Widget Function(BuildContext context, Categories$Query$Category)
-      builder;
+  final Widget Function(
+    BuildContext context,
+    Categories$Query$Category,
+  ) builder;
   final List<Categories$Query$Category> categories;
 
   @override
@@ -113,7 +116,7 @@ class _Tabbed extends StatefulWidget {
   }
 }
 
-class _TabbedState extends State<_Tabbed> with SingleTickerProviderStateMixin {
+class _TabbedState extends State<Tabbed> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override

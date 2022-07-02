@@ -8,8 +8,10 @@ import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/order_repository.dart';
 import '../../../repositories/payment_repository.dart';
 import '../../widgets/searchable_dropdown.dart';
+import '../category/category.dart';
 import '../customer/customers_list_cubit.dart';
 import '../home/stats/simple_stats_cubit.dart';
+import '../inventory/inventory.dart';
 import '../inventory/items_list_cubit.dart';
 import '../payment/create_order_payment_cubit.dart';
 import '../payment/payments_list_cubit.dart';
@@ -53,10 +55,21 @@ class _OrderFormState<T extends OrderCubit> extends State<OrderForm<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildForm();
+    return PricingBuilder(
+      builder: (context, list) {
+        if (list.items.length == 1) {
+          return _buildForm(list.items[0]);
+        }
+
+        return Tabbed(
+          builder: (context, cat) => _buildForm(cat),
+          categories: list.items,
+        );
+      },
+    );
   }
 
-  Widget _buildForm() {
+  Widget _buildForm(Categories$Query$Category pricing) {
     return BlocConsumer<T, NewOrder>(
       listener: (context, state) {
         if (state.hasError) {
@@ -72,6 +85,13 @@ class _OrderFormState<T extends OrderCubit> extends State<OrderForm<T>> {
         return QueryBuilder<ResourceListData<Items$Query$Item>, ItemsListCubit>(
           retry: (cubit) => cubit.fetch(),
           builder: (context, itemsData, _) {
+            List<Items$Query$Item> cats = [];
+
+            for (var e in itemsData.items) {
+              if (e.prices.map((e) => e.categoryId).contains(pricing.id)) {
+                cats.add(e);
+              }
+            }
             return MutationBuilder<CreateOrderPayment$Mutation$Payment,
                 CreatePaymentCubit, PaymentRepository>(
               blocCreator: (r) => CreatePaymentCubit(r, () {
@@ -121,12 +141,17 @@ class _OrderFormState<T extends OrderCubit> extends State<OrderForm<T>> {
                           const Divider(),
                           SearchableDropdown<Items$Query$Item>(
                             asString: (i) => ItemTile.formatItemName(i),
-                            data: itemsData,
+                            data: itemsData.copyWith(
+                              items: cats,
+                            ),
                             labelText: "Enter item",
                             hintText: "Type product name",
                             helperText: "Type items to add",
                             selectedItem: (e) => e == _item,
-                            builder: (_, i) => ItemTile(item: i),
+                            builder: (_, i) => ItemTile(
+                              item: i,
+                              pricingId: pricing.id,
+                            ),
                             onChanged: (item) => setState(() {
                               _item = item;
                             }),
@@ -148,8 +173,11 @@ class _OrderFormState<T extends OrderCubit> extends State<OrderForm<T>> {
                                 suffixIcon: TextButton.icon(
                                   onPressed: () {
                                     newOrderCubit.addItem(
-                                      _item!,
-                                      int.parse(_quantityAddController.text),
+                                      item: _item!,
+                                      quantity: int.parse(
+                                        _quantityAddController.text,
+                                      ),
+                                      pricingId: pricing.id,
                                     );
 
                                     //Resetting fields
@@ -239,7 +267,8 @@ class _OrderFormState<T extends OrderCubit> extends State<OrderForm<T>> {
                                         .map(
                                           (e) => OrderItemInput(
                                             price: e.customSellingPrice ??
-                                                e.item.prices[0].amount,
+                                                ItemTile.price(
+                                                    e.item, pricing.id),
                                             itemId: e.item.id,
                                             quantity: e.quantity,
                                           ),
@@ -252,6 +281,7 @@ class _OrderFormState<T extends OrderCubit> extends State<OrderForm<T>> {
                                         comment: _commentController.text,
                                         customerId: state.customer?.id,
                                         items: items,
+                                        pricingId: pricing.id,
                                       );
 
                                       if (_isEdit) {
@@ -269,6 +299,7 @@ class _OrderFormState<T extends OrderCubit> extends State<OrderForm<T>> {
                                         SalesInput(
                                           comment: _commentController.text,
                                           items: items,
+                                          pricingId: pricing.id,
                                         ),
                                       );
                                     }
