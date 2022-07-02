@@ -13,7 +13,9 @@ func TestOrders(t *testing.T) {
 	DB := util.InitTestDB()
 	user := util.CreateUser(DB)
 	store := util.CreateStore(DB, &user.ID)
-	item := util.CreateItem(DB, &store.ID)
+	item := util.CreateItem(DB, util.CreateItemArgs{
+		StoreID: store.ID,
+	})
 
 	t.Run("CreateOrder with sufficient quantity", func(t *testing.T) {
 		order, err := repository.CreateOrder(DB, user.ID, model.OrderInput{
@@ -92,7 +94,9 @@ func TestOrders(t *testing.T) {
 	})
 
 	t.Run("EditOrder", func(t *testing.T) {
-		item2 := util.CreateItem(DB, &store.ID)
+		item2 := util.CreateItem(DB, util.CreateItemArgs{
+			StoreID: store.ID,
+		})
 
 		orderResult := util.CreateOrder(DB, nil)
 		Comment := "oooooooooooooooo"

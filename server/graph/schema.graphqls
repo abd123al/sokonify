@@ -724,6 +724,7 @@ input StatsArgs {
     timeframe: TimeframeType
     filter: StatsFilter
     value: ID
+    pricingID: ID
 }
 
 # We will seed common units and each store can add more units to fit their needs
@@ -758,7 +759,6 @@ type Profit {
     expected : String!
     # With discount
     real : String!
-    categoryId: Int!
 }
 
 type ItemsStats {

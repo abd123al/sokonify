@@ -248,7 +248,9 @@ func TestPayment(t *testing.T) {
 	})
 
 	t.Run("CreateSale", func(t *testing.T) {
-		item := util.CreateItem(DB, &store.ID)
+		item := util.CreateItem(DB, util.CreateItemArgs{
+			StoreID: store.ID,
+		})
 
 		payment, err := repository.CreateSalePayment(DB, model.SalesInput{
 			Items: []*model.OrderItemInput{
@@ -274,6 +276,7 @@ func TestPayment(t *testing.T) {
 
 		profit, err := repository.SumGrossProfit(DB, re.StoreID, model.StatsArgs{
 			Timeframe: &timeframe,
+			PricingID: re.PricingID,
 		})
 
 		//fmt.Printf("Profit %v\n", profit)

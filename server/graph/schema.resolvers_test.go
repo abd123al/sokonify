@@ -26,7 +26,9 @@ func TestResolvers(t *testing.T) {
 		StoreID:    store.ID,
 		CategoryId: &category.ID,
 	})
-	item := util.CreateItem(DB, &store.ID)
+	item := util.CreateItem(DB, util.CreateItemArgs{
+		StoreID: store.ID,
+	})
 	order := util.CreateOrder(DB, &util.CreateOrderArgs{
 		IssuerID:   store.ID,
 		StaffId:    user.ID,

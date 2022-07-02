@@ -126,29 +126,28 @@ func CreateProduct(DB *gorm.DB, Args *CreateProductArgs) *model.Product {
 
 type CreateItemArgs struct {
 	BrandID   *int
-	ProductID int
+	PricingID *int
+	StoreID   int
 }
 
-func CreateItem(DB *gorm.DB, StoreId *int) *model.Item {
+func CreateItem(DB *gorm.DB, args CreateItemArgs) *model.Item {
 	var BrandID *int
 	var Product *model.Product
 	var ProductID int
 	var CreatorID int
+	var PricingID int
 
-	//creating the needed product
-	if StoreId != nil {
-		Product = CreateProduct(DB, &CreateProductArgs{StoreID: *StoreId})
-		ProductID = Product.ID
-		CreatorID = *Product.CreatorID
+	Product = CreateProduct(DB, &CreateProductArgs{StoreID: args.StoreID})
+	ProductID = Product.ID
+	CreatorID = *Product.CreatorID
+
+	unit := CreateUnit(DB, Product.StoreID, &CreatorID)
+
+	if args.PricingID == nil {
+		PricingID = CreateCategory(DB, args.StoreID, model.CategoryTypePricing).ID
 	} else {
-		Product = CreateProduct(DB, nil)
-		ProductID = Product.ID
-		CreatorID = *Product.CreatorID
+		PricingID = *args.PricingID
 	}
-
-	unit := CreateUnit(DB, Product.StoreID, nil)
-
-	priceCategory := CreateCategory(DB, ProductID, model.CategoryTypePricing)
 
 	item, _ := repository.CreateItem(DB, model.ItemInput{
 		Quantity:    10,
@@ -160,7 +159,7 @@ func CreateItem(DB *gorm.DB, StoreId *int) *model.Item {
 		ProductID:   ProductID,
 		UnitID:      unit.ID,
 		Prices: []*model.PriceInput{
-			{Amount: "500.00", CategoryID: priceCategory.ID},
+			{Amount: "500.00", CategoryID: PricingID},
 		},
 	}, CreatorID)
 
@@ -183,6 +182,7 @@ type CreateOrderArgs struct {
 	StaffId    int
 	CustomerID int
 	Items      []*model.Item
+	PricingID  int
 }
 
 type CreateOrderResult struct {
@@ -190,12 +190,14 @@ type CreateOrderResult struct {
 	IssuerID   int
 	StaffId    int
 	CustomerID int
+	PricingID  int
 }
 
 func CreateOrder(DB *gorm.DB, args *CreateOrderArgs) CreateOrderResult {
 	var IssuerID int
 	var StaffId int
 	var CustomerID int
+	var PricingID int
 
 	var Items []*model.Item
 	var ItemsInput []*model.OrderItemInput
@@ -204,16 +206,22 @@ func CreateOrder(DB *gorm.DB, args *CreateOrderArgs) CreateOrderResult {
 		IssuerID = args.IssuerID
 		StaffId = args.StaffId
 		CustomerID = args.CustomerID
+		PricingID = args.PricingID
 		Items = args.Items
 	} else {
 		StaffId = CreateUser(DB).ID
 		IssuerID = CreateStore(DB, &StaffId).ID
 		CustomerID = CreateCustomer(DB, IssuerID).ID
+		PricingID = CreateCategory(DB, IssuerID, model.CategoryTypePricing).ID
 
+		pp := CreateItemArgs{
+			PricingID: &PricingID,
+			StoreID:   args.IssuerID,
+		}
 		Items = []*model.Item{
-			CreateItem(DB, &IssuerID),
-			CreateItem(DB, &IssuerID),
-			CreateItem(DB, &IssuerID),
+			CreateItem(DB, pp),
+			CreateItem(DB, pp),
+			CreateItem(DB, pp),
 		}
 	}
 
@@ -226,8 +234,9 @@ func CreateOrder(DB *gorm.DB, args *CreateOrderArgs) CreateOrderResult {
 	}
 
 	order, _ := repository.CreateOrder(DB, StaffId, model.OrderInput{
-		CustomerID: &CustomerID,
 		Type:       model.OrderTypeSale,
+		CustomerID: &CustomerID,
+		PricingID:  PricingID,
 		Items:      ItemsInput,
 	}, IssuerID)
 
@@ -236,6 +245,7 @@ func CreateOrder(DB *gorm.DB, args *CreateOrderArgs) CreateOrderResult {
 		IssuerID:   IssuerID,
 		StaffId:    StaffId,
 		CustomerID: CustomerID,
+		PricingID:  PricingID,
 	}
 	return result
 }
@@ -267,6 +277,7 @@ type CreatePaymentArgs struct {
 type CreatePaymentResult struct {
 	StoreID    int
 	StaffID    int
+	PricingID  *int
 	CustomerID *int
 	Payment    *model.Payment
 }
@@ -275,6 +286,7 @@ func CreatePayment(DB *gorm.DB, Args *CreatePaymentArgs, Order bool) CreatePayme
 	var StoreID int
 	var StaffID int
 	var CustomerID *int
+	var PricingID *int
 	var payment *model.Payment
 
 	if Args == nil {
@@ -293,11 +305,18 @@ func CreatePayment(DB *gorm.DB, Args *CreatePaymentArgs, Order bool) CreatePayme
 	}
 
 	if Order {
-		item := CreateItem(DB, &StoreID)
+		PricingID = &CreateCategory(DB, StoreID, model.CategoryTypePricing).ID
+
+		item := CreateItem(DB, CreateItemArgs{
+			StoreID:   StoreID,
+			PricingID: PricingID,
+		})
+
 		order := CreateOrder(DB, &CreateOrderArgs{
 			IssuerID:   StoreID,
 			StaffId:    StaffID,
 			CustomerID: *CustomerID,
+			PricingID:  *PricingID,
 			Items:      []*model.Item{item},
 		})
 		payment, _ = repository.CreateOrderPayment(DB, StaffID, model.OrderPaymentInput{
@@ -320,6 +339,7 @@ func CreatePayment(DB *gorm.DB, Args *CreatePaymentArgs, Order bool) CreatePayme
 		StaffID:    StaffID,
 		CustomerID: CustomerID,
 		Payment:    payment,
+		PricingID:  PricingID,
 	}
 
 	return result

@@ -30,8 +30,12 @@ func TestPrice(t *testing.T) {
 	}
 
 	t.Run("CreatePrice", func(t *testing.T) {
-		ItemID1 := util.CreateItem(DB, &Store.ID).ID
-		ItemID2 := util.CreateItem(DB, &Store.ID).ID
+		ar := util.CreateItemArgs{
+			StoreID: Store.ID,
+		}
+
+		ItemID1 := util.CreateItem(DB, ar).ID
+		ItemID2 := util.CreateItem(DB, ar).ID
 
 		require.NotEqual(t, ItemID1, ItemID2)
 
