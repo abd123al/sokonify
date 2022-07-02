@@ -20,19 +20,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
-  late PageController _pageController;
-
-  @override
-  void initState() {
-    super.initState();
-    _pageController = PageController();
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +124,6 @@ class _HomePageState extends State<HomePage> {
           currentIndex: _currentIndex,
           onTap: (index) {
             setState(() => _currentIndex = index);
-            _pageController.jumpToPage(index);
           },
           items: [
             TitledNavigationBarItem(
