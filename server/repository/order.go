@@ -39,6 +39,7 @@ func CreateOrder(DB *gorm.DB, UserId int, input model.OrderInput, StoreID int) (
 		ReceiverID: input.ReceiverID,
 		IssuerID:   StoreID,
 		CustomerID: input.CustomerID,
+		PricingID:  input.PricingID,
 		StaffID:    UserId,
 		Type:       input.Type,
 		OrderItems: items,

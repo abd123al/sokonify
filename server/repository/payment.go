@@ -18,6 +18,7 @@ func CreateSalePayment(DB *gorm.DB, input model.SalesInput, args helpers.UserAnd
 			Type:       model.OrderTypeSale,
 			Items:      input.Items,
 			CustomerID: nil,
+			PricingID:  input.PricingID,
 		}, args.StoreID)
 
 		if err != nil {

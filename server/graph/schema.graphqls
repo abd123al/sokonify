@@ -535,8 +535,8 @@ type Order implements Gorm {
     comment: String @goTag(key: "gorm", value: "size:100")
 
     # This will state what floor price used for generating order.
-    categoryId: Int!
-    category: Category! @goTag(key: "gorm", value: "foreignKey:CategoryID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
+    pricingId: Int!
+    pricing: Category! @goTag(key: "gorm", value: "foreignKey:PricingID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
 
     # todo depending on order type this can be supplier
     # Customer can be nullable. Since POS don't have to register customer.
@@ -565,12 +565,14 @@ input OrderInput {
     customerId: Int @validate(constraint: "required")
     receiverId: Int
     comment: String
+    pricingId: Int!
     items: [OrderItemInput!]!
 }
 
 input SalesInput {
     comment: String
     items: [OrderItemInput!]!
+    pricingId: Int!
 }
 
 # This will decide whether result will be handled in full or by pagination
