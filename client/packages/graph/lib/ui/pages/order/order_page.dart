@@ -48,6 +48,7 @@ class OrderPage extends StatelessWidget {
                 subtitle: "Customer", value: "${data.customer?.name}"),
           ShortDetailTile(subtitle: "Created At", value: "${data.createdAt}"),
           ShortDetailTile(subtitle: "Status", value: describeEnum(data.status)),
+          ShortDetailTile(subtitle: "Pricing", value: data.pricing.name),
           ShortDetailTile(subtitle: "Comment", value: data.comment),
           if (data.payment != null)
             ShortDetailTile(
