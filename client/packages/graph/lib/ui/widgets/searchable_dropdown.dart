@@ -76,6 +76,7 @@ class _SearchableListState<T> extends State<SearchableDropdown<T>> {
                   labelText: widget.labelText,
                   hintText: widget.hintText,
                   border: const OutlineInputBorder(),
+                  helperText: widget.helperText,
                 ),
               );
 

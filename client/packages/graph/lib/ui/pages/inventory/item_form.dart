@@ -144,6 +144,7 @@ class _ItemFormState extends State<ItemForm> {
                           labelText: "Product",
                           isOptional: false,
                           hintText: "Select Product",
+                          helperText: "Choose product which you want to add stock",
                           selectedItem: (e) => e.id == _productId,
                           onChanged: (p) => setState(() {
                             _productId = p?.id;
