@@ -31,18 +31,15 @@ func CreatePrice(db *gorm.DB, ItemID int, input model.PriceInput, args helpers.U
 	return price, nil
 }
 
-func EditPrice(DB *gorm.DB, ID int, input model.PriceInput, args helpers.UserAndStoreArgs) (*model.Price, error) {
+func EditPrice(DB *gorm.DB, ItemID int, input model.PriceInput, args helpers.UserAndStoreArgs) (*model.Price, error) {
 	var price *model.Price
 
 	price = &model.Price{
-		ID:         ID,
-		Amount:     input.Amount,
-		CreatorID:  args.UserID,
-		CategoryID: input.CategoryID,
-		ItemID:     ID,
+		Amount:    input.Amount,
+		CreatorID: args.UserID,
 	}
 
-	if err := DB.Model(&model.Price{}).Where(&model.Price{ID: ID, CreatorID: args.UserID}).Updates(&price).Error; err != nil {
+	if err := DB.Model(&model.Price{}).Where(&model.Price{ItemID: ItemID, CategoryID: input.CategoryID}).Updates(&price).Error; err != nil {
 		return nil, err
 	}
 
