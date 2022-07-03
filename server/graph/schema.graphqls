@@ -800,14 +800,13 @@ type Query {
 
     # stats
     netIncome(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
-    grossProfit(args:StatsArgs!): Profit
-    ! @goField(forceResolver: true) @isAuthenticated
+    grossProfit(args:StatsArgs!): Profit! @goField(forceResolver: true) @isAuthenticated
     totalExpensesAmount(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
     totalSalesAmount(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
     # Daily sales
     averageDailySalesAmount(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
     #cost of buying goods
-    itemsStats: ItemsStats! @goField(forceResolver: true) @isAuthenticated
+    itemsStats(args:StatsArgs!): ItemsStats! @goField(forceResolver: true) @isAuthenticated
 }
 
 type Mutation {

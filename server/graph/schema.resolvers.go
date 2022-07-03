@@ -590,9 +590,8 @@ func (r *queryResolver) AverageDailySalesAmount(ctx context.Context, args model.
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) ItemsStats(ctx context.Context) (*model.ItemsStats, error) {
-	return nil, nil
-	//return repository.SumItemsCost(r.DB, helpers.ForContext(ctx).StoreID)
+func (r *queryResolver) ItemsStats(ctx context.Context, args model.StatsArgs) (*model.ItemsStats, error) {
+	return repository.SumItemsCost(r.DB, helpers.ForContext(ctx).StoreID, *args.PricingID)
 }
 
 func (r *staffResolver) User(ctx context.Context, obj *model.Staff) (*model.User, error) {

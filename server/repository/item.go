@@ -123,10 +123,16 @@ func FindItem(db *gorm.DB, ID int) (*model.Item, error) {
 	return item, result.Error
 }
 
-func SumItemsCost(db *gorm.DB, StoreID int) (*model.ItemsStats, error) {
+func SumItemsCost(db *gorm.DB, StoreID int, PID int) (*model.ItemsStats, error) {
 	var profit *model.ItemsStats
 
-	if err := db.Debug().Table("items").Joins("inner join products on items.product_id = products.id AND products.store_id = ?", StoreID).Joins("inner join prices on prices.item_id = items.id AND prices.category_id = ?", 1).Having("items.quantity > 0").Select("sum((prices.amount - items.buying_price) * items.quantity) AS expected_profit, sum(items.buying_price * items.quantity) AS total_cost,sum(prices.amount * items.quantity) AS total_return ").Scan(&profit).Error; err != nil {
+	a := db.Debug().Table("items")
+	b := a.Joins("inner join products on items.product_id = products.id AND products.store_id = ?", StoreID)
+	d := b.Joins("inner join prices on prices.item_id = items.id AND prices.category_id = ?", PID)
+	e := d //.Having("items.quantity > 0")
+	f := e.Select("sum((prices.amount - items.buying_price) * items.quantity) AS expected_profit, sum(items.buying_price * items.quantity) AS total_cost,sum(prices.amount * items.quantity) AS total_return ")
+
+	if err := f.Scan(&profit).Error; err != nil {
 		return nil, err
 	}
 

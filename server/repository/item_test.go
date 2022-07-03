@@ -15,6 +15,7 @@ func TestItem(t *testing.T) {
 	unit := util.CreateUnit(DB, product.StoreID, nil)
 	cat := util.CreateCategory(DB, *product.StoreID, model.CategoryTypeSubcategory)
 	priceCategory := util.CreateCategory(DB, *product.StoreID, model.CategoryTypePricing)
+	priceCategory2 := util.CreateCategory(DB, *product.StoreID, model.CategoryTypePricing)
 
 	t.Run("CreateItem", func(t *testing.T) {
 		item, _ := repository.CreateItem(DB, model.ItemInput{
@@ -24,7 +25,8 @@ func TestItem(t *testing.T) {
 			BuyingPrice: "2000",
 			Categories:  []int{cat.ID},
 			Prices: []*model.PriceInput{
-				{Amount: "500.00", CategoryID: priceCategory.ID},
+				{Amount: "5000.00", CategoryID: priceCategory.ID},
+				{Amount: "10000.00", CategoryID: priceCategory2.ID},
 			},
 		}, *product.CreatorID)
 
@@ -38,12 +40,13 @@ func TestItem(t *testing.T) {
 
 	var create = func() *model.Item {
 		i, _ := repository.CreateItem(DB, model.ItemInput{
-			Quantity:    12,
-			BuyingPrice: "2000",
+			Quantity:    10,
+			BuyingPrice: "1000",
 			UnitID:      unit.ID,
 			ProductID:   product.ID,
 			Prices: []*model.PriceInput{
-				{Amount: "500.00", CategoryID: priceCategory.ID},
+				{Amount: "5000.00", CategoryID: priceCategory.ID},
+				{Amount: "10000.00", CategoryID: priceCategory2.ID},
 			},
 		}, *product.CreatorID)
 
@@ -98,9 +101,16 @@ func TestItem(t *testing.T) {
 	t.Run("SumItemsCost", func(t *testing.T) {
 		create()
 
-		itemsStat, _ := repository.SumItemsCost(DB, *product.StoreID)
+		itemsStat, _ := repository.SumItemsCost(DB, *product.StoreID, priceCategory.ID)
+		itemsStat2, _ := repository.SumItemsCost(DB, *product.StoreID, priceCategory2.ID)
 
-		fmt.Printf("stats %v", itemsStat)
+		println("TotalCost %v", itemsStat.TotalCost)
+		println("ExpectedProfit %v", itemsStat.ExpectedProfit)
+		println("TotalReturn %v", itemsStat.TotalReturn)
+
+		println("TotalCost2 %v", itemsStat2.TotalCost)
+		println("ExpectedProfit2 %v", itemsStat2.ExpectedProfit)
+		println("TotalReturn2 %v", itemsStat2.TotalReturn)
 
 		require.NotEmpty(t, itemsStat.ExpectedProfit)
 		require.NotEmpty(t, itemsStat.TotalCost)
