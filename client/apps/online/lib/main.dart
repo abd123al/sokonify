@@ -9,20 +9,24 @@ void main() async {
     urlHandler: () async {
       Future<String> getBaseUrl() async {
         if (kReleaseMode) {
-          ip() async {
-            try {
-              //In web this don't work
-              final info = NetworkInfo();
-              final ip = await info.getWifiIP();
-              return ip;
-            } catch (e) {
-              return null;
+          if (!kIsWeb) {
+            ip() async {
+              try {
+                //In web this don't work
+                final info = NetworkInfo();
+                final ip = await info.getWifiIP();
+                return ip;
+              } catch (e) {
+                return null;
+              }
             }
+
+            final url = "http://${await ip() ?? "127.0.0.1"}:9191";
+
+            return url;
           }
 
-          final url = "http://${await ip() ?? "127.0.0.1"}:9191";
-
-          return url;
+          return "http://127.0.0.1:9191";
         } else {
           //Web don't support platform
           if (!kIsWeb) {
