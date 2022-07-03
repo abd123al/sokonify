@@ -120,6 +120,7 @@ class _HomePageState extends State<HomePage> {
     return SizedBox.expand(
       child: PageView(
         controller: _pageController,
+        physics: const NeverScrollableScrollPhysics(),
         onPageChanged: (index) {
           setState(() => _currentIndex = index);
         },
