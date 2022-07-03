@@ -765,6 +765,7 @@ type ItemsStats {
     expectedProfit : String!
     totalCost : String!
     totalReturn : String!
+    categoryId : ID!
 }
 
 #todo remove storeId everywhere and use JWT for that.
@@ -806,7 +807,7 @@ type Query {
     # Daily sales
     averageDailySalesAmount(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
     #cost of buying goods
-    itemsStats(args:StatsArgs!): ItemsStats! @goField(forceResolver: true) @isAuthenticated
+    itemsStats: [ItemsStats!]! @goField(forceResolver: true) @isAuthenticated
 }
 
 type Mutation {
