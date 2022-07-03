@@ -17,6 +17,7 @@ dependencies:
 #    git:
 #      url: git@github.com:kateile/blocitory.git
 #      ref: main #You need to force the update with flutter packages upgrade
+  collection: ^1.16.0
   dio: ^4.0.2
   dropdown_search: ^5.0.2
   json_annotation: ^4.3.0

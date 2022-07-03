@@ -57,7 +57,10 @@ class ItemsList extends StatelessWidget {
 
               return ListView(
                 children: [
-                  const InventoryStats(),
+                  if (cats.isNotEmpty)
+                    InventoryStats(
+                      categoryId: cat.id,
+                    ),
                   const SizedBox(height: 8),
                   SearchableList<Items$Query$Item>(
                     hintName: "Item",

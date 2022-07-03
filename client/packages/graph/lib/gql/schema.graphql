@@ -135,6 +135,7 @@ type Item implements Gorm {
 }
 
 type ItemsStats {
+    categoryId: ID!
     expectedProfit: String!
     totalCost: String!
     totalReturn: String!
@@ -278,7 +279,6 @@ type ProductCategory implements Gorm {
 }
 
 type Profit {
-    categoryId: Int!
     expected: String!
     real: String!
 }
@@ -299,7 +299,7 @@ type Query {
     grossProfit(args: StatsArgs!): Profit!
     item(id: ID!): Item!
     items(args: ItemsArgs!): [Item!]!
-    itemsStats: ItemsStats!
+    itemsStats: [ItemsStats!]!
     me: User!
     netIncome(args: StatsArgs!): String!
     order(id: ID!): Order!
@@ -696,6 +696,7 @@ input StaffInput {
 input StatsArgs {
     endDate: Time
     filter: StatsFilter
+    pricingID: ID
     startDate: Time
     timeframe: TimeframeType
     value: ID
