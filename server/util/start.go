@@ -7,6 +7,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/jwtauth"
+	"github.com/rs/cors"
 	"gorm.io/gorm"
 	"log"
 	"mahesabu/graph"
@@ -55,6 +56,13 @@ func StartServer(Args StartServerArgs) string {
 
 func ConfigureGraphql(DB *gorm.DB, Multistore bool, isServer bool) *chi.Mux {
 	router := chi.NewRouter()
+
+	//todo websockets too https://gqlgen.com/recipes/cors/
+	router.Use(cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:8081", "http://127.0.0.1:8081"},
+		AllowCredentials: true,
+		AllowedHeaders:   []string{"*"},
+	}).Handler)
 
 	//jwt: Seek, verify and validate JWT tokens
 	router.Use(jwtauth.Verifier(helpers.TokenAuth))
