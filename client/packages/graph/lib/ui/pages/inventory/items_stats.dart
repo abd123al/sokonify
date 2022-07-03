@@ -1,7 +1,7 @@
 import 'package:blocitory/blocitory.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:collection/collection.dart';
 
 import '../../../../gql/generated/graphql_api.graphql.dart';
 import '../../helpers/currency_formatter.dart';
@@ -12,19 +12,21 @@ import 'items_stats_cubit.dart';
 class InventoryStats extends StatelessWidget {
   const InventoryStats({
     Key? key,
-    required this.categoryId,
+    required this.category,
   }) : super(key: key);
 
-  final int categoryId;
+  final Categories$Query$Category category;
 
   @override
   Widget build(BuildContext context) {
     return QueryBuilder<List<ItemsStats$Query$ItemsStats>, ItemsStatsCubit>(
       retry: (cubit) => cubit.fetch(),
       builder: (context, res, _) {
-        final data = res.firstWhereOrNull((e) => e.categoryId == categoryId);
+        final data = res.firstWhereOrNull(
+          (e) => e.categoryId == category.id,
+        );
 
-        if(data == null){
+        if (data == null) {
           return const SizedBox();
         }
 
@@ -68,8 +70,10 @@ class InventoryStats extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           children: [
-            const Topper(
-              label: "Inventory",
+            Topper(
+              label: "${category.name} Inventory",
+              onPressed: (){},
+              actionLabel: "Actions",
             ),
             ScreenTypeLayout.builder(
               mobile: (BuildContext context) => OrientationLayoutBuilder(

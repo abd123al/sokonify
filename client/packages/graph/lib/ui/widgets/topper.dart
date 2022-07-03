@@ -5,9 +5,11 @@ class Topper extends StatelessWidget {
     Key? key,
     required this.label,
     this.onPressed,
+    this.actionLabel = "More",
   }) : super(key: key);
 
   final String label;
+  final String actionLabel;
   final VoidCallback? onPressed;
 
   @override
@@ -28,7 +30,7 @@ class Topper extends StatelessWidget {
             if (onPressed != null)
               TextButton(
                 onPressed: onPressed,
-                child: const Text('More'),
+                child: Text(actionLabel),
               )
           ],
         ),

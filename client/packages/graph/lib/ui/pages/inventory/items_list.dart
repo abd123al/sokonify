@@ -59,7 +59,7 @@ class ItemsList extends StatelessWidget {
                 children: [
                   if (cats.isNotEmpty)
                     InventoryStats(
-                      categoryId: cat.id,
+                      category: cat,
                     ),
                   const SizedBox(height: 8),
                   SearchableList<Items$Query$Item>(
