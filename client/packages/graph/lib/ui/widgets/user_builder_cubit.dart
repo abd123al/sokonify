@@ -14,4 +14,14 @@ class UserBuilderCubit extends ResourceCubit<Me$Query$User> {
       parser: (r) => Me$Query.fromJson(r).me,
     );
   }
+
+  edit(ProfileInput input) {
+    super.execute(
+      executor: () => _repository.editProfile( input),
+      parser: (r) {
+        final result = EditProfile$Mutation.fromJson(r).editProfile;
+        return Me$Query$User.fromJson(result.toJson());
+      },
+    );
+  }
 }

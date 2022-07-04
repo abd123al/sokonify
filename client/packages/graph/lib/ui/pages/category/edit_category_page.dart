@@ -23,6 +23,7 @@ class EditCategoryPage extends StatelessWidget {
           return CategoryForm(
             category: category,
             id: id,
+            type: category.type,
           );
         },
       ),

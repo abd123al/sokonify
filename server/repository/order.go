@@ -7,6 +7,15 @@ import (
 	"mahesabu/helpers"
 )
 
+func contains(s []*model.OrderItem, e int) bool {
+	for _, a := range s {
+		if a.ItemID == e {
+			return true
+		}
+	}
+	return false
+}
+
 func CreateOrder(DB *gorm.DB, UserId int, input model.OrderInput, StoreID int) (*model.Order, error) {
 	var items []*model.OrderItem
 
@@ -30,16 +39,80 @@ func CreateOrder(DB *gorm.DB, UserId int, input model.OrderInput, StoreID int) (
 		ReceiverID: input.ReceiverID,
 		IssuerID:   StoreID,
 		CustomerID: input.CustomerID,
+		PricingID:  input.PricingID,
 		StaffID:    UserId,
 		Type:       input.Type,
 		OrderItems: items,
 		Status:     model.OrderStatusPending, //Important
+		Comment:    input.Comment,
 	}
 
 	//fmt.Printf("%+v\n\n", order.Items[0].ItemID)
 
 	result := DB.Create(&order)
 	return &order, result.Error
+}
+
+func EditOrder(DB *gorm.DB, ID int, input model.OrderInput, args helpers.UserAndStoreArgs) (*model.Order, error) {
+	var items []*model.OrderItem
+	var order *model.Order
+
+	err := DB.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Where(&model.Order{ID: ID, StaffID: args.UserID}).First(&order).Error; err != nil {
+			return err
+		}
+
+		if order.Status != model.OrderStatusPending {
+			return fmt.Errorf(`order is already %s, you can't edit it`, order.Status)
+		}
+
+		order.ReceiverID = input.ReceiverID
+		order.CustomerID = input.CustomerID
+		order.Comment = input.Comment
+
+		if err := tx.Save(&order).Error; err != nil {
+			return err
+		}
+
+		//Finding previous order items and then compare them
+		_, err := DeleteOrderItems(tx, ID)
+
+		if err != nil {
+			return err
+		}
+
+		for _, u := range input.Items {
+			err := CheckAvailableQuantity(tx, u)
+
+			if err != nil {
+				return err
+			}
+
+			i := model.OrderItem{
+				OrderID:  ID,
+				Price:    u.Price,
+				ItemID:   u.ItemID,
+				Quantity: u.Quantity,
+			}
+
+			items = append(items, &i)
+		}
+
+		orderItems, err := CreateOrderItems(tx, ID, items)
+		if err != nil {
+			return err
+		}
+
+		order.OrderItems = orderItems
+
+		return nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return order, nil
 }
 
 func FindOrders(DB *gorm.DB, args model.OrdersArgs, StoreID int) ([]*model.Order, error) {

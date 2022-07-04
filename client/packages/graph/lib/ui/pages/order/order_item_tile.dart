@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:graph/ui/helpers/helpers.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
+import '../../../nav/nav.dart';
 
 class OrderItemTile extends StatelessWidget {
   const OrderItemTile({
@@ -34,6 +35,12 @@ class OrderItemTile extends StatelessWidget {
             subtitle: Text(
               "${orderItem.quantity} ${orderItem.item.unit.name}",
             ),
+            onTap: () {
+              redirectTo(
+                context,
+                "${Routes.item}/${orderItem.item.id}",
+              );
+            },
           );
         },
       ),

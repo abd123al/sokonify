@@ -1,17 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:blocitory/blocitory.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
-import '../../../gql/generated/graphql_api.graphql.dart';
-import '../../../repositories/order_repository.dart';
+import '../../../nav/nav.dart';
 import '../../helpers/currency_formatter.dart';
-import '../../widgets/widgets.dart';
-import '../payment/create_order_payment_page.dart';
+import '../../'
+    'widgets/widgets.dart';
 import 'order_item_tile.dart';
-import 'order_page_cubit.dart';
+import 'order_wrapper.dart';
 import 'print.dart';
 import 'total_amount_tile.dart';
 
@@ -27,38 +24,46 @@ class OrderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Order #$id"),
-      ),
-      body: BlocProvider(
-        create: (context) {
-          return OrderPageCubit(
-            RepositoryProvider.of<OrderRepository>(context),
+      appBar: DetailsAppBar(
+        label: "Order #$id",
+        onPressed: () {
+          redirectTo(
+            context,
+            "${Routes.editOrder}/$id",
+            replace: true,
           );
         },
-        child: Builder(builder: (context) {
-          return _build();
-        }),
       ),
+      body: _build(),
     );
   }
 
   Widget _build() {
-    return QueryBuilder<Order$Query$Order, OrderPageCubit>(
-      retry: (cubit) => cubit.fetch(id),
-      initializer: (cubit) => cubit.fetch(id),
-      builder: (context, data, _) {
+    return OrderWrapper(
+      id: id,
+      builder: (context, data) {
         final left = [
           if (data.customer?.name != null)
             ShortDetailTile(
                 subtitle: "Customer", value: "${data.customer?.name}"),
           ShortDetailTile(subtitle: "Created At", value: "${data.createdAt}"),
           ShortDetailTile(subtitle: "Status", value: describeEnum(data.status)),
+          ShortDetailTile(subtitle: "Pricing", value: data.pricing.name),
+          ShortDetailTile(subtitle: "Comment", value: data.comment),
           if (data.payment != null)
             ShortDetailTile(
                 subtitle: "Paid Amount",
                 value: formatCurrency(data.payment!.amount)),
         ];
+
+        final total = calculateTotal(
+          data.orderItems.map(
+            (e) => TotalPriceArgs(
+              price: e.price,
+              quantity: e.quantity,
+            ),
+          ),
+        );
 
         final right = [
           ListView.separated(
@@ -77,14 +82,7 @@ class OrderPage extends StatelessWidget {
             },
           ),
           TotalAmountTile(
-            amount: calculateTotal(
-              data.orderItems.map(
-                (e) => TotalPriceArgs(
-                  price: e.price,
-                  quantity: e.quantity,
-                ),
-              ),
-            ),
+            amount: total,
           ),
         ];
 
@@ -187,14 +185,10 @@ class OrderPage extends StatelessWidget {
                           "Complete Payment",
                           Icons.payment,
                           () {
-                            showModalBottomSheet(
-                              context: context,
-                              builder: (context) {
-                                return CreatePaymentWidget(
-                                  amount: '36677',
-                                  orderId: id,
-                                );
-                              },
+                            redirectTo(
+                              context,
+                              "${Routes.createOrderPayment}/$id/$total",
+                              replace: true,
                             );
                           },
                         ),

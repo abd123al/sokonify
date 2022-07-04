@@ -20,6 +20,7 @@ class LoginInPage extends StatefulWidget {
 class _LoginInPageState extends State<LoginInPage> {
   final _passwordController = TextEditingController();
   final _emailController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +36,7 @@ class _LoginInPageState extends State<LoginInPage> {
             color: Colors.white,
           ),
         ),
+        showPopUpSuccess: false,
         builder: (context, cubit) {
           const padding = EdgeInsets.only(top: 8.0);
 
@@ -49,6 +51,7 @@ class _LoginInPageState extends State<LoginInPage> {
                     vertical: 8,
                   ),
                   child: Form(
+                    key: _formKey,
                     child: ListView(
                       shrinkWrap: true,
                       children: [
@@ -76,6 +79,13 @@ class _LoginInPageState extends State<LoginInPage> {
                             ),
                             controller: _emailController,
                             keyboardType: TextInputType.emailAddress,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            validator: (s) {
+                              if ((s?.length ?? 0) < 1) {
+                                return "Type username/Email here..";
+                              }
+                              return null;
+                            },
                           ),
                         ),
                         Padding(
@@ -87,16 +97,25 @@ class _LoginInPageState extends State<LoginInPage> {
                             controller: _passwordController,
                             keyboardType: TextInputType.visiblePassword,
                             obscureText: true,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            validator: (s) {
+                              if ((s?.length ?? 0) < 8) {
+                                return "New Password must contain at least 8 characters";
+                              }
+                              return null;
+                            },
                           ),
                         ),
                         Button(
                           callback: () {
-                            cubit.signIn(
-                              SignInInput(
-                                password: _passwordController.text,
-                                login: _emailController.text,
-                              ),
-                            );
+                            if (_formKey.currentState!.validate()) {
+                              cubit.signIn(
+                                SignInInput(
+                                  password: _passwordController.text,
+                                  login: _emailController.text,
+                                ),
+                              );
+                            }
                           },
                           title: 'Sign In',
                         ),

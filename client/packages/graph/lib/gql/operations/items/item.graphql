@@ -4,7 +4,13 @@ query item($id: ID!) {
         createdAt
         description
         expiresAt
-        sellingPrice
+        prices {
+            amount
+            category {
+                id
+                name
+            }
+        }
         batch
         quantity
         brand {
@@ -21,6 +27,9 @@ query item($id: ID!) {
         unit {
             id
             name
+        }
+        categories {
+            ...CategoryParts
         }
     }
 }

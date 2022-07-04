@@ -21,14 +21,14 @@ func TestResolvers(t *testing.T) {
 		UserID:  user.ID,
 		StoreID: store.ID,
 	})
-	category := util.CreateCategory(DB, store.ID)
+	category := util.CreateCategory(DB, store.ID, model.CategoryTypeCategory)
 	product := util.CreateProduct(DB, &util.CreateProductArgs{
 		StoreID:    store.ID,
 		CategoryId: &category.ID,
 	})
-	item := util.CreateItem(DB, &util.CreateItemArgs{
-		ProductID: product.ID,
-	}, nil)
+	item := util.CreateItem(DB, util.CreateItemArgs{
+		StoreID: store.ID,
+	})
 	order := util.CreateOrder(DB, &util.CreateOrderArgs{
 		IssuerID:   store.ID,
 		StaffId:    user.ID,
@@ -178,7 +178,7 @@ func TestResolvers(t *testing.T) {
 		require.Equal(t, input.Name, resp.CreateCustomer.Name)
 
 		//Some tricks so that we may be able to find user via phone
-		input.Phone = &user.Phone
+		input.Phone = user.Phone
 		input.Email = nil
 		call(input)
 		require.Equal(t, input.Name, resp.CreateCustomer.Name)

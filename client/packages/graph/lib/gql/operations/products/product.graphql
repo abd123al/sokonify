@@ -9,5 +9,8 @@ query product($id: ID!) {
         brands {
             ...BrandParts
         }
+        categories {
+            ...CategoryParts
+        }
     }
 }

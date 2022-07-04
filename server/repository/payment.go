@@ -18,6 +18,7 @@ func CreateSalePayment(DB *gorm.DB, input model.SalesInput, args helpers.UserAnd
 			Type:       model.OrderTypeSale,
 			Items:      input.Items,
 			CustomerID: nil,
+			PricingID:  input.PricingID,
 		}, args.StoreID)
 
 		if err != nil {
@@ -179,36 +180,48 @@ func FindPaymentByOrderId(db *gorm.DB, OrderID int) (*model.Payment, error) {
 func FindPayments(DB *gorm.DB, args model.PaymentsArgs, StoreID int) ([]*model.Payment, error) {
 	var payments []*model.Payment
 	var result *gorm.DB
+	var typeColumn string
+
+	if args.Type == model.PaymentTypeOrder {
+		typeColumn = "order_id"
+	} else {
+		typeColumn = "expense_id"
+	}
 
 	sort := "payments.id " + "DESC" //todo use sortBy var
 	By := args.By
-	//Type := args.Type
-	//Limit := args.Limit
-	//Offset := args.Offset
+	Limit := args.Limit
+	Offset := args.Offset
 
-	q := DB //.Debug() //todo filter payments
+	StartDate, EndDate := helpers.HandleStatsDates(model.StatsArgs{
+		StartDate: args.StartDate,
+		EndDate:   args.EndDate,
+		Timeframe: args.Timeframe,
+	})
 
-	//partialQuery := q.Table("payments").Order("id DESC").Offset(*Offset).Limit(*Limit).Order(sort)
+	db := DB //.Debug() //todo filter payments
 
 	if By == model.PaymentsByStore {
-		if args.Mode == model.FetchModeFull {
-			StartDate, EndDate := helpers.HandleStatsDates(model.StatsArgs{
-				StartDate: args.StartDate,
-				EndDate:   args.EndDate,
-				Timeframe: args.Timeframe,
-			})
+		q := db.Table("payments").Order(sort).Joins(fmt.Sprintf("inner join staffs on payments.staff_id = staffs.user_id AND staffs.store_id = ? AND payments.%s IS NOT NULL", typeColumn), StoreID)
 
-			result = q.Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate).Order(sort).Joins("inner join staffs on payments.staff_id = staffs.user_id AND staffs.store_id = ?", StoreID).Find(&payments)
+		if args.Mode == model.FetchModeFull {
+			result = q.Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate).Find(&payments)
 		} else {
-			//This will return all payments store processed.
-			//result = partialQuery.Joins("inner join staffs on payments.staff_id = staffs.user_id AND staffs.store_id = ?", args.Value).Find(&payments)
+			result = q.Offset(*Offset).Limit(*Limit).Find(&payments)
 		}
 	} else if By == model.PaymentsByStaff {
 		//This will return payments processed by a specific staff.
-		//result = partialQuery.Where(&model.Payment{StaffID: *args.Value}).Find(&payments)
+		panic(fmt.Errorf("not implemented"))
 	} else if By == model.PaymentsByCustomer {
 		//This will return payments by specific customer.
-		//result = partialQuery.Joins("inner join orders on payments.order_id = orders.id AND orders.customer_id = ?", args.Value).Find(&payments)
+		a := db.Table("payments").Order(sort)
+		b := a.Joins("inner join orders on orders.id = payments.order_id AND orders.customer_id = ?", args.Value)
+
+		if args.Mode == model.FetchModeFull {
+			result = b.Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate).Find(&payments)
+		} else {
+			result = b.Offset(*Offset).Limit(*Limit).Find(&payments)
+		}
 	} else {
 		panic(fmt.Errorf("not implemented"))
 	}
@@ -243,16 +256,19 @@ func sumPaymentType(db *gorm.DB, StoreID int, args model.StatsArgs, t model.Paym
 	var amount string
 	StartDate, EndDate := helpers.HandleStatsDates(args)
 
-	var condition string
+	var join string
 
 	if t == model.PaymentTypeExpense {
-		condition = "< 0"
+		join = "inner join expenses on expenses.id = payments.expense_id AND expenses.store_id = ?"
 	} else {
-		condition = "> 0"
+		join = "inner join orders on orders.id = payments.order_id AND orders.issuer_id = ?"
 	}
+	a := db.Table("payments")
+	b := a.Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate)
+	c := b.Joins(join, StoreID)
 
-	if err := db.Table("payments").Where(fmt.Sprintf("amount %s", condition)).Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate).Joins("inner join staffs on payments.staff_id = staffs.user_id AND staffs.store_id = ?", StoreID).Select("sum(amount)").Row().Scan(&amount); err != nil {
-		return "0.00", nil
+	if err := c.Select("coalesce(sum(amount),0)").Row().Scan(&amount); err != nil {
+		return "0.00", err
 	}
 
 	return amount, nil
@@ -260,11 +276,41 @@ func sumPaymentType(db *gorm.DB, StoreID int, args model.StatsArgs, t model.Paym
 
 func SumGrossProfit(db *gorm.DB, StoreID int, args model.StatsArgs) (*model.Profit, error) {
 	var profit *model.Profit
+	var Real, Expected string
 	StartDate, EndDate := helpers.HandleStatsDates(args)
 
-	if err := db.Table("order_items").Joins("inner join items on order_items.item_id = items.id").Joins("inner join orders on order_items.order_id = orders.id AND orders.issuer_id = ?", StoreID).Joins("inner join payments on orders.id = payments.order_id").Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate).Select("sum((items.selling_price - items.buying_price) * order_items.quantity) AS expected, sum((order_items.price - items.buying_price) * order_items.quantity) AS real").Scan(&profit).Error; err != nil {
-		return nil, err
+	a := db.Table("order_items")
+	b := a.Joins("inner join items on order_items.item_id = items.id")
+	c := b.Joins("inner join orders on order_items.order_id = orders.id AND orders.issuer_id = ?", StoreID)
+	d := c.Joins("inner join payments on orders.id = payments.order_id")
+	e := d.Joins("inner join prices on prices.item_id = items.id")
+	f := e.Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate)
+	g := f.Select("sum((prices.amount - items.buying_price) * order_items.quantity) AS expected, sum((order_items.price - items.buying_price) * order_items.quantity) AS real")
+
+	if args.PricingID != nil {
+		h := g.Where("prices.category_id =? AND orders.pricing_id = ?", args.PricingID, args.PricingID)
+		if err := h.Scan(&profit).Error; err != nil {
+			return nil, err
+		}
+	} else {
+		if err := g.Scan(&profit).Error; err != nil {
+			return nil, err
+		}
 	}
 
-	return profit, nil
+	Real = profit.Real
+	Expected = profit.Expected
+
+	if len(Real) == 0 {
+		Real = "0.00"
+	}
+
+	if Expected == "" {
+		Expected = "0.00"
+	}
+
+	return &model.Profit{
+		Real:     Real,
+		Expected: Expected,
+	}, nil
 }

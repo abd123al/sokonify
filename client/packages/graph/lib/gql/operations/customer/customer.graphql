@@ -1,0 +1,14 @@
+query customer($id: ID!) {
+    customer(id: $id) {
+        name
+        phone
+        address
+        comment
+        createdAt
+        email
+        tin
+        creator {
+            ...CreatorParts
+        }
+    }
+}

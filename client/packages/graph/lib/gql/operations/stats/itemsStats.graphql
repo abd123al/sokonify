@@ -3,5 +3,6 @@ query itemsStats {
         expectedProfit
         totalCost
         totalReturn
+        categoryId
     }
 }

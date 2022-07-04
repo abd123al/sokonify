@@ -72,6 +72,7 @@ type Category implements Gorm {
     name: String!
     store: Store
     storeId: Int
+    type: CategoryType!
     updatedAt: Time!
 }
 
@@ -115,6 +116,7 @@ type Item implements Gorm {
     brand: Brand
     brandId: Int
     buyingPrice: String!
+    categories: [Category!]
     createdAt: Time!
     creator: User
     creatorId: Int
@@ -123,23 +125,24 @@ type Item implements Gorm {
     expiresAt: Time
     id: ID!
     name: String
+    prices: [Price!]!
     product: Product!
     productId: Int!
     quantity: Int!
-    sellingPrice: String!
     unit: Unit!
     unitId: Int!
     updatedAt: Time!
 }
 
 type ItemsStats {
+    categoryId: ID!
     expectedProfit: String!
     totalCost: String!
     totalReturn: String!
 }
 
 type Mutation {
-    changePassword(input: ChangePasswordInput!): User!
+    changePassword(input: ChangePasswordInput!): Boolean!
     createBrand(input: BrandInput!): Brand!
     createCategory(input: CategoryInput!): Category!
     createCustomer(input: CustomerInput!): Customer!
@@ -147,6 +150,7 @@ type Mutation {
     createExpensePayment(input: ExpensePaymentInput!): Payment!
     createItem(input: ItemInput!): Item!
     createOrder(input: OrderInput!): Order!
+    createOrderItem(id: ID!, input: OrderItemInput!): OrderItem!
     createOrderPayment(input: OrderPaymentInput!): Payment!
     createProduct(input: ProductInput!): Product!
     createSales(input: SalesInput!): Payment!
@@ -154,12 +158,15 @@ type Mutation {
     createStore(input: StoreInput!): Store!
     createUnit(input: UnitInput!): Unit!
     deleteItem(id: ID!): Item!
+    deleteOrderItem(itemId: ID!, orderId: ID!): OrderItem!
     editBrand(id: ID!, input: BrandInput!): Brand!
     editCategory(id: ID!, input: CategoryInput!): Category!
     editCustomer(id: ID!, input: CustomerInput!): Customer!
     editItem(id: ID!, input: ItemInput!): Item!
     editOrder(id: ID!, input: OrderInput!): Order!
+    editOrderItem(id: ID!, input: OrderItemInput!): OrderItem!
     editProduct(id: ID!, input: ProductInput!): Product!
+    editProfile(input: ProfileInput!): User!
     editStaff(id: ID!, input: StaffInput!): Staff!
     editStore(id: ID!, input: StoreInput!): Store!
     editUnit(id: ID!, input: UnitInput!): Unit!
@@ -180,6 +187,8 @@ type Order implements Gorm {
     issuerId: Int!
     orderItems: [OrderItem!]!
     payment: Payment
+    pricing: Category!
+    pricingId: Int!
     receiver: Store
     receiverId: Int
     staff: User!
@@ -225,6 +234,20 @@ type Payment implements Gorm {
     updatedAt: Time!
 }
 
+type Price implements Gorm {
+    amount: String!
+    category: Category!
+    categoryId: Int!
+    createdAt: Time!
+    creator: User!
+    creatorId: Int!
+    deletedAt: Time
+    id: ID!
+    item: Item!
+    itemId: Int!
+    updatedAt: Time!
+}
+
 type Permission implements Gorm {
     createdAt: Time!
     creator: User!
@@ -239,6 +262,7 @@ type Permission implements Gorm {
 
 type Product implements Gorm {
     brands: [Brand!]!
+    categories: [Category!]
     createdAt: Time!
     creator: User
     creatorId: Int
@@ -259,8 +283,10 @@ type ProductCategory implements Gorm {
     creatorId: Int
     deletedAt: Time
     id: ID!
-    product: Product!
-    productId: Int!
+    item: Item
+    itemId: Int
+    product: Product
+    productId: Int
     updatedAt: Time!
 }
 
@@ -285,7 +311,7 @@ type Query {
     grossProfit(args: StatsArgs!): Profit!
     item(id: ID!): Item!
     items(args: ItemsArgs!): [Item!]!
-    itemsStats: ItemsStats!
+    itemsStats: [ItemsStats!]!
     me: User!
     netIncome(args: StatsArgs!): String!
     order(id: ID!): Order!
@@ -385,7 +411,7 @@ type User implements Gorm {
     isVerified: Boolean!
     name: String!
     password: String
-    phone: String!
+    phone: String
     updatedAt: Time!
     username: String
 }
@@ -394,6 +420,12 @@ enum BusinessType {
     both
     retail
     wholesale
+}
+
+enum CategoryType {
+    category
+    pricing
+    subcategory
 }
 
 enum CustomerType {
@@ -494,6 +526,16 @@ enum StaffRole {
     staff
 }
 
+enum StatsFilter {
+    brand
+    category
+    customer
+    item
+    priceGroup
+    product
+    staff
+}
+
 enum StoreType {
     other
     pharmacy
@@ -532,6 +574,7 @@ input BrandsArgs {
 input CategoryInput {
     description: String
     name: String!
+    type: CategoryType!
 }
 
 input ChangePasswordInput {
@@ -541,6 +584,7 @@ input ChangePasswordInput {
 
 input CustomerInput {
     address: String
+    comment: String
     dob: Time
     email: String
     gender: GenderType
@@ -574,11 +618,12 @@ input ItemInput {
     batch: String
     brandId: Int
     buyingPrice: String!
+    categories: [ID!]
     description: String
     expiresAt: Time
+    prices: [PriceInput!]!
     productId: Int!
     quantity: Int!
-    sellingPrice: String!
     unitId: Int!
 }
 
@@ -591,6 +636,7 @@ input OrderInput {
     comment: String
     customerId: Int
     items: [OrderItemInput!]!
+    pricingId: Int!
     receiverId: Int
     type: OrderType!
 }
@@ -632,8 +678,13 @@ input PaymentsArgs {
     sortBy: SortBy = DESC
     startDate: Time
     timeframe: TimeframeType
-    type: PaymentType
+    type: PaymentType!
     value: ID
+}
+
+input PriceInput {
+    amount: String!
+    categoryId: ID!
 }
 
 input PermissionInput {
@@ -659,6 +710,13 @@ input ProductsArgs {
     value: ID
 }
 
+input ProfileInput {
+    email: String!
+    name: String!
+    phone: String
+    username: String
+}
+
 input RoleInput {
     description: String
     name: String!
@@ -667,6 +725,7 @@ input RoleInput {
 input SalesInput {
     comment: String
     items: [OrderItemInput!]!
+    pricingId: Int!
 }
 
 input SignInInput {
@@ -688,8 +747,11 @@ input StaffInput {
 
 input StatsArgs {
     endDate: Time
+    filter: StatsFilter
+    pricingID: ID
     startDate: Time
     timeframe: TimeframeType
+    value: ID
 }
 
 input StoreInput {

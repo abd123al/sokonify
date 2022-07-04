@@ -10,11 +10,13 @@ class ItemTile extends StatelessWidget {
     required this.item,
     this.currency = "TZS",
     this.color,
+    required this.pricingId,
   }) : super(key: key);
 
   final Items$Query$Item item;
   final String currency;
   final Color? color;
+  final int pricingId;
 
   static String formatItemName(Items$Query$Item item) {
     final n = item.product.name;
@@ -25,6 +27,10 @@ class ItemTile extends StatelessWidget {
     }
 
     return n;
+  }
+
+  static String price(Items$Query$Item item, int pricingId) {
+    return item.prices.firstWhere((e) => e.categoryId == pricingId).amount;
   }
 
   @override
@@ -46,10 +52,14 @@ class ItemTile extends StatelessWidget {
               style: Theme.of(context).textTheme.titleSmall,
             ),
             dense: true,
-            trailing: Text(
-              formatCurrency(item.sellingPrice),
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
+            trailing: Builder(builder: (context) {
+              final amount = price(item, pricingId);
+
+              return Text(
+                formatCurrency(amount),
+                style: Theme.of(context).textTheme.titleMedium,
+              );
+            }),
             onTap: () => redirectTo(context, "${Routes.item}/${item.id}"),
           );
         },

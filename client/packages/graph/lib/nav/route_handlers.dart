@@ -15,16 +15,22 @@ var editStoreRouterHandler = Handler(handlerFunc: (_, __) {
   return const EditStorePage();
 });
 
-var createCategoryRouterHandler = Handler(handlerFunc: (_, __) {
-  return const CreateCategoryPage();
+var createCategoryRouterHandler = Handler(handlerFunc: (context, __) {
+  return CreateCategoryPage(
+    type: context?.settings?.arguments as CategoryType,
+  );
 });
 
-var categoriesListRouterHandler = Handler(handlerFunc: (_, __) {
-  return const CategoriesListPage();
+var categoriesListRouterHandler = Handler(handlerFunc: (context, __) {
+  return CategoriesListPage(
+    type: context?.settings?.arguments as CategoryType,
+  );
 });
 
-var createItemRouterHandler = Handler(handlerFunc: (_, __) {
-  return const CreateItemPage();
+var createItemRouterHandler = Handler(handlerFunc: (context, __) {
+  return CreateItemPage(
+    pricing: context?.settings?.arguments as Categories$Query$Category,
+  );
 });
 
 var unitsListPageRouterHandler = Handler(handlerFunc: (_, __) {
@@ -114,7 +120,12 @@ var productPageRouterHandler = Handler(handlerFunc: (_, params) {
 
 var paymentPageRouterHandler = Handler(handlerFunc: (_, params) {
   final id = params["id"]![0];
-  return PaymentPage(id: int.parse(id));
+  final word = params["word"]![0].toString();
+
+  return PaymentPage(
+    id: int.parse(id),
+    word: word,
+  );
 });
 
 var editProductPageRouterHandler = Handler(handlerFunc: (context, params) {
@@ -135,4 +146,58 @@ var editCategoryPageRouterHandler = Handler(handlerFunc: (context, params) {
 var editItemPageRouterHandler = Handler(handlerFunc: (context, params) {
   final id = params["id"]![0];
   return EditItemPage(id: int.parse(id));
+});
+
+var editOrderPageRouterHandler = Handler(handlerFunc: (context, params) {
+  final id = params["id"]![0];
+  return EditOrderPage(id: int.parse(id));
+});
+
+var customerPageRouterHandler = Handler(handlerFunc: (context, params) {
+  final id = params["id"]![0];
+  return CustomerPage(id: int.parse(id));
+});
+
+var editCustomerPageRouterHandler = Handler(handlerFunc: (context, params) {
+  final id = params["id"]![0];
+  return EditCustomerPage(id: int.parse(id));
+});
+
+var createPaymentPageRouterHandler = Handler(handlerFunc: (context, params) {
+  final id = params["orderId"]![0];
+  final amount = params["amount"]![0];
+
+  return CreatePaymentPage(
+    orderId: int.parse(id),
+    amount: amount,
+  );
+});
+
+var statsPageRouterHandler = Handler(handlerFunc: (_, __) {
+  return const StatsPage();
+});
+
+var ordersPageRouterHandler = Handler(handlerFunc: (_, __) {
+  return const OrdersPaginatedPage();
+});
+
+var settingsPageRouterHandler = Handler(handlerFunc: (_, __) {
+  return const SettingsPage();
+});
+
+var editUserPageRouterHandler = Handler(handlerFunc: (_, __) {
+  return const EditUserPage();
+});
+
+var changePassPageRouterHandler = Handler(handlerFunc: (_, __) {
+  return const ChangePasswordPage();
+});
+
+var paymentsPageRouterHandler = Handler(handlerFunc: (context, params) {
+  final word = params["word"]![0];
+
+  return PaymentsPaginatedPage(
+    word: word,
+    type: context?.settings?.arguments as PaymentType,
+  );
 });

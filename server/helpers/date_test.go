@@ -2,58 +2,69 @@ package helpers_test
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/require"
+	"mahesabu/graph/model"
 	"mahesabu/helpers"
 	"testing"
-	"time"
 )
 
 func TestDate(t *testing.T) {
-	t.Run("BeginningOfDay", func(t *testing.T) {
-		result := helpers.BeginningOfDay(time.Now())
+	t.Run("BeginningOfToday", func(t *testing.T) {
+		var timeframe model.TimeframeType
 
-		fmt.Printf("BeginningOfDay: %s\n", result)
+		timeframe = model.TimeframeTypeToday
+		BeginningOfToday, EndOfToday := helpers.HandleStatsDates(model.StatsArgs{
+			Timeframe: &timeframe,
+		})
 
-		require.NotNil(t, result)
-	})
+		timeframe = model.TimeframeTypeYesterday
+		BeginningYesterday, EndYesterday := helpers.HandleStatsDates(model.StatsArgs{
+			Timeframe: &timeframe,
+		})
 
-	t.Run("EndOfDay", func(t *testing.T) {
-		result := helpers.EndOfDay(time.Now())
+		timeframe = model.TimeframeTypeThisWeek
+		BeginningOfWeek, EndOfWeek := helpers.HandleStatsDates(model.StatsArgs{
+			Timeframe: &timeframe,
+		})
 
-		fmt.Printf("EndOfDay: %s\n", result)
+		timeframe = model.TimeframeTypeLastWeek
+		BeginningOfLastWeek, EndOfLastWeek := helpers.HandleStatsDates(model.StatsArgs{
+			Timeframe: &timeframe,
+		})
 
-		require.NotNil(t, result)
-	})
+		timeframe = model.TimeframeTypeThisMonth
+		BeginningOfMonth, EndOfMonth := helpers.HandleStatsDates(model.StatsArgs{
+			Timeframe: &timeframe,
+		})
 
-	t.Run("BeginningOfMonth", func(t *testing.T) {
-		result := helpers.BeginningOfMonth(time.Now())
+		timeframe = model.TimeframeTypeLastMonth
+		BeginningOfLastMonth, EndOfLastMonth := helpers.HandleStatsDates(model.StatsArgs{
+			Timeframe: &timeframe,
+		})
 
-		fmt.Printf("BeginningOfMonth: %s\n", result)
+		timeframe = model.TimeframeTypeThisYear
+		BeginningOfYear, EndOfYear := helpers.HandleStatsDates(model.StatsArgs{
+			Timeframe: &timeframe,
+		})
 
-		require.NotNil(t, result)
-	})
+		fmt.Printf("BeginningOfToday: %s\n", BeginningOfToday)
+		fmt.Printf("EndOfToday: %s\n", EndOfToday)
 
-	t.Run("EndOfMonth", func(t *testing.T) {
-		result := helpers.EndOfMonth(time.Now())
+		fmt.Printf("BeginningYesterday: %s\n", BeginningYesterday)
+		fmt.Printf("EndYesterday: %s\n", EndYesterday)
 
-		fmt.Printf("EndOfMonth: %s\n", result)
+		fmt.Printf("BeginningOfWeek: %s\n", BeginningOfWeek)
+		fmt.Printf("EndOfWeek: %s\n", EndOfWeek)
 
-		require.NotNil(t, result)
-	})
+		fmt.Printf("BeginningOfLastWeek: %s\n", BeginningOfLastWeek)
+		fmt.Printf("EndOfLastWeek: %s\n", EndOfLastWeek)
 
-	t.Run("BeginningOfYear", func(t *testing.T) {
-		result := helpers.BeginningOfYear(time.Now())
+		fmt.Printf("BeginningOfMonth: %s\n", BeginningOfMonth)
+		fmt.Printf("EndOfMonth: %s\n", EndOfMonth)
 
-		fmt.Printf("BeginningOfYear: %s\n", result)
+		fmt.Printf("BeginningOfLastMonth: %s\n", BeginningOfLastMonth)
+		fmt.Printf("EndOfLastMonth: %s\n", EndOfLastMonth)
 
-		require.NotNil(t, result)
-	})
-
-	t.Run("EndOfYear", func(t *testing.T) {
-		result := helpers.EndOfYear(time.Now())
-
-		fmt.Printf("EndOfYear: %s\n", result)
-
-		require.NotNil(t, result)
+		fmt.Printf("BeginningOfYear: %s\n", BeginningOfYear)
+		fmt.Printf("EndOfYear: %s\n", EndOfYear)
 	})
 }

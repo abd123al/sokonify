@@ -64,6 +64,55 @@ func SignIn(db *gorm.DB, input model.SignInInput) (*model.AuthPayload, error) {
 	return nil, err
 }
 
+func ChangePassword(db *gorm.DB, ID int, input model.ChangePasswordInput) (bool, error) {
+	var user *model.User
+	var err = errors.New("incorrect password")
+
+	if input.NewPassword == input.CurrentPassword {
+		return false, errors.New("new password should be different from old one")
+	}
+
+	result := db.Where(&model.User{ID: ID}).Find(&user)
+
+	if result.RowsAffected == 0 {
+		return false, err
+	} else if user.Password != nil {
+		if helpers.VerifyPassword(input.CurrentPassword, *user.Password) {
+			hash := helpers.HashPassword(input.NewPassword)
+
+			update := model.User{
+				ID:       ID,
+				Password: &hash,
+			}
+
+			if err := db.Model(&model.User{}).Where(&model.User{ID: ID}).Updates(&update).Error; err != nil {
+				return false, err
+			}
+
+			return true, nil
+		}
+	}
+
+	return false, err
+}
+
+// EditProfile todo check email and username
+func EditProfile(db *gorm.DB, ID int, input model.ProfileInput) (*model.User, error) {
+	user := model.User{
+		ID:       ID,
+		Name:     input.Name,
+		Email:    input.Email,
+		Username: input.Username,
+		Phone:    input.Phone,
+	}
+
+	if err := db.Model(&user).Where(&model.User{ID: ID}).Updates(&user).Error; err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
 func SwitchStore(db *gorm.DB, args helpers.UserAndStoreArgs) (*model.AuthPayload, error) {
 	var payload *model.AuthPayload
 	var err = errors.New("switch to other store failed")

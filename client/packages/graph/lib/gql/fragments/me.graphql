@@ -1,0 +1,7 @@
+fragment MeParts on User {
+    id
+    name
+    email
+    username
+    phone
+}

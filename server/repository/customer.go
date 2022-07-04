@@ -3,9 +3,10 @@ package repository
 import (
 	"gorm.io/gorm"
 	"mahesabu/graph/model"
+	"mahesabu/helpers"
 )
 
-func CreateCustomer(DB *gorm.DB, input model.CustomerInput, StoreID int) (*model.Customer, error) {
+func CreateCustomer(DB *gorm.DB, input model.CustomerInput, args helpers.UserAndStoreArgs) (*model.Customer, error) {
 	var user *model.User
 	email := input.Email
 	phone := input.Phone
@@ -14,18 +15,22 @@ func CreateCustomer(DB *gorm.DB, input model.CustomerInput, StoreID int) (*model
 	if email != nil {
 		DB.Where(&model.User{Email: *email}).First(&user)
 	} else if phone != nil {
-		DB.Where(&model.User{Phone: *phone}).First(&user)
+		DB.Where(&model.User{Phone: phone}).First(&user)
 	}
 
 	customer := model.Customer{
+		Address: input.Address,
+		Comment: input.Comment,
+		Email:   input.Email,
 		Name:    input.Name,
-		StoreID: StoreID,
+		Phone:   input.Phone,
+		Tin:     input.Tin,
 		Type:    input.Type,
 		Gender:  input.Gender,
 		Dob:     input.Dob,
-		Email:   input.Email,
-		Address: input.Address,
-		Phone:   input.Phone,
+		StoreID: args.StoreID,
+		//UserID:    &user.ID,
+		CreatorID: &args.UserID,
 	}
 
 	if user != nil {
@@ -34,6 +39,29 @@ func CreateCustomer(DB *gorm.DB, input model.CustomerInput, StoreID int) (*model
 
 	result := DB.Create(&customer)
 	return &customer, result.Error
+}
+
+func EditCustomer(DB *gorm.DB, ID int, input model.CustomerInput, args helpers.UserAndStoreArgs) (*model.Customer, error) {
+	customer := model.Customer{
+		ID:        ID,
+		Address:   input.Address,
+		Comment:   input.Comment,
+		Email:     input.Email,
+		Name:      input.Name,
+		Phone:     input.Phone,
+		Tin:       input.Tin,
+		Type:      input.Type,
+		Gender:    input.Gender,
+		Dob:       input.Dob,
+		StoreID:   args.StoreID,
+		CreatorID: &args.UserID,
+	}
+
+	if err := DB.Model(&model.Customer{}).Where(&model.Customer{ID: ID, StoreID: args.StoreID}).Updates(&customer).Error; err != nil {
+		return nil, err
+	}
+
+	return &customer, nil
 }
 
 func FindCustomers(DB *gorm.DB, storeID int) ([]*model.Customer, error) {

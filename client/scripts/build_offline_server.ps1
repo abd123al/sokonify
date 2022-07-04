@@ -13,6 +13,7 @@ cd..
 .\server\scripts\build_dll.ps1
 
 Set-Location $PSScriptRoot
+
 .\build_web.ps1 -destination "../apps/offline/build/windows/runner/Release/"
 
 Set-Location $PSScriptRoot
@@ -26,7 +27,7 @@ flutter build windows `
                     --split-debug-info=./build/app/outputs/symbols `
                     --release
 
-$build = 16
+$build = 18
 $path = [Environment]::GetFolderPath("Desktop")
 
 flutter pub run msix:create `

@@ -66,32 +66,61 @@ func TestPayment(t *testing.T) {
 		require.NotNil(t, err)
 	})
 
-	t.Run("FindPayments by store", func(t *testing.T) {
-		re := util.CreatePayment(DB, nil, false)
+	pay := func(Order bool) *util.CreatePaymentResult {
+		re := util.CreatePayment(DB, &util.CreatePaymentArgs{
+			StoreID:    store.ID,
+			StaffID:    user.ID,
+			CustomerID: &util.CreateCustomer(DB, store.ID).ID,
+		}, Order)
 
-		paymentType := model.PaymentTypeExpense
+		return &re
+	}
+
+	t.Run("FindPayments by store", func(t *testing.T) {
+		re := pay(false)
+		require.NotNil(t, re.Payment)
 
 		paymentsByCustomer, err := repository.FindPayments(DB, model.PaymentsArgs{
 			By:   model.PaymentsByStore,
 			Mode: model.FetchModeFull,
-			Type: &paymentType,
+			Type: model.PaymentTypeExpense,
 		}, re.StoreID)
 
 		require.Nil(t, err)
 		require.NotEmpty(t, paymentsByCustomer)
 	})
 
-	//t.Run("FindPayments by customer", func(t *testing.T) {
-	//	result := util.CreatePayment(DB, nil, true)
-	//
-	//	paymentsByCustomer, err := repository.FindPayments(DB, model.PaymentsArgs{
-	//		By:    model.PaymentsByCustomer,
-	//		Value: result.CustomerID,
-	//	})
-	//
-	//	require.Nil(t, err)
-	//	require.NotEmpty(t, paymentsByCustomer)
-	//})
+	t.Run("FindPayments by store with pagination", func(t *testing.T) {
+		re := pay(false)
+		_ = pay(false)
+
+		offset := 1
+		limit := 10
+
+		paymentsByCustomer, err := repository.FindPayments(DB, model.PaymentsArgs{
+			By:     model.PaymentsByStore,
+			Mode:   model.FetchModePagination,
+			Limit:  &limit,
+			Offset: &offset,
+			Type:   model.PaymentTypeExpense,
+		}, re.StoreID)
+
+		require.Nil(t, err)
+		require.NotEmpty(t, paymentsByCustomer)
+	})
+
+	t.Run("FindPayments by customer using FetchModeFull", func(t *testing.T) {
+		result := pay(true)
+
+		paymentsByCustomer, err := repository.FindPayments(DB, model.PaymentsArgs{
+			By:    model.PaymentsByCustomer,
+			Value: result.CustomerID,
+			Mode:  model.FetchModeFull,
+		}, result.StoreID)
+
+		require.Nil(t, err)
+		require.NotEmpty(t, paymentsByCustomer)
+	})
 
 	//t.Run("FindPayments by staff", func(t *testing.T) {
 	//	result := util.CreatePayment(DB, nil, false)
@@ -219,13 +248,15 @@ func TestPayment(t *testing.T) {
 	})
 
 	t.Run("CreateSale", func(t *testing.T) {
-		item := util.CreateItem(DB, nil, &store.ID)
+		item := util.CreateItem(DB, util.CreateItemArgs{
+			StoreID: store.ID,
+		})
 
 		payment, err := repository.CreateSalePayment(DB, model.SalesInput{
 			Items: []*model.OrderItemInput{
 				{
 					Quantity: item.Quantity,
-					Price:    item.SellingPrice,
+					Price:    item.Prices[0].Amount,
 					ItemID:   item.ID,
 				},
 			},
@@ -245,12 +276,27 @@ func TestPayment(t *testing.T) {
 
 		profit, err := repository.SumGrossProfit(DB, re.StoreID, model.StatsArgs{
 			Timeframe: &timeframe,
+			PricingID: re.PricingID,
 		})
 
+		//fmt.Printf("Profit %v\n", profit)
 		fmt.Printf("Profit %s\n", profit.Real)
 		fmt.Printf("Expected %s\n", profit.Expected)
 
 		require.Nil(t, err)
 		require.NotEmpty(t, profit)
+	})
+
+	t.Run("SumGrossProfit to return zero when nothing found", func(t *testing.T) {
+		timeframe := model.TimeframeTypeToday
+
+		profit, err := repository.SumGrossProfit(DB, store.ID, model.StatsArgs{
+			Timeframe: &timeframe,
+		})
+
+		require.Nil(t, err)
+		require.NotNil(t, profit)
+		//require.NotEmpty(t, profit[0].Real)
+		//require.NotEmpty(t, profit[0].Expected)
 	})
 }

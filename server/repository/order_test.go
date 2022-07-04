@@ -3,6 +3,7 @@ package repository_test
 import (
 	"github.com/stretchr/testify/require"
 	"mahesabu/graph/model"
+	"mahesabu/helpers"
 	"mahesabu/repository"
 	"mahesabu/util"
 	"testing"
@@ -12,7 +13,9 @@ func TestOrders(t *testing.T) {
 	DB := util.InitTestDB()
 	user := util.CreateUser(DB)
 	store := util.CreateStore(DB, &user.ID)
-	item := util.CreateItem(DB, nil, &store.ID)
+	item := util.CreateItem(DB, util.CreateItemArgs{
+		StoreID: store.ID,
+	})
 
 	t.Run("CreateOrder with sufficient quantity", func(t *testing.T) {
 		order, err := repository.CreateOrder(DB, user.ID, model.OrderInput{
@@ -20,7 +23,7 @@ func TestOrders(t *testing.T) {
 			Items: []*model.OrderItemInput{
 				{
 					Quantity: item.Quantity,
-					Price:    item.SellingPrice,
+					Price:    item.Prices[0].Amount,
 					ItemID:   item.ID,
 				},
 			},
@@ -36,7 +39,7 @@ func TestOrders(t *testing.T) {
 			Items: []*model.OrderItemInput{
 				{
 					Quantity: item.Quantity + 1,
-					Price:    item.SellingPrice,
+					Price:    item.Prices[0].Amount,
 					ItemID:   item.ID,
 				},
 			},
@@ -85,6 +88,38 @@ func TestOrders(t *testing.T) {
 	t.Run("FindOrderCustomerName", func(t *testing.T) {
 		orderResult := util.CreateOrder(DB, nil)
 		name, err := repository.FindOrderCustomerName(DB, orderResult.Order.ID)
+
+		require.Nil(t, err)
+		require.NotEmpty(t, name)
+	})
+
+	t.Run("EditOrder", func(t *testing.T) {
+		item2 := util.CreateItem(DB, util.CreateItemArgs{
+			StoreID: store.ID,
+		})
+
+		orderResult := util.CreateOrder(DB, nil)
+		Comment := "oooooooooooooooo"
+
+		name, err := repository.EditOrder(DB, orderResult.Order.ID, model.OrderInput{
+			Type:    model.OrderTypeSale,
+			Comment: &Comment,
+			Items: []*model.OrderItemInput{
+				{
+					Quantity: item.Quantity - 1,
+					Price:    item.Prices[0].Amount,
+					ItemID:   item.ID,
+				},
+				{
+					Quantity: item2.Quantity - 1,
+					Price:    item.Prices[0].Amount,
+					ItemID:   item2.ID,
+				},
+			},
+		}, helpers.UserAndStoreArgs{
+			UserID:  orderResult.StaffId,
+			StoreID: orderResult.IssuerID,
+		})
 
 		require.Nil(t, err)
 		require.NotEmpty(t, name)

@@ -9,6 +9,8 @@ export 'inventory/inventory.dart';
 export 'order/order.dart';
 export 'payment/payment.dart';
 export 'product/product.dart';
+export 'stats/stats_page.dart';
 export 'store/create_store_page.dart';
 export 'store/store.dart';
 export 'unit/unit.dart';
+export 'user/user.dart';

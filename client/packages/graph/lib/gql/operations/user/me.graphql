@@ -1,8 +1,5 @@
 query me{
     me {
-        id
-        name
-        email
-        createdAt
+        ...MeParts
     }
 }

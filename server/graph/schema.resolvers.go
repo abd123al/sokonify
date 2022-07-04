@@ -112,6 +112,14 @@ func (r *itemResolver) Unit(ctx context.Context, obj *model.Item) (*model.Unit, 
 	return repository.FindUnit(r.DB, obj.UnitID)
 }
 
+func (r *itemResolver) Categories(ctx context.Context, obj *model.Item) ([]*model.Category, error) {
+	return repository.FindProductCategories(r.DB, model.CategoryTypeSubcategory, obj.ID)
+}
+
+func (r *itemResolver) Prices(ctx context.Context, obj *model.Item) ([]*model.Price, error) {
+	return repository.FindPrices(r.DB, obj.ID)
+}
+
 func (r *mutationResolver) CreateBrand(ctx context.Context, input model.BrandInput) (*model.Brand, error) {
 	return repository.CreateBrand(r.DB, input, helpers.ForContext(ctx).UserID)
 }
@@ -124,7 +132,10 @@ func (r *mutationResolver) CreateCategory(ctx context.Context, input model.Categ
 }
 
 func (r *mutationResolver) CreateCustomer(ctx context.Context, input model.CustomerInput) (*model.Customer, error) {
-	return repository.CreateCustomer(r.DB, input, helpers.ForContext(ctx).StoreID)
+	return repository.CreateCustomer(r.DB, input, helpers.UserAndStoreArgs{
+		UserID:  helpers.ForContext(ctx).UserID,
+		StoreID: helpers.ForContext(ctx).StoreID,
+	})
 }
 
 func (r *mutationResolver) CreateExpense(ctx context.Context, input model.ExpenseInput) (*model.Expense, error) {
@@ -140,6 +151,11 @@ func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput
 
 func (r *mutationResolver) CreateOrder(ctx context.Context, input model.OrderInput) (*model.Order, error) {
 	return repository.CreateOrder(r.DB, helpers.ForContext(ctx).UserID, input, helpers.ForContext(ctx).StoreID)
+}
+
+func (r *mutationResolver) CreateOrderItem(ctx context.Context, id int, input model.OrderItemInput) (*model.OrderItem, error) {
+	//return repository.CreateOrderItems(r.DB, id, input)
+	return nil, nil
 }
 
 func (r *mutationResolver) CreateOrderPayment(ctx context.Context, input model.OrderPaymentInput) (*model.Payment, error) {
@@ -182,8 +198,8 @@ func (r *mutationResolver) CreateUnit(ctx context.Context, input model.UnitInput
 	})
 }
 
-func (r *mutationResolver) ChangePassword(ctx context.Context, input model.ChangePasswordInput) (*model.User, error) {
-	panic(fmt.Errorf("not implemented"))
+func (r *mutationResolver) ChangePassword(ctx context.Context, input model.ChangePasswordInput) (bool, error) {
+	return repository.ChangePassword(r.DB, helpers.ForContext(ctx).UserID, input)
 }
 
 func (r *mutationResolver) EditBrand(ctx context.Context, id int, input model.BrandInput) (*model.Brand, error) {
@@ -198,7 +214,10 @@ func (r *mutationResolver) EditCategory(ctx context.Context, id int, input model
 }
 
 func (r *mutationResolver) EditCustomer(ctx context.Context, id int, input model.CustomerInput) (*model.Customer, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.EditCustomer(r.DB, id, input, helpers.UserAndStoreArgs{
+		UserID:  helpers.ForContext(ctx).UserID,
+		StoreID: helpers.ForContext(ctx).StoreID,
+	})
 }
 
 func (r *mutationResolver) EditItem(ctx context.Context, id int, input model.ItemInput) (*model.Item, error) {
@@ -206,7 +225,14 @@ func (r *mutationResolver) EditItem(ctx context.Context, id int, input model.Ite
 }
 
 func (r *mutationResolver) EditOrder(ctx context.Context, id int, input model.OrderInput) (*model.Order, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.EditOrder(r.DB, id, input, helpers.UserAndStoreArgs{
+		UserID:  helpers.ForContext(ctx).UserID,
+		StoreID: helpers.ForContext(ctx).StoreID,
+	})
+}
+
+func (r *mutationResolver) EditOrderItem(ctx context.Context, id int, input model.OrderItemInput) (*model.OrderItem, error) {
+	return repository.EditOrderItem(r.DB, id, input)
 }
 
 func (r *mutationResolver) EditProduct(ctx context.Context, id int, input model.ProductInput) (*model.Product, error) {
@@ -214,6 +240,10 @@ func (r *mutationResolver) EditProduct(ctx context.Context, id int, input model.
 		UserID:  helpers.ForContext(ctx).UserID,
 		StoreID: helpers.ForContext(ctx).StoreID,
 	})
+}
+
+func (r *mutationResolver) EditProfile(ctx context.Context, input model.ProfileInput) (*model.User, error) {
+	return repository.EditProfile(r.DB, helpers.ForContext(ctx).UserID, input)
 }
 
 func (r *mutationResolver) EditStaff(ctx context.Context, id int, input model.StaffInput) (*model.Staff, error) {
@@ -233,6 +263,10 @@ func (r *mutationResolver) EditUnit(ctx context.Context, id int, input model.Uni
 
 func (r *mutationResolver) DeleteItem(ctx context.Context, id int) (*model.Item, error) {
 	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) DeleteOrderItem(ctx context.Context, orderID int, itemID int) (*model.OrderItem, error) {
+	return repository.DeleteOrderItem(r.DB, orderID, itemID)
 }
 
 func (r *mutationResolver) Ping(ctx context.Context) (string, error) {
@@ -272,6 +306,10 @@ func (r *orderResolver) TotalPrice(ctx context.Context, obj *model.Order) (*stri
 
 	total := totalPrice.String()
 	return &total, nil
+}
+
+func (r *orderResolver) Pricing(ctx context.Context, obj *model.Order) (*model.Category, error) {
+	return repository.FindCategory(r.DB, obj.PricingID)
 }
 
 func (r *orderResolver) Customer(ctx context.Context, obj *model.Order) (*model.Customer, error) {
@@ -377,6 +415,14 @@ func (r *permissionResolver) Role(ctx context.Context, obj *model.Permission) (*
 	panic(fmt.Errorf("not implemented"))
 }
 
+func (r *priceResolver) Creator(ctx context.Context, obj *model.Price) (*model.User, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *priceResolver) Category(ctx context.Context, obj *model.Price) (*model.Category, error) {
+	return repository.FindCategory(r.DB, obj.CategoryID)
+}
+
 func (r *productResolver) Store(ctx context.Context, obj *model.Product) (*model.Store, error) {
 	panic(fmt.Errorf("not implemented"))
 }
@@ -394,11 +440,19 @@ func (r *productResolver) Creator(ctx context.Context, obj *model.Product) (*mod
 	return nil, nil
 }
 
+func (r *productResolver) Categories(ctx context.Context, obj *model.Product) ([]*model.Category, error) {
+	return repository.FindProductCategories(r.DB, model.CategoryTypeCategory, obj.ID)
+}
+
 func (r *productCategoryResolver) Category(ctx context.Context, obj *model.ProductCategory) (*model.Category, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
 func (r *productCategoryResolver) Product(ctx context.Context, obj *model.ProductCategory) (*model.Product, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *productCategoryResolver) Item(ctx context.Context, obj *model.ProductCategory) (*model.Item, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
@@ -544,7 +598,7 @@ func (r *queryResolver) AverageDailySalesAmount(ctx context.Context, args model.
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) ItemsStats(ctx context.Context) (*model.ItemsStats, error) {
+func (r *queryResolver) ItemsStats(ctx context.Context) ([]*model.ItemsStats, error) {
 	return repository.SumItemsCost(r.DB, helpers.ForContext(ctx).StoreID)
 }
 
@@ -647,6 +701,9 @@ func (r *Resolver) Payment() generated.PaymentResolver { return &paymentResolver
 // Permission returns generated.PermissionResolver implementation.
 func (r *Resolver) Permission() generated.PermissionResolver { return &permissionResolver{r} }
 
+// Price returns generated.PriceResolver implementation.
+func (r *Resolver) Price() generated.PriceResolver { return &priceResolver{r} }
+
 // Product returns generated.ProductResolver implementation.
 func (r *Resolver) Product() generated.ProductResolver { return &productResolver{r} }
 
@@ -687,6 +744,7 @@ type mutationResolver struct{ *Resolver }
 type orderResolver struct{ *Resolver }
 type orderItemResolver struct{ *Resolver }
 type paymentResolver struct{ *Resolver }
+type priceResolver struct{ *Resolver }
 type permissionResolver struct{ *Resolver }
 type productResolver struct{ *Resolver }
 type productCategoryResolver struct{ *Resolver }
@@ -697,13 +755,3 @@ type storeResolver struct{ *Resolver }
 type subscriptionResolver struct{ *Resolver }
 type unitResolver struct{ *Resolver }
 type userResolver struct{ *Resolver }
-
-// !!! WARNING !!!
-// The code below was going to be deleted when updating resolvers. It has been copied here so you have
-// one last chance to move it out of harms way if you want. There are two reasons this happens:
-//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
-//    it when you're done.
-//  - You have helper methods in this file. Move them out to keep these resolver files clean.
-func (r *permissionResolver) Category(ctx context.Context, obj *model.Permission) (*model.Role, error) {
-	panic(fmt.Errorf("not implemented"))
-}

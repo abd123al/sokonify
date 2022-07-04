@@ -1,4 +1,5 @@
 fragment CategoryParts on Category {
     id
     name
+    type
 }

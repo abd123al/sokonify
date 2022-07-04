@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:graph/gql/generated/graphql_api.graphql.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../nav/nav.dart';
@@ -13,6 +14,7 @@ class SokonifyDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final children = <Widget>[
       UserBuilder(
+        loadingWidget: const SizedBox(),
         builder: (context, data) {
           return UserAccountsDrawerHeader(
             accountEmail: Text(data.email),
@@ -26,6 +28,7 @@ class SokonifyDrawer extends StatelessWidget {
         },
       ),
       StoreBuilder(
+        loadingWidget: const SizedBox(),
         noBuilder: (context) => const SizedBox(),
         builder: (context, _) {
           ///All these need someone to have store
@@ -72,7 +75,33 @@ class SokonifyDrawer extends StatelessWidget {
                 title: const Text('Product Categories'),
                 trailing: const Icon(Icons.category_outlined),
                 onTap: () {
-                  redirectTo(context, Routes.categories);
+                  redirectTo(
+                    context,
+                    Routes.categories,
+                    args: CategoryType.category,
+                  );
+                },
+              ),
+              ListTile(
+                title: const Text('Stock Categories'),
+                trailing: const Icon(Icons.category_outlined),
+                onTap: () {
+                  redirectTo(
+                    context,
+                    Routes.categories,
+                    args: CategoryType.subcategory,
+                  );
+                },
+              ),
+              ListTile(
+                title: const Text('Pricing Categories'),
+                trailing: const Icon(Icons.category_outlined),
+                onTap: () {
+                  redirectTo(
+                    context,
+                    Routes.categories,
+                    args: CategoryType.pricing,
+                  );
                 },
               ),
               ListTile(
@@ -91,13 +120,13 @@ class SokonifyDrawer extends StatelessWidget {
               ListTile(
                 title: const Text('Stats'),
                 trailing: const Icon(Icons.query_stats_outlined),
-                onTap: () {},
+                onTap: () => redirectTo(context, Routes.stats),
               ),
               const Divider(),
               ListTile(
                 title: const Text('Settings'),
-                trailing: const Icon(Icons.settings_outlined),
-                onTap: () {},
+                trailing: const Icon(Icons.settings),
+                onTap: () => redirectTo(context, Routes.settings),
               ),
             ],
           );

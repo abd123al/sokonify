@@ -36,6 +36,32 @@ func CreateStore(db *gorm.DB, UserID int, input model.StoreInput, Multistore boo
 				return er
 			}
 
+			var categories []string
+
+			if store.BusinessType == model.BusinessTypeBoth {
+				categories = append(categories, "Retail")
+				categories = append(categories, "Wholesale")
+			} else if store.BusinessType == model.BusinessTypeRetail {
+				categories = append(categories, "Retail")
+			} else if store.BusinessType == model.BusinessTypeWholesale {
+				categories = append(categories, "Wholesale")
+			}
+
+			//Create pricing categories
+			for _, c := range categories {
+				_, err := CreateCategory(tx, model.CategoryInput{
+					Name: c,
+					Type: model.CategoryTypePricing,
+				}, helpers.UserAndStoreArgs{
+					UserID:  UserID,
+					StoreID: store.ID,
+				})
+
+				if err != nil {
+					return err
+				}
+			}
+
 			_, err := CreateStaff(tx, model.StaffInput{
 				UserID: UserID,
 				RoleID: role.ID,

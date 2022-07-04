@@ -14,12 +14,14 @@ class UnitTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(
-        unit.name,
-        style: Theme.of(context).textTheme.headlineSmall,
+    return Card(
+      child: ListTile(
+        title: Text(
+          unit.name,
+          style: Theme.of(context).textTheme.headlineSmall,
+        ),
+        tileColor: color,
       ),
-      tileColor: color,
     );
   }
 }

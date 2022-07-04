@@ -140,6 +140,11 @@ class UniBlocProviderState extends State<UniBlocProvider> {
             ),
             BlocProvider(
               create: (context) {
+                return ExpensesListCubit(paymentRepository)..fetch();
+              },
+            ),
+            BlocProvider(
+              create: (context) {
                 return ExpensesCategoriesListCubit(expenseRepository)..fetch();
               },
             ),
@@ -163,6 +168,7 @@ class UniBlocProviderState extends State<UniBlocProvider> {
               RepositoryProvider(create: (context) => customerRepository),
               RepositoryProvider(create: (context) => paymentRepository),
               RepositoryProvider(create: (context) => expenseRepository),
+              RepositoryProvider(create: (context) => statsRepository),
             ],
             child: widget.child,
           ),

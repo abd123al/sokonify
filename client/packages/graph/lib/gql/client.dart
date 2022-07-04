@@ -9,6 +9,7 @@ import 'package:graph/gql/token_box.dart';
 import 'package:graph/ui/widgets/auth_wrapper_cubit.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hive/hive.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import '../utils/application.dart';
 import '../utils/consts.dart';
@@ -73,17 +74,17 @@ Future<GraphQLClient> graphQLClient({
   );
 
   if (kDebugMode) {
-    // dio.interceptors.add(
-    //   PrettyDioLogger(
-    //     requestBody: true,
-    //     responseBody: true,
-    //     requestHeader: true,
-    //     responseHeader: true,
-    //     error: true,
-    //     compact: true,
-    //     maxWidth: 90,
-    //   ),
-    // );
+    dio.interceptors.add(
+      PrettyDioLogger(
+        requestBody: true,
+        responseBody: true,
+        requestHeader: false,
+        responseHeader: false,
+        error: true,
+        compact: true,
+        maxWidth: 90,
+      ),
+    );
   }
 
   dio.interceptors.add(AuthInterceptor(box));

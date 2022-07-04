@@ -10,9 +10,8 @@ import (
 func CreateProduct(DB *gorm.DB, input model.ProductInput, args helpers.UserAndStoreArgs) (*model.Product, error) {
 	var brands []*model.Brand
 	var product *model.Product
-	var productCategories []*model.ProductCategory
 
-	err := DB.Transaction(func(tx *gorm.DB) error {
+	err := DB.Debug().Transaction(func(tx *gorm.DB) error {
 		for _, k := range input.Brands {
 			brand := model.Brand{
 				Manufacturer: k.Manufacturer,
@@ -34,30 +33,10 @@ func CreateProduct(DB *gorm.DB, input model.ProductInput, args helpers.UserAndSt
 			return err
 		}
 
-		//making sure ids are unique
-		categories := helpers.RemoveDuplicatedInt(input.Categories)
+		_, er := CreateProductCategories(tx, product.ID, model.CategoryTypeCategory, input.Categories, args.UserID)
 
-		for _, k := range categories {
-			// First checking if there is no previous relationship.
-			var cat *model.ProductCategory
-
-			//First() causes panic, so Find works here better
-			tx.Where(&model.ProductCategory{ProductID: product.ID, CategoryID: k}).Limit(1).Find(&cat)
-
-			if cat != nil {
-				ProductCategory := model.ProductCategory{
-					ProductID:  product.ID,
-					CategoryID: k,
-				}
-
-				productCategories = append(productCategories, &ProductCategory)
-			}
-		}
-
-		if len(productCategories) > 0 {
-			if err := tx.Create(&productCategories).Error; err != nil {
-				return err
-			}
+		if er != nil {
+			return er
 		}
 
 		return nil
@@ -81,6 +60,17 @@ func EditProduct(DB *gorm.DB, ID int, input model.ProductInput, args helpers.Use
 		}
 
 		if err := tx.Model(&product).Where(&model.Product{ID: ID, StoreID: &args.StoreID}).Updates(&product).Error; err != nil {
+			return err
+		}
+
+		_, err := DeleteProductCategories(tx, ID, model.CategoryTypeCategory)
+		if err != nil {
+			return err
+		}
+
+		_, err = CreateProductCategories(tx, ID, model.CategoryTypeCategory, input.Categories, args.UserID)
+
+		if err != nil {
 			return err
 		}
 

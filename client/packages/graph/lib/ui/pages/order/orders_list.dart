@@ -16,11 +16,14 @@ class OrdersListScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        children: const [
+        children:  [
           Topper(
             label: "Today Orders",
+            onPressed: (){
+              redirectTo(context, Routes.orders);
+            },
           ),
-          Expanded(
+          const Expanded(
             child: _OrdersList(),
           ),
         ],

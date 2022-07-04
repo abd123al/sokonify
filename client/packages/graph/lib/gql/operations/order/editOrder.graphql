@@ -1,0 +1,5 @@
+mutation editOrder($id: ID!,$input:OrderInput!) {
+    editOrder(id: $id,input: $input) {
+        ...OrderParts
+    }
+}

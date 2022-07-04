@@ -30,6 +30,6 @@ func FindUnits(db *gorm.DB, StoreID int) ([]*model.Unit, error) {
 
 func FindUnit(db *gorm.DB, ID int) (*model.Unit, error) {
 	var unit *model.Unit
-	result := db.Where(&model.Unit{ID: ID}).First(&unit)
+	result := db.Where(&model.Unit{ID: ID}).Find(&unit)
 	return unit, result.Error
 }

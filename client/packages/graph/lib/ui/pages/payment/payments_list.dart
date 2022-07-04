@@ -2,11 +2,12 @@ import 'package:blocitory/blocitory.dart';
 import 'package:flutter/material.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
+import '../../../nav/nav.dart';
 import '../../widgets/widgets.dart';
 import 'payment_tile.dart';
 import 'payments_list_cubit.dart';
 
-class PaymentsList extends StatelessWidget {
+class PaymentsList<T extends ParentPaymentsListCubit> extends StatelessWidget {
   const PaymentsList({
     Key? key,
     this.type = PaymentType.order,
@@ -18,15 +19,14 @@ class PaymentsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return QueryBuilder<ResourceListData<Payments$Query$Payment>,
-        PaymentsListCubit>(
+    return QueryBuilder<ResourceListData<Payments$Query$Payment>, T>(
       retry: (cubit) => cubit.fetch(),
       builder: (context, data, _) {
         word() {
           if (type == PaymentType.order) {
-            return "Payments";
+            return "Payment";
           }
-          return "Expenses";
+          return "Expense";
         }
 
         final payments = data.items.where((e) => e.type == type).toList();
@@ -36,7 +36,14 @@ class PaymentsList extends StatelessWidget {
           children: [
             topper,
             Topper(
-              label: "Today ${word()}",
+              label: "Today ${word()}s",
+              onPressed: () {
+                redirectTo(
+                  context,
+                  "${Routes.payments}/${word()}s",
+                  args: type,
+                );
+              },
             ),
             HighList<Payments$Query$Payment>(
               shrinkWrap: true,
@@ -46,6 +53,7 @@ class PaymentsList extends StatelessWidget {
                 return PaymentTile(
                   payment: store,
                   color: color,
+                  word: word(),
                 );
               },
               items: data.copyWith(

@@ -1,4 +1,5 @@
 import 'package:blocitory/blocitory.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -11,13 +12,24 @@ import 'items_stats_cubit.dart';
 class InventoryStats extends StatelessWidget {
   const InventoryStats({
     Key? key,
+    required this.category,
   }) : super(key: key);
+
+  final Categories$Query$Category category;
 
   @override
   Widget build(BuildContext context) {
-    return QueryBuilder<ItemsStats$Query$ItemsStats, ItemsStatsCubit>(
+    return QueryBuilder<List<ItemsStats$Query$ItemsStats>, ItemsStatsCubit>(
       retry: (cubit) => cubit.fetch(),
-      builder: (context, data, _) {
+      builder: (context, res, _) {
+        final data = res.firstWhereOrNull(
+          (e) => e.categoryId == category.id,
+        );
+
+        if (data == null) {
+          return const SizedBox();
+        }
+
         final List<StatTile> children = [
           StatTile(
             title: 'Total Cost',
@@ -58,8 +70,10 @@ class InventoryStats extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           children: [
-            const Topper(
-              label: "Inventory",
+            Topper(
+              label: "${category.name} Inventory",
+              onPressed: (){},
+              actionLabel: "Actions",
             ),
             ScreenTypeLayout.builder(
               mobile: (BuildContext context) => OrientationLayoutBuilder(

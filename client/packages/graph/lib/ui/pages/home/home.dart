@@ -9,7 +9,6 @@ import '../pages.dart';
 import 'customers.dart';
 import 'drawer.dart';
 import 'expense.dart';
-import 'inventory.dart';
 import 'pos.dart';
 
 class HomePage extends StatefulWidget {
@@ -109,19 +108,22 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildBody() {
+    final List<Widget> list = [
+      const POS(),
+      const OrdersListScaffold(),
+      const ItemsList(),
+      const Expenses(),
+      const Customers(),
+    ];
+
     return SizedBox.expand(
       child: PageView(
         controller: _pageController,
+        physics: const NeverScrollableScrollPhysics(),
         onPageChanged: (index) {
           setState(() => _currentIndex = index);
         },
-        children: const <Widget>[
-          POS(),
-          OrdersListScaffold(),
-          Inventory(),
-          Expenses(),
-          Customers(),
-        ],
+        children: list,
       ),
     );
   }

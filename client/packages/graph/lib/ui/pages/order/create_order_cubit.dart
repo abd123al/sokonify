@@ -15,4 +15,15 @@ class CreateOrderCubit extends ResourceCubit<CreateOrder$Mutation$Order> {
       },
     );
   }
+
+
+  edit(EditOrderArguments args) {
+    super.execute(
+      executor: () => _repository.editOrder(args),
+      parser: (r) {
+        final result = EditOrder$Mutation.fromJson(r).editOrder;
+        return CreateOrder$Mutation$Order.fromJson(result.toJson());
+      },
+    );
+  }
 }

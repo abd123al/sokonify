@@ -10,6 +10,7 @@ require (
 	github.com/go-chi/jwtauth v1.2.0
 	github.com/go-playground/validator/v10 v10.11.0
 	github.com/lestrrat-go/jwx v1.1.0
+	github.com/rs/cors v1.8.2
 	github.com/shopspring/decimal v1.3.1
 	github.com/stretchr/testify v1.7.1
 	github.com/vektah/gqlparser/v2 v2.4.0

@@ -13,26 +13,36 @@ class Routes {
   static String createCustomPayment = "/createCustomPayment";
   static String createItem = "/createItem";
   static String createOrder = "/createOrder";
+  static String createOrderPayment = "/createOrderPayment";
   static String createProduct = "/createProduct";
   static String createSales = "/createSales";
   static String createStore = "/createStore";
   static String createUnit = "/createUnit";
 
+  static String changePassword = "/changePassword";
   static String editCategory = "/editCategory";
+  static String editCustomer = "/editCustomer";
   static String editItem = "/editItem";
+  static String editOrder = "/editOrder";
   static String editProduct = "/editProduct";
+  static String editProfile = "/editProfile";
   static String editStore = "/editStore";
 
   static String brands = "/brands";
   static String categories = "/categories";
   static String category = "/category";
+  static String customer = "/customer";
   static String expenses = "/expenses";
   static String item = "/item";
   static String gains = "/gains";
   static String order = "/order";
+  static String orders = "/orders";
   static String payment = "/payment";
+  static String payments = "/payments";
   static String products = "/products";
   static String product = "/product";
+  static String settings = "/settings";
+  static String stats = "/stats";
   static String store = "/store";
   static String units = "/units";
 
@@ -111,6 +121,12 @@ class Routes {
     );
 
     router.define(
+      "$createOrderPayment/:orderId/:amount",
+      handler: createPaymentPageRouterHandler,
+      transitionType: TransitionType.nativeModal,
+    );
+
+    router.define(
       createProduct,
       handler: createProductRouterHandler,
       transitionType: TransitionType.materialFullScreenDialog,
@@ -129,8 +145,20 @@ class Routes {
     );
 
     router.define(
+      changePassword,
+      handler: changePassPageRouterHandler,
+      transitionType: TransitionType.materialFullScreenDialog,
+    );
+
+    router.define(
       "$editCategory/:id",
       handler: editCategoryPageRouterHandler,
+      transitionType: TransitionType.nativeModal,
+    );
+
+    router.define(
+      "$editCustomer/:id",
+      handler: editCustomerPageRouterHandler,
       transitionType: TransitionType.nativeModal,
     );
 
@@ -141,8 +169,20 @@ class Routes {
     );
 
     router.define(
+      "$editOrder/:id",
+      handler: editOrderPageRouterHandler,
+      transitionType: TransitionType.nativeModal,
+    );
+
+    router.define(
       "$editProduct/:id",
       handler: editProductPageRouterHandler,
+      transitionType: TransitionType.nativeModal,
+    );
+
+    router.define(
+      editProfile,
+      handler: editUserPageRouterHandler,
       transitionType: TransitionType.nativeModal,
     );
 
@@ -177,13 +217,19 @@ class Routes {
     );
 
     router.define(
+      "$customer/:id",
+      handler: customerPageRouterHandler,
+      transitionType: TransitionType.inFromLeft,
+    );
+
+    router.define(
       "$item/:id",
       handler: itemPageRouterHandler,
       transitionType: TransitionType.inFromLeft,
     );
 
     router.define(
-      "$payment/:id",
+      "$payment/:id/:word",
       handler: paymentPageRouterHandler,
       transitionType: TransitionType.inFromLeft,
     );
@@ -207,8 +253,32 @@ class Routes {
     );
 
     router.define(
+      stats,
+      handler: statsPageRouterHandler,
+      transitionType: TransitionType.inFromLeft,
+    );
+
+    router.define(
       store,
       handler: storePagePageRouterHandler,
+      transitionType: TransitionType.inFromLeft,
+    );
+
+    router.define(
+      settings,
+      handler: settingsPageRouterHandler,
+      transitionType: TransitionType.inFromLeft,
+    );
+
+    router.define(
+      orders,
+      handler: ordersPageRouterHandler,
+      transitionType: TransitionType.inFromLeft,
+    );
+
+    router.define(
+      "$payments/:word",
+      handler: paymentsPageRouterHandler,
       transitionType: TransitionType.inFromLeft,
     );
 

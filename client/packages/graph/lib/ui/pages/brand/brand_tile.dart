@@ -16,13 +16,15 @@ class BrandTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
-        return ListTile(
-          tileColor: color,
-          title: Text(
-            brand.name,
-            overflow: TextOverflow.ellipsis,
+        return Card(
+          child: ListTile(
+            tileColor: color,
+            title: Text(
+              brand.name,
+              style: Theme.of(context).textTheme.titleLarge,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
-          dense: true,
         );
       },
     );
