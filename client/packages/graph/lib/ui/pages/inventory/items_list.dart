@@ -90,7 +90,6 @@ class ItemsList extends StatelessWidget {
               args: cat,
             ),
             tooltip: 'Add',
-            backgroundColor: Colors.teal,
             icon: const Icon(Icons.add),
             label: const Text("Add Stock"),
           ),

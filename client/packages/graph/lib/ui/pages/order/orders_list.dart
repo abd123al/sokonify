@@ -32,7 +32,6 @@ class OrdersListScaffold extends StatelessWidget {
         onPressed: () => redirectTo(context, Routes.createOrder),
         tooltip: 'Add',
         icon: const Icon(Icons.add),
-        backgroundColor: Colors.green,
         label: const Text("New Order"),
       ),
     );

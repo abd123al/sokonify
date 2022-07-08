@@ -17,7 +17,6 @@ class POS extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => redirectTo(context, Routes.createSales),
         icon: const Icon(Icons.add),
-        backgroundColor: Colors.blue,
         label: const Text("Track Sales"),
       ),
 

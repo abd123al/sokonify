@@ -18,7 +18,6 @@ class Expenses extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => redirectTo(context, Routes.createExpensePayment),
         icon: const Icon(Icons.add),
-        backgroundColor: Colors.blueGrey,
         label: const Text("Track Expense"),
       ),
     );
