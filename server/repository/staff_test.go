@@ -13,10 +13,7 @@ func TestStaff(t *testing.T) {
 	DB := util.InitTestDB()
 	UserID := util.CreateUser(DB).ID
 	StoreID := util.CreateStore(DB, nil).ID
-	RoleID := util.CreateRole(DB, helpers.UserAndStoreArgs{
-		UserID:  UserID,
-		StoreID: StoreID,
-	}).ID
+	RoleID := util.CreateCategory(DB, StoreID, model.CategoryTypeRole).ID
 
 	t.Run("CreateStaff", func(t *testing.T) {
 		fn := func() (*model.Staff, error) {
@@ -53,8 +50,8 @@ func TestStaff(t *testing.T) {
 		result, err := repository.FindDefaultStoreAndRole(DB, UserID)
 
 		require.Nil(t, err)
-		require.Equal(t, staff.StoreID, result.StoreID)
-		require.Equal(t, staff.Default, true)
+		require.Equal(t, StoreID, result.StoreID)
+		require.Equal(t, staff.Staff.Default, true)
 	})
 
 	t.Run("FindDefaultStoreAndRole with no store", func(t *testing.T) {
@@ -80,7 +77,8 @@ func TestStaff(t *testing.T) {
 		})
 
 		require.Nil(t, err)
-		require.Equal(t, staff.StoreID, result.StoreID)
+		require.NotEmpty(t, staff.Staff.ID)
+		require.Equal(t, StoreID, result.StoreID)
 	})
 
 	t.Run("FindStoreAndRole with non staff", func(t *testing.T) {
@@ -106,8 +104,8 @@ func TestStaff(t *testing.T) {
 		result, err := repository.FindDefaultStore(DB, UserID)
 
 		require.Nil(t, err)
-		require.Equal(t, staff.StoreID, result.ID)
-		require.Equal(t, staff.Default, true)
+		require.Equal(t, StoreID, result.ID)
+		require.Equal(t, staff.Staff.Default, true)
 	})
 
 	t.Run("FindDefaultStore with no store", func(t *testing.T) {

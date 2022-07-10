@@ -90,7 +90,7 @@ func TestUser(t *testing.T) {
 
 		payload, err := repository.SwitchStore(DB, helpers.UserAndStoreArgs{
 			StoreID: staff.StoreID,
-			UserID:  staff.UserID,
+			UserID:  staff.Staff.UserID,
 		})
 
 		require.NotNil(t, payload.AccessToken)
@@ -115,7 +115,7 @@ func TestUser(t *testing.T) {
 	t.Run("FindName", func(t *testing.T) {
 		staff := util.CreateStaff(DB, nil)
 
-		name, err := repository.FindName(DB, staff.UserID)
+		name, err := repository.FindName(DB, staff.Staff.UserID)
 
 		require.Nil(t, err)
 		require.NotEmpty(t, name)

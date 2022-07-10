@@ -407,11 +407,15 @@ func (r *paymentResolver) OrderItems(ctx context.Context, obj *model.Payment) ([
 	return nil, nil
 }
 
+func (r *permissionResolver) Pricing(ctx context.Context, obj *model.Permission) (*model.Category, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *permissionResolver) Creator(ctx context.Context, obj *model.Permission) (*model.User, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *permissionResolver) Role(ctx context.Context, obj *model.Permission) (*model.Role, error) {
+func (r *permissionResolver) Role(ctx context.Context, obj *model.Permission) (*model.Category, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
@@ -602,23 +606,11 @@ func (r *queryResolver) ItemsStats(ctx context.Context) ([]*model.ItemsStats, er
 	return repository.SumItemsCost(r.DB, helpers.ForContext(ctx).StoreID)
 }
 
-func (r *roleResolver) Creator(ctx context.Context, obj *model.Role) (*model.User, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
-func (r *roleResolver) Store(ctx context.Context, obj *model.Role) (*model.Store, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
-func (r *staffResolver) Role(ctx context.Context, obj *model.Staff) (*model.Role, error) {
+func (r *staffResolver) Role(ctx context.Context, obj *model.Staff) (*model.Category, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
 func (r *staffResolver) User(ctx context.Context, obj *model.Staff) (*model.User, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
-func (r *staffResolver) Store(ctx context.Context, obj *model.Staff) (*model.Store, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
@@ -715,9 +707,6 @@ func (r *Resolver) ProductCategory() generated.ProductCategoryResolver {
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
-// Role returns generated.RoleResolver implementation.
-func (r *Resolver) Role() generated.RoleResolver { return &roleResolver{r} }
-
 // Staff returns generated.StaffResolver implementation.
 func (r *Resolver) Staff() generated.StaffResolver { return &staffResolver{r} }
 
@@ -744,14 +733,23 @@ type mutationResolver struct{ *Resolver }
 type orderResolver struct{ *Resolver }
 type orderItemResolver struct{ *Resolver }
 type paymentResolver struct{ *Resolver }
-type priceResolver struct{ *Resolver }
 type permissionResolver struct{ *Resolver }
+type priceResolver struct{ *Resolver }
 type productResolver struct{ *Resolver }
 type productCategoryResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
-type roleResolver struct{ *Resolver }
 type staffResolver struct{ *Resolver }
 type storeResolver struct{ *Resolver }
 type subscriptionResolver struct{ *Resolver }
 type unitResolver struct{ *Resolver }
 type userResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//    it when you're done.
+//  - You have helper methods in this file. Move them out to keep these resolver files clean.
+func (r *permissionResolver) Category(ctx context.Context, obj *model.Permission) (*model.Category, error) {
+	panic(fmt.Errorf("not implemented"))
+}

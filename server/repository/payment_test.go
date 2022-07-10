@@ -153,7 +153,7 @@ func TestPayment(t *testing.T) {
 			for i < length+1 {
 				result := util.CreatePayment(DB, &util.CreatePaymentArgs{
 					StoreID:    staff.StoreID,
-					StaffID:    staff.UserID,
+					StaffID:    staff.Staff.UserID,
 					CustomerID: &customer.ID,
 				}, i%2 == 0)
 

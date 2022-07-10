@@ -83,8 +83,7 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 		&model.ProductCategory{},
 		&model.Brand{},
 		&model.Unit{},
-		 &model.Role{},
-		 &model.Permission{},
+		&model.Permission{},
 	); err != nil {
 		panic(fmt.Sprintf("failed to auto migrate with error: %s", err.Error()))
 	}

@@ -25,17 +25,6 @@ func CreateStore(db *gorm.DB, UserID int, input model.StoreInput, Multistore boo
 				return err
 			}
 
-			role, er := CreateRole(db, model.RoleInput{
-				Name: "Admins",
-			}, helpers.UserAndStoreArgs{
-				UserID:  UserID,
-				StoreID: store.ID,
-			})
-
-			if er != nil {
-				return er
-			}
-
 			var categories []string
 
 			if store.BusinessType == model.BusinessTypeBoth {
@@ -60,18 +49,6 @@ func CreateStore(db *gorm.DB, UserID int, input model.StoreInput, Multistore boo
 				if err != nil {
 					return err
 				}
-			}
-
-			_, err := CreateStaff(tx, model.StaffInput{
-				UserID: UserID,
-				RoleID: role.ID,
-			}, helpers.UserAndStoreArgs{
-				UserID:  UserID,
-				StoreID: store.ID,
-			})
-
-			if err != nil {
-				return err
 			}
 
 			return nil

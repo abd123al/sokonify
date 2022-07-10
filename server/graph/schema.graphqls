@@ -152,6 +152,7 @@ enum CategoryType {
     category #default
     subcategory
     pricing
+    role
 }
 
 
@@ -474,8 +475,6 @@ enum PermissionType {
     view_stats
 }
 
-# Even suppliers/customers can be termed as staffs
-# todo we should allow specifying name here may be for handling customers
 type Staff implements Gorm {
     id: ID! @goTag(key: "gorm", value: "primaryKey")
 
@@ -487,14 +486,10 @@ type Staff implements Gorm {
     default: Boolean! @goTag(key: "gorm", value: "type:boolean")
 
     roleId: Int!
-    role: Role! @goTag(key: "gorm", value: "foreignKey:RoleID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
+    role: Category! @goTag(key: "gorm", value: "foreignKey:RoleID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
 
     userId: Int!
     user: User! @goTag(key: "gorm", value: "foreignKey:UserID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
-
-    #todo remove this role is enough...
-    storeId: Int!
-    store: Store! @goTag(key: "gorm", value: "foreignKey:StoreID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
 
     creatorId: Int
     creator: User @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
@@ -750,28 +745,12 @@ input StatsArgs {
     pricingID: ID
 }
 
-type Role implements Gorm {
-    id:ID! @goTag(key: "gorm", value: "primaryKey;")
-
-    createdAt:Time!
-    updatedAt:Time!
-    deletedAt:Time
-
-    name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(50);default:null")
-    description: String @goTag(key: "gorm", value: "type:varchar(250);default:null")
-
-    creatorId: Int!
-    creator: User! @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
-
-    storeId: Int!
-    store: Store! @goTag(key: "gorm", value:  "foreignKey:StoreID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
-}
-
 input RoleInput {
     name: String!
     description: String
 }
 
+# This will determine what access can user have between pricing and permissions
 type Permission implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey;")
 
@@ -779,17 +758,22 @@ type Permission implements Gorm {
     updatedAt:Time!
     deletedAt:Time
 
-    permission: PermissionType! @goTag(key: "gorm", value: "type:varchar(250);default:null")
+    permission: PermissionType @goTag(key: "gorm", value: "type:varchar(250);default:null")
+
+    pricingId: Int
+    pricing: Category @goTag(key: "gorm", value:  "foreignKey:PricingID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
 
     creatorId: Int!
     creator: User! @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
 
+    # This is something like Accountants/Managers/
     roleId: Int!
-    role: Role! @goTag(key: "gorm", value:  "foreignKey:RoleID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
+    role: Category! @goTag(key: "gorm", value:  "foreignKey:RoleID;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
 }
 
 input PermissionInput {
-    permission: PermissionType!
+    permission: PermissionType
+    pricingId: ID
     roleId: ID!
 }
 

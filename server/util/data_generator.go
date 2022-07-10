@@ -48,23 +48,17 @@ func CreateStore(DB *gorm.DB, UserID *int) *model.Store {
 	return store
 }
 
-func CreateRole(DB *gorm.DB, args helpers.UserAndStoreArgs) *model.Role {
-	role, _ := repository.CreateRole(DB, model.RoleInput{
-		Name: "Admins",
-	}, helpers.UserAndStoreArgs{
-		UserID:  args.UserID,
-		StoreID: args.StoreID,
-	})
-
-	return role
-}
-
 type CreateStaffArgs struct {
 	UserID  int
 	StoreID int
 }
 
-func CreateStaff(DB *gorm.DB, Args *CreateStaffArgs) *model.Staff {
+type CreateStaffResult struct {
+	StoreID int
+	Staff   *model.Staff
+}
+
+func CreateStaff(DB *gorm.DB, Args *CreateStaffArgs) *CreateStaffResult {
 	var UserID int
 	var StoreID int
 
@@ -76,10 +70,7 @@ func CreateStaff(DB *gorm.DB, Args *CreateStaffArgs) *model.Staff {
 		StoreID = CreateStore(DB, nil).ID
 	}
 
-	role := CreateRole(DB, helpers.UserAndStoreArgs{
-		UserID:  UserID,
-		StoreID: StoreID,
-	})
+	role := CreateCategory(DB, StoreID, model.CategoryTypeRole)
 
 	staff, _ := repository.CreateStaff(DB, model.StaffInput{
 		UserID: UserID,
@@ -89,7 +80,10 @@ func CreateStaff(DB *gorm.DB, Args *CreateStaffArgs) *model.Staff {
 		StoreID: StoreID,
 	})
 
-	return staff
+	return &CreateStaffResult{
+		Staff:   staff,
+		StoreID: StoreID,
+	}
 }
 
 func CreateCategory(DB *gorm.DB, StoreID int, categoryType model.CategoryType) *model.Category {
@@ -306,13 +300,13 @@ func CreatePayment(DB *gorm.DB, Args *CreatePaymentArgs, Order bool) CreatePayme
 	var payment *model.Payment
 
 	if Args == nil {
-		StaffID = CreateStaff(DB, nil).UserID //Remember we use userId mostly and not staff's ID
+		StaffID = CreateStaff(DB, nil).Staff.UserID //Remember we use userId mostly and not staff's ID
 		StoreID = CreateStore(DB, nil).ID
 
 		_ = CreateStaff(DB, &CreateStaffArgs{
 			StoreID: StoreID,
 			UserID:  StaffID,
-		}).ID
+		}).Staff.ID
 		CustomerID = &CreateCustomer(DB, StoreID).ID
 	} else {
 		StoreID = Args.StoreID
