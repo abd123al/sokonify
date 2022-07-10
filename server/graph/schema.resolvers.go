@@ -37,6 +37,10 @@ func (r *authPayloadResolver) Store(ctx context.Context, obj *model.AuthPayload)
 	return repository.FindDefaultStore(r.DB, helpers.ForContext(ctx).UserID)
 }
 
+func (r *authPayloadResolver) Permissions(ctx context.Context, obj *model.AuthPayload) ([]*model.Permission, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *brandResolver) Product(ctx context.Context, obj *model.Brand) (*model.Product, error) {
 	panic(fmt.Errorf("not implemented"))
 }

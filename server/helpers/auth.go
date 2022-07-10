@@ -8,12 +8,16 @@ import (
 )
 
 type FindDefaultStoreAndRoleResult struct {
-	StoreID int
-	Role    model.StaffRole
+	StoreID     int
+	Permissions []*model.Permission
 }
 
 func GenerateAuthToken(UserID int, args *FindDefaultStoreAndRoleResult) string {
 	var myMap map[string]interface{}
+	//This is used to allow access to operations
+	var permissions []string
+	//This is used to allow selling items according to some kind of pricing.
+	var prices []int
 
 	payload := model.AuthParams{
 		UserID: UserID,
@@ -21,7 +25,22 @@ func GenerateAuthToken(UserID int, args *FindDefaultStoreAndRoleResult) string {
 
 	if args != nil {
 		payload.StoreID = args.StoreID
-		payload.Role = args.Role
+
+		if args.Permissions != nil {
+			for _, p := range args.Permissions {
+				if p.Permission != nil {
+					str := p.Permission.String()
+					permissions = append(permissions, str)
+				}
+
+				if p.PricingID != nil {
+					prices = append(prices, *p.PricingID)
+				}
+			}
+
+			payload.Permissions = permissions
+			payload.Prices = prices
+		}
 	}
 
 	data, _ := json.Marshal(payload)
@@ -40,25 +59,27 @@ func GenerateAuthToken(UserID int, args *FindDefaultStoreAndRoleResult) string {
 func ForContext(ctx context.Context) *model.AuthParams {
 	_, claims, _ := jwtauth.FromContext(ctx)
 
+	return ExtractAuthParams(claims)
+}
+
+func ExtractAuthParams(claims map[string]interface{}) *model.AuthParams {
+	var permissions []string
+	var prices []int
+
 	userId := int(claims["userId"].(float64))
 	StoreID := int(claims["storeId"].(float64))
-	roleStr := claims["role"].(string)
-
-	var Role = model.StaffRoleStaff //Default since without StoreId it is still useless.
-
-	if len(roleStr) > 0 {
-		for _, role := range model.AllStaffRole {
-			if role.String() == roleStr {
-				Role = role
-				break
-			}
-		}
+	for _, s := range claims["permissions"].([]interface{}) {
+		permissions = append(permissions, s.(string))
+	}
+	for _, s := range claims["prices"].([]interface{}) {
+		prices = append(prices, int(s.(float64)))
 	}
 
 	params := model.AuthParams{
-		UserID:  userId,
-		StoreID: StoreID,
-		Role:    Role,
+		UserID:      userId,
+		StoreID:     StoreID,
+		Permissions: permissions,
+		Prices:      prices,
 	}
 
 	return &params

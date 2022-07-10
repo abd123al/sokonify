@@ -10,14 +10,30 @@ import (
 
 func TestGenerateAuthToken(t *testing.T) {
 	t.Run("GenerateAuthToken with store", func(t *testing.T) {
-		result := helpers.GenerateAuthToken(1, &helpers.FindDefaultStoreAndRoleResult{
-			StoreID: 1,
-			Role:    model.StaffRoleOwner,
+		perm := model.PermissionTypeCreateOrder
+		pricingId := 1
+
+		token := helpers.GenerateAuthToken(1, &helpers.FindDefaultStoreAndRoleResult{
+			StoreID: 2,
+			Permissions: []*model.Permission{
+				{
+					ID:         1,
+					Permission: &perm,
+				},
+				{
+					ID:        2,
+					PricingID: &pricingId,
+				},
+			},
 		})
 
-		fmt.Printf("%s\n\n", result)
+		fmt.Printf("token: %s\n\n", token)
+		decoded, _ := helpers.TokenAuth.Decode(token)
 
-		require.NotNil(t, result)
+		params := helpers.ExtractAuthParams(decoded.PrivateClaims())
+		fmt.Printf("%v\n\n", params)
+
+		require.NotNil(t, token)
 	})
 
 	t.Run("GenerateAuthToken with no store", func(t *testing.T) {

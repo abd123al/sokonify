@@ -7,15 +7,6 @@ import (
 	"mahesabu/helpers"
 )
 
-func contains(s []*model.OrderItem, e int) bool {
-	for _, a := range s {
-		if a.ItemID == e {
-			return true
-		}
-	}
-	return false
-}
-
 func CreateOrder(DB *gorm.DB, UserId int, input model.OrderInput, StoreID int) (*model.Order, error) {
 	var items []*model.OrderItem
 

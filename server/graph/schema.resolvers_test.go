@@ -40,7 +40,6 @@ func TestResolvers(t *testing.T) {
 	router := util.ConfigureGraphql(DB, true, false)
 	token := helpers.GenerateAuthToken(user.ID, &helpers.FindDefaultStoreAndRoleResult{
 		StoreID: store.ID,
-		Role:    model.StaffRoleOwner,
 	})
 	c := client.New(router, client.AddHeader("Authorization", fmt.Sprintf("Bearer %s", token)))
 
@@ -108,7 +107,6 @@ func TestResolvers(t *testing.T) {
 
 		input := model.StaffInput{
 			UserID: user.ID,
-			Role:   model.StaffRoleStaff,
 		}
 
 		c.MustPost(`
@@ -414,7 +412,7 @@ func TestResolvers(t *testing.T) {
 					id
 				  }
 				}
-			`, &resp, client.Var("value", staff.UserID))
+			`, &resp, client.Var("value", staff.Staff.UserID))
 
 		require.GreaterOrEqual(t, len(resp.Orders), 1)
 

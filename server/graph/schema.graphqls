@@ -135,12 +135,14 @@ type AuthPayload {
     user: User! @goField(forceResolver: true)
     # This returns the default store todo remove it it's just confusing
     store: Store @goField(forceResolver: true)
+    permissions: [Permission!] @goField(forceResolver: true)
 }
 
 type AuthParams {
     userId: Int!
     storeId: Int! #ensure 0 is not used
-    role : StaffRole!
+    permissions : [String!]!
+    prices : [ID!]! #if can sell they need this thing here
 }
 
 input ChangePasswordInput {
@@ -818,7 +820,6 @@ type ItemsStats {
     categoryId : ID!
 }
 
-#todo remove storeId everywhere and use JWT for that.
 type Query {
     admin(id:ID!): Admin!
     admins: [Admin!]!
@@ -861,38 +862,38 @@ type Query {
 }
 
 type Mutation {
-    createBrand(input: BrandInput!): Brand! @isAuthenticated @hasRole(role: owner)
-    createCategory(input: CategoryInput!): Category! @isAuthenticated @hasRole(role: owner)
-    createCustomer(input: CustomerInput!): Customer! @isAuthenticated  @hasRole(role: staff)
-    createExpense(input: ExpenseInput!): Expense! @isAuthenticated  @hasRole(role: owner)
-    createItem(input: ItemInput!): Item! @isAuthenticated  @hasRole(role: owner)
-    createOrder(input: OrderInput!): Order! @isAuthenticated @hasRole(role: staff)
-    createOrderItem(id:ID!,input: OrderItemInput!): OrderItem! @isAuthenticated @hasRole(role: staff)
-    createOrderPayment(input: OrderPaymentInput!): Payment! @isAuthenticated  @hasRole(role: staff)
-    createExpensePayment(input: ExpensePaymentInput!): Payment! @isAuthenticated  @hasRole(role: staff)
-    createProduct(input: ProductInput!): Product! @isAuthenticated  @hasRole(role: owner)
-    createSales(input: SalesInput!): Payment! @isAuthenticated  @hasRole(role: staff)
-    createStaff(input: StaffInput!): Staff! @isAuthenticated  @hasRole(role: owner)
+    createBrand(input: BrandInput!): Brand! @isAuthenticated @hasPermission(permission: create_order)
+    createCategory(input: CategoryInput!): Category! @isAuthenticated @hasPermission(permission: create_order)
+    createCustomer(input: CustomerInput!): Customer! @isAuthenticated  @hasPermission(permission: create_order)
+    createExpense(input: ExpenseInput!): Expense! @isAuthenticated  @hasPermission(permission: create_order)
+    createItem(input: ItemInput!): Item! @isAuthenticated  @hasPermission(permission: create_order)
+    createOrder(input: OrderInput!): Order! @isAuthenticated @hasPermission(permission: create_order)
+    createOrderItem(id:ID!,input: OrderItemInput!): OrderItem! @isAuthenticated @hasPermission(permission: create_order)
+    createOrderPayment(input: OrderPaymentInput!): Payment! @isAuthenticated  @hasPermission(permission: create_order)
+    createExpensePayment(input: ExpensePaymentInput!): Payment! @isAuthenticated  @hasPermission(permission: create_order)
+    createProduct(input: ProductInput!): Product! @isAuthenticated  @hasPermission(permission: create_order)
+    createSales(input: SalesInput!): Payment! @isAuthenticated  @hasPermission(permission: create_order)
+    createStaff(input: StaffInput!): Staff! @isAuthenticated  @hasPermission(permission: create_order)
     createStore(input: StoreInput!): Store! @isAuthenticated
     # Only admins can create new user.
-    createUnit(input: UnitInput!): Unit! @isAuthenticated  @hasRole(role: owner)
+    createUnit(input: UnitInput!): Unit! @isAuthenticated  @hasPermission(permission: create_order)
 
     changePassword(input: ChangePasswordInput!): Boolean! @isAuthenticated
 
-    editBrand(id: ID!,input: BrandInput!): Brand! @isAuthenticated  @hasRole(role: owner)
-    editCategory(id: ID!,input: CategoryInput!): Category! @isAuthenticated  @hasRole(role: owner)
-    editCustomer(id: ID!,input: CustomerInput!): Customer! @isAuthenticated  @hasRole(role: staff)
-    editItem(id: ID!,input: ItemInput!): Item! @isAuthenticated  @hasRole(role: owner)
+    editBrand(id: ID!,input: BrandInput!): Brand! @isAuthenticated  @hasPermission(permission: create_order)
+    editCategory(id: ID!,input: CategoryInput!): Category! @isAuthenticated  @hasPermission(permission: create_order)
+    editCustomer(id: ID!,input: CustomerInput!): Customer! @isAuthenticated  @hasPermission(permission: create_order)
+    editItem(id: ID!,input: ItemInput!): Item! @isAuthenticated  @hasPermission(permission: create_order)
     editOrder(id: ID!,input: OrderInput!): Order!  @isAuthenticated
-    editOrderItem(id: ID!,input: OrderItemInput!): OrderItem! @isAuthenticated @hasRole(role: staff)
+    editOrderItem(id: ID!,input: OrderItemInput!): OrderItem! @isAuthenticated @hasPermission(permission: create_order)
     editProduct(id: ID!,input: ProductInput!): Product!  @isAuthenticated
     editProfile(input: ProfileInput!): User!  @isAuthenticated
-    editStaff(id: ID!,input: StaffInput!): Staff! @isAuthenticated  @hasRole(role: owner)
-    editStore(id: ID!,input: StoreInput!): Store! @isAuthenticated  @hasRole(role: owner)
-    editUnit(id: ID!,input: UnitInput!): Unit! @isAuthenticated  @hasRole(role: owner)
+    editStaff(id: ID!,input: StaffInput!): Staff! @isAuthenticated  @hasPermission(permission: create_order)
+    editStore(id: ID!,input: StoreInput!): Store! @isAuthenticated  @hasPermission(permission: create_order)
+    editUnit(id: ID!,input: UnitInput!): Unit! @isAuthenticated  @hasPermission(permission: create_order)
 
-    deleteItem(id: ID!): Item!  @isAuthenticated @hasRole(role: owner)
-    deleteOrderItem(orderId: ID!,itemId: ID!): OrderItem! @isAuthenticated @hasRole(role: staff)
+    deleteItem(id: ID!): Item!  @isAuthenticated @hasPermission(permission: create_order)
+    deleteOrderItem(orderId: ID!,itemId: ID!): OrderItem! @isAuthenticated @hasPermission(permission: create_order)
 
     # For testing if local ip works. Otherwise client will have to reconfigure.
     ping: String!
@@ -929,7 +930,7 @@ directive @goTag(
     value: String
 ) on INPUT_FIELD_DEFINITION | FIELD_DEFINITION
 
-directive @hasRole(role: StaffRole!) on FIELD_DEFINITION
+directive @hasPermission(permission: PermissionType!) on FIELD_DEFINITION
 directive @isAuthenticated on FIELD_DEFINITION
 
 directive @validate(constraint: String!) on INPUT_FIELD_DEFINITION | ARGUMENT_DEFINITION

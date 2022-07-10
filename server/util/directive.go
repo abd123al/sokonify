@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/bxcodec/faker/v3/support/slice"
 	"github.com/go-playground/validator/v10"
 	"mahesabu/graph/model"
 	"mahesabu/helpers"
@@ -35,7 +36,7 @@ var Validator = func(ctx context.Context, obj interface{}, next graphql.Resolver
 	return val, nil
 }
 
-var HasRole = func(ctx context.Context, obj interface{}, next graphql.Resolver, role model.StaffRole) (interface{}, error) {
+var HasPermission = func(ctx context.Context, obj interface{}, next graphql.Resolver, permission model.PermissionType) (interface{}, error) {
 	payload := helpers.ForContext(ctx)
 
 	if payload == nil {
@@ -44,7 +45,7 @@ var HasRole = func(ctx context.Context, obj interface{}, next graphql.Resolver, 
 
 	//owner can do anything that other staffs can.
 	//we check for store id because roles requires valid store
-	if payload.StoreID != 0 && (payload.Role == role || payload.Role == model.StaffRoleOwner) {
+	if payload.StoreID != 0 && slice.Contains(payload.Permissions, permission.String()) {
 		return next(ctx)
 	} else {
 		return nil, NoPermissionError
