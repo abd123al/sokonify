@@ -178,6 +178,8 @@ input CategoryInput {
     name: String!
     description: String
     type: CategoryType!
+    permissionTypes: [PermissionType!]
+    pricingIds: [ID!]
 }
 
 #todo find better name to reflect customer and supplier

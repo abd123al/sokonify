@@ -87,15 +87,25 @@ func CreateStaff(DB *gorm.DB, Args *CreateStaffArgs) *CreateStaffResult {
 }
 
 func CreateCategory(DB *gorm.DB, StoreID int, categoryType model.CategoryType) *model.Category {
-	category := model.Category{
-		Name:    faker.Name(),
-		StoreID: &StoreID,
-		Type:    categoryType,
+	var PermissionTypes []model.PermissionType
+	var PricingIds []int //todo put values here
+
+	if categoryType == model.CategoryTypeRole {
+		PermissionTypes = append(PermissionTypes, model.PermissionTypeAddStaff)
+		PermissionTypes = append(PermissionTypes, model.PermissionTypeCreateOrder)
 	}
 
-	DB.Create(&category)
+	category, _ := repository.CreateCategory(DB, model.CategoryInput{
+		Name:            faker.Word(),
+		Type:            categoryType,
+		PermissionTypes: PermissionTypes,
+		PricingIds:      PricingIds,
+	}, helpers.UserAndStoreArgs{
+		UserID:  CreateUser(DB).ID,
+		StoreID: StoreID,
+	})
 
-	return &category
+	return category
 }
 
 type CreateProductArgs struct {

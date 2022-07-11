@@ -103,6 +103,10 @@ func findRole(db *gorm.DB, userId int, storeId *int) (*helpers.FindDefaultStoreA
 		return nil, errors.New("no record found")
 	}
 
+	//todo think of better way of handling this...
+	permissions, _ := FindPermissions(db, roleResult.RoleID)
+	roleResult.Permissions = permissions
+
 	return roleResult, nil
 }
 

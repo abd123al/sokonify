@@ -15,8 +15,50 @@ func CreateCategory(db *gorm.DB, input model.CategoryInput, args helpers.UserAnd
 		StoreID:     &args.StoreID,
 		CreatorID:   &args.UserID,
 	}
-	result := db.Create(&category)
-	return &category, result.Error
+
+	err := db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Create(&category).Error; err != nil {
+			return err
+		}
+
+		var Permissions []*model.Permission
+
+		if input.Type == model.CategoryTypeRole {
+			for _, k := range input.PermissionTypes {
+				p := model.Permission{
+					CreatorID:  args.UserID,
+					Permission: &k,
+					RoleID:     category.ID,
+				}
+
+				Permissions = append(Permissions, &p)
+			}
+
+			for _, k := range input.PricingIds {
+				p := model.Permission{
+					CreatorID: args.UserID,
+					PricingID: &k,
+					RoleID:    category.ID,
+				}
+
+				Permissions = append(Permissions, &p)
+			}
+		}
+
+		if len(Permissions) > 0 {
+			if err := tx.Create(&Permissions).Error; err != nil {
+				return err
+			}
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &category, nil
 }
 
 func EditCategory(DB *gorm.DB, ID int, input model.CategoryInput, args helpers.UserAndStoreArgs) (*model.Category, error) {
