@@ -490,7 +490,7 @@ type Staff implements Gorm {
     creatorId: Int
     creator: User @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
 
-    permissions: [Permission!]! @goField(forceResolver: true)
+    permissions: [Permission!]! @goField(forceResolver: true) @goTag(key: "gorm", value: "-")
 }
 
 input StaffInput {
@@ -525,7 +525,7 @@ type Store implements Gorm {
 
     staffs: [Staff!]! @goTag(key: "gorm", value: "-")
 
-    permissions: [Permission!]! @goField(forceResolver: true)
+    permissions: [Permission!]! @goField(forceResolver: true) @goTag(key: "gorm", value: "-")
 }
 
 input StoreInput {

@@ -11,7 +11,7 @@ type FindDefaultStoreAndRoleResult struct {
 	StoreID int
 	RoleID  int
 	//todo this should not be here. We should find permission based on roleId this will make it easier to revoke..
-	Permissions []*model.Permission
+	Permissions []*model.Permission `json:"permissions" gorm:"-"`
 }
 
 func GenerateAuthToken(UserID int, args *FindDefaultStoreAndRoleResult) string {
