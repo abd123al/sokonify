@@ -6,42 +6,30 @@ import (
 	"mahesabu/helpers"
 )
 
+// CreatePermission Permissions are role based. So users are assigned roles
 func CreatePermission(db *gorm.DB, input model.PermissionInput, args helpers.UserAndStoreArgs) (*model.Permission, error) {
 	category := model.Permission{
 		Permission: input.Permission,
+		PricingID:  input.PricingID,
 		CreatorID:  args.UserID,
 		RoleID:     input.RoleID,
 	}
+
 	result := db.Create(&category)
 	return &category, result.Error
 }
 
-func EditPermission(DB *gorm.DB, ID int, input model.PermissionInput, args helpers.UserAndStoreArgs) (*model.Permission, error) {
+func DeletePermission(DB *gorm.DB, ID int) (*model.Permission, error) {
 	var category *model.Permission
 
-	err := DB.Transaction(func(tx *gorm.DB) error {
-		category = &model.Permission{
-			ID:         ID,
-			Permission: input.Permission,
-			CreatorID:  args.UserID,
-			RoleID:     input.RoleID,
-		}
-
-		if err := tx.Model(&category).Where(&model.Permission{ID: ID}).Updates(&category).Error; err != nil {
-			return err
-		}
-
-		return nil
-	})
-
-	if err != nil {
+	if err := DB.Model(&category).Where(&model.Permission{ID: ID}).Delete(&category).Error; err != nil {
 		return nil, err
 	}
 
 	return category, nil
 }
 
-func FindPermissionsByUserId(db *gorm.DB, RoleID int) ([]*model.Permission, error) {
+func FindPermissions(db *gorm.DB, RoleID int) ([]*model.Permission, error) {
 	var categories []*model.Permission
 	result := db.Where(&model.Permission{RoleID: RoleID}).Find(&categories)
 	return categories, result.Error

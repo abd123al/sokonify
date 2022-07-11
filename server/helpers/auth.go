@@ -8,7 +8,9 @@ import (
 )
 
 type FindDefaultStoreAndRoleResult struct {
-	StoreID     int
+	StoreID int
+	RoleID  int
+	//todo this should not be here. We should find permission based on roleId this will make it easier to revoke..
 	Permissions []*model.Permission
 }
 
@@ -25,6 +27,7 @@ func GenerateAuthToken(UserID int, args *FindDefaultStoreAndRoleResult) string {
 
 	if args != nil {
 		payload.StoreID = args.StoreID
+		payload.RoleID = args.RoleID
 
 		if args.Permissions != nil {
 			for _, p := range args.Permissions {
@@ -68,6 +71,7 @@ func ExtractAuthParams(claims map[string]interface{}) *model.AuthParams {
 
 	userId := int(claims["userId"].(float64))
 	StoreID := int(claims["storeId"].(float64))
+	RoleID := int(claims["roleId"].(float64))
 	for _, s := range claims["permissions"].([]interface{}) {
 		permissions = append(permissions, s.(string))
 	}
@@ -78,6 +82,7 @@ func ExtractAuthParams(claims map[string]interface{}) *model.AuthParams {
 	params := model.AuthParams{
 		UserID:      userId,
 		StoreID:     StoreID,
+		RoleID:      RoleID,
 		Permissions: permissions,
 		Prices:      prices,
 	}

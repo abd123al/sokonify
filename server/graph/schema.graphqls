@@ -133,13 +133,11 @@ input SwitchStoreInput {
 type AuthPayload {
     accessToken : String!
     user: User! @goField(forceResolver: true)
-    # This returns the default store todo remove it it's just confusing
-    store: Store @goField(forceResolver: true)
-    permissions: [Permission!] @goField(forceResolver: true)
 }
 
 type AuthParams {
     userId: Int!
+    roleId: Int!
     storeId: Int! #ensure 0 is not used
     permissions : [String!]!
     prices : [ID!]! #if can sell they need this thing here
@@ -449,14 +447,10 @@ input ItemsArgs {
     value:ID!
 }
 
-enum StaffRole {
-    # can edit things in store
-    staff @enumInt(value: 2)
-    # can assign users in stores
-    owner @enumInt(value: 1)
-}
-
 enum PermissionType {
+    create_category
+    edit_category
+
     create_order
     edit_order
 
@@ -495,6 +489,8 @@ type Staff implements Gorm {
 
     creatorId: Int
     creator: User @goTag(key: "gorm", value: "foreignKey:CreatorID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;") @goField(forceResolver: true)
+
+    permissions: [Permission!]! @goField(forceResolver: true)
 }
 
 input StaffInput {
@@ -528,6 +524,8 @@ type Store implements Gorm {
     user: User! @goTag(key: "gorm", value: "foreignKey:UserID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)
 
     staffs: [Staff!]! @goTag(key: "gorm", value: "-")
+
+    permissions: [Permission!]! @goField(forceResolver: true)
 }
 
 input StoreInput {
@@ -839,6 +837,8 @@ type Query {
     orders(args: OrdersArgs!): [Order!]! @isAuthenticated
     payment(id: ID!): Payment! @isAuthenticated
     payments(args: PaymentsArgs!): [Payment!]! @isAuthenticated
+    permission(id: ID!): Permission! @isAuthenticated
+    permissions(roleId: ID!): [Permission!]! @isAuthenticated
     product(id: ID!): Product!
     products(args: ProductsArgs!): [Product!]!
     staff(id: ID!): Staff! @isAuthenticated
@@ -871,6 +871,7 @@ type Mutation {
     createOrderItem(id:ID!,input: OrderItemInput!): OrderItem! @isAuthenticated @hasPermission(permission: create_order)
     createOrderPayment(input: OrderPaymentInput!): Payment! @isAuthenticated  @hasPermission(permission: create_order)
     createExpensePayment(input: ExpensePaymentInput!): Payment! @isAuthenticated  @hasPermission(permission: create_order)
+    createPermission(input: PermissionInput!): Permission! @isAuthenticated  @hasPermission(permission: create_order)
     createProduct(input: ProductInput!): Product! @isAuthenticated  @hasPermission(permission: create_order)
     createSales(input: SalesInput!): Payment! @isAuthenticated  @hasPermission(permission: create_order)
     createStaff(input: StaffInput!): Staff! @isAuthenticated  @hasPermission(permission: create_order)
@@ -894,6 +895,7 @@ type Mutation {
 
     deleteItem(id: ID!): Item!  @isAuthenticated @hasPermission(permission: create_order)
     deleteOrderItem(orderId: ID!,itemId: ID!): OrderItem! @isAuthenticated @hasPermission(permission: create_order)
+    deletePermission(id: ID!): Permission! @isAuthenticated @hasPermission(permission: create_order)
 
     # For testing if local ip works. Otherwise client will have to reconfigure.
     ping: String!

@@ -33,14 +33,6 @@ func (r *authPayloadResolver) User(ctx context.Context, obj *model.AuthPayload) 
 	return repository.FindUser(r.DB, helpers.ForContext(ctx).UserID)
 }
 
-func (r *authPayloadResolver) Store(ctx context.Context, obj *model.AuthPayload) (*model.Store, error) {
-	return repository.FindDefaultStore(r.DB, helpers.ForContext(ctx).UserID)
-}
-
-func (r *authPayloadResolver) Permissions(ctx context.Context, obj *model.AuthPayload) ([]*model.Permission, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
 func (r *brandResolver) Product(ctx context.Context, obj *model.Brand) (*model.Product, error) {
 	panic(fmt.Errorf("not implemented"))
 }
@@ -170,6 +162,13 @@ func (r *mutationResolver) CreateExpensePayment(ctx context.Context, input model
 	return repository.CreateExpensePayment(r.DB, helpers.ForContext(ctx).UserID, input)
 }
 
+func (r *mutationResolver) CreatePermission(ctx context.Context, input model.PermissionInput) (*model.Permission, error) {
+	return repository.CreatePermission(r.DB, input, helpers.UserAndStoreArgs{
+		UserID:  helpers.ForContext(ctx).UserID,
+		StoreID: helpers.ForContext(ctx).StoreID,
+	})
+}
+
 func (r *mutationResolver) CreateProduct(ctx context.Context, input model.ProductInput) (*model.Product, error) {
 	return repository.CreateProduct(r.DB, input, helpers.UserAndStoreArgs{
 		UserID:  helpers.ForContext(ctx).UserID,
@@ -271,6 +270,10 @@ func (r *mutationResolver) DeleteItem(ctx context.Context, id int) (*model.Item,
 
 func (r *mutationResolver) DeleteOrderItem(ctx context.Context, orderID int, itemID int) (*model.OrderItem, error) {
 	return repository.DeleteOrderItem(r.DB, orderID, itemID)
+}
+
+func (r *mutationResolver) DeletePermission(ctx context.Context, id int) (*model.Permission, error) {
+	panic(fmt.Errorf("not implemented"))
 }
 
 func (r *mutationResolver) Ping(ctx context.Context) (string, error) {
@@ -546,6 +549,14 @@ func (r *queryResolver) Payments(ctx context.Context, args model.PaymentsArgs) (
 	return repository.FindPayments(r.DB, args, helpers.ForContext(ctx).StoreID)
 }
 
+func (r *queryResolver) Permission(ctx context.Context, id int) (*model.Permission, error) {
+	return repository.FindPermission(r.DB, id)
+}
+
+func (r *queryResolver) Permissions(ctx context.Context, roleID int) ([]*model.Permission, error) {
+	return repository.FindPermissions(r.DB, 1) //todo
+}
+
 func (r *queryResolver) Product(ctx context.Context, id int) (*model.Product, error) {
 	return repository.FindProduct(r.DB, id, helpers.ForContext(ctx).StoreID)
 }
@@ -625,8 +636,16 @@ func (r *staffResolver) Creator(ctx context.Context, obj *model.Staff) (*model.U
 	return nil, nil
 }
 
+func (r *staffResolver) Permissions(ctx context.Context, obj *model.Staff) ([]*model.Permission, error) {
+	return repository.FindPermissions(r.DB, obj.RoleID)
+}
+
 func (r *storeResolver) User(ctx context.Context, obj *model.Store) (*model.User, error) {
 	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *storeResolver) Permissions(ctx context.Context, obj *model.Store) ([]*model.Permission, error) {
+	return repository.FindPermissions(r.DB, helpers.ForContext(ctx).RoleID)
 }
 
 func (r *subscriptionResolver) Item(ctx context.Context) (<-chan *model.Item, error) {
@@ -754,6 +773,12 @@ type userResolver struct{ *Resolver }
 //  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //    it when you're done.
 //  - You have helper methods in this file. Move them out to keep these resolver files clean.
+func (r *authPayloadResolver) Store(ctx context.Context, obj *model.AuthPayload) (*model.Store, error) {
+	return repository.FindDefaultStore(r.DB, helpers.ForContext(ctx).UserID)
+}
+func (r *authPayloadResolver) Permissions(ctx context.Context, obj *model.AuthPayload) ([]*model.Permission, error) {
+	panic(fmt.Errorf("not implemented"))
+}
 func (r *permissionResolver) Category(ctx context.Context, obj *model.Permission) (*model.Category, error) {
 	panic(fmt.Errorf("not implemented"))
 }

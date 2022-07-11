@@ -15,6 +15,7 @@ func TestGenerateAuthToken(t *testing.T) {
 
 		token := helpers.GenerateAuthToken(1, &helpers.FindDefaultStoreAndRoleResult{
 			StoreID: 2,
+			RoleID:  4,
 			Permissions: []*model.Permission{
 				{
 					ID:         1,
