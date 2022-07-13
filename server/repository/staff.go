@@ -84,16 +84,17 @@ func findRole(db *gorm.DB, userId int, storeId *int) (*helpers.FindDefaultStoreA
 	var roleResult *helpers.FindDefaultStoreAndRoleResult
 
 	a := db.Debug().Table("staffs").Joins("inner join categories on staffs.role_id = categories.id")
+	b := a.Joins("inner join stores on categories.store_id = stores.id")
 
 	var c *gorm.DB
 
 	if storeId != nil {
-		c = a.Where("categories.store_id = ? AND staffs.user_id = ?", storeId, userId)
+		c = b.Where("categories.store_id = ? AND staffs.user_id = ?", storeId, userId)
 	} else {
-		c = a.Where(&model.Staff{UserID: userId, Default: true})
+		c = b.Where(&model.Staff{UserID: userId, Default: true})
 	}
 
-	result := c.Select("categories.store_id as store_id, staffs.role_id AS role_id").Scan(&roleResult)
+	result := c.Select("categories.store_id as store_id, staffs.role_id AS role_id, stores.user_id AS owner_id").Scan(&roleResult)
 
 	if result.Error != nil {
 		return nil, result.Error
@@ -103,9 +104,12 @@ func findRole(db *gorm.DB, userId int, storeId *int) (*helpers.FindDefaultStoreA
 		return nil, errors.New("no record found")
 	}
 
-	//todo think of better way of handling this...
-	permissions, _ := FindPermissions(db, roleResult.RoleID)
-	roleResult.Permissions = permissions
+	//Because owner has every access, we only assign permissions to others
+	if roleResult.OwnerId != userId {
+		//todo think of better way of handling this...
+		permissions, _ := FindPermissions(db, roleResult.RoleID)
+		roleResult.Permissions = permissions
+	}
 
 	return roleResult, nil
 }

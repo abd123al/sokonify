@@ -45,11 +45,13 @@ var HasPermission = func(ctx context.Context, obj interface{}, next graphql.Reso
 
 	//owner can do anything that other staffs can.
 	//we check for store id because roles requires valid store
-	if payload.StoreID != 0 && slice.Contains(payload.Permissions, permission.String()) {
-		return next(ctx)
-	} else {
-		return nil, NoPermissionError
+	if payload.StoreID != 0 {
+		if payload.IsOwner || slice.Contains(payload.Permissions, permission.String()) {
+			return next(ctx)
+		}
 	}
+
+	return nil, NoPermissionError
 }
 
 var IsAuthenticated = func(ctx context.Context, obj interface{}, next graphql.Resolver) (res interface{}, err error) {

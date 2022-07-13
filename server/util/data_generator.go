@@ -91,8 +91,8 @@ func CreateCategory(DB *gorm.DB, StoreID int, categoryType model.CategoryType) *
 	var PricingIds []int //todo put values here
 
 	if categoryType == model.CategoryTypeRole {
-		PermissionTypes = append(PermissionTypes, model.PermissionTypeAddStaff)
 		PermissionTypes = append(PermissionTypes, model.PermissionTypeCreateOrder)
+		PermissionTypes = append(PermissionTypes, model.PermissionTypeCreatePayment)
 	}
 
 	category, _ := repository.CreateCategory(DB, model.CategoryInput{

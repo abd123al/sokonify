@@ -135,14 +135,6 @@ type AuthPayload {
     user: User! @goField(forceResolver: true)
 }
 
-type AuthParams {
-    userId: Int!
-    roleId: Int!
-    storeId: Int! #ensure 0 is not used
-    permissions : [String!]!
-    prices : [ID!]! #if can sell they need this thing here
-}
-
 input ChangePasswordInput {
     currentPassword : String!
     newPassword : String!
@@ -864,40 +856,40 @@ type Query {
 }
 
 type Mutation {
-    createBrand(input: BrandInput!): Brand! @isAuthenticated @hasPermission(permission: create_order)
-    createCategory(input: CategoryInput!): Category! @isAuthenticated @hasPermission(permission: create_order)
-    createCustomer(input: CustomerInput!): Customer! @isAuthenticated  @hasPermission(permission: create_order)
-    createExpense(input: ExpenseInput!): Expense! @isAuthenticated  @hasPermission(permission: create_order)
-    createItem(input: ItemInput!): Item! @isAuthenticated  @hasPermission(permission: create_order)
-    createOrder(input: OrderInput!): Order! @isAuthenticated @hasPermission(permission: create_order)
-    createOrderItem(id:ID!,input: OrderItemInput!): OrderItem! @isAuthenticated @hasPermission(permission: create_order)
-    createOrderPayment(input: OrderPaymentInput!): Payment! @isAuthenticated  @hasPermission(permission: create_order)
-    createExpensePayment(input: ExpensePaymentInput!): Payment! @isAuthenticated  @hasPermission(permission: create_order)
-    createPermission(input: PermissionInput!): Permission! @isAuthenticated  @hasPermission(permission: create_order)
-    createProduct(input: ProductInput!): Product! @isAuthenticated  @hasPermission(permission: create_order)
-    createSales(input: SalesInput!): Payment! @isAuthenticated  @hasPermission(permission: create_order)
-    createStaff(input: StaffInput!): Staff! @isAuthenticated  @hasPermission(permission: create_order)
-    createStore(input: StoreInput!): Store! @isAuthenticated
+    createBrand(input: BrandInput!): Brand! @hasPermission(permission: create_order)
+    createCategory(input: CategoryInput!): Category! @hasPermission(permission: create_order)
+    createCustomer(input: CustomerInput!): Customer!  @hasPermission(permission: create_order)
+    createExpense(input: ExpenseInput!): Expense!  @hasPermission(permission: create_order)
+    createItem(input: ItemInput!): Item!  @hasPermission(permission: create_order)
+    createOrder(input: OrderInput!): Order! @hasPermission(permission: create_order)
+    createOrderItem(id:ID!,input: OrderItemInput!): OrderItem! @hasPermission(permission: create_order)
+    createOrderPayment(input: OrderPaymentInput!): Payment!  @hasPermission(permission: create_order)
+    createExpensePayment(input: ExpensePaymentInput!): Payment!  @hasPermission(permission: create_order)
+    createPermission(input: PermissionInput!): Permission!  @hasPermission(permission: create_order)
+    createProduct(input: ProductInput!): Product!  @hasPermission(permission: create_order)
+    createSales(input: SalesInput!): Payment!  @hasPermission(permission: create_order)
+    createStaff(input: StaffInput!): Staff!  @hasPermission(permission: create_order)
+    createStore(input: StoreInput!): Store!
     # Only admins can create new user.
-    createUnit(input: UnitInput!): Unit! @isAuthenticated  @hasPermission(permission: create_order)
+    createUnit(input: UnitInput!): Unit!  @hasPermission(permission: create_order)
 
     changePassword(input: ChangePasswordInput!): Boolean! @isAuthenticated
 
-    editBrand(id: ID!,input: BrandInput!): Brand! @isAuthenticated  @hasPermission(permission: create_order)
-    editCategory(id: ID!,input: CategoryInput!): Category! @isAuthenticated  @hasPermission(permission: create_order)
-    editCustomer(id: ID!,input: CustomerInput!): Customer! @isAuthenticated  @hasPermission(permission: create_order)
-    editItem(id: ID!,input: ItemInput!): Item! @isAuthenticated  @hasPermission(permission: create_order)
-    editOrder(id: ID!,input: OrderInput!): Order!  @isAuthenticated
-    editOrderItem(id: ID!,input: OrderItemInput!): OrderItem! @isAuthenticated @hasPermission(permission: create_order)
-    editProduct(id: ID!,input: ProductInput!): Product!  @isAuthenticated
-    editProfile(input: ProfileInput!): User!  @isAuthenticated
-    editStaff(id: ID!,input: StaffInput!): Staff! @isAuthenticated  @hasPermission(permission: create_order)
-    editStore(id: ID!,input: StoreInput!): Store! @isAuthenticated  @hasPermission(permission: create_order)
-    editUnit(id: ID!,input: UnitInput!): Unit! @isAuthenticated  @hasPermission(permission: create_order)
+    editBrand(id: ID!,input: BrandInput!): Brand!  @hasPermission(permission: create_order)
+    editCategory(id: ID!,input: CategoryInput!): Category!  @hasPermission(permission: create_order)
+    editCustomer(id: ID!,input: CustomerInput!): Customer!  @hasPermission(permission: create_order)
+    editItem(id: ID!,input: ItemInput!): Item!  @hasPermission(permission: create_order)
+    editOrder(id: ID!,input: OrderInput!): Order!
+    editOrderItem(id: ID!,input: OrderItemInput!): OrderItem! @hasPermission(permission: create_order)
+    editProduct(id: ID!,input: ProductInput!): Product!
+    editProfile(input: ProfileInput!): User!
+    editStaff(id: ID!,input: StaffInput!): Staff!  @hasPermission(permission: create_order)
+    editStore(id: ID!,input: StoreInput!): Store!  @hasPermission(permission: create_order)
+    editUnit(id: ID!,input: UnitInput!): Unit!  @hasPermission(permission: create_order)
 
-    deleteItem(id: ID!): Item!  @isAuthenticated @hasPermission(permission: create_order)
-    deleteOrderItem(orderId: ID!,itemId: ID!): OrderItem! @isAuthenticated @hasPermission(permission: create_order)
-    deletePermission(id: ID!): Permission! @isAuthenticated @hasPermission(permission: create_order)
+    deleteItem(id: ID!): Item!  @hasPermission(permission: create_order)
+    deleteOrderItem(orderId: ID!,itemId: ID!): OrderItem! @hasPermission(permission: create_order)
+    deletePermission(id: ID!): Permission! @hasPermission(permission: create_order)
 
     # For testing if local ip works. Otherwise client will have to reconfigure.
     ping: String!

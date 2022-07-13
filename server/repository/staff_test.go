@@ -12,7 +12,8 @@ import (
 func TestStaff(t *testing.T) {
 	DB := util.InitTestDB()
 	UserID := util.CreateUser(DB).ID
-	StoreID := util.CreateStore(DB, nil).ID
+	Store := util.CreateStore(DB, nil)
+	StoreID := Store.ID
 	RoleID := util.CreateCategory(DB, StoreID, model.CategoryTypeRole).ID
 
 	t.Run("CreateStaff", func(t *testing.T) {
@@ -52,6 +53,7 @@ func TestStaff(t *testing.T) {
 		require.Nil(t, err)
 		require.Equal(t, StoreID, result.StoreID)
 		require.Equal(t, staff.Staff.RoleID, result.RoleID)
+		require.Equal(t, Store.UserID, result.OwnerId)
 		require.Equal(t, staff.Staff.Default, true)
 	})
 
@@ -80,6 +82,7 @@ func TestStaff(t *testing.T) {
 		require.Nil(t, err)
 		require.NotEmpty(t, staff.Staff.ID)
 		require.Equal(t, staff.Staff.RoleID, result.RoleID)
+		require.Equal(t, Store.UserID, result.OwnerId)
 		require.Equal(t, StoreID, result.StoreID)
 	})
 
