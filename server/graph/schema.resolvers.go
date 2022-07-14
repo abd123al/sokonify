@@ -766,19 +766,3 @@ type storeResolver struct{ *Resolver }
 type subscriptionResolver struct{ *Resolver }
 type unitResolver struct{ *Resolver }
 type userResolver struct{ *Resolver }
-
-// !!! WARNING !!!
-// The code below was going to be deleted when updating resolvers. It has been copied here so you have
-// one last chance to move it out of harms way if you want. There are two reasons this happens:
-//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
-//    it when you're done.
-//  - You have helper methods in this file. Move them out to keep these resolver files clean.
-func (r *authPayloadResolver) Store(ctx context.Context, obj *model.AuthPayload) (*model.Store, error) {
-	return repository.FindDefaultStore(r.DB, helpers.ForContext(ctx).UserID)
-}
-func (r *authPayloadResolver) Permissions(ctx context.Context, obj *model.AuthPayload) ([]*model.Permission, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-func (r *permissionResolver) Category(ctx context.Context, obj *model.Permission) (*model.Category, error) {
-	panic(fmt.Errorf("not implemented"))
-}

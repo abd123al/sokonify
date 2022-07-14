@@ -442,24 +442,38 @@ input ItemsArgs {
 }
 
 enum PermissionType {
-    create_category
-    edit_category
-
-    create_order
-    edit_order
-
+    all
     add_stock
-    edit_stock
 
-    create_payment
+    create_brand
+    create_category
+    create_customer
+    create_expense_category
+    create_expense_payment
+    create_order_payment
+    create_permission
+    create_order
+    create_product
+    create_staff
     create_sales
+    create_unit
 
-    add_staff
-    edit_staff
-    remove_staff
+    delete_item
+    delete_order_item
+    delete_permission
 
-    register_customer
+    edit_brand
+    edit_category
     edit_customer
+    edit_order
+    edit_product
+    edit_stock
+    edit_staff
+    edit_store
+    edit_unit
+
+    remove_staff
+    register_customer
     view_customer
 
     view_stats
@@ -845,51 +859,51 @@ type Query {
     users: [User!]! #todo add args  @isAuthenticated
 
     # stats
-    netIncome(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
-    grossProfit(args:StatsArgs!): Profit! @goField(forceResolver: true) @isAuthenticated
-    totalExpensesAmount(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
-    totalSalesAmount(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
+    netIncome(args:StatsArgs!): String! @goField(forceResolver: true)  @hasPermission(permission: view_stats)
+    grossProfit(args:StatsArgs!): Profit! @goField(forceResolver: true)  @hasPermission(permission: view_stats)
+    totalExpensesAmount(args:StatsArgs!): String! @goField(forceResolver: true) @hasPermission(permission: view_stats)
+    totalSalesAmount(args:StatsArgs!): String! @goField(forceResolver: true) @hasPermission(permission: view_stats)
     # Daily sales
-    averageDailySalesAmount(args:StatsArgs!): String! @goField(forceResolver: true) @isAuthenticated
+    averageDailySalesAmount(args:StatsArgs!): String! @goField(forceResolver: true) @hasPermission(permission: view_stats)
     #cost of buying goods
-    itemsStats: [ItemsStats!]! @goField(forceResolver: true) @isAuthenticated
+    itemsStats: [ItemsStats!]! @goField(forceResolver: true) @hasPermission(permission: view_stats)
 }
 
 type Mutation {
-    createBrand(input: BrandInput!): Brand! @hasPermission(permission: create_order)
-    createCategory(input: CategoryInput!): Category! @hasPermission(permission: create_order)
-    createCustomer(input: CustomerInput!): Customer!  @hasPermission(permission: create_order)
-    createExpense(input: ExpenseInput!): Expense!  @hasPermission(permission: create_order)
-    createItem(input: ItemInput!): Item!  @hasPermission(permission: create_order)
+    createBrand(input: BrandInput!): Brand! @hasPermission(permission: create_brand)
+    createCategory(input: CategoryInput!): Category! @hasPermission(permission: create_category)
+    createCustomer(input: CustomerInput!): Customer! @hasPermission(permission: create_customer)
+    createExpense(input: ExpenseInput!): Expense! @hasPermission(permission: create_expense_category)
+    createItem(input: ItemInput!): Item! @hasPermission(permission: add_stock)
     createOrder(input: OrderInput!): Order! @hasPermission(permission: create_order)
-    createOrderItem(id:ID!,input: OrderItemInput!): OrderItem! @hasPermission(permission: create_order)
-    createOrderPayment(input: OrderPaymentInput!): Payment!  @hasPermission(permission: create_order)
-    createExpensePayment(input: ExpensePaymentInput!): Payment!  @hasPermission(permission: create_order)
-    createPermission(input: PermissionInput!): Permission!  @hasPermission(permission: create_order)
-    createProduct(input: ProductInput!): Product!  @hasPermission(permission: create_order)
-    createSales(input: SalesInput!): Payment!  @hasPermission(permission: create_order)
-    createStaff(input: StaffInput!): Staff!  @hasPermission(permission: create_order)
+    createOrderItem(id:ID!,input: OrderItemInput!): OrderItem! @hasPermission(permission: edit_order)
+    createOrderPayment(input: OrderPaymentInput!): Payment! @hasPermission(permission: create_order_payment)
+    createExpensePayment(input: ExpensePaymentInput!): Payment! @hasPermission(permission: create_expense_payment)
+    createPermission(input: PermissionInput!): Permission! @hasPermission(permission: create_permission)
+    createProduct(input: ProductInput!): Product! @hasPermission(permission: create_product)
+    createSales(input: SalesInput!): Payment! @hasPermission(permission: create_sales)
+    createStaff(input: StaffInput!): Staff! @hasPermission(permission: create_staff)
     createStore(input: StoreInput!): Store!
     # Only admins can create new user.
-    createUnit(input: UnitInput!): Unit!  @hasPermission(permission: create_order)
+    createUnit(input: UnitInput!): Unit!  @hasPermission(permission: create_unit)
 
     changePassword(input: ChangePasswordInput!): Boolean! @isAuthenticated
 
-    editBrand(id: ID!,input: BrandInput!): Brand!  @hasPermission(permission: create_order)
-    editCategory(id: ID!,input: CategoryInput!): Category!  @hasPermission(permission: create_order)
-    editCustomer(id: ID!,input: CustomerInput!): Customer!  @hasPermission(permission: create_order)
-    editItem(id: ID!,input: ItemInput!): Item!  @hasPermission(permission: create_order)
-    editOrder(id: ID!,input: OrderInput!): Order!
-    editOrderItem(id: ID!,input: OrderItemInput!): OrderItem! @hasPermission(permission: create_order)
-    editProduct(id: ID!,input: ProductInput!): Product!
+    editBrand(id: ID!,input: BrandInput!): Brand! @hasPermission(permission: edit_brand)
+    editCategory(id: ID!,input: CategoryInput!): Category! @hasPermission(permission: edit_category)
+    editCustomer(id: ID!,input: CustomerInput!): Customer! @hasPermission(permission: edit_customer)
+    editItem(id: ID!,input: ItemInput!): Item! @hasPermission(permission: edit_stock)
+    editOrder(id: ID!,input: OrderInput!): Order! @hasPermission(permission: edit_order)
+    editOrderItem(id: ID!,input: OrderItemInput!): OrderItem! @hasPermission(permission: edit_order)
+    editProduct(id: ID!,input: ProductInput!): Product! @hasPermission(permission: edit_stock)
     editProfile(input: ProfileInput!): User!
-    editStaff(id: ID!,input: StaffInput!): Staff!  @hasPermission(permission: create_order)
-    editStore(id: ID!,input: StoreInput!): Store!  @hasPermission(permission: create_order)
-    editUnit(id: ID!,input: UnitInput!): Unit!  @hasPermission(permission: create_order)
+    editStaff(id: ID!,input: StaffInput!): Staff! @hasPermission(permission: edit_staff)
+    editStore(id: ID!,input: StoreInput!): Store! @hasPermission(permission: edit_store)
+    editUnit(id: ID!,input: UnitInput!): Unit! @hasPermission(permission: edit_unit)
 
-    deleteItem(id: ID!): Item!  @hasPermission(permission: create_order)
-    deleteOrderItem(orderId: ID!,itemId: ID!): OrderItem! @hasPermission(permission: create_order)
-    deletePermission(id: ID!): Permission! @hasPermission(permission: create_order)
+    deleteItem(id: ID!): Item! @hasPermission(permission: delete_item)
+    deleteOrderItem(orderId: ID!,itemId: ID!): OrderItem! @hasPermission(permission: delete_order_item)
+    deletePermission(id: ID!): Permission! @hasPermission(permission: delete_permission)
 
     # For testing if local ip works. Otherwise client will have to reconfigure.
     ping: String!
