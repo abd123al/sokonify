@@ -51,6 +51,12 @@ func CreateStore(db *gorm.DB, UserID int, input model.StoreInput, Multistore boo
 				}
 			}
 
+			err2 := AssignOwnerRole(tx, store)
+
+			if err2 != nil {
+				return err2
+			}
+
 			return nil
 		}); err != nil {
 			return nil, err
@@ -73,6 +79,38 @@ func CreateStore(db *gorm.DB, UserID int, input model.StoreInput, Multistore boo
 			return create()
 		}
 	}
+}
+
+// AssignOwnerRole This helps to assign store owner a role
+func AssignOwnerRole(tx *gorm.DB, store model.Store) error {
+	//create admins category
+	role, err := CreateCategory(tx, model.CategoryInput{
+		Name:            "Owners",
+		Type:            model.CategoryTypeRole,
+		PermissionTypes: []model.PermissionType{model.PermissionTypeAll},
+	}, helpers.UserAndStoreArgs{
+		UserID:  store.UserID,
+		StoreID: store.ID,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	//Assign role
+	_, err = CreateStaff(tx, model.StaffInput{
+		UserID: store.UserID,
+		RoleID: role.ID,
+	}, helpers.UserAndStoreArgs{
+		UserID:  store.UserID,
+		StoreID: store.ID,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func EditStore(db *gorm.DB, input model.StoreInput, args helpers.UserAndStoreArgs) (*model.Store, error) {
@@ -111,7 +149,7 @@ func FindStore(db *gorm.DB, ID int) (*model.Store, error) {
 // This is also used for finding current store.
 func FindStaffStore(db *gorm.DB, Args helpers.UserAndStoreArgs) (*model.Store, error) {
 	var store *model.Store
-	if err := db.Table("stores").Joins("inner join staffs on staffs.store_id = stores.id AND staffs.user_id = ? AND staffs.store_id = ?", Args.UserID, Args.StoreID).First(&store).Error; err != nil {
+	if err := db.Table("stores").Joins("inner join categories on categories.store_id = stores.id AND store_id = ?", Args.StoreID).Joins("inner join staffs on staffs.role_id = categories.id AND staffs.user_id = ?", Args.UserID).First(&store).Error; err != nil {
 		return nil, nil //We neglect errors because we just resolve null
 	}
 	return store, nil

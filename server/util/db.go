@@ -179,6 +179,74 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 		}
 	}
 
+	if (db.Migrator().HasColumn(&model.Staff{}, "store_id")) {
+		err = db.Transaction(func(tx *gorm.DB) error {
+			err := tx.Migrator().DropConstraint(model.Permission{}, "fk_permissions_role")
+			if err != nil {
+				return fmt.Errorf("error in DropConstraint Permission %e", err)
+			}
+
+			err = tx.Migrator().DropConstraint(model.Staff{}, "fk_staffs_role")
+			if err != nil {
+				return fmt.Errorf("error in DropConstraint Staff %e", err)
+			}
+
+			var stores []*model.Store
+
+			if err = tx.Find(&stores).Error; err != nil {
+				return fmt.Errorf("error in finding stores %e", err)
+			}
+
+			log.Printf("stores found: %d\n", len(stores))
+
+			for _, s := range stores {
+				log.Printf("current store: %d\n", s.ID)
+
+				role, err := repository.CreateCategory(tx, model.CategoryInput{
+					Name:            "Owners",
+					Type:            model.CategoryTypeRole,
+					PermissionTypes: []model.PermissionType{model.PermissionTypeAll},
+				}, helpers.UserAndStoreArgs{
+					UserID:  s.UserID,
+					StoreID: s.ID,
+				})
+
+				if err != nil {
+					return fmt.Errorf("error in create role %e", err)
+				}
+
+				log.Printf("role created: %d\n", role.ID)
+
+				var staffs []*model.Staff
+				err2 := tx.Table("staffs").Where("staffs.store_id = ?", s.ID).Find(&staffs).Error
+
+				if err2 != nil {
+					return fmt.Errorf("error in create role %e", err)
+				}
+
+				for _, staff := range staffs {
+					tx.Model(&model.Staff{}).Where(&model.Staff{ID: staff.ID}).Update("role_id", role.ID)
+				}
+			}
+
+			err1 := tx.Migrator().DropColumn(&model.Staff{}, "store_id")
+			if err1 != nil {
+				return fmt.Errorf("error in drop store_id %e", err1)
+			}
+
+			err1 = tx.Migrator().DropColumn(&model.Staff{}, "role")
+			if err1 != nil {
+				return fmt.Errorf("error in drop role %e", err1)
+			}
+
+			return nil
+		})
+
+		if err != nil {
+			log.Printf("Staff Migration failed with error: %e", err)
+		}
+	}
+
 	return db
 }
 

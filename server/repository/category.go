@@ -17,7 +17,7 @@ func CreateCategory(db *gorm.DB, input model.CategoryInput, args helpers.UserAnd
 	}
 
 	err := db.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Create(&category).Error; err != nil {
+		if err := tx.Table("categories").Create(&category).Error; err != nil {
 			return err
 		}
 
