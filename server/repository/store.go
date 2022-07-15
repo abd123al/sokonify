@@ -134,7 +134,7 @@ func EditStore(db *gorm.DB, input model.StoreInput, args helpers.UserAndStoreArg
 
 func FindStores(db *gorm.DB, UserId int) ([]*model.Store, error) {
 	var stores []*model.Store
-	result := db.Table("stores").Joins("inner join staffs on staffs.store_id = stores.id AND staffs.user_id = ?", UserId).Find(&stores)
+	result := db.Table("stores").Joins("inner join categories on categories.store_id = stores.id").Joins("inner join staffs on staffs.role_id = categories.id AND staffs.user_id = ?", UserId).Find(&stores)
 	return stores, result.Error
 }
 
