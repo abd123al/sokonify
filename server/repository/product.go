@@ -11,7 +11,7 @@ func CreateProduct(DB *gorm.DB, input model.ProductInput, args helpers.UserAndSt
 	var brands []*model.Brand
 	var product *model.Product
 
-	err := DB.Debug().Transaction(func(tx *gorm.DB) error {
+	err := DB.Transaction(func(tx *gorm.DB) error {
 		for _, k := range input.Brands {
 			brand := model.Brand{
 				Manufacturer: k.Manufacturer,

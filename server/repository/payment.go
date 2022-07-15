@@ -235,7 +235,7 @@ func SumNetIncome(db *gorm.DB, StoreID int, args model.StatsArgs) (string, error
 	var amount string
 	StartDate, EndDate := helpers.HandleStatsDates(args)
 
-	if err := db.Table("payments").Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate).Joins("inner join staffs on payments.staff_id = staffs.user_id AND staffs.store_id = ?", StoreID).Select("sum(amount)").Row().Scan(&amount); err != nil {
+	if err := db.Table("payments").Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate).Joins("inner join staffs on payments.staff_id = staffs.user_id").Joins("inner join categories on staffs.role_id = categories.id AND categories.store_id = ?", StoreID).Select("sum(amount)").Row().Scan(&amount); err != nil {
 		return "0.00", nil
 	}
 
