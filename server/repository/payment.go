@@ -180,13 +180,6 @@ func FindPaymentByOrderId(db *gorm.DB, OrderID int) (*model.Payment, error) {
 func FindPayments(DB *gorm.DB, args model.PaymentsArgs, StoreID int) ([]*model.Payment, error) {
 	var payments []*model.Payment
 	var result *gorm.DB
-	var typeColumn string
-
-	if args.Type == model.PaymentTypeOrder {
-		typeColumn = "order_id"
-	} else {
-		typeColumn = "expense_id"
-	}
 
 	sort := "payments.id " + "DESC" //todo use sortBy var
 	By := args.By
@@ -199,10 +192,15 @@ func FindPayments(DB *gorm.DB, args model.PaymentsArgs, StoreID int) ([]*model.P
 		Timeframe: args.Timeframe,
 	})
 
-	db := DB //.Debug() //todo filter payments
+	db := DB.Table("payments") //.Debug() //todo filter payments
 
 	if By == model.PaymentsByStore {
-		q := db.Table("payments").Order(sort).Joins(fmt.Sprintf("inner join staffs on payments.staff_id = staffs.user_id AND staffs.store_id = ? AND payments.%s IS NOT NULL", typeColumn), StoreID)
+		var q *gorm.DB
+		if args.Type == model.PaymentTypeOrder {
+			q = db.Order(sort).Joins("inner join orders on orders.id = payments.order_id AND orders.issuer_id = ?", StoreID)
+		} else {
+			q = db.Order(sort).Joins("inner join expenses on expenses.id = payments.expense_id AND expenses.store_id = ?", StoreID)
+		}
 
 		if args.Mode == model.FetchModeFull {
 			result = q.Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate).Find(&payments)
@@ -214,7 +212,7 @@ func FindPayments(DB *gorm.DB, args model.PaymentsArgs, StoreID int) ([]*model.P
 		panic(fmt.Errorf("not implemented"))
 	} else if By == model.PaymentsByCustomer {
 		//This will return payments by specific customer.
-		a := db.Table("payments").Order(sort)
+		a := db.Order(sort)
 		b := a.Joins("inner join orders on orders.id = payments.order_id AND orders.customer_id = ?", args.Value)
 
 		if args.Mode == model.FetchModeFull {
