@@ -46,7 +46,11 @@ var HasPermission = func(ctx context.Context, obj interface{}, next graphql.Reso
 	//owner can do anything that other staffs can.
 	//we check for store id because roles requires valid store
 	if payload.StoreID != 0 {
-		if payload.IsOwner || slice.Contains(payload.Permissions, permission.String()) {
+		hasP := slice.Contains(payload.Permissions, permission.String())
+		hasAll := slice.Contains(payload.Permissions, model.PermissionTypeAll.String())
+
+		//todo What if owner transfer ownership?
+		if payload.IsOwner || hasP || hasAll {
 			return next(ctx)
 		}
 	}
