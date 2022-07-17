@@ -24,7 +24,17 @@ class CategoryTile extends StatelessWidget {
           style: Theme.of(context).textTheme.headlineSmall,
         ),
         onTap: () {
-          redirectTo(context, "${Routes.category}/${category.id}");
+          var route = Routes.category;
+
+          if (category.type == CategoryType.role) {
+            route = Routes.role;
+          }
+
+          redirectTo(
+            context,
+            "$route/${category.id}",
+            args: category.name,
+          );
         },
       ),
     );

@@ -26,21 +26,48 @@ class CategoryPage extends StatelessWidget {
           );
         },
       ),
-      body: CategoryWrapper(
+      body: CategoryWidget(
         id: id,
-        builder: (context, data) {
-          return DetailsList(
-            children: [
-              ShortDetailTile(subtitle: "Category Name", value: data.name),
-              ShortDetailTile(subtitle: "Description", value: data.description),
-              ShortDetailTile(
-                  subtitle: "Created By", value: data.creator?.name),
-              ShortDetailTile(
-                  subtitle: "Created on", value: data.createdAt.toString()),
-            ],
-          );
-        },
       ),
+    );
+  }
+}
+
+
+class CategoryWidget extends StatelessWidget {
+  const CategoryWidget({
+    Key? key,
+    required this.id,
+  }) : super(key: key);
+
+  final int id;
+
+  @override
+  Widget build(BuildContext context) {
+    return CategoryWrapper(
+      id: id,
+      builder: (context, data) {
+        return DetailsList(
+          children: [
+            ShortDetailTile(
+              subtitle: "Category Name",
+              value: data.name,
+            ),
+            ShortDetailTile(
+              subtitle: "Description",
+              value: data.description,
+            ),
+            ShortDetailTile(
+              subtitle: "Created By",
+              value: data.creator?.name,
+            ),
+            ShortDetailTile(
+              subtitle: "Created on",
+              value: data.createdAt.toString(),
+            ),
+          ],
+        );
+      },
     );
   }
 }

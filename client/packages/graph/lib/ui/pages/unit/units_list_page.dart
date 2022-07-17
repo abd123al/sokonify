@@ -17,10 +17,11 @@ class UnitsListPage extends StatelessWidget {
         title: const Text("Units"),
       ),
       body: _buildListView(),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () => redirectTo(context, Routes.createUnit),
-        tooltip: 'Add',
-        child: const Icon(Icons.add),
+        tooltip: 'Add Unit',
+        icon: const Icon(Icons.add),
+        label: const Text("Add Unit"),
       ),
     );
   }

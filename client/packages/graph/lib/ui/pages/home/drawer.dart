@@ -111,9 +111,10 @@ class SokonifyDrawer extends StatelessWidget {
                   redirectTo(context, Routes.expenses);
                 },
               ),
+              const Divider(),
               ListTile(
-                title: const Text('Staff Categories'),
-                trailing: const Icon(Icons.category_outlined),
+                title: const Text('Staffs'),
+                trailing: const Icon(Icons.people_outlined),
                 onTap: () {
                   redirectTo(
                     context,
@@ -121,12 +122,6 @@ class SokonifyDrawer extends StatelessWidget {
                     args: CategoryType.role,
                   );
                 },
-              ),
-              const Divider(),
-              ListTile(
-                title: const Text('Staffs'),
-                trailing: const Icon(Icons.people_outlined),
-                onTap: () {},
               ),
               ListTile(
                 title: const Text('Stats'),

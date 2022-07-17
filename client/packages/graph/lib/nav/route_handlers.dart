@@ -201,3 +201,12 @@ var paymentsPageRouterHandler = Handler(handlerFunc: (context, params) {
     type: context?.settings?.arguments as PaymentType,
   );
 });
+
+var rolePageRouterHandler = Handler(handlerFunc: (context, params) {
+  final id = params["id"]![0];
+
+  return RolePage(
+    id: int.parse(id),
+    name: context?.settings?.arguments as String,
+  );
+});

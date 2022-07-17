@@ -41,6 +41,7 @@ class Routes {
   static String payments = "/payments";
   static String products = "/products";
   static String product = "/product";
+  static String role = "/role";
   static String settings = "/settings";
   static String stats = "/stats";
   static String store = "/store";
@@ -273,6 +274,12 @@ class Routes {
     router.define(
       orders,
       handler: ordersPageRouterHandler,
+      transitionType: TransitionType.inFromLeft,
+    );
+
+    router.define(
+      "$role/:id",
+      handler: rolePageRouterHandler,
       transitionType: TransitionType.inFromLeft,
     );
 
