@@ -1,4 +1,4 @@
-Set-PSDebug -Trace 1
+#Set-PSDebug -Trace 1
 Write-Host "Starting building msi..."
 Set-Location $PSScriptRoot
 
@@ -27,7 +27,7 @@ flutter build windows `
                     --split-debug-info=./build/app/outputs/symbols `
                     --release
 
-$build = 18
+$build = 20
 $path = [Environment]::GetFolderPath("Desktop")
 
 flutter pub run msix:create `

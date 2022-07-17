@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="faker" type="FlutterRunConfigurationType" factoryName="Flutter">
+    <option name="additionalArgs" value="--dart-define BASE_URL=&quot;http://10.0.2.2:9002&quot;" />
+    <option name="filePath" value="$PROJECT_DIR$/apps/online/lib/main.dart" />
+    <method v="2" />
+  </configuration>
+</component>
