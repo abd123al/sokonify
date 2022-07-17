@@ -12,7 +12,7 @@ directive @goModel(model: String, models: [String!]) on SCALAR | OBJECT | INTERF
 
 directive @goTag(key: String!, value: String) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
 
-directive @hasRole(role: StaffRole!) on FIELD_DEFINITION
+directive @hasPermission(permission: PermissionType!) on FIELD_DEFINITION
 
 directive @id on ARGUMENT_DEFINITION | INPUT_FIELD_DEFINITION
 
@@ -37,15 +37,8 @@ type Admin implements Gorm {
     updatedAt: Time!
 }
 
-type AuthParams {
-    role: StaffRole!
-    storeId: Int!
-    userId: Int!
-}
-
 type AuthPayload {
     accessToken: String!
-    store: Store
     user: User!
 }
 
@@ -152,6 +145,7 @@ type Mutation {
     createOrder(input: OrderInput!): Order!
     createOrderItem(id: ID!, input: OrderItemInput!): OrderItem!
     createOrderPayment(input: OrderPaymentInput!): Payment!
+    createPermission(input: PermissionInput!): Permission!
     createProduct(input: ProductInput!): Product!
     createSales(input: SalesInput!): Payment!
     createStaff(input: StaffInput!): Staff!
@@ -159,6 +153,7 @@ type Mutation {
     createUnit(input: UnitInput!): Unit!
     deleteItem(id: ID!): Item!
     deleteOrderItem(itemId: ID!, orderId: ID!): OrderItem!
+    deletePermission(id: ID!): Permission!
     editBrand(id: ID!, input: BrandInput!): Brand!
     editCategory(id: ID!, input: CategoryInput!): Category!
     editCustomer(id: ID!, input: CustomerInput!): Customer!
@@ -234,6 +229,20 @@ type Payment implements Gorm {
     updatedAt: Time!
 }
 
+type Permission implements Gorm {
+    createdAt: Time!
+    creator: User!
+    creatorId: Int!
+    deletedAt: Time
+    id: ID!
+    permission: PermissionType
+    pricing: Category
+    pricingId: Int
+    role: Category!
+    roleId: Int!
+    updatedAt: Time!
+}
+
 type Price implements Gorm {
     amount: String!
     category: Category!
@@ -245,18 +254,6 @@ type Price implements Gorm {
     id: ID!
     item: Item!
     itemId: Int!
-    updatedAt: Time!
-}
-
-type Permission implements Gorm {
-    createdAt: Time!
-    creator: User!
-    creatorId: Int!
-    deletedAt: Time
-    id: ID!
-    permission: PermissionType!
-    role: Role!
-    roleId: Int!
     updatedAt: Time!
 }
 
@@ -318,6 +315,8 @@ type Query {
     orders(args: OrdersArgs!): [Order!]!
     payment(id: ID!): Payment!
     payments(args: PaymentsArgs!): [Payment!]!
+    permission(id: ID!): Permission!
+    permissions(roleId: ID!): [Permission!]!
     product(id: ID!): Product!
     products(args: ProductsArgs!): [Product!]!
     staff(id: ID!): Staff!
@@ -332,19 +331,6 @@ type Query {
     users: [User!]!
 }
 
-type Role implements Gorm {
-    createdAt: Time!
-    creator: User!
-    creatorId: Int!
-    deletedAt: Time
-    description: String
-    id: ID!
-    name: String!
-    store: Store!
-    storeId: Int!
-    updatedAt: Time!
-}
-
 type Staff implements Gorm {
     createdAt: Time!
     creator: User
@@ -352,10 +338,9 @@ type Staff implements Gorm {
     default: Boolean!
     deletedAt: Time
     id: ID!
-    role: Role!
+    permissions: [Permission!]!
+    role: Category!
     roleId: Int!
-    store: Store!
-    storeId: Int!
     updatedAt: Time!
     user: User!
     userId: Int!
@@ -369,6 +354,7 @@ type Store implements Gorm {
     id: ID!
     logo: String
     name: String!
+    permissions: [Permission!]!
     staffs: [Staff!]!
     storeType: StoreType!
     templateType: TemplateType
@@ -425,6 +411,7 @@ enum BusinessType {
 enum CategoryType {
     category
     pricing
+    role
     subcategory
 }
 
@@ -496,15 +483,32 @@ enum PaymentsBy {
 }
 
 enum PermissionType {
-    add_staff
     add_stock
+    all
+    create_brand
+    create_category
+    create_customer
+    create_expense_category
+    create_expense_payment
     create_order
-    create_payment
+    create_order_payment
+    create_permission
+    create_product
     create_sales
+    create_staff
+    create_unit
+    delete_item
+    delete_order_item
+    delete_permission
+    edit_brand
+    edit_category
     edit_customer
     edit_order
+    edit_product
     edit_staff
     edit_stock
+    edit_store
+    edit_unit
     register_customer
     remove_staff
     view_customer
@@ -519,11 +523,6 @@ enum ProductsBy {
 enum SortBy {
     ASC
     DESC
-}
-
-enum StaffRole {
-    owner
-    staff
 }
 
 enum StatsFilter {
@@ -574,6 +573,8 @@ input BrandsArgs {
 input CategoryInput {
     description: String
     name: String!
+    permissionTypes: [PermissionType!]
+    pricingIds: [ID!]
     type: CategoryType!
 }
 
@@ -682,14 +683,15 @@ input PaymentsArgs {
     value: ID
 }
 
+input PermissionInput {
+    permission: PermissionType
+    pricingId: ID
+    roleId: ID!
+}
+
 input PriceInput {
     amount: String!
     categoryId: ID!
-}
-
-input PermissionInput {
-    permission: PermissionType!
-    roleId: ID!
 }
 
 input ProductBrandInput {

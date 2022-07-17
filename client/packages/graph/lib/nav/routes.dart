@@ -55,12 +55,6 @@ class Routes {
     router.define(root, handler: rootHandler);
 
     router.define(
-      categories,
-      handler: categoriesListRouterHandler,
-      transitionType: TransitionType.materialFullScreenDialog,
-    );
-
-    router.define(
       createBrand,
       handler: createBrandPagePageRouterHandler,
       transitionType: TransitionType.materialFullScreenDialog,
@@ -195,6 +189,12 @@ class Routes {
     router.define(
       brands,
       handler: brandsPagePageRouterHandler,
+      transitionType: TransitionType.inFromLeft,
+    );
+
+    router.define(
+      categories,
+      handler: categoriesListRouterHandler,
       transitionType: TransitionType.inFromLeft,
     );
 

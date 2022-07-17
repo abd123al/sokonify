@@ -21,6 +21,8 @@ class CategoriesListPage extends StatelessWidget {
         return "Stock";
       } else if (type == CategoryType.pricing) {
         return "Pricing";
+      } else if (type == CategoryType.role) {
+        return "Staff";
       }
       return "Product";
     }
