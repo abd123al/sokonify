@@ -441,7 +441,7 @@ func (r *productResolver) Store(ctx context.Context, obj *model.Product) (*model
 func (r *productResolver) Brands(ctx context.Context, obj *model.Product) ([]*model.Brand, error) {
 	return repository.FindBrands(r.DB, model.BrandsArgs{
 		ProductID: &obj.ID,
-	})
+	}, helpers.ForContext(ctx).StoreID)
 }
 
 func (r *productResolver) Creator(ctx context.Context, obj *model.Product) (*model.User, error) {
@@ -487,7 +487,7 @@ func (r *queryResolver) Brand(ctx context.Context, id int) (*model.Brand, error)
 }
 
 func (r *queryResolver) Brands(ctx context.Context, args model.BrandsArgs) ([]*model.Brand, error) {
-	return repository.FindBrands(r.DB, args)
+	return repository.FindBrands(r.DB, args, helpers.ForContext(ctx).StoreID)
 }
 
 func (r *queryResolver) Category(ctx context.Context, id int) (*model.Category, error) {

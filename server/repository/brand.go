@@ -16,14 +16,14 @@ func CreateBrand(db *gorm.DB, input model.BrandInput, CreatorID int) (*model.Bra
 	return &brand, result.Error
 }
 
-func FindBrands(db *gorm.DB, args model.BrandsArgs) ([]*model.Brand, error) {
+func FindBrands(db *gorm.DB, args model.BrandsArgs, StoreId int) ([]*model.Brand, error) {
 	var result *gorm.DB
 
 	var brands []*model.Brand
 	if args.ProductID != nil {
 		result = db.Where(&model.Brand{ProductID: *args.ProductID}).Find(&brands)
 	} else {
-		result = db.Find(&brands)
+		result = db.Table("brands").Joins("inner join products on products.id = brands.product_id AND products.store_id =?", StoreId).Find(&brands)
 	}
 	return brands, result.Error
 }
