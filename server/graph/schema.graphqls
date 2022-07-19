@@ -479,6 +479,11 @@ enum PermissionType {
     view_stats
 }
 
+enum BoolType {
+    yes
+    no
+}
+
 type Staff implements Gorm {
     id: ID! @goTag(key: "gorm", value: "primaryKey")
 
@@ -487,7 +492,7 @@ type Staff implements Gorm {
     deletedAt:Time
 
     # Defaults store when user logs in like youtube
-    default: Boolean! @goTag(key: "gorm", value: "type:boolean")
+    preferred: BoolType! @goTag(key: "gorm", value: "type:varchar(5);default:no")
 
     roleId: Int!
     role: Category! @goTag(key: "gorm", value: "foreignKey:RoleID;not null;constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;")  @goField(forceResolver: true)

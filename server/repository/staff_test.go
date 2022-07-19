@@ -54,7 +54,7 @@ func TestStaff(t *testing.T) {
 		require.Equal(t, StoreID, result.StoreID)
 		require.Equal(t, staff.Staff.RoleID, result.RoleID)
 		require.Equal(t, Store.UserID, result.OwnerId)
-		require.Equal(t, staff.Staff.Default, true)
+		require.Equal(t, staff.Staff.Preferred, model.BoolTypeYes)
 	})
 
 	t.Run("FindDefaultStoreAndRole with no store", func(t *testing.T) {
@@ -110,7 +110,7 @@ func TestStaff(t *testing.T) {
 
 		require.Nil(t, err)
 		require.Equal(t, StoreID, result.ID)
-		require.Equal(t, staff.Staff.Default, true)
+		require.Equal(t, staff.Staff.Preferred, model.BoolTypeYes)
 	})
 
 	t.Run("FindDefaultStore with no store", func(t *testing.T) {

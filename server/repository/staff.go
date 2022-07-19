@@ -8,7 +8,7 @@ import (
 )
 
 func CreateStaff(db *gorm.DB, input model.StaffInput, args helpers.UserAndStoreArgs) (*model.Staff, error) {
-	var hasDefault bool
+	var IsPreferred = model.BoolTypeYes
 
 	memberships, err := FindMyMemberships(db, input.UserID)
 
@@ -24,8 +24,8 @@ func CreateStaff(db *gorm.DB, input model.StaffInput, args helpers.UserAndStoreA
 		}
 
 		//Checking if user has default login store
-		if s.Default {
-			hasDefault = true
+		if *s.Preferred == model.BoolTypeYes {
+			IsPreferred = model.BoolTypeNo
 			break
 		}
 	}
@@ -33,7 +33,7 @@ func CreateStaff(db *gorm.DB, input model.StaffInput, args helpers.UserAndStoreA
 	staff := model.Staff{
 		UserID:    input.UserID, //This is user who is about to get membership
 		RoleID:    input.RoleID,
-		Default:   !hasDefault,
+		Preferred: IsPreferred,
 		CreatorID: &args.UserID,
 	}
 
@@ -56,15 +56,15 @@ func FindStaffs(db *gorm.DB, StoreID int) ([]*model.Staff, error) {
 }
 
 type FindMembershipResult struct {
-	StoreID int
-	Default bool
+	StoreID   int
+	Preferred *model.BoolType
 }
 
 // FindMyMemberships This will get all stores id in which this user is a member
 // Very useful for checking where user has access
 func FindMyMemberships(db *gorm.DB, UserID int) ([]*FindMembershipResult, error) {
 	var r []*FindMembershipResult
-	result := db.Table("staffs").Joins("inner join categories ON categories.id = staffs.role_id").Where(&model.Staff{UserID: UserID}).Select("categories.store_id AS store_id,staffs.default AS default").Scan(&r)
+	result := db.Table("staffs").Joins("inner join categories ON categories.id = staffs.role_id").Where(&model.Staff{UserID: UserID}).Select("categories.store_id AS store_id,staffs.preferred AS preferred").Scan(&r)
 	return r, result.Error
 }
 
@@ -91,7 +91,7 @@ func findRole(db *gorm.DB, userId int, storeId *int) (*helpers.FindDefaultStoreA
 	if storeId != nil {
 		c = b.Where("categories.store_id = ? AND staffs.user_id = ?", storeId, userId)
 	} else {
-		c = b.Where(&model.Staff{UserID: userId, Default: true})
+		c = b.Where(&model.Staff{UserID: userId, Preferred: model.BoolTypeYes})
 	}
 
 	result := c.Select("categories.store_id as store_id, staffs.role_id AS role_id, stores.user_id AS owner_id").Scan(&roleResult)
@@ -116,7 +116,7 @@ func findRole(db *gorm.DB, userId int, storeId *int) (*helpers.FindDefaultStoreA
 
 func FindDefaultStore(db *gorm.DB, UserID int) (*model.Store, error) {
 	var store *model.Store
-	if err := db.Table("stores").Joins("inner join categories ON categories.store_id = stores.id").Joins("inner join staffs on staffs.role_id = categories.id AND staffs.user_id = ? AND staffs.default = ?", UserID, true).First(&store).Error; err != nil {
+	if err := db.Table("stores").Joins("inner join categories ON categories.store_id = stores.id").Joins("inner join staffs on staffs.role_id = categories.id AND staffs.user_id = ? AND staffs.preferred = ?", UserID, model.BoolTypeYes).First(&store).Error; err != nil {
 		return nil, nil
 	}
 	return store, nil

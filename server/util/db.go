@@ -247,6 +247,23 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 		}
 	}
 
+	if (db.Migrator().HasColumn(&model.Staff{}, "default")) {
+		err = db.Transaction(func(tx *gorm.DB) error {
+			tx.Model(&model.Staff{}).Where("default", true).Update("preferred", model.BoolTypeYes)
+
+			err1 := tx.Migrator().DropColumn(&model.Staff{}, "default")
+			if err1 != nil {
+				return fmt.Errorf("error in drop role %e", err1)
+			}
+
+			return nil
+		})
+
+		if err != nil {
+			log.Printf("Staff default Migration failed with error: %e", err)
+		}
+	}
+
 	return db
 }
 
