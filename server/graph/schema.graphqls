@@ -740,13 +740,15 @@ enum TimeframeType {
 
 enum StatsFilter {
     brand
-    category
+    products_category #todo we use _ so that it can be easy to use in describe enum
+    stocks_category
     item
     product
     staff #How much staff sold
     customer #Anasa hii ya queries
     order #profit we got from certain order
     payment
+    pricing
 }
 
 # We may use duration

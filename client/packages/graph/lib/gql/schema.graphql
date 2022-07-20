@@ -533,13 +533,15 @@ enum SortBy {
 
 enum StatsFilter {
     brand
-    category
     customer
     item
     order
     payment
+    pricing
     product
+    products_category
     staff
+    stocks_category
 }
 
 enum StoreType {

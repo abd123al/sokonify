@@ -23,9 +23,12 @@ class Topper extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              label,
-              style: Theme.of(context).textTheme.headlineSmall,
+            Expanded(
+              child: Text(
+                label,
+                style: Theme.of(context).textTheme.headlineSmall,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
             if (onPressed != null)
               TextButton(

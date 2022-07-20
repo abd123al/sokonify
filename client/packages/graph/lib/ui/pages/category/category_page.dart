@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:graph/nav/redirect_to.dart';
 
+import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../nav/routes.dart';
 import '../../widgets/widgets.dart';
+import '../stats/sub_stats.dart';
 import 'category_wrapper.dart';
 
 class CategoryPage extends StatelessWidget {
@@ -33,7 +35,6 @@ class CategoryPage extends StatelessWidget {
   }
 }
 
-
 class CategoryWidget extends StatelessWidget {
   const CategoryWidget({
     Key? key,
@@ -49,6 +50,23 @@ class CategoryWidget extends StatelessWidget {
       builder: (context, data) {
         return DetailsList(
           children: [
+            Builder(builder: (context) {
+              StatsFilter? filter;
+
+              if (data.type == CategoryType.category) {
+                filter = StatsFilter.productsCategory;
+              } else if (data.type == CategoryType.subcategory) {
+                filter = StatsFilter.stocksCategory;
+              } else if (data.type == CategoryType.pricing) {
+                filter = StatsFilter.pricing;
+              }
+
+              if (filter != null) {
+                return SubStats(filter: filter, id: id);
+              }
+
+              return const SizedBox.shrink();
+            }),
             ShortDetailTile(
               subtitle: "Category Name",
               value: data.name,

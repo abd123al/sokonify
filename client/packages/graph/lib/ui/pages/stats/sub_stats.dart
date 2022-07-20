@@ -39,7 +39,7 @@ class SubStats extends StatelessWidget {
               real: data.grossProfit.real,
               sales: data.grossProfit.sales,
             ),
-            title: "Today ${describeEnum(filter)} stats",
+            title: "Today Stats",
             onPressed: () => redirectTo(
               context,
               Routes.stats,

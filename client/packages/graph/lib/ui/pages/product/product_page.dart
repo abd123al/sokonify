@@ -7,6 +7,7 @@ import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../nav/routes.dart';
 import '../brand/brand_tile.dart';
 import '../category/category_tile.dart';
+import '../stats/sub_stats.dart';
 import 'product_wrapper.dart';
 
 class ProductPage extends StatelessWidget {
@@ -45,6 +46,7 @@ class ProductPage extends StatelessWidget {
   Widget builder(BuildContext context, Product$Query$Product data) {
     return ListView(
       children: [
+        SubStats(filter: StatsFilter.product, id: id),
         ShortDetailTile(subtitle: "Product Name", value: data.name),
         const Divider(),
         ShortDetailTile(subtitle: "Description", value: data.description),

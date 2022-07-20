@@ -280,8 +280,10 @@ func SumGrossProfit(db *gorm.DB, StoreID int, args model.StatsArgs) (*model.Prof
 
 	if args.Filter != nil && args.Value != nil {
 		//todo later we can combine filters
-		if *args.Filter == model.StatsFilterCategory {
-			y = e.Joins("inner joins products_categories ON products_categories.product_id = items.product_id AND products_categories.category_id = ?", args.Value)
+		if *args.Filter == model.StatsFilterProductsCategory {
+			y = e.Joins("inner join product_categories ON product_categories.product_id = items.product_id AND product_categories.category_id = ?", args.Value)
+		} else if *args.Filter == model.StatsFilterStocksCategory {
+			y = e.Joins("inner join product_categories ON product_categories.item_id = items.id AND product_categories.category_id = ?", args.Value)
 		} else if *args.Filter == model.StatsFilterBrand {
 			y = e.Where("items.brand_id = ?", args.Value)
 		} else if *args.Filter == model.StatsFilterItem {
@@ -296,6 +298,8 @@ func SumGrossProfit(db *gorm.DB, StoreID int, args model.StatsArgs) (*model.Prof
 			y = e.Where("payments.id = ?", args.Value)
 		} else if *args.Filter == model.StatsFilterOrder {
 			y = e.Where("orders.id = ?", args.Value)
+		} else if *args.Filter == model.StatsFilterPricing {
+			y = e.Where("prices.category_id = ?", args.Value)
 		}
 	}
 
