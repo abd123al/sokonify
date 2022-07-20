@@ -10,7 +10,7 @@ import '../../../repositories/payment_repository.dart';
 import '../../widgets/searchable_dropdown.dart';
 import '../category/category.dart';
 import '../customer/customers_list_cubit.dart';
-import '../home/stats/simple_stats_cubit.dart';
+import '../stats/home_stats_cubit.dart';
 import '../inventory/inventory.dart';
 import '../inventory/items_list_cubit.dart';
 import '../payment/create_order_payment_cubit.dart';

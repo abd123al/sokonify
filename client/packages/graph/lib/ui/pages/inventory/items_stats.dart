@@ -6,7 +6,7 @@ import 'package:responsive_builder/responsive_builder.dart';
 import '../../../../gql/generated/graphql_api.graphql.dart';
 import '../../helpers/currency_formatter.dart';
 import '../../widgets/topper.dart';
-import '../home/stats/stat_tile.dart';
+import '../stats/stat_tile.dart';
 import 'items_stats_cubit.dart';
 
 class InventoryStats extends StatelessWidget {

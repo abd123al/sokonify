@@ -1,14 +1,15 @@
 import 'package:blocitory/blocitory.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../gql/generated/graphql_api.graphql.dart';
-import '../../../../nav/nav.dart';
-import '../../stats/stats_view.dart';
-import 'simple_stats_cubit.dart';
+import '../../../gql/generated/graphql_api.graphql.dart';
+import '../../../nav/nav.dart';
+import 'stats_view.dart';
+import 'home_stats_cubit.dart';
 
 /// This is used in home page only
-class SimpleStats extends StatelessWidget {
-  const SimpleStats({
+class HomeStats extends StatelessWidget {
+  const HomeStats({
     Key? key,
   }) : super(key: key);
 
@@ -18,7 +19,11 @@ class SimpleStats extends StatelessWidget {
       retry: (cubit) => cubit.fetch(),
       builder: (context, data, _) {
         return StatsView(
-          data: data,
+          data:  StatsData(
+              real: data.grossProfit.real,
+              sales: data.grossProfit.sales,
+              expenses: data.totalExpensesAmount,
+          ),
           title: "Today Statistics",
           onPressed: () => redirectTo(context, Routes.stats),
         );

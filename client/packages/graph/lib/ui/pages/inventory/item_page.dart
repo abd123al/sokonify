@@ -6,6 +6,7 @@ import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../nav/nav.dart';
 import '../../widgets/widgets.dart';
 import '../category/category_tile.dart';
+import '../stats/stats.dart';
 import 'item_wrapper.dart';
 
 /// There is no need at all to edit posted order.
@@ -40,6 +41,7 @@ class ItemPage extends StatelessWidget {
   Widget builder(BuildContext context, Item$Query$Item data) {
     return DetailsList(
       children: [
+        SubStats(filter: StatsFilter.item, id: id),
         ShortDetailTile(subtitle: "Item Name", value: data.product.name),
         ShortDetailTile(subtitle: "Brand Name", value: data.brand?.name),
         ShortDetailTile(subtitle: "Quantity", value: data.quantity.toString()),

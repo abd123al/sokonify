@@ -34,7 +34,11 @@ class StatsWidget extends StatelessWidget {
         initializer: (cubit) => cubit.fetchByTimeframe(tab.type),
         builder: (context, data, _) {
           return StatsView(
-            data: data,
+            data: StatsData(
+              real: data.grossProfit.real,
+              sales: data.grossProfit.sales,
+              expenses: data.totalExpensesAmount,
+            ),
             title: "${tab.title} Statistics",
           );
         },

@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/repositories.dart';
 import '../../widgets/widgets.dart';
-import '../home/stats/simple_stats_cubit.dart';
+import '../stats/home_stats_cubit.dart';
 import '../order/orders_list_cubit.dart';
 import 'create_order_payment_cubit.dart';
 import 'payments_list_cubit.dart';

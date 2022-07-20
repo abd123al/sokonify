@@ -22,4 +22,13 @@ class StatsRepository {
 
     return client.query(options);
   }
+
+  fetchSubStats(StatsArgs args) {
+    final options = QueryOptions(
+      document: SUB_STATS_QUERY_DOCUMENT,
+      variables: StatsArguments(args: args).toJson(),
+    );
+
+    return client.query(options);
+  }
 }

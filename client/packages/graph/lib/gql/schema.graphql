@@ -290,6 +290,7 @@ type ProductCategory implements Gorm {
 type Profit {
     expected: String!
     real: String!
+    sales: String!
 }
 
 type Query {
@@ -335,10 +336,10 @@ type Staff implements Gorm {
     createdAt: Time!
     creator: User
     creatorId: Int
-    default: Boolean!
     deletedAt: Time
     id: ID!
     permissions: [Permission!]!
+    preferred: BoolType!
     role: Category!
     roleId: Int!
     updatedAt: Time!
@@ -400,6 +401,11 @@ type User implements Gorm {
     phone: String
     updatedAt: Time!
     username: String
+}
+
+enum BoolType {
+    no
+    yes
 }
 
 enum BusinessType {
@@ -530,7 +536,8 @@ enum StatsFilter {
     category
     customer
     item
-    priceGroup
+    order
+    payment
     product
     staff
 }

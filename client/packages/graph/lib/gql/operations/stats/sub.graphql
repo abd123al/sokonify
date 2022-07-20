@@ -1,0 +1,6 @@
+query subStats($args:StatsArgs!) {
+    grossProfit(args: $args){
+        real
+        sales
+    }
+}

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../nav/nav.dart';
 import '../payment/payments_list.dart';
 import '../payment/payments_list_cubit.dart';
-import 'stats/simple_stats.dart';
+import '../stats/home_stats.dart';
 
 class POS extends StatelessWidget {
   const POS({Key? key}) : super(key: key);
@@ -12,7 +12,7 @@ class POS extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: const PaymentsList<PaymentsListCubit>(
-        topper: SimpleStats(),
+        topper: HomeStats(),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => redirectTo(context, Routes.createSales),

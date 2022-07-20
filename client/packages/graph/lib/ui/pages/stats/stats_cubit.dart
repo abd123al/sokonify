@@ -29,4 +29,11 @@ class StatsCubit extends ResourceCubit<Stats$Query> {
       parser: (r) => Stats$Query.fromJson(r),
     );
   }
+
+  fetchSubStats(StatsArgs args) {
+    super.execute(
+      executor: () => _repository.fetch(args),
+      parser: (r) => Stats$Query.fromJson(r),
+    );
+  }
 }

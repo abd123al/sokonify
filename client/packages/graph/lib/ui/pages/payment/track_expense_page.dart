@@ -7,7 +7,7 @@ import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/repositories.dart';
 import '../../widgets/searchable_dropdown.dart';
 import '../expenses_category/expense_category.dart';
-import '../home/stats/simple_stats_cubit.dart';
+import '../stats/home_stats_cubit.dart';
 import 'create_order_payment_cubit.dart';
 import 'payments_list_cubit.dart';
 
