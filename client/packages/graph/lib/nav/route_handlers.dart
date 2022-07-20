@@ -173,8 +173,12 @@ var createPaymentPageRouterHandler = Handler(handlerFunc: (context, params) {
   );
 });
 
-var statsPageRouterHandler = Handler(handlerFunc: (_, __) {
-  return const StatsPage();
+var statsPageRouterHandler = Handler(handlerFunc: (context, __) {
+  final args = context?.settings?.arguments as StatsArgs?;
+
+  return StatsPage(
+    args: args,
+  );
 });
 
 var ordersPageRouterHandler = Handler(handlerFunc: (_, __) {

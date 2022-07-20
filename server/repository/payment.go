@@ -271,7 +271,7 @@ func SumGrossProfit(db *gorm.DB, StoreID int, args model.StatsArgs) (*model.Prof
 	var profit *model.Profit
 	StartDate, EndDate := helpers.HandleStatsDates(args)
 
-	a := db.Table("order_items").Debug()
+	a := db.Table("order_items")
 	b := a.Joins("inner join items on order_items.item_id = items.id")
 	c := b.Joins("inner join orders on order_items.order_id = orders.id AND orders.issuer_id = ?", StoreID)
 	d := c.Joins("inner join payments on orders.id = payments.order_id")

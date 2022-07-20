@@ -19,19 +19,25 @@ class StatsWidget extends StatelessWidget {
   const StatsWidget({
     Key? key,
     required this.tab,
+    this.args,
   }) : super(key: key);
 
   final StatTab tab;
+  final StatsArgs? args;
 
   @override
   Widget build(BuildContext context) {
+    var statsArgs = args ?? StatsArgs();
+
+    statsArgs.timeframe = tab.type;
+
     return BlocProvider(
-      create: (context){
+      create: (context) {
         return StatsCubit(RepositoryProvider.of<StatsRepository>(context));
       },
       child: QueryBuilder<Stats$Query, StatsCubit>(
-        retry: (cubit) => cubit.fetchByTimeframe(tab.type),
-        initializer: (cubit) => cubit.fetchByTimeframe(tab.type),
+        retry: (cubit) => cubit.fetch(statsArgs),
+        initializer: (cubit) => cubit.fetch(statsArgs),
         builder: (context, data, _) {
           return StatsView(
             data: StatsData(
@@ -39,6 +45,7 @@ class StatsWidget extends StatelessWidget {
               sales: data.grossProfit.sales,
               expenses: data.totalExpensesAmount,
             ),
+            sub: statsArgs.value != null,
             title: "${tab.title} Statistics",
           );
         },
@@ -48,7 +55,11 @@ class StatsWidget extends StatelessWidget {
 }
 
 class StatsPage extends StatefulWidget {
-  const StatsPage({Key? key}) : super(key: key);
+  const StatsPage({
+    Key? key,
+    this.args,
+  }) : super(key: key);
+  final StatsArgs? args;
 
   @override
   State<StatsPage> createState() => _HomePageState();
@@ -96,7 +107,12 @@ class _HomePageState extends State<StatsPage> {
 
   Widget _body() {
     return TabBarView(
-      children: list.map((e) => StatsWidget(tab: e)).toList(),
+      children: list
+          .map((e) => StatsWidget(
+                tab: e,
+                args: widget.args,
+              ))
+          .toList(),
     );
   }
 }

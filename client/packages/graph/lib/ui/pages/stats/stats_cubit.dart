@@ -8,13 +8,9 @@ class StatsCubit extends ResourceCubit<Stats$Query> {
 
   StatsCubit(this._repository) : super();
 
-  fetchByTimeframe(TimeframeType timeframe) {
+  fetch(StatsArgs args) {
     super.execute(
-      executor: () => _repository.fetch(
-        StatsArgs(
-          timeframe: timeframe,
-        ),
-      ),
+      executor: () => _repository.fetch(args),
       parser: (r) => Stats$Query.fromJson(r),
     );
   }
@@ -32,7 +28,7 @@ class StatsCubit extends ResourceCubit<Stats$Query> {
 
   fetchSubStats(StatsArgs args) {
     super.execute(
-      executor: () => _repository.fetch(args),
+      executor: () => _repository.fetchSubStats(args),
       parser: (r) => Stats$Query.fromJson(r),
     );
   }

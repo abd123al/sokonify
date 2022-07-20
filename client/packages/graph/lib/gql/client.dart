@@ -74,17 +74,17 @@ Future<GraphQLClient> graphQLClient({
   );
 
   if (kDebugMode) {
-    dio.interceptors.add(
-      PrettyDioLogger(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: false,
-        responseHeader: false,
-        error: true,
-        compact: true,
-        maxWidth: 90,
-      ),
-    );
+    // dio.interceptors.add(
+    //   PrettyDioLogger(
+    //     requestBody: true,
+    //     responseBody: true,
+    //     requestHeader: false,
+    //     responseHeader: false,
+    //     error: true,
+    //     compact: true,
+    //     maxWidth: 90,
+    //   ),
+    // );
   }
 
   dio.interceptors.add(AuthInterceptor(box));
