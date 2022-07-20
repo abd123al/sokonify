@@ -235,35 +235,30 @@ func SumNetIncome(db *gorm.DB, StoreID int, args model.StatsArgs) (string, error
 	var amount string
 	StartDate, EndDate := helpers.HandleStatsDates(args)
 
-	if err := db.Table("payments").Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate).Joins("inner join staffs on payments.staff_id = staffs.user_id").Joins("inner join categories on staffs.role_id = categories.id AND categories.store_id = ?", StoreID).Select("sum(amount)").Row().Scan(&amount); err != nil {
+	a := db.Table("payments")
+	b := a.Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate)
+	c := b.Joins("inner join staffs on payments.staff_id = staffs.user_id")
+	d := c.Joins("inner join categories on staffs.role_id = categories.id AND categories.store_id = ?", StoreID)
+	if err := d.Select("sum(amount)").Row().Scan(&amount); err != nil {
 		return "0.00", nil
 	}
 
 	return amount, nil
 }
 
-func SumExpensePayment(db *gorm.DB, StoreID int, args model.StatsArgs) (string, error) {
-	return sumPaymentType(db, StoreID, args, model.PaymentTypeExpense)
-}
-
 func SumOrderPayments(db *gorm.DB, StoreID int, args model.StatsArgs) (string, error) {
-	return sumPaymentType(db, StoreID, args, model.PaymentTypeOrder)
+	re, er := SumGrossProfit(db, StoreID, args)
+
+	return re.Sales, er
 }
 
-func sumPaymentType(db *gorm.DB, StoreID int, args model.StatsArgs, t model.PaymentType) (string, error) {
+func SumExpensePayment(db *gorm.DB, StoreID int, args model.StatsArgs) (string, error) {
 	var amount string
 	StartDate, EndDate := helpers.HandleStatsDates(args)
 
-	var join string
-
-	if t == model.PaymentTypeExpense {
-		join = "inner join expenses on expenses.id = payments.expense_id AND expenses.store_id = ?"
-	} else {
-		join = "inner join orders on orders.id = payments.order_id AND orders.issuer_id = ?"
-	}
 	a := db.Table("payments")
 	b := a.Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate)
-	c := b.Joins(join, StoreID)
+	c := b.Joins("inner join expenses on expenses.id = payments.expense_id AND expenses.store_id = ?", StoreID)
 
 	if err := c.Select("coalesce(sum(amount),0)").Row().Scan(&amount); err != nil {
 		return "0.00", err
@@ -274,19 +269,45 @@ func sumPaymentType(db *gorm.DB, StoreID int, args model.StatsArgs, t model.Paym
 
 func SumGrossProfit(db *gorm.DB, StoreID int, args model.StatsArgs) (*model.Profit, error) {
 	var profit *model.Profit
-	var Real, Expected string
 	StartDate, EndDate := helpers.HandleStatsDates(args)
 
-	a := db.Table("order_items")
+	a := db.Table("order_items").Debug()
 	b := a.Joins("inner join items on order_items.item_id = items.id")
 	c := b.Joins("inner join orders on order_items.order_id = orders.id AND orders.issuer_id = ?", StoreID)
 	d := c.Joins("inner join payments on orders.id = payments.order_id")
 	e := d.Joins("inner join prices on prices.item_id = items.id")
-	f := e.Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate)
-	g := f.Select("sum((prices.amount - items.buying_price) * order_items.quantity) AS expected, sum((order_items.price - items.buying_price) * order_items.quantity) AS real")
+	var y = e
+
+	if args.Filter != nil && args.Value != nil {
+		//todo later we can combine filters
+		if *args.Filter == model.StatsFilterCategory {
+			y = e.Joins("inner joins products_categories ON products_categories.product_id = items.product_id AND products_categories.category_id = ?", args.Value)
+		} else if *args.Filter == model.StatsFilterBrand {
+			y = e.Where("items.brand_id = ?", args.Value)
+		} else if *args.Filter == model.StatsFilterItem {
+			y = e.Where("items.id = ?", args.Value)
+		} else if *args.Filter == model.StatsFilterProduct {
+			y = e.Where("items.product_id = ?", args.Value)
+		} else if *args.Filter == model.StatsFilterCustomer {
+			y = e.Where("orders.customer_id = ?", args.Value)
+		} else if *args.Filter == model.StatsFilterStaff {
+			y = e.Where("payments.staff_id = ?", args.Value)
+		} else if *args.Filter == model.StatsFilterPayment {
+			y = e.Where("payments.id = ?", args.Value)
+		} else if *args.Filter == model.StatsFilterOrder {
+			y = e.Where("orders.id = ?", args.Value)
+		}
+	}
+
+	f := y.Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate)
+	g := f.Select(`
+COALESCE(SUM((prices.amount - items.buying_price) * order_items.quantity),0.00) AS expected,
+COALESCE(SUM((order_items.price - items.buying_price) * order_items.quantity),0.00) AS real, 
+COALESCE(SUM(order_items.price * order_items.quantity),0.00) AS sales
+`)
 
 	if args.PricingID != nil {
-		h := g.Where("prices.category_id =? AND orders.pricing_id = ?", args.PricingID, args.PricingID)
+		h := g.Where("prices.category_id =?", args.PricingID)
 		if err := h.Scan(&profit).Error; err != nil {
 			return nil, err
 		}
@@ -296,19 +317,5 @@ func SumGrossProfit(db *gorm.DB, StoreID int, args model.StatsArgs) (*model.Prof
 		}
 	}
 
-	Real = profit.Real
-	Expected = profit.Expected
-
-	if len(Real) == 0 {
-		Real = "0.00"
-	}
-
-	if Expected == "" {
-		Expected = "0.00"
-	}
-
-	return &model.Profit{
-		Real:     Real,
-		Expected: Expected,
-	}, nil
+	return profit, nil
 }

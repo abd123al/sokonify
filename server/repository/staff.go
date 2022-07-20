@@ -83,7 +83,7 @@ func FindStoreAndRole(db *gorm.DB, Args helpers.UserAndStoreArgs) (*helpers.Find
 func findRole(db *gorm.DB, userId int, storeId *int) (*helpers.FindDefaultStoreAndRoleResult, error) {
 	var roleResult *helpers.FindDefaultStoreAndRoleResult
 
-	a := db.Debug().Table("staffs").Joins("inner join categories on staffs.role_id = categories.id")
+	a := db.Table("staffs").Joins("inner join categories on staffs.role_id = categories.id")
 	b := a.Joins("inner join stores on categories.store_id = stores.id")
 
 	var c *gorm.DB

@@ -273,15 +273,20 @@ func TestPayment(t *testing.T) {
 		re := util.CreatePayment(DB, nil, true)
 
 		timeframe := model.TimeframeTypeToday
+		value := re.Payment.ID
+		filter := model.StatsFilterPayment
 
 		profit, err := repository.SumGrossProfit(DB, re.StoreID, model.StatsArgs{
 			Timeframe: &timeframe,
 			PricingID: re.PricingID,
+			Value:     &value,
+			Filter:    &filter,
 		})
 
 		//fmt.Printf("Profit %v\n", profit)
 		fmt.Printf("Profit %s\n", profit.Real)
 		fmt.Printf("Expected %s\n", profit.Expected)
+		fmt.Printf("Sales %s\n", profit.Sales)
 
 		require.Nil(t, err)
 		require.NotEmpty(t, profit)
@@ -294,9 +299,14 @@ func TestPayment(t *testing.T) {
 			Timeframe: &timeframe,
 		})
 
+		fmt.Printf("Profit %s\n", profit.Real)
+		fmt.Printf("Expected %s\n", profit.Expected)
+		fmt.Printf("Sales %s\n", profit.Sales)
+
 		require.Nil(t, err)
 		require.NotNil(t, profit)
-		//require.NotEmpty(t, profit[0].Real)
-		//require.NotEmpty(t, profit[0].Expected)
+		require.NotEmpty(t, profit.Real)
+		require.NotEmpty(t, profit.Expected)
+		require.NotEmpty(t, profit.Sales)
 	})
 }

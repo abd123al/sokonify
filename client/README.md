@@ -1,4 +1,5 @@
-- Cone
+- show item view in tabs show details, sales.
+- show stats for categories
 - print invoice and receipt from payment page too
 - add receipt layout.
 - when we click eg total sales show how items contributed to that amount. mfano panadol sold items 20 amount 1000. show na percent comtribution ili mtu afurahie

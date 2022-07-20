@@ -745,7 +745,8 @@ enum StatsFilter {
     product
     staff #How much staff sold
     customer #Anasa hii ya queries
-    priceGroup
+    order #profit we got from certain order
+    payment
 }
 
 # We may use duration
@@ -822,6 +823,7 @@ type Profit {
     expected : String!
     # With discount
     real : String!
+    sales : String!
 }
 
 type ItemsStats {
