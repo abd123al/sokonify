@@ -569,8 +569,8 @@ func (r *queryResolver) Staff(ctx context.Context, id int) (*model.Staff, error)
 	return repository.FindStaff(r.DB, id)
 }
 
-func (r *queryResolver) Staffs(ctx context.Context) ([]*model.Staff, error) {
-	return repository.FindStaffs(r.DB, helpers.ForContext(ctx).StoreID)
+func (r *queryResolver) Staffs(ctx context.Context, args *model.StaffArgs) ([]*model.Staff, error) {
+	return repository.FindStaffs(r.DB, args, helpers.ForContext(ctx).StoreID)
 }
 
 func (r *queryResolver) Store(ctx context.Context, id int) (*model.Store, error) {

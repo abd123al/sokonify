@@ -484,6 +484,16 @@ enum BoolType {
     no
 }
 
+enum StaffBy {
+    store
+    role
+}
+
+input StaffArgs {
+    by: StaffBy,
+    value:ID!
+}
+
 type Staff implements Gorm {
     id: ID! @goTag(key: "gorm", value: "primaryKey")
 
@@ -859,7 +869,7 @@ type Query {
     product(id: ID!): Product!
     products(args: ProductsArgs!): [Product!]!
     staff(id: ID!): Staff! @isAuthenticated
-    staffs: [Staff!]! @isAuthenticated
+    staffs(args: StaffArgs): [Staff!]! @isAuthenticated
     store(id: ID!): Store! @isAuthenticated
     stores: [Store!]! @isAuthenticated
     unit(id: ID!): Unit!

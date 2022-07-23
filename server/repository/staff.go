@@ -49,9 +49,27 @@ func FindStaff(db *gorm.DB, ID int) (*model.Staff, error) {
 	return staff, result.Error
 }
 
-func FindStaffs(db *gorm.DB, StoreID int) ([]*model.Staff, error) {
+func FindStaffs(db *gorm.DB, staffArgs *model.StaffArgs, StoresID int) ([]*model.Staff, error) {
 	var staffs []*model.Staff
-	result := db.Table("staffs").Joins("inner join categories on categories.id = staffs.role_id AND categories.store_id = ?", StoreID).Find(&staffs)
+
+	var result *gorm.DB
+	var storeId = StoresID
+	var RoleID *int
+
+	if staffArgs != nil {
+		if *staffArgs.By == model.StaffByStore {
+			storeId = staffArgs.Value
+		} else if *staffArgs.By == model.StaffByRole {
+			RoleID = &staffArgs.Value
+		}
+	}
+
+	if RoleID != nil {
+		result = db.Where(&model.Staff{RoleID: *RoleID}).Find(&staffs)
+	} else {
+		result = db.Table("staffs").Joins("inner join categories on categories.id = staffs.role_id AND categories.store_id = ?", storeId).Find(&staffs)
+	}
+
 	return staffs, result.Error
 }
 
