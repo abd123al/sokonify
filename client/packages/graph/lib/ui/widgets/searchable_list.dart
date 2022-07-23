@@ -65,7 +65,7 @@ class _SearchableListState<T> extends State<SearchableList<T>> {
                   });
                 },
                 decoration: InputDecoration(
-                  hintText: "Search ${widget.hintName}s",
+                  hintText: "Search ${widget.hintName}",
                   border: const OutlineInputBorder(),
                   suffixIcon: const Icon(Icons.search_outlined),
                 ),

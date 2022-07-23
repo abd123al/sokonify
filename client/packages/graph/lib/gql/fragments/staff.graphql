@@ -1,0 +1,6 @@
+fragment StaffParts on Staff {
+    id
+    user {
+        ...CreatorParts
+    }
+}

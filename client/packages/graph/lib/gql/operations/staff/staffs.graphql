@@ -1,0 +1,5 @@
+query staffs($args:StaffsArgs!) {
+    staffs(args: $args) {
+        ...StaffParts
+    }
+}

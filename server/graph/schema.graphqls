@@ -484,13 +484,13 @@ enum BoolType {
     no
 }
 
-enum StaffBy {
+enum StaffsBy {
     store
     role
 }
 
-input StaffArgs {
-    by: StaffBy,
+input StaffsArgs {
+    by: StaffsBy!,
     value:ID!
 }
 
@@ -869,7 +869,7 @@ type Query {
     product(id: ID!): Product!
     products(args: ProductsArgs!): [Product!]!
     staff(id: ID!): Staff! @isAuthenticated
-    staffs(args: StaffArgs): [Staff!]! @isAuthenticated
+    staffs(args: StaffsArgs): [Staff!]! @isAuthenticated
     store(id: ID!): Store! @isAuthenticated
     stores: [Store!]! @isAuthenticated
     unit(id: ID!): Unit!

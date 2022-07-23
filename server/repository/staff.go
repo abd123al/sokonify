@@ -49,7 +49,7 @@ func FindStaff(db *gorm.DB, ID int) (*model.Staff, error) {
 	return staff, result.Error
 }
 
-func FindStaffs(db *gorm.DB, staffArgs *model.StaffArgs, StoresID int) ([]*model.Staff, error) {
+func FindStaffs(db *gorm.DB, staffArgs *model.StaffsArgs, StoresID int) ([]*model.Staff, error) {
 	var staffs []*model.Staff
 
 	var result *gorm.DB
@@ -57,9 +57,9 @@ func FindStaffs(db *gorm.DB, staffArgs *model.StaffArgs, StoresID int) ([]*model
 	var RoleID *int
 
 	if staffArgs != nil {
-		if *staffArgs.By == model.StaffByStore {
+		if staffArgs.By == model.StaffsByStore {
 			storeId = staffArgs.Value
-		} else if *staffArgs.By == model.StaffByRole {
+		} else if staffArgs.By == model.StaffsByRole {
 			RoleID = &staffArgs.Value
 		}
 	}

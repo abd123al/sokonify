@@ -554,7 +554,7 @@ func (r *queryResolver) Permission(ctx context.Context, id int) (*model.Permissi
 }
 
 func (r *queryResolver) Permissions(ctx context.Context, roleID int) ([]*model.Permission, error) {
-	return repository.FindPermissions(r.DB, 1) //todo
+	return repository.FindPermissions(r.DB, roleID)
 }
 
 func (r *queryResolver) Product(ctx context.Context, id int) (*model.Product, error) {
@@ -569,7 +569,7 @@ func (r *queryResolver) Staff(ctx context.Context, id int) (*model.Staff, error)
 	return repository.FindStaff(r.DB, id)
 }
 
-func (r *queryResolver) Staffs(ctx context.Context, args *model.StaffArgs) ([]*model.Staff, error) {
+func (r *queryResolver) Staffs(ctx context.Context, args *model.StaffsArgs) ([]*model.Staff, error) {
 	return repository.FindStaffs(r.DB, args, helpers.ForContext(ctx).StoreID)
 }
 
@@ -626,7 +626,7 @@ func (r *staffResolver) Role(ctx context.Context, obj *model.Staff) (*model.Cate
 }
 
 func (r *staffResolver) User(ctx context.Context, obj *model.Staff) (*model.User, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.FindUser(r.DB, obj.UserID)
 }
 
 func (r *staffResolver) Creator(ctx context.Context, obj *model.Staff) (*model.User, error) {

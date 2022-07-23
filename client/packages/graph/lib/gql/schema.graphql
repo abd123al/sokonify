@@ -321,7 +321,7 @@ type Query {
     product(id: ID!): Product!
     products(args: ProductsArgs!): [Product!]!
     staff(id: ID!): Staff!
-    staffs: [Staff!]!
+    staffs(args: StaffsArgs): [Staff!]!
     store(id: ID!): Store!
     stores: [Store!]!
     totalExpensesAmount(args: StatsArgs!): String!
@@ -529,6 +529,11 @@ enum ProductsBy {
 enum SortBy {
     ASC
     DESC
+}
+
+enum StaffsBy {
+    role
+    store
 }
 
 enum StatsFilter {
@@ -754,6 +759,11 @@ input SignUpInput {
 input StaffInput {
     roleId: ID!
     userId: ID!
+}
+
+input StaffsArgs {
+    by: StaffsBy!
+    value: ID!
 }
 
 input StatsArgs {

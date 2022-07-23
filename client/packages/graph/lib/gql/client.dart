@@ -95,7 +95,7 @@ Future<GraphQLClient> graphQLClient({
   );
 
   return GraphQLClient(
-    cache: GraphQLCache(),
+   cache: GraphQLCache(),
     defaultPolicies: DefaultPolicies(
       query: Policies(
         fetch: FetchPolicy.noCache, //so refresh works

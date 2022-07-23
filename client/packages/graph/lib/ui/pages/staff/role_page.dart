@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../nav/nav.dart';
 import '../category/category_page.dart';
+import 'staffs_list.dart';
 
 class RoleTab {
   final Widget widget;
@@ -33,16 +34,16 @@ class _RolePageState extends State<RolePage> {
 
     list = [
       RoleTab(
-        "Details",
-        CategoryWidget(id: widget.id),
+        "Staffs",
+        StaffsList(roleId: widget.id),
       ),
       RoleTab(
         "Permissions",
         const SizedBox(),
       ),
       RoleTab(
-        "Staffs",
-        const SizedBox(),
+        "Details",
+        CategoryWidget(id: widget.id),
       ),
     ];
   }
