@@ -14,7 +14,13 @@ cd..
 
 Write-Host "Start Building DDl...!"
 
+$output = "../client/packages/server/windows/lib.dll"
+
+if (Test-Path $output) {
+    Remove-Item -Verbose -Force $output
+}
+
 #Installing go and build
-go build -o ../client/packages/server/windows/lib.dll -buildmode=c-shared -ldflags="-s -w" ./c/c.go
+go build -o $output -buildmode=c-shared -ldflags="-s -w" ./c/c.go
 
 Write-Host "Done building dll!"

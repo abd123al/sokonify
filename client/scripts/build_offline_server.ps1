@@ -27,7 +27,23 @@ flutter build windows `
                     --split-debug-info=./build/app/outputs/symbols `
                     --release
 
-$build = 20
+#This will help automating getting version number
+function Get-Build-Number
+{
+    $file = "$PSScriptRoot\last_id.txt"
+
+    $str = Get-Content -Path $file
+
+    $last_id = [System.Decimal]::Parse($str)
+    $last_id++
+
+    Set-Content -Path $file $last_id
+
+    return $last_id
+}
+
+$build = Get-Build-Number
+
 $path = [Environment]::GetFolderPath("Desktop")
 
 flutter pub run msix:create `
