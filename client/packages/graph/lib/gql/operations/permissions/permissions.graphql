@@ -1,0 +1,5 @@
+query permissions($roleId: ID!) {
+    permissions(roleId: $roleId) {
+        ...PermissionParts
+    }
+}

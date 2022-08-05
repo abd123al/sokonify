@@ -28,4 +28,33 @@ class StaffRepository {
 
     return client.query(options);
   }
+
+  createPermission(PermissionInput input) {
+    final options = MutationOptions(
+      document: CREATE_PERMISSION_MUTATION_DOCUMENT,
+      variables: CreatePermissionArguments(input: input).toJson(),
+    );
+
+    return client.mutate(options);
+  }
+
+  deletePermission(int id) {
+    final options = MutationOptions(
+      document: DELETE_PERMISSION_MUTATION_DOCUMENT,
+      variables: DeletePermissionArguments(id: id).toJson(),
+    );
+
+    return client.mutate(options);
+  }
+
+  fetchPermissions(int roleId) {
+    final options = QueryOptions(
+      document: PERMISSIONS_QUERY_DOCUMENT,
+      variables: PermissionsArguments(
+        roleId: roleId,
+      ).toJson(),
+    );
+
+    return client.query(options);
+  }
 }

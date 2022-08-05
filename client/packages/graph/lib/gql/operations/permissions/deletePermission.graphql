@@ -1,0 +1,5 @@
+mutation deletePermission($id:ID!) {
+    deletePermission(id: $id){
+        ...PermissionParts
+    }
+}

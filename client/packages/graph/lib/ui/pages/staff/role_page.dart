@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../nav/nav.dart';
 import '../category/category_page.dart';
+import 'permissions.dart';
 import 'staffs_list.dart';
 
 class RoleTab {
@@ -39,7 +41,11 @@ class _RolePageState extends State<RolePage> {
       ),
       RoleTab(
         "Permissions",
-        const SizedBox(),
+        PermissionsWidget(id: widget.id, type: CategoryType.role),
+      ),
+      RoleTab(
+        "Pricing",
+        PermissionsWidget(id: widget.id, type: CategoryType.pricing),
       ),
       RoleTab(
         "Details",
@@ -55,7 +61,7 @@ class _RolePageState extends State<RolePage> {
       child: Scaffold(
         appBar: AppBar(
           bottom: TabBar(
-            isScrollable: false,
+            isScrollable: true,
             tabs: list
                 .map(
                   (e) => Tab(text: e.title),

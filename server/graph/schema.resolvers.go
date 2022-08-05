@@ -415,7 +415,11 @@ func (r *paymentResolver) OrderItems(ctx context.Context, obj *model.Payment) ([
 }
 
 func (r *permissionResolver) Pricing(ctx context.Context, obj *model.Permission) (*model.Category, error) {
-	panic(fmt.Errorf("not implemented"))
+	if obj.PricingID != nil {
+		return repository.FindCategory(r.DB, *obj.PricingID)
+	}
+
+	return nil, nil
 }
 
 func (r *permissionResolver) Creator(ctx context.Context, obj *model.Permission) (*model.User, error) {

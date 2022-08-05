@@ -1,0 +1,8 @@
+fragment PermissionParts on Permission {
+    id
+    permission
+    pricing {
+        ...CategoryParts
+    }
+    createdAt
+}

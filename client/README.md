@@ -1,3 +1,8 @@
+- JWT expire time in 12 hours
+- handling 401 
+- hiding items based on permissions
+- 
+- 
 - show item view in tabs show details, sales.
 - show stats for categories
 - print invoice and receipt from payment page too
