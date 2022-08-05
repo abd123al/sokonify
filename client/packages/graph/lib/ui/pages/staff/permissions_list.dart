@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:graph/gql/generated/graphql_api.dart';
 
+import '../../../nav/nav.dart';
 import '../../widgets/widgets.dart';
 import 'permissions_wrapper.dart';
 
@@ -17,26 +18,26 @@ class PermissionsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      body: _build(),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => redirectTo(
+          context,
+          Routes.createCategory,
+          args: type,
+        ),
+        tooltip: 'Add',
+        icon: const Icon(Icons.edit),
+        label: const Text("Edit"),
+      ),
+    );
+  }
+
+  Widget _build() {
     return PermissionsWrapper(
       roleId: id,
-      builder: (context, data) {
-        List<Permissions$Query$Permission> list = [];
-        String word = "";
-
-        for (var e in data.items) {
-          if (type == CategoryType.role) {
-            word = "Permission";
-            if (e.permission != null) {
-              list.add(e);
-            }
-          } else if (type == CategoryType.pricing) {
-            word = "Pricing";
-            if (e.pricing != null) {
-              list.add(e);
-            }
-          }
-        }
-
+      type: type,
+      builder: (context, data, word) {
         return SearchableList<Permissions$Query$Permission>(
           builder: (context, e, color) {
             return Builder(
@@ -74,9 +75,7 @@ class PermissionsWidget extends StatelessWidget {
             }
             return "";
           },
-          data: data.copyWith(
-            items: list,
-          ),
+          data: data,
           hintName: word,
         );
       },

@@ -11,11 +11,17 @@ class PermissionsWrapper extends StatelessWidget {
     Key? key,
     required this.roleId,
     required this.builder,
+    required this.type,
   }) : super(key: key);
 
   final int roleId;
+  final CategoryType type;
+
   final Widget Function(
-      BuildContext, ResourceListData<Permissions$Query$Permission>) builder;
+    BuildContext,
+    ResourceListData<Permissions$Query$Permission>,
+    String,
+  ) builder;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +36,28 @@ class PermissionsWrapper extends StatelessWidget {
         retry: (cubit) => cubit.fetch(roleId),
         initializer: (cubit) => cubit.fetch(roleId),
         builder: (context, data, _) {
-          return builder(context, data);
+          List<Permissions$Query$Permission> list = [];
+          String word = "";
+
+          for (var e in data.items) {
+            if (type == CategoryType.role) {
+              word = "Permission";
+              if (e.permission != null) {
+                list.add(e);
+              }
+            } else if (type == CategoryType.pricing) {
+              word = "Pricing";
+              if (e.pricing != null) {
+                list.add(e);
+              }
+            }
+          }
+
+          return builder(
+            context,
+            data.copyWith(items: list),
+            word,
+          );
         },
       ),
     );

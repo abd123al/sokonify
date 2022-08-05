@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../nav/nav.dart';
 import '../category/category_page.dart';
-import 'permissions.dart';
+import 'permissions_list.dart';
 import 'staffs_list.dart';
 
 class RoleTab {
