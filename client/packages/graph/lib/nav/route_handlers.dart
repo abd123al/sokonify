@@ -214,3 +214,19 @@ var rolePageRouterHandler = Handler(handlerFunc: (context, params) {
     name: context?.settings?.arguments as String,
   );
 });
+
+var editPermissionsRouterHandler = Handler(handlerFunc: (context, params) {
+  final id = params["id"]![0];
+  final type = context?.settings?.arguments as CategoryType;
+
+  if (type == CategoryType.pricing) {
+    return EditStaffPricing(
+      roleId: int.parse(id),
+    );
+  }
+
+  return EditPermissions(
+    roleId: int.parse(id),
+    type: type,
+  );
+});

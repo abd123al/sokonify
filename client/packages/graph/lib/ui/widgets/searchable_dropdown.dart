@@ -99,11 +99,14 @@ class _SearchableListState<T> extends State<SearchableDropdown<T>> {
                   selectedItems: widget.selectedItems != null
                       ? widget.selectedItems!
                       : <T>[],
-                  popupProps: const PopupPropsMultiSelection.menu(
+                  popupProps:  PopupPropsMultiSelection.menu(
                     showSearchBox: true,
                     searchFieldProps: searchFieldProps,
-                    searchDelay: Duration(milliseconds: 0),
+                    searchDelay: const Duration(milliseconds: 0),
                     isFilterOnline: false,
+                    itemBuilder: widget.builder != null
+                        ? (c, i, _) => widget.builder!(c, i)
+                        : null,
                   ),
                 );
               }

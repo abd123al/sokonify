@@ -23,7 +23,7 @@ class PermissionsWidget extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => redirectTo(
           context,
-          Routes.createCategory,
+          "${Routes.editPermissions}/$id",
           args: type,
         ),
         tooltip: 'Add',
