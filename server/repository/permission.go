@@ -6,27 +6,67 @@ import (
 	"mahesabu/helpers"
 )
 
-// CreatePermission Permissions are role based. So users are assigned roles
-func CreatePermission(db *gorm.DB, input model.PermissionInput, args helpers.UserAndStoreArgs) (*model.Permission, error) {
-	category := model.Permission{
-		Permission: input.Permission,
-		PricingID:  input.PricingID,
-		CreatorID:  args.UserID,
-		RoleID:     input.RoleID,
+func containsPricing(s []*model.Permission, e int) bool {
+	for _, a := range s {
+		if a.PricingID == &e {
+			return true
+		}
 	}
-
-	result := db.Create(&category)
-	return &category, result.Error
+	return false
 }
 
-func DeletePermission(DB *gorm.DB, ID int) (*model.Permission, error) {
-	var category *model.Permission
+func containsPermission(s []*model.Permission, e model.PermissionType) bool {
+	for _, a := range s {
+		if a.Permission == &e {
+			return true
+		}
+	}
+	return false
+}
 
-	if err := DB.Model(&category).Where(&model.Permission{ID: ID}).Delete(&category).Error; err != nil {
+// SetPermissions Permissions are role based. So users are assigned roles
+func SetPermissions(db *gorm.DB, input model.PermissionsInput, args helpers.UserAndStoreArgs) ([]*model.Permission, error) {
+	var permissions []*model.Permission
+	var oldList []*model.Permission
+
+	//todo don't delete
+	err := db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Model(&model.Permission{}).Where(&model.Permission{RoleID: input.RoleID}).Delete(&oldList).Error; err != nil {
+			return err
+		}
+
+		for _, v := range input.Permissions {
+			cat := model.Permission{
+				Permission: v,
+				CreatorID:  args.UserID,
+				RoleID:     input.RoleID,
+			}
+
+			permissions = append(permissions, &cat)
+		}
+
+		for _, v := range input.PricingIds {
+			cat := model.Permission{
+				PricingID: v,
+				CreatorID: args.UserID,
+				RoleID:    input.RoleID,
+			}
+
+			permissions = append(permissions, &cat)
+		}
+
+		if err := tx.Create(&permissions).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	if err != nil {
 		return nil, err
 	}
 
-	return category, nil
+	return permissions, nil
 }
 
 func FindPermissions(db *gorm.DB, RoleID int) ([]*model.Permission, error) {

@@ -162,13 +162,6 @@ func (r *mutationResolver) CreateExpensePayment(ctx context.Context, input model
 	return repository.CreateExpensePayment(r.DB, helpers.ForContext(ctx).UserID, input)
 }
 
-func (r *mutationResolver) CreatePermission(ctx context.Context, input model.PermissionInput) (*model.Permission, error) {
-	return repository.CreatePermission(r.DB, input, helpers.UserAndStoreArgs{
-		UserID:  helpers.ForContext(ctx).UserID,
-		StoreID: helpers.ForContext(ctx).StoreID,
-	})
-}
-
 func (r *mutationResolver) CreateProduct(ctx context.Context, input model.ProductInput) (*model.Product, error) {
 	return repository.CreateProduct(r.DB, input, helpers.UserAndStoreArgs{
 		UserID:  helpers.ForContext(ctx).UserID,
@@ -278,6 +271,13 @@ func (r *mutationResolver) DeletePermission(ctx context.Context, id int) (*model
 
 func (r *mutationResolver) Ping(ctx context.Context) (string, error) {
 	return "pong", nil
+}
+
+func (r *mutationResolver) SetPermissions(ctx context.Context, input model.PermissionsInput) ([]*model.Permission, error) {
+	return repository.SetPermissions(r.DB, input, helpers.UserAndStoreArgs{
+		UserID:  helpers.ForContext(ctx).UserID,
+		StoreID: helpers.ForContext(ctx).StoreID,
+	})
 }
 
 func (r *mutationResolver) SignIn(ctx context.Context, input model.SignInInput) (*model.AuthPayload, error) {
