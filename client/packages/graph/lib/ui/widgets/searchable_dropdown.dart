@@ -16,8 +16,10 @@ class SearchableDropdown<T> extends StatefulWidget {
     this.onChangedMultiSelection,
     this.helperText,
     this.isOptional = true,
+    this.validator,
   })  : isMultiSelectionMode = false,
         selectedItems = null,
+        validatorMultiSelection = null,
         super(key: key);
 
   const SearchableDropdown.multiSelection({
@@ -32,8 +34,10 @@ class SearchableDropdown<T> extends StatefulWidget {
     this.selectedItems,
     this.helperText,
     this.isOptional = true,
+    this.validatorMultiSelection,
   })  : onChanged = null,
         isMultiSelectionMode = true,
+        validator = null,
         super(key: key);
 
   final Widget Function(BuildContext context, T item)? builder;
@@ -48,6 +52,9 @@ class SearchableDropdown<T> extends StatefulWidget {
   final bool Function(T)? selectedItem;
   final List<T>? selectedItems;
   final bool isOptional;
+
+  final FormFieldValidator<T>? validator;
+  final FormFieldValidator<List<T>>? validatorMultiSelection;
 
   @override
   State<StatefulWidget> createState() {
@@ -99,7 +106,7 @@ class _SearchableListState<T> extends State<SearchableDropdown<T>> {
                   selectedItems: widget.selectedItems != null
                       ? widget.selectedItems!
                       : <T>[],
-                  popupProps:  PopupPropsMultiSelection.menu(
+                  popupProps: PopupPropsMultiSelection.menu(
                     showSearchBox: true,
                     searchFieldProps: searchFieldProps,
                     searchDelay: const Duration(milliseconds: 0),
@@ -108,6 +115,7 @@ class _SearchableListState<T> extends State<SearchableDropdown<T>> {
                         ? (c, i, _) => widget.builder!(c, i)
                         : null,
                   ),
+                  validator: widget.validatorMultiSelection,
                 );
               }
 
