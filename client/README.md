@@ -1,4 +1,3 @@
-- JWT expire time in 12 hours
 - handling 401 
 - hiding items based on permissions
 - Just one store

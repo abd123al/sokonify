@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/go-chi/jwtauth"
 	"mahesabu/graph/model"
+	"time"
 )
 
 type AuthParams struct {
@@ -64,6 +65,9 @@ func GenerateAuthToken(UserID int, args *FindDefaultStoreAndRoleResult) string {
 	if err != nil {
 		panic(err)
 	}
+
+	jwtauth.SetIssuedNow(myMap)
+	jwtauth.SetExpiry(myMap, time.Now().Add(time.Hour*12))
 
 	_, tokenString, _ := TokenAuth.Encode(myMap)
 
