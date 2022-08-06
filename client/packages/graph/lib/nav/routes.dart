@@ -16,6 +16,7 @@ class Routes {
   static String createOrderPayment = "/createOrderPayment";
   static String createProduct = "/createProduct";
   static String createSales = "/createSales";
+  static String createStaff = "/createStaff";
   static String createStore = "/createStore";
   static String createUnit = "/createUnit";
 
@@ -125,6 +126,12 @@ class Routes {
     router.define(
       createProduct,
       handler: createProductRouterHandler,
+      transitionType: TransitionType.materialFullScreenDialog,
+    );
+
+    router.define(
+      "$createStaff/:id",
+      handler: createStaffRouterHandler,
       transitionType: TransitionType.materialFullScreenDialog,
     );
 

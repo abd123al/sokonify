@@ -136,6 +136,13 @@ func FindUser(db *gorm.DB, ID int) (*model.User, error) {
 	return user, result.Error
 }
 
+// FindUsers todo
+func FindUsers(db *gorm.DB, args model.UsersArgs) ([]*model.User, error) {
+	var users []*model.User
+	result := db.Find(&users)
+	return users, result.Error
+}
+
 func FindName(db *gorm.DB, UserID int) (string, error) {
 	var name string
 

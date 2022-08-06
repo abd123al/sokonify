@@ -27,7 +27,7 @@ class StaffsList extends StatelessWidget {
           return FloatingActionButton.extended(
             onPressed: () => redirectTo(
               context,
-              "${Routes.editPermissions}/$roleId",
+              "${Routes.createStaff}/$roleId",
               replace: true,
             ),
             tooltip: 'Add',

@@ -1,0 +1,6 @@
+query users($args: UsersArgs!) {
+    users(args: $args) {
+        id
+        name
+    }
+}

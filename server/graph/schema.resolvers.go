@@ -597,8 +597,8 @@ func (r *queryResolver) User(ctx context.Context, id int) (*model.User, error) {
 	return repository.FindUser(r.DB, id)
 }
 
-func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
-	panic(fmt.Errorf("not implemented"))
+func (r *queryResolver) Users(ctx context.Context, args model.UsersArgs) ([]*model.User, error) {
+	return repository.FindUsers(r.DB, args)
 }
 
 func (r *queryResolver) NetIncome(ctx context.Context, args model.StatsArgs) (string, error) {

@@ -48,4 +48,13 @@ class StaffRepository {
 
     return client.query(options);
   }
+
+  fetchUsers() {
+    final options = QueryOptions(
+      document: USERS_QUERY_DOCUMENT,
+      variables: UsersArguments(args: UsersArgs()).toJson(),
+    );
+
+    return client.query(options);
+  }
 }

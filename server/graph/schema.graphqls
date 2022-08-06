@@ -106,6 +106,10 @@ type User implements Gorm {
     #    isPhoneVerified: Boolean! @goTag(key: "gorm", value: "not null;default:false")
 }
 
+input UsersArgs {
+    search : String
+}
+
 input SignInInput {
     login: String! @validate(constraint: "required")
     password: String! @validate(constraint: "required")
@@ -876,7 +880,7 @@ type Query {
     unit(id: ID!): Unit!
     units: [Unit!]! @isAuthenticated
     user(id: ID!): User!
-    users: [User!]! #todo add args  @isAuthenticated
+    users(args: UsersArgs!): [User!]! @hasPermission(permission: create_staff)
 
     # stats
     netIncome(args:StatsArgs!): String! @goField(forceResolver: true)  @hasPermission(permission: view_stats)

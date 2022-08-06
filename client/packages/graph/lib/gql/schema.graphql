@@ -329,7 +329,7 @@ type Query {
     unit(id: ID!): Unit!
     units: [Unit!]!
     user(id: ID!): User!
-    users: [User!]!
+    users(args: UsersArgs!): [User!]!
 }
 
 type Staff implements Gorm {
@@ -790,4 +790,8 @@ input SwitchStoreInput {
 input UnitInput {
     name: String!
     templateType: TemplateType
+}
+
+input UsersArgs {
+    search: String
 }

@@ -197,6 +197,14 @@ var changePassPageRouterHandler = Handler(handlerFunc: (_, __) {
   return const ChangePasswordPage();
 });
 
+var createStaffRouterHandler = Handler(handlerFunc: (_, params) {
+  final id = params["id"]![0];
+
+  return  CreateStaffPage(
+    roleId: int.parse(id),
+  );
+});
+
 var paymentsPageRouterHandler = Handler(handlerFunc: (context, params) {
   final word = params["word"]![0];
 
