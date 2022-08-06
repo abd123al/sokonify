@@ -29,19 +29,10 @@ class StaffRepository {
     return client.query(options);
   }
 
-  createPermission(PermissionInput input) {
+  setPermissions(PermissionsInput input) {
     final options = MutationOptions(
-      document: CREATE_PERMISSION_MUTATION_DOCUMENT,
-      variables: CreatePermissionArguments(input: input).toJson(),
-    );
-
-    return client.mutate(options);
-  }
-
-  deletePermission(int id) {
-    final options = MutationOptions(
-      document: DELETE_PERMISSION_MUTATION_DOCUMENT,
-      variables: DeletePermissionArguments(id: id).toJson(),
+      document: SET_PERMISSIONS_MUTATION_DOCUMENT,
+      variables: SetPermissionsArguments(input: input).toJson(),
     );
 
     return client.mutate(options);

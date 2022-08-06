@@ -25,6 +25,7 @@ class PermissionsWidget extends StatelessWidget {
           context,
           "${Routes.editPermissions}/$id",
           args: type,
+          replace: true,
         ),
         tooltip: 'Add',
         icon: const Icon(Icons.edit),

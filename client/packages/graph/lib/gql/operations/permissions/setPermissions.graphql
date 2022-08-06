@@ -1,0 +1,5 @@
+mutation setPermissions($input:PermissionsInput!) {
+    setPermissions(input: $input){
+        ...PermissionParts
+    }
+}

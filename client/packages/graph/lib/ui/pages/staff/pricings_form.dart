@@ -1,4 +1,6 @@
+import 'package:blocitory/widgets/button.dart';
 import 'package:flutter/material.dart';
+import 'package:graph/ui/pages/staff/set_permissions_wrapper.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../widgets/searchable_dropdown.dart';
@@ -64,28 +66,22 @@ class _CreateProductPageState extends State<StaffPricingForm> {
             const SizedBox(
               height: 8,
             ),
-            // MutationBuilder<CreateProduct$Mutation$Product, CreateProductCubit,
-            //     ProductRepository>(
-            //   blocCreator: (r) => CreateProductCubit(r),
-            //   pop: true,
-            //   builder: (context, cubit) {
-            //     return Button(
-            //       padding: EdgeInsets.zero,
-            //       callback: () {
-            //         final input = ProductInput(
-            //           categories: _permissions.map((e) => e.id).toList(),
-            //         );
-            //
-            //         if (isEdit) {
-            //           cubit.edit(widget.id!, input);
-            //         } else {
-            //           cubit.create(input);
-            //         }
-            //       },
-            //       title: 'Submit',
-            //     );
-            //   },
-            // ),
+            SetPermissionsWrapper(
+              builder: (context, cubit) {
+                return Button(
+                  padding: EdgeInsets.zero,
+                  callback: () {
+                    final input = PermissionsInput(
+                      roleId: widget.id,
+                      pricingIds: _pricingIds,
+                    );
+
+                    cubit.submit(input);
+                  },
+                  title: 'Submit',
+                );
+              },
+            ),
           ],
         ),
       ),

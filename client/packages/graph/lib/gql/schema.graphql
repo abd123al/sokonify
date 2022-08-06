@@ -145,7 +145,6 @@ type Mutation {
     createOrder(input: OrderInput!): Order!
     createOrderItem(id: ID!, input: OrderItemInput!): OrderItem!
     createOrderPayment(input: OrderPaymentInput!): Payment!
-    createPermission(input: PermissionInput!): Permission!
     createProduct(input: ProductInput!): Product!
     createSales(input: SalesInput!): Payment!
     createStaff(input: StaffInput!): Staff!
@@ -166,6 +165,7 @@ type Mutation {
     editStore(id: ID!, input: StoreInput!): Store!
     editUnit(id: ID!, input: UnitInput!): Unit!
     ping: String!
+    setPermissions(input: PermissionsInput!): [Permission]!
     signIn(input: SignInInput!): AuthPayload!
     signUp(input: SignUpInput!): AuthPayload!
     switchStore(input: SwitchStoreInput!): AuthPayload!
@@ -498,7 +498,6 @@ enum PermissionType {
     create_expense_payment
     create_order
     create_order_payment
-    create_permission
     create_product
     create_sales
     create_staff
@@ -517,6 +516,7 @@ enum PermissionType {
     edit_unit
     register_customer
     remove_staff
+    set_permissions
     view_customer
     view_stats
 }
@@ -697,9 +697,9 @@ input PaymentsArgs {
     value: ID
 }
 
-input PermissionInput {
-    permission: PermissionType
-    pricingId: ID
+input PermissionsInput {
+    permissions: [PermissionType]
+    pricingIds: [ID]
     roleId: ID!
 }
 

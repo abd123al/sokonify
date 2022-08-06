@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../widgets/searchable_dropdown.dart';
+import 'set_permissions_wrapper.dart';
 
 class PermissionsForm extends StatefulWidget {
   const PermissionsForm({
@@ -25,7 +26,6 @@ class PermissionsForm extends StatefulWidget {
 
 class _CreateProductPageState extends State<PermissionsForm> {
   late List<PermissionType> _permissions;
-  late List<Categories$Query$Category> _categories;
 
   @override
   void initState() {
@@ -55,7 +55,7 @@ class _CreateProductPageState extends State<PermissionsForm> {
                 );
               },
               hintText: "Permissions",
-              helperText: "Select only appropriate permissions",
+              helperText: "Select only appropriate permissions staff needs",
               onChangedMultiSelection: (item) => setState(() {
                 _permissions = item;
               }),
@@ -64,28 +64,22 @@ class _CreateProductPageState extends State<PermissionsForm> {
             const SizedBox(
               height: 8,
             ),
-            // MutationBuilder<CreateProduct$Mutation$Product, CreateProductCubit,
-            //     ProductRepository>(
-            //   blocCreator: (r) => CreateProductCubit(r),
-            //   pop: true,
-            //   builder: (context, cubit) {
-            //     return Button(
-            //       padding: EdgeInsets.zero,
-            //       callback: () {
-            //         final input = ProductInput(
-            //           categories: _permissions.map((e) => e.id).toList(),
-            //         );
-            //
-            //         if (isEdit) {
-            //           cubit.edit(widget.id!, input);
-            //         } else {
-            //           cubit.create(input);
-            //         }
-            //       },
-            //       title: 'Submit',
-            //     );
-            //   },
-            // ),
+            SetPermissionsWrapper(
+              builder: (context, cubit) {
+                return Button(
+                  padding: EdgeInsets.zero,
+                  callback: () {
+                    final input = PermissionsInput(
+                      roleId: widget.id,
+                      permissions: _permissions,
+                    );
+
+                    cubit.submit(input);
+                  },
+                  title: 'Submit',
+                );
+              },
+            ),
           ],
         ),
       ),

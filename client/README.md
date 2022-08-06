@@ -1,7 +1,12 @@
 - JWT expire time in 12 hours
 - handling 401 
 - hiding items based on permissions
-- 
+- Just one store
+- search invoice
+-
+-
+-
+-
 - 
 - show item view in tabs show details, sales.
 - show stats for categories
