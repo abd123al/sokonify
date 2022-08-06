@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import 'item_form.dart';
+import 'prices_cubit.dart';
 
 class CreateItemPage extends StatelessWidget {
   const CreateItemPage({
@@ -17,10 +19,15 @@ class CreateItemPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("New Stock"),
       ),
-      body: ItemForm(
-        item: null,
-        id: null,
-        pricing: pricing,
+      body: BlocProvider(
+        create: (context) {
+          return NewPriceCubit();
+        },
+        child: ItemForm<NewPriceCubit>(
+          item: null,
+          id: null,
+          pricing: pricing,
+        ),
       ),
     );
   }

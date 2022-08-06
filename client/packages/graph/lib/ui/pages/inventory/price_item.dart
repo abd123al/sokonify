@@ -4,7 +4,7 @@ import 'package:graph/ui/helpers/helpers.dart';
 
 import 'prices_cubit.dart';
 
-class PriceItem extends StatefulWidget {
+class PriceItem<T extends PricingCubit> extends StatefulWidget {
   const PriceItem({
     Key? key,
     required this.item,
@@ -15,11 +15,11 @@ class PriceItem extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _PriceItemState();
+    return _PriceItemState<T>();
   }
 }
 
-class _PriceItemState extends State<PriceItem> {
+class _PriceItemState<T extends PricingCubit> extends State<PriceItem<T>> {
   final _aController = TextEditingController();
   bool _editing = false;
 
@@ -31,7 +31,7 @@ class _PriceItemState extends State<PriceItem> {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = BlocProvider.of<NewPriceCubit>(context);
+    final cubit = BlocProvider.of<T>(context);
 
     return ExpansionTile(
       title: Text(

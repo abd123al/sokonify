@@ -7,8 +7,7 @@ query item($id: ID!) {
         prices {
             amount
             category {
-                id
-                name
+                ...CategoryParts
             }
         }
         batch
