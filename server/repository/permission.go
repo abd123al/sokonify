@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"fmt"
 	"gorm.io/gorm"
 	"mahesabu/graph/model"
 	"mahesabu/helpers"
@@ -31,8 +32,26 @@ func SetPermissions(db *gorm.DB, input model.PermissionsInput, args helpers.User
 
 	//todo don't delete
 	err := db.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Model(&model.Permission{}).Where(&model.Permission{RoleID: input.RoleID}).Delete(&oldList).Error; err != nil {
-			return err
+		del := func(col string) error {
+			if err := tx.Table("permissions").Where(fmt.Sprintf("role_id =? AND %s IS NOT NULL", col), input.RoleID).Delete(&oldList).Error; err != nil {
+				return err
+			}
+
+			return nil
+		}
+
+		if len(input.Permissions) > 0 {
+			err := del("permission")
+			if err != nil {
+				return err
+			}
+		}
+
+		if len(input.PricingIds) > 0 {
+			err := del("pricing_id")
+			if err != nil {
+				return err
+			}
 		}
 
 		for _, v := range input.Permissions {
