@@ -77,6 +77,9 @@ func EditCategory(DB *gorm.DB, ID int, input model.CategoryInput, args helpers.U
 			return err
 		}
 
+		//For cubits to work
+		category.Type = input.Type
+
 		return nil
 	})
 

@@ -4,6 +4,7 @@ import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../nav/nav.dart';
 import '../category/category_page.dart';
 import 'permissions_list.dart';
+import 'role_details.dart';
 import 'staffs_list.dart';
 
 class RoleTab {
@@ -49,7 +50,7 @@ class _RolePageState extends State<RolePage> {
       ),
       RoleTab(
         "Details",
-        CategoryWidget(id: widget.id),
+        RoleDetails(id: widget.id),
       ),
     ];
   }
@@ -69,19 +70,6 @@ class _RolePageState extends State<RolePage> {
                 .toList(),
           ),
           title: Text(widget.name),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.edit),
-              tooltip: 'Edit ${widget.name} Details',
-              onPressed: () {
-                redirectTo(
-                  context,
-                  "${Routes.editCategory}/${widget.id}",
-                  replace: true,
-                );
-              },
-            ),
-          ],
         ),
         body: TabBarView(
           children: list.map((e) => e.widget).toList(),
