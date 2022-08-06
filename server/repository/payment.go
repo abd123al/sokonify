@@ -275,7 +275,13 @@ func SumGrossProfit(db *gorm.DB, StoreID int, args model.StatsArgs) (*model.Prof
 	b := a.Joins("inner join items on order_items.item_id = items.id")
 	c := b.Joins("inner join orders on order_items.order_id = orders.id AND orders.issuer_id = ?", StoreID)
 	d := c.Joins("inner join payments on orders.id = payments.order_id")
-	e := d.Joins("inner join prices on prices.item_id = items.id")
+
+	//todo this results into wrong calculations
+	var e = d
+	//if args.PricingID != nil {
+	//	e = d.Joins("inner join prices on prices.item_id = items.id AND prices.category_id = ?", args.PricingID)
+	//}
+
 	var y = e
 
 	if args.Filter != nil && args.Value != nil {
@@ -305,20 +311,12 @@ func SumGrossProfit(db *gorm.DB, StoreID int, args model.StatsArgs) (*model.Prof
 
 	f := y.Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate)
 	g := f.Select(`
-COALESCE(SUM((prices.amount - items.buying_price) * order_items.quantity),0.00) AS expected,
 COALESCE(SUM((order_items.price - items.buying_price) * order_items.quantity),0.00) AS real, 
 COALESCE(SUM(order_items.price * order_items.quantity),0.00) AS sales
 `)
 
-	if args.PricingID != nil {
-		h := g.Where("prices.category_id =?", args.PricingID)
-		if err := h.Scan(&profit).Error; err != nil {
-			return nil, err
-		}
-	} else {
-		if err := g.Scan(&profit).Error; err != nil {
-			return nil, err
-		}
+	if err := g.Scan(&profit).Error; err != nil {
+		return nil, err
 	}
 
 	return profit, nil

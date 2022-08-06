@@ -1,7 +1,6 @@
 query stats($args:StatsArgs!) {
     totalExpensesAmount(args: $args)
     grossProfit(args: $args){
-        expected
         real
         sales
     }
