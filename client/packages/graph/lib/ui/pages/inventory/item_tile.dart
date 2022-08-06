@@ -3,6 +3,7 @@ import 'package:graph/ui/helpers/helpers.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../nav/nav.dart';
+import '../../widgets/permission_builder.dart';
 
 class ItemTile extends StatelessWidget {
   const ItemTile({
@@ -47,19 +48,26 @@ class ItemTile extends StatelessWidget {
               style: Theme.of(context).textTheme.titleLarge,
               overflow: TextOverflow.ellipsis,
             ),
-            subtitle: Text(
-              "${item.quantity} ${item.unit.name}",
-              style: Theme.of(context).textTheme.titleSmall,
+            subtitle: PermissionBuilder(
+              type: PermissionType.viewStockQuantity,
+              builder: (context) {
+                return Text(
+                  "${item.quantity} ${item.unit.name}",
+                  style: Theme.of(context).textTheme.titleSmall,
+                );
+              },
             ),
             dense: true,
-            trailing: Builder(builder: (context) {
-              final amount = price(item, pricingId);
+            trailing: Builder(
+              builder: (context) {
+                final amount = price(item, pricingId);
 
-              return Text(
-                formatCurrency(amount),
-                style: Theme.of(context).textTheme.titleMedium,
-              );
-            }),
+                return Text(
+                  formatCurrency(amount),
+                  style: Theme.of(context).textTheme.titleMedium,
+                );
+              },
+            ),
             onTap: () => redirectTo(context, "${Routes.item}/${item.id}"),
           );
         },

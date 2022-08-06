@@ -32,15 +32,20 @@ class CategoriesListPage extends StatelessWidget {
         title: Text("${word()} Categories"),
       ),
       body: _buildListView(),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => redirectTo(
-          context,
-          Routes.createCategory,
-          args: type,
-        ),
-        tooltip: 'Add',
-        icon: const Icon(Icons.add),
-        label: const Text("Add Category"),
+      floatingActionButton: PermissionBuilder(
+        type: PermissionType.createCategory,
+        builder: (context) {
+          return FloatingActionButton.extended(
+            onPressed: () => redirectTo(
+              context,
+              Routes.createCategory,
+              args: type,
+            ),
+            tooltip: 'Add',
+            icon: const Icon(Icons.add),
+            label: const Text("Add Category"),
+          );
+        },
       ),
     );
   }

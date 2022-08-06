@@ -83,15 +83,20 @@ class ItemsList extends StatelessWidget {
               );
             },
           ),
-          floatingActionButton: FloatingActionButton.extended(
-            onPressed: () => redirectTo(
-              context,
-              Routes.createItem,
-              args: cat,
-            ),
-            tooltip: 'Add',
-            icon: const Icon(Icons.add),
-            label: const Text("Add Stock"),
+          floatingActionButton: PermissionBuilder(
+            type: PermissionType.addStock,
+            builder: (context) {
+              return FloatingActionButton.extended(
+                onPressed: () => redirectTo(
+                  context,
+                  Routes.createItem,
+                  args: cat,
+                ),
+                tooltip: 'Add',
+                icon: const Icon(Icons.add),
+                label: const Text("Add Stock"),
+              );
+            },
           ),
         );
       },

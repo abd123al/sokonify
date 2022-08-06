@@ -393,9 +393,6 @@ type User implements Gorm {
     deletedAt: Time
     email: String!
     id: ID!
-    isEmailVerified: Boolean!
-    isPhoneVerified: Boolean!
-    isVerified: Boolean!
     name: String!
     password: String
     phone: String
@@ -519,6 +516,7 @@ enum PermissionType {
     set_permissions
     view_customer
     view_stats
+    view_stock_quantity
 }
 
 enum ProductsBy {

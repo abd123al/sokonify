@@ -3,11 +3,12 @@
 - hiding items based on permissions
 - Just one store
 - search invoice
--
--
--
--
+- edit price well in inventory
 - 
+- 
+- 
+- 
+- create a shared common fab widget
 - show item view in tabs show details, sales.
 - show stats for categories
 - print invoice and receipt from payment page too

@@ -6,6 +6,7 @@ export 'details_list.dart';
 export 'empty_list.dart';
 export 'form_list.dart';
 export 'high_builder.dart';
+export 'permission_builder.dart';
 export 'searchable_dropdown.dart';
 export 'searchable_list.dart';
 export 'short_detail_tile.dart';

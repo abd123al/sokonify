@@ -44,7 +44,13 @@ class ItemPage extends StatelessWidget {
         SubStats(filter: StatsFilter.item, id: id),
         ShortDetailTile(subtitle: "Item Name", value: data.product.name),
         ShortDetailTile(subtitle: "Brand Name", value: data.brand?.name),
-        ShortDetailTile(subtitle: "Quantity", value: data.quantity.toString()),
+        PermissionBuilder(
+          type: PermissionType.viewStockQuantity,
+          builder: (context) {
+            return ShortDetailTile(
+                subtitle: "Quantity", value: data.quantity.toString());
+          },
+        ),
         ShortDetailTile(subtitle: "Unit", value: data.unit.name),
         ShortDetailTile(
             subtitle: "Buying Price", value: formatCurrency(data.buyingPrice)),

@@ -101,9 +101,9 @@ type User implements Gorm {
     phone: String @goTag(key: "gorm", value: "unique;null;type:varchar(20);default:null")
     password: String @goTag(key: "gorm", value: "type:varchar(100);default:null") @goField(forceResolver: true)
 
-    isVerified: Boolean! @goTag(key: "gorm", value: "not null;default:false")
-    isEmailVerified: Boolean! @goTag(key: "gorm", value: "not null;default:false")
-    isPhoneVerified: Boolean! @goTag(key: "gorm", value: "not null;default:false")
+    #    isVerified: Boolean! @goTag(key: "gorm", value: "not null;default:false")
+    #    isEmailVerified: Boolean! @goTag(key: "gorm", value: "not null;default:false")
+    #    isPhoneVerified: Boolean! @goTag(key: "gorm", value: "not null;default:false")
 }
 
 input SignInInput {
@@ -477,6 +477,7 @@ enum PermissionType {
     view_customer
 
     view_stats
+    view_stock_quantity
 }
 
 enum BoolType {

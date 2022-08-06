@@ -5,6 +5,7 @@ import 'package:graph/ui/pages/stats/stats_view.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/stats_repository.dart';
+import '../../widgets/permission_builder.dart';
 import 'stats_cubit.dart';
 
 class StatTab {
@@ -27,10 +28,19 @@ class StatsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var statsArgs = args ?? StatsArgs();
+    return PermissionBuilder(
+      type: PermissionType.viewStats,
+      builder: (context) {
+        var statsArgs = args ?? StatsArgs();
 
-    statsArgs.timeframe = tab.type;
+        statsArgs.timeframe = tab.type;
 
+        return _body(statsArgs);
+      },
+    );
+  }
+
+  BlocProvider<StatsCubit> _body(StatsArgs statsArgs) {
     return BlocProvider(
       create: (context) {
         return StatsCubit(RepositoryProvider.of<StatsRepository>(context));

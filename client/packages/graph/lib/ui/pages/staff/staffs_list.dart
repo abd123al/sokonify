@@ -21,15 +21,20 @@ class StaffsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _body(),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => redirectTo(
-          context,
-          "${Routes.editPermissions}/$roleId",
-          replace: true,
-        ),
-        tooltip: 'Add',
-        icon: const Icon(Icons.add),
-        label: const Text("Add Staff"),
+      floatingActionButton: PermissionBuilder(
+        type: PermissionType.createStaff,
+        builder: (context) {
+          return FloatingActionButton.extended(
+            onPressed: () => redirectTo(
+              context,
+              "${Routes.editPermissions}/$roleId",
+              replace: true,
+            ),
+            tooltip: 'Add',
+            icon: const Icon(Icons.add),
+            label: const Text("Add Staff"),
+          );
+        },
       ),
     );
   }
