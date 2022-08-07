@@ -19,6 +19,6 @@ go get golang.org/x/mobile/cmd/gobind
 go get golang.org/x/mobile/cmd/gomobile
 gomobile init
 
-gomobile bind -v -o ../client/packages/server/android/libs/server.aar -target=android  -ldflags="-s -w" ./lib
+gomobile bind -v -o ../client/packages/server/android/libs/server.aar -target=android -androidapi 19 -ldflags="-s -w" ./lib
 
 Write-Host "Done!"

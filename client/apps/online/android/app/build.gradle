@@ -49,7 +49,7 @@ android {
 
     defaultConfig {
         applicationId "com.sokonify.online"
-        minSdkVersion 18 //flutter.minSdkVersion
+        minSdkVersion 19 //flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
