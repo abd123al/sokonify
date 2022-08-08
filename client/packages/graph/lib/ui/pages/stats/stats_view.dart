@@ -2,9 +2,7 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
-import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../helpers/currency_formatter.dart';
-import '../../widgets/permission_builder.dart';
 import '../../widgets/topper.dart';
 import 'stat_tile.dart';
 
@@ -38,8 +36,7 @@ class StatsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PermissionBuilder(
-      type: PermissionType.viewStats,
+    return Builder(
       builder: (context) {
         return _body();
       },
