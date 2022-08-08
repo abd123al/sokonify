@@ -14,10 +14,12 @@ class SubStats extends StatelessWidget {
     required this.filter,
     required this.id,
     Key? key,
+    this.hasMore = true,
   }) : super(key: key);
 
   final StatsFilter filter;
   final int id;
+  final bool hasMore;
 
   @override
   Widget build(BuildContext context) {
@@ -48,12 +50,14 @@ class SubStats extends StatelessWidget {
               real: data.grossProfit.real,
               sales: data.grossProfit.sales,
             ),
-            title: "Today Stats",
-            onPressed: () => redirectTo(
-              context,
-              Routes.stats,
-              args: args,
-            ),
+            title: hasMore ? "Today Stats" : "Stats",
+            onPressed: hasMore
+                ? () => redirectTo(
+                      context,
+                      Routes.stats,
+                      args: args,
+                    )
+                : null,
             sub: true,
           );
         },

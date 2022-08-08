@@ -277,6 +277,7 @@ func SumGrossProfit(db *gorm.DB, StoreID int, args model.StatsArgs) (*model.Prof
 	d := c.Joins("inner join payments on orders.id = payments.order_id")
 
 	var y = d
+	var isDateDependent = true
 
 	if args.Filter != nil && args.Value != nil {
 		//todo later we can combine filters
@@ -295,15 +296,20 @@ func SumGrossProfit(db *gorm.DB, StoreID int, args model.StatsArgs) (*model.Prof
 		} else if *args.Filter == model.StatsFilterStaff {
 			y = d.Where("payments.staff_id = ?", args.Value)
 		} else if *args.Filter == model.StatsFilterPayment {
+			isDateDependent = false
 			y = d.Where("payments.id = ?", args.Value)
 		} else if *args.Filter == model.StatsFilterOrder {
+			isDateDependent = false
 			y = d.Where("orders.id = ?", args.Value)
 		} else if *args.Filter == model.StatsFilterPricing {
 			y = d.Joins("inner join prices on prices.item_id = items.id AND prices.category_id = ?", args.Value)
 		}
 	}
 
-	f := y.Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate)
+	var f = y
+	if isDateDependent {
+		f = y.Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate)
+	}
 	g := f.Select(`
 COALESCE(SUM((order_items.price - items.buying_price) * order_items.quantity),0.00) AS real, 
 COALESCE(SUM(order_items.price * order_items.quantity),0.00) AS sales

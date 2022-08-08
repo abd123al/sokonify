@@ -7,6 +7,7 @@ import 'package:graph/ui/widgets/widgets.dart';
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/payment_repository.dart';
 import '../order/order_item_tile.dart';
+import '../stats/sub_stats.dart';
 import 'payment_page_cubit.dart';
 
 /// There is no need at all to edit posted order.
@@ -45,8 +46,13 @@ class PaymentPage extends StatelessWidget {
       builder: (context, data, _) {
         return ListView(
           children: [
+            SubStats(
+              filter: StatsFilter.payment,
+              id: id,
+              hasMore: false,
+            ),
             ShortDetailTile(
-                subtitle: "Amount", value: formatCurrency(data.amount)),
+                subtitle: "Paid Amount", value: formatCurrency(data.amount)),
             if (data.expense != null)
               ShortDetailTile(
                   subtitle: "Expenses Category", value: data.expense?.name),

@@ -1,12 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:graph/gql/generated/graphql_api.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 import '../../../nav/nav.dart';
 import '../../helpers/currency_formatter.dart';
 import '../../'
     'widgets/widgets.dart';
+import '../stats/sub_stats.dart';
 import 'order_item_tile.dart';
 import 'order_wrapper.dart';
 import 'print.dart';
@@ -43,6 +45,12 @@ class OrderPage extends StatelessWidget {
       id: id,
       builder: (context, data) {
         final left = [
+          if (data.status == OrderStatus.completed)
+            SubStats(
+              filter: StatsFilter.order,
+              id: id,
+              hasMore: false,
+            ),
           if (data.customer?.name != null)
             ShortDetailTile(
                 subtitle: "Customer", value: "${data.customer?.name}"),
