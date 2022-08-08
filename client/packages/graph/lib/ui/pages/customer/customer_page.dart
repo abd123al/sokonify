@@ -5,6 +5,7 @@ import '../../../nav/nav.dart';
 import '../order/orders_paginated_list.dart';
 import '../payment/payments_paginated_list.dart';
 import 'customer_details.dart';
+import 'customer_stats.dart';
 
 class CustomerTab {
   final Widget widget;
@@ -50,6 +51,12 @@ class _HomePageState extends State<CustomerPage> {
         OrdersPaginationList(
           value: widget.id,
           by: OrdersBy.customer,
+        ),
+      ),
+      CustomerTab(
+        "Stats",
+        CustomerStats(
+          customerId: widget.id,
         ),
       ),
     ];
