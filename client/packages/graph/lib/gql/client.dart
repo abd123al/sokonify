@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:gql_dio_link/gql_dio_link.dart';
 import 'package:graph/gql/token_box.dart';
@@ -9,6 +11,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
+import '../ui/widgets/auth_wrapper_cubit.dart';
 import '../utils/application.dart';
 import '../utils/consts.dart';
 
@@ -31,11 +34,22 @@ class AuthInterceptor extends Interceptor {
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {
     if (err.response?.statusCode == 401) {
-      //Instead of using cubit we just delete it here directly.
-      box.delete(tokenHiveKey);
+      // //Instead of using cubit we just delete it here directly.
+      // box.delete(tokenHiveKey);
+      //
+      // //Restart app.
+      // Phoenix.rebirth(Application.navigatorKey.currentContext!);
 
-      //Restart app.
-      Phoenix.rebirth(Application.navigatorKey.currentContext!);
+      //Redirect HomePage
+      Navigator.pushNamedAndRemoveUntil(
+        Application.navigatorKey.currentContext!,
+        '/',
+            (_) => false,
+      );
+
+      BlocProvider.of<AuthWrapperCubit>(
+          Application.navigatorKey.currentContext!)
+          .logOut();
     }
 
     super.onError(err, handler);
