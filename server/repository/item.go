@@ -39,6 +39,7 @@ func CreateItem(DB *gorm.DB, input model.ItemInput, CreatorID int) (*model.Item,
 			return err
 		}
 
+		//If there are sub categories attached
 		_, er := CreateProductCategories(tx, item.ID, model.CategoryTypeSubcategory, input.Categories, CreatorID)
 
 		if er != nil {
@@ -70,8 +71,15 @@ func EditItem(DB *gorm.DB, ID int, input model.ItemInput, CreatorID int) (*model
 	}
 
 	err := DB.Transaction(func(tx *gorm.DB) error {
-		if err := DB.Model(&model.Item{}).Where(&model.Item{ID: ID, CreatorID: &CreatorID}).Updates(&update).Error; err != nil {
+		if err := DB.Debug().Model(&model.Item{}).Where(&model.Item{ID: ID}).Updates(&update).Error; err != nil {
 			return err
+		}
+
+		for _, p := range input.Prices {
+			_, err := EditPrice(tx, ID, *p, CreatorID)
+			if err != nil {
+				return err
+			}
 		}
 
 		_, err := DeleteProductCategories(tx, ID, model.CategoryTypeSubcategory)

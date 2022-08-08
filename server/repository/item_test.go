@@ -64,7 +64,11 @@ func TestItem(t *testing.T) {
 			Description: nil,
 			ExpiresAt:   nil,
 			BrandID:     nil,
-			ProductID:   product.ID,
+			Prices: []*model.PriceInput{
+				{Amount: "8000.00", CategoryID: priceCategory.ID},
+				{Amount: "16000.00", CategoryID: priceCategory2.ID},
+			},
+			ProductID: product.ID,
 		}, *i.CreatorID)
 
 		require.Nil(t, err)

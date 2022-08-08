@@ -2,7 +2,6 @@
 - hiding items based on permissions
 - Just one store
 - search invoice
-- edit price well in inventory
 - 
 - 
 - 
