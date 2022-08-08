@@ -5,9 +5,12 @@ import (
 	"errors"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/bxcodec/faker/v3/support/slice"
+	"github.com/go-chi/jwtauth"
 	"github.com/go-playground/validator/v10"
+	"github.com/lestrrat-go/jwx/jwt"
 	"mahesabu/graph/model"
 	"mahesabu/helpers"
+	"net/http"
 )
 
 var (
@@ -36,7 +39,25 @@ var Validator = func(ctx context.Context, obj interface{}, next graphql.Resolver
 	return val, nil
 }
 
+func checkToken(ctx context.Context) error {
+	token, _, err := jwtauth.FromContext(ctx)
+	r := ctx.Value(HTTPCtxKey).(HTTP)
+
+	//If token is available validate it.
+	if err != nil || jwt.Validate(token) != nil {
+		http.Error(*r.W, http.StatusText(401), http.StatusUnauthorized)
+		return errors.New(http.StatusText(401))
+	}
+
+	return nil
+}
+
 var HasPermission = func(ctx context.Context, obj interface{}, next graphql.Resolver, permission model.PermissionType) (interface{}, error) {
+	err := checkToken(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	payload := helpers.ForContext(ctx)
 
 	if payload == nil {
@@ -59,9 +80,13 @@ var HasPermission = func(ctx context.Context, obj interface{}, next graphql.Reso
 }
 
 var IsAuthenticated = func(ctx context.Context, obj interface{}, next graphql.Resolver) (res interface{}, err error) {
+	err = checkToken(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	payload := helpers.ForContext(ctx)
 
-	//todo status code
 	if payload == nil {
 		return nil, NoAccessError
 	}
