@@ -276,36 +276,30 @@ func SumGrossProfit(db *gorm.DB, StoreID int, args model.StatsArgs) (*model.Prof
 	c := b.Joins("inner join orders on order_items.order_id = orders.id AND orders.issuer_id = ?", StoreID)
 	d := c.Joins("inner join payments on orders.id = payments.order_id")
 
-	//todo this results into wrong calculations
-	var e = d
-	//if args.PricingID != nil {
-	//	e = d.Joins("inner join prices on prices.item_id = items.id AND prices.category_id = ?", args.PricingID)
-	//}
-
-	var y = e
+	var y = d
 
 	if args.Filter != nil && args.Value != nil {
 		//todo later we can combine filters
 		if *args.Filter == model.StatsFilterProductsCategory {
-			y = e.Joins("inner join product_categories ON product_categories.product_id = items.product_id AND product_categories.category_id = ?", args.Value)
+			y = d.Joins("inner join product_categories ON product_categories.product_id = items.product_id AND product_categories.category_id = ?", args.Value)
 		} else if *args.Filter == model.StatsFilterStocksCategory {
-			y = e.Joins("inner join product_categories ON product_categories.item_id = items.id AND product_categories.category_id = ?", args.Value)
+			y = d.Joins("inner join product_categories ON product_categories.item_id = items.id AND product_categories.category_id = ?", args.Value)
 		} else if *args.Filter == model.StatsFilterBrand {
-			y = e.Where("items.brand_id = ?", args.Value)
+			y = d.Where("items.brand_id = ?", args.Value)
 		} else if *args.Filter == model.StatsFilterItem {
-			y = e.Where("items.id = ?", args.Value)
+			y = d.Where("items.id = ?", args.Value)
 		} else if *args.Filter == model.StatsFilterProduct {
-			y = e.Where("items.product_id = ?", args.Value)
+			y = d.Where("items.product_id = ?", args.Value)
 		} else if *args.Filter == model.StatsFilterCustomer {
-			y = e.Where("orders.customer_id = ?", args.Value)
+			y = d.Where("orders.customer_id = ?", args.Value)
 		} else if *args.Filter == model.StatsFilterStaff {
-			y = e.Where("payments.staff_id = ?", args.Value)
+			y = d.Where("payments.staff_id = ?", args.Value)
 		} else if *args.Filter == model.StatsFilterPayment {
-			y = e.Where("payments.id = ?", args.Value)
+			y = d.Where("payments.id = ?", args.Value)
 		} else if *args.Filter == model.StatsFilterOrder {
-			y = e.Where("orders.id = ?", args.Value)
+			y = d.Where("orders.id = ?", args.Value)
 		} else if *args.Filter == model.StatsFilterPricing {
-			y = e.Where("prices.category_id = ?", args.Value)
+			y = d.Joins("inner join prices on prices.item_id = items.id AND prices.category_id = ?", args.Value)
 		}
 	}
 
