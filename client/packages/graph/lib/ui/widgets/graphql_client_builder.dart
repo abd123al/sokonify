@@ -1,13 +1,15 @@
 import 'package:blocitory/widgets/widgets.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:graph/ui/widgets/widgets.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:in_app_update/in_app_update.dart';
 
 import '../../gql/client.dart';
 import '../app.dart';
 
-class GraphqlClientBuilder extends StatelessWidget {
+class GraphqlClientBuilder extends StatefulWidget {
   final UrlHandler urlHandler;
   final StatusHandler statusHandler;
   final Function() onDone;
@@ -20,16 +22,39 @@ class GraphqlClientBuilder extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<StatefulWidget> createState() {
+    return _GraphqlClientBuilderState();
+  }
+}
+
+class _GraphqlClientBuilderState extends State<GraphqlClientBuilder> {
+  Future<void> checkForUpdate() async {
+    if (!kIsWeb) {
+      InAppUpdate.checkForUpdate().then((info) {
+        if (info.updateAvailability == UpdateAvailability.updateAvailable) {
+          InAppUpdate.performImmediateUpdate().then((_) {}).catchError((e) {});
+        }
+      }).catchError((e) {});
+    }
+  }
+
+  @override
+  void initState() {
+    checkForUpdate().then((_) {});
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<GraphQLClient>(
       future: graphQLClient(
-        urlHandler: urlHandler,
-        statusHandler: statusHandler,
+        urlHandler: widget.urlHandler,
+        statusHandler: widget.statusHandler,
       ),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           //Remove splash screen
-          onDone();
+          widget.onDone();
 
           return Phoenix(
             child: UniBlocProvider(

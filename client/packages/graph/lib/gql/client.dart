@@ -29,10 +29,10 @@ class AuthInterceptor extends Interceptor {
   }
 
   @override
-  void onError(DioError err, ErrorInterceptorHandler handler) async {
+  void onError(DioError err, ErrorInterceptorHandler handler) {
     if (err.response?.statusCode == 401) {
       //Instead of using cubit we just delete it here directly.
-      await box.delete(tokenHiveKey);
+      box.delete(tokenHiveKey);
 
       //Restart app.
       Phoenix.rebirth(Application.navigatorKey.currentContext!);

@@ -28,22 +28,6 @@ class UniBlocProvider extends StatefulWidget {
 }
 
 class UniBlocProviderState extends State<UniBlocProvider> {
-  Future<void> checkForUpdate() async {
-    if (!kIsWeb) {
-      InAppUpdate.checkForUpdate().then((info) {
-        if (info.updateAvailability == UpdateAvailability.updateAvailable) {
-          InAppUpdate.performImmediateUpdate().then((_) {}).catchError((e) {});
-        }
-      }).catchError((e) {});
-    }
-  }
-
-  @override
-  void initState() {
-    checkForUpdate().then((_) {});
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
