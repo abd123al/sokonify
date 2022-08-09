@@ -396,6 +396,13 @@ type Item implements Gorm {
     prices: [Price!]! @goTag(key: "gorm", value: "constraint:OnUpdate:CASCADE,OnDelete:RESTRICT;") @goField(forceResolver: true)
 }
 
+input ConvertStockInput {
+    from: ID!
+    to: ID!
+    quantity: Int!
+    eachEqualsTo: Int!
+}
+
 type Price implements Gorm {
     id:ID! @goTag(key: "gorm", value: "primaryKey")
 
@@ -449,6 +456,7 @@ enum PermissionType {
     all
     add_stock
 
+    convert_stock
     create_brand
     create_category
     create_customer
@@ -894,6 +902,7 @@ type Query {
 }
 
 type Mutation {
+    convertStock(input: ConvertStockInput!): [Item]! @hasPermission(permission: convert_stock)
     createBrand(input: BrandInput!): Brand! @hasPermission(permission: create_brand)
     createCategory(input: CategoryInput!): Category! @hasPermission(permission: create_category)
     createCustomer(input: CustomerInput!): Customer! @hasPermission(permission: create_customer)

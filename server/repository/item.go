@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 	"mahesabu/graph/model"
 )
 
@@ -172,4 +173,47 @@ func CheckAvailableQuantity(db *gorm.DB, input *model.OrderItemInput) error {
 	}
 
 	return nil
+}
+
+func ConvertItem(DB *gorm.DB, input model.ConvertStockInput) ([]*model.Item, error) {
+	var Items []*model.Item
+
+	err := DB.Debug().Transaction(func(tx *gorm.DB) error {
+		from, err1 := FindItem(tx, input.From)
+		if err1 != nil {
+			return err1
+		}
+
+		to, err2 := FindItem(tx, input.To)
+		if err2 != nil {
+			return err1
+		}
+
+		if input.Quantity > from.Quantity {
+			return errors.New("the required quantity is greater than available quantity")
+		}
+
+		if from.ProductID != to.ProductID {
+			return errors.New("you can't convert stocks of different products")
+		}
+
+		if err := tx.Model(&from).Clauses(clause.Returning{}).UpdateColumn("quantity", gorm.Expr("quantity - ?", input.Quantity)).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Model(&to).Clauses(clause.Returning{}).UpdateColumn("quantity", gorm.Expr("quantity + ?", input.Quantity*input.EachEqualsTo)).Error; err != nil {
+			return err
+		}
+
+		Items = append(Items, from)
+		Items = append(Items, to)
+
+		return nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return Items, nil
 }

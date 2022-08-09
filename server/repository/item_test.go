@@ -116,4 +116,19 @@ func TestItem(t *testing.T) {
 		//require.NotEmpty(t, itemsStat.TotalCost)
 		//require.NotEmpty(t, itemsStat.TotalReturn)
 	})
+
+	t.Run("SumItemsCost", func(t *testing.T) {
+		i0 := create()
+		i1 := create()
+
+		items, _ := repository.ConvertItem(DB, model.ConvertStockInput{
+			From:         i0.ID,
+			To:           i1.ID,
+			Quantity:     4,
+			EachEqualsTo: 2,
+		})
+
+		println("TotalCost %v", items[0].Quantity)
+		println("TotalCost %v", items[1].Quantity)
+	})
 }

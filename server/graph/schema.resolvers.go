@@ -116,6 +116,10 @@ func (r *itemResolver) Prices(ctx context.Context, obj *model.Item) ([]*model.Pr
 	return repository.FindPrices(r.DB, obj.ID)
 }
 
+func (r *mutationResolver) ConvertStock(ctx context.Context, input model.ConvertStockInput) ([]*model.Item, error) {
+	return repository.ConvertItem(r.DB, input)
+}
+
 func (r *mutationResolver) CreateBrand(ctx context.Context, input model.BrandInput) (*model.Brand, error) {
 	return repository.CreateBrand(r.DB, input, helpers.ForContext(ctx).UserID)
 }

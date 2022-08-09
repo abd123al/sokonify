@@ -136,6 +136,7 @@ type ItemsStats {
 
 type Mutation {
     changePassword(input: ChangePasswordInput!): Boolean!
+    convertItem(input: ConvertStockInput!): [Item]!
     createBrand(input: BrandInput!): Brand!
     createCategory(input: CategoryInput!): Category!
     createCustomer(input: CustomerInput!): Customer!
@@ -488,6 +489,7 @@ enum PaymentsBy {
 enum PermissionType {
     add_stock
     all
+    convert_stock
     create_brand
     create_category
     create_customer
@@ -593,6 +595,13 @@ input CategoryInput {
 input ChangePasswordInput {
     currentPassword: String!
     newPassword: String!
+}
+
+input ConvertStockInput {
+    eachEqualsTo: Int!
+    from: ID!
+    quantity: Int!
+    to: ID!
 }
 
 input CustomerInput {
