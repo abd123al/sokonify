@@ -4,6 +4,7 @@ import './route_handlers.dart';
 
 class Routes {
   static String root = "/";
+  static String convertStock = "/convertStock";
   static String createBrand = "/createBrand";
   static String createCategory = "/createCategory";
   static String createCustomer = "/createCustomer";
@@ -56,6 +57,12 @@ class Routes {
     // });
 
     router.define(root, handler: rootHandler);
+
+    router.define(
+      convertStock,
+      handler: convertStockPageRouterHandler,
+      transitionType: TransitionType.materialFullScreenDialog,
+    );
 
     router.define(
       createBrand,

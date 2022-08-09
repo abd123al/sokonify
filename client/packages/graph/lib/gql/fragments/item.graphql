@@ -6,6 +6,7 @@ fragment ItemParts on Item {
         categoryId
     }
     product {
+        id
         name
     }
     brand {

@@ -193,6 +193,10 @@ var editUserPageRouterHandler = Handler(handlerFunc: (_, __) {
   return const EditUserPage();
 });
 
+var convertStockPageRouterHandler = Handler(handlerFunc: (_, __) {
+  return const ConvertStockPage();
+});
+
 var changePassPageRouterHandler = Handler(handlerFunc: (_, __) {
   return const ChangePasswordPage();
 });

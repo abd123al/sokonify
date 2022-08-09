@@ -1,0 +1,5 @@
+mutation convertStock($input:ConvertStockInput!) {
+    convertStock(input: $input){
+        ...ItemParts
+    }
+}

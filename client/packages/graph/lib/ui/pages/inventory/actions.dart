@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../nav/nav.dart';
+
 class ItemsActions extends StatelessWidget {
   const ItemsActions({
     Key? key,
@@ -13,7 +15,11 @@ class ItemsActions extends StatelessWidget {
         shrinkWrap: true,
         children: [
           TextButton(
-            onPressed: () {},
+            onPressed: () => redirectTo(
+              context,
+              Routes.convertStock,
+              replace: true,
+            ),
             child: const Text("Convert Stock"),
           ),
           TextButton(

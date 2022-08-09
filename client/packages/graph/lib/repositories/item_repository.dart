@@ -41,4 +41,13 @@ class ItemRepository {
 
     return client.query(options);
   }
+
+  convertStock(ConvertStockInput input) {
+    final options = MutationOptions(
+      document: CONVERT_STOCK_MUTATION_DOCUMENT,
+      variables: ConvertStockArguments(input: input).toJson(),
+    );
+
+    return client.mutate(options);
+  }
 }
