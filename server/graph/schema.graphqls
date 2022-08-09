@@ -902,7 +902,7 @@ type Query {
 }
 
 type Mutation {
-    convertStock(input: ConvertStockInput!): [Item]! @hasPermission(permission: convert_stock)
+    convertStock(input: ConvertStockInput!): [Item!]! @hasPermission(permission: convert_stock)
     createBrand(input: BrandInput!): Brand! @hasPermission(permission: create_brand)
     createCategory(input: CategoryInput!): Category! @hasPermission(permission: create_category)
     createCustomer(input: CustomerInput!): Customer! @hasPermission(permission: create_customer)

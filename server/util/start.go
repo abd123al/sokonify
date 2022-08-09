@@ -49,7 +49,7 @@ func StartServer(Args StartServerArgs) string {
 	router := ConfigureGraphql(db, Args.Multistore, Args.IsServer)
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
-	log.Fatal(http.ListenAndServe(":"+port, router))
+	log.Fatal(http.ListenAndServe("127.0.0.1:"+port, router))
 
 	return port
 }
