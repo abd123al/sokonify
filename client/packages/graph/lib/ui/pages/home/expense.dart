@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:graph/gql/generated/graphql_api.graphql.dart';
 
 import '../../../nav/nav.dart';
+import '../../widgets/fab.dart';
 import '../payment/payments_list.dart';
 import '../payment/payments_list_cubit.dart';
 
@@ -15,10 +16,10 @@ class Expenses extends StatelessWidget {
         type: PaymentType.expense,
         topper: SizedBox(),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => redirectTo(context, Routes.createExpensePayment),
-        icon: const Icon(Icons.add),
-        label: const Text("Track Expense"),
+      floatingActionButton: Fab(
+        route: Routes.createExpensePayment,
+        title: "Track Expense",
+        permission: PermissionType.createExpensePayment,
       ),
     );
   }

@@ -4,6 +4,7 @@ export 'create_button.dart';
 export 'details_app_bar.dart';
 export 'details_list.dart';
 export 'empty_list.dart';
+export 'fab.dart';
 export 'form_list.dart';
 export 'high_builder.dart';
 export 'permission_builder.dart';

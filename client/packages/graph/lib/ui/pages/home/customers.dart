@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../nav/nav.dart';
+import '../../widgets/fab.dart';
 import '../customer/customers_list.dart';
 
 class Customers extends StatelessWidget {
@@ -10,11 +12,10 @@ class Customers extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: const CustomersList(),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => redirectTo(context, Routes.createCustomer),
-        tooltip: 'Register Customer',
-        label: const Text("Register Customer"),
-        icon: const Icon(Icons.add),
+      floatingActionButton: Fab(
+        route: Routes.createCustomer,
+        title: "Register Customer",
+        permission: PermissionType.createCustomer,
       ),
     );
   }

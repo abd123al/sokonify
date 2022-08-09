@@ -28,11 +28,10 @@ class OrdersListScaffold extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => redirectTo(context, Routes.createOrder),
-        tooltip: 'Add',
-        icon: const Icon(Icons.add),
-        label: const Text("New Order"),
+      floatingActionButton: Fab(
+        route: Routes.createOrder,
+        title: "Create Order",
+        permission: PermissionType.createOrder,
       ),
     );
   }

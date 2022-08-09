@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../nav/nav.dart';
-import '../../widgets/permission_builder.dart';
+import '../../widgets/fab.dart';
 import '../../widgets/searchable_list.dart';
 import 'product_tile.dart';
 import 'products_list_cubit.dart';
@@ -44,16 +44,10 @@ class ProductsListPage extends StatelessWidget {
         title: const Text("Products"),
       ),
       body: const ProductList(),
-      floatingActionButton: PermissionBuilder(
-        type: PermissionType.createProduct,
-        builder: (context) {
-          return FloatingActionButton.extended(
-            onPressed: () => redirectTo(context, Routes.createProduct),
-            tooltip: 'Add Product',
-            label: const Text("Add product"),
-            icon: const Icon(Icons.add),
-          );
-        },
+      floatingActionButton: Fab(
+        route: Routes.createProduct,
+        title: "Add Product",
+        permission: PermissionType.createProduct,
       ),
     );
   }

@@ -1,4 +1,3 @@
-- handling 401 
 - hiding items based on permissions
 - Just one store
 - search invoice

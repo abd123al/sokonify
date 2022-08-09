@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../gql/generated/graphql_api.dart';
 import '../../../nav/nav.dart';
+import '../../widgets/fab.dart';
 import '../payment/payments_list.dart';
 import '../payment/payments_list_cubit.dart';
 import '../stats/home_stats.dart';
@@ -14,10 +16,10 @@ class POS extends StatelessWidget {
       body: const PaymentsList<PaymentsListCubit>(
         topper: HomeStats(),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => redirectTo(context, Routes.createSales),
-        icon: const Icon(Icons.add),
-        label: const Text("Track Sales"),
+      floatingActionButton: Fab(
+        route: Routes.createSales,
+        title: "Track Sales",
+        permission: PermissionType.createSales,
       ),
 
       // Column(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:graph/gql/generated/graphql_api.dart';
 
 import '../../../nav/nav.dart';
-import '../../widgets/permission_builder.dart';
+import '../../widgets/fab.dart';
 import 'brands_list.dart';
 
 class BrandsListPage extends StatelessWidget {
@@ -15,16 +15,10 @@ class BrandsListPage extends StatelessWidget {
         title: const Text("Brands"),
       ),
       body: const BrandsList(),
-      floatingActionButton: PermissionBuilder(
-        type: PermissionType.createBrand,
-        builder: (context) {
-          return FloatingActionButton.extended(
-            onPressed: () => redirectTo(context, Routes.createBrand),
-            tooltip: 'Add',
-            icon: const Icon(Icons.add),
-            label: const Text("New Brand"),
-          );
-        },
+      floatingActionButton: Fab(
+        route: Routes.createBrand,
+        title: "Create Brand",
+        permission: PermissionType.createBrand,
       ),
     );
   }
