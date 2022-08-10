@@ -46,7 +46,7 @@ class PaymentPage extends StatelessWidget {
       builder: (context, data, _) {
         return ListView(
           children: [
-            SubStats(
+           if(data.type ==PaymentType.order) SubStats(
               filter: StatsFilter.payment,
               id: id,
               hasMore: false,

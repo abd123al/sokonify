@@ -19,5 +19,6 @@ query payment($id: ID!) {
             id
             name
         }
+        type
     }
 }
