@@ -24,8 +24,8 @@ class Server {
     if (Platform.isWindows) {
       call(int port) async {
         final DynamicLibrary lib = DynamicLibrary.open("lib.dll");
-        final int Function(int, bool, bool) startServer = lib
-            .lookup<NativeFunction<Int32 Function(Int32, Bool, Bool)>>(
+        final int Function(int, bool, bool, int) startServer = lib
+            .lookup<NativeFunction<Int32 Function(Int32, Bool, Bool, Int64)>>(
                 'StartServer')
             .asFunction();
 
@@ -34,8 +34,13 @@ class Server {
           defaultValue: false,
         );
 
+        const noOfStore = int.fromEnvironment(
+          "NO_OF_STORES",
+          defaultValue: 1,
+        );
+
         //kReleaseMode will help deciding which db to use.
-        final result = startServer(port, isServer, kReleaseMode);
+        final result = startServer(port, isServer, kReleaseMode, noOfStore);
         return "$result";
       }
 

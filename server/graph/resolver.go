@@ -11,5 +11,5 @@ import (
 
 type Resolver struct {
 	DB         *gorm.DB
-	Multistore bool
+	NoOfStores int64
 }

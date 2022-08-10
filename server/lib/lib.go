@@ -11,7 +11,7 @@ func StartServer(Dsn string, Port string) string {
 		Dsn:        Dsn,
 		Port:       Port,
 		IsServer:   false,
-		Multistore: true, //Since phone just belongs to one person
+		NoOfStores: 10, //Since phone just belongs to one person
 	})
 
 	return Port

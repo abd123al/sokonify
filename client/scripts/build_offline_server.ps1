@@ -23,6 +23,7 @@ cd apps/offline
 #flutter pub get
 flutter build windows `
                     --dart-define PORT=9191 `
+                    --dart-define NO_OF_STORES=1 `
                     --dart-define IS_SERVER=true --obfuscate `
                     --split-debug-info=./build/app/outputs/symbols `
                     --release

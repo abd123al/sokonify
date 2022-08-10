@@ -7,7 +7,7 @@ import (
 func main() {
 	util.StartServer(util.StartServerArgs{
 		IsServer:   true,
-		Multistore: true,
+		NoOfStores: 10000,
 		IsRelease:  false, //Todo check if it runs on production
 	})
 }

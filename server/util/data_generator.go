@@ -43,7 +43,7 @@ func CreateStore(DB *gorm.DB, UserID *int) *model.Store {
 	store, _ := repository.CreateStore(DB, *UserID, model.StoreInput{
 		Name:         faker.Name(),
 		BusinessType: model.BusinessTypeBoth,
-	}, true)
+	}, 100)
 
 	return store
 }

@@ -1,6 +1,7 @@
 package util
 
 import (
+	"fmt"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/extension"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
@@ -20,7 +21,7 @@ import (
 
 type StartServerArgs struct {
 	IsServer   bool
-	Multistore bool
+	NoOfStores int64
 	Port       string
 	Dsn        string //Especially for android
 	IsRelease  bool
@@ -46,7 +47,7 @@ func StartServer(Args StartServerArgs) string {
 		IsRelease: Args.IsRelease,
 	})
 
-	router := ConfigureGraphql(db, Args.Multistore, Args.IsServer)
+	router := ConfigureGraphql(db, Args.NoOfStores, Args.IsServer, port)
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe("127.0.0.1:"+port, router))
@@ -54,12 +55,12 @@ func StartServer(Args StartServerArgs) string {
 	return port
 }
 
-func ConfigureGraphql(DB *gorm.DB, Multistore bool, isServer bool) *chi.Mux {
+func ConfigureGraphql(DB *gorm.DB, NoOfStores int64, isServer bool, port string) *chi.Mux {
 	router := chi.NewRouter()
 
 	//todo websockets too https://gqlgen.com/recipes/cors/
 	router.Use(cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:8081", "http://127.0.0.1:8081"},
+		AllowedOrigins:   []string{fmt.Sprintf("http://localhost:%s", port), fmt.Sprintf("http://127.0.0.1:%s", port)},
 		AllowCredentials: true,
 		AllowedHeaders:   []string{"*"},
 	}).Handler)
@@ -71,7 +72,7 @@ func ConfigureGraphql(DB *gorm.DB, Multistore bool, isServer bool) *chi.Mux {
 
 	config := generated.Config{Resolvers: &graph.Resolver{
 		DB:         DB,
-		Multistore: Multistore,
+		NoOfStores: NoOfStores,
 	}}
 
 	//Configuring directives to be used on run-time

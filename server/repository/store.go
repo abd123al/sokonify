@@ -2,12 +2,13 @@ package repository
 
 import (
 	"errors"
+	"fmt"
 	"gorm.io/gorm"
 	"mahesabu/graph/model"
 	"mahesabu/helpers"
 )
 
-func CreateStore(db *gorm.DB, UserID int, input model.StoreInput, Multistore bool) (*model.Store, error) {
+func CreateStore(db *gorm.DB, UserID int, input model.StoreInput, NoOfStores int64) (*model.Store, error) {
 	create := func() (*model.Store, error) {
 		var store = model.Store{
 			Description:  input.Description,
@@ -65,19 +66,15 @@ func CreateStore(db *gorm.DB, UserID int, input model.StoreInput, Multistore boo
 		return &store, nil
 	}
 
-	if Multistore {
-		return create()
-	} else {
-		var count int64
-		if err := db.Model(&model.Store{}).Count(&count).Error; err != nil {
-			return nil, err
-		}
+	var count int64
+	if err := db.Model(&model.Store{}).Count(&count).Error; err != nil {
+		return nil, err
+	}
 
-		if count >= 1 {
-			return nil, errors.New("multi-stores are not allowed in this current installation")
-		} else {
-			return create()
-		}
+	if count >= NoOfStores {
+		return nil, errors.New(fmt.Sprintf("current installation only support %d store", NoOfStores))
+	} else {
+		return create()
 	}
 }
 
