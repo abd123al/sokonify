@@ -73,7 +73,7 @@ class SokonifyDrawer extends StatelessWidget {
               const Divider(),
               ListTile(
                 title: const Text('Product Categories'),
-                trailing: const Icon(Icons.category_outlined),
+                trailing: const Icon(Icons.ac_unit),
                 onTap: () {
                   redirectTo(
                     context,
@@ -84,7 +84,7 @@ class SokonifyDrawer extends StatelessWidget {
               ),
               ListTile(
                 title: const Text('Stock Categories'),
-                trailing: const Icon(Icons.category_outlined),
+                trailing: const Icon(Icons.catching_pokemon),
                 onTap: () {
                   redirectTo(
                     context,
@@ -95,7 +95,7 @@ class SokonifyDrawer extends StatelessWidget {
               ),
               ListTile(
                 title: const Text('Pricing Categories'),
-                trailing: const Icon(Icons.category_outlined),
+                trailing: const Icon(Icons.money),
                 onTap: () {
                   redirectTo(
                     context,
@@ -106,7 +106,7 @@ class SokonifyDrawer extends StatelessWidget {
               ),
               ListTile(
                 title: const Text('Expense Categories'),
-                trailing: const Icon(Icons.category_outlined),
+                trailing: const Icon(Icons.price_change),
                 onTap: () {
                   redirectTo(context, Routes.expenses);
                 },
