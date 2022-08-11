@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../nav/nav.dart';
+import 'items_list_cubit.dart';
+import 'items_stats_cubit.dart';
 
 class ItemsActions extends StatelessWidget {
   const ItemsActions({
@@ -23,13 +26,18 @@ class ItemsActions extends StatelessWidget {
             child: const Text("Convert Stock"),
           ),
           TextButton(
-            onPressed: () {},
-            child: const Text("Reset Stocks to zero"),
+            onPressed: () {
+              Navigator.of(context).pop();
+
+              BlocProvider.of<ItemsListCubit>(context).fetch();
+              BlocProvider.of<ItemsStatsCubit>(context).fetch();
+            },
+            child: const Text("Refresh Inventory"),
           ),
-          TextButton(
-            onPressed: () {},
-            child: const Text("Help"),
-          ),
+          // TextButton(
+          //   onPressed: () {},
+          //   child: const Text("Help"),
+          // ),
         ],
       ),
     );
