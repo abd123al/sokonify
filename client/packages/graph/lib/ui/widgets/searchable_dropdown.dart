@@ -17,6 +17,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     this.helperText,
     this.isOptional = true,
     this.validator,
+    this.autofocus = false,
   })  : isMultiSelectionMode = false,
         selectedItems = null,
         validatorMultiSelection = null,
@@ -35,6 +36,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     this.helperText,
     this.isOptional = true,
     this.validatorMultiSelection,
+    this.autofocus = false,
   })  : onChanged = null,
         isMultiSelectionMode = true,
         validator = null,
@@ -52,6 +54,7 @@ class SearchableDropdown<T> extends StatefulWidget {
   final bool Function(T)? selectedItem;
   final List<T>? selectedItems;
   final bool isOptional;
+  final bool autofocus;
 
   final FormFieldValidator<T>? validator;
   final FormFieldValidator<List<T>>? validatorMultiSelection;
@@ -88,6 +91,7 @@ class _SearchableListState<T> extends State<SearchableDropdown<T>> {
               );
 
               const searchFieldProps = TextFieldProps(
+                autofocus: true,
                 decoration: InputDecoration(
                   hintText: "Type here to search....",
                   border: OutlineInputBorder(),
