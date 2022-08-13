@@ -68,7 +68,7 @@ class Invoice {
           _buildHeader(context),
           _contentTable(context),
           pw.SizedBox(height: 20),
-        if(isInventory)  _buildBelow(context),
+          //if (isInventory) _buildBelow(context),
         ],
       ),
     );
@@ -189,12 +189,13 @@ class Invoice {
         ItemTile.price(e, pricing.id),
       ];
 
-      final sub = Decimal.parse(ItemTile.price(e, pricing.id)) * Decimal.fromInt(e.quantity);
+      final sub = Decimal.parse(ItemTile.price(e, pricing.id)) *
+          Decimal.fromInt(e.quantity);
 
       if (isInventory) {
         list.addAll([
           e.quantity,
-          formatCurrency(sub.toString()),
+          //formatCurrency(sub.toString()),
         ]);
       }
 
@@ -202,7 +203,10 @@ class Invoice {
     }).toList();
 
     if (isInventory) {
-      headers.addAll(["Quantity","Sub Cost"]);
+      headers.addAll([
+        "Quantity",
+        //"Sub Cost",
+      ]);
     }
 
     return pw.Table.fromTextArray(
@@ -249,7 +253,7 @@ class Invoice {
   pw.Widget _buildBelow(pw.Context context) {
     final total = calculateTotal(
       items.map(
-            (e) => TotalPriceArgs(
+        (e) => TotalPriceArgs(
           price: ItemTile.price(e, pricing.id),
           quantity: e.quantity,
         ),
