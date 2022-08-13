@@ -319,7 +319,7 @@ class Routes {
     );
 
     router.define(
-      "$printPricing/:id",
+      printPricing,
       handler: printPricingPageRouterHandler,
       transitionType: TransitionType.inFromLeft,
     );

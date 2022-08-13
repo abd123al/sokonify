@@ -201,11 +201,9 @@ var changePassPageRouterHandler = Handler(handlerFunc: (_, __) {
   return const ChangePasswordPage();
 });
 
-var printPricingPageRouterHandler = Handler(handlerFunc: (_, params) {
-  final id = params["id"]![0];
-
+var printPricingPageRouterHandler = Handler(handlerFunc: (context, params) {
   return  PrintPriceListPage(
-    pricingId: int.parse(id),
+    pricing: context?.settings?.arguments as Categories$Query$Category,
   );
 });
 

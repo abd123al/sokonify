@@ -82,7 +82,7 @@ class InventoryStats extends StatelessWidget {
                       context: context,
                       builder: (context) {
                         return ItemsActions(
-                          pricingId: category.id,
+                          pricing: category,
                         );
                       },
                     );

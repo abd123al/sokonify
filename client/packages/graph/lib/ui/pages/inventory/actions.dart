@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../nav/nav.dart';
 import 'items_list_cubit.dart';
 import 'items_stats_cubit.dart';
 
 class ItemsActions extends StatelessWidget {
   const ItemsActions({
-    Key? key, required this.pricingId,
+    Key? key, required this.pricing,
   }) : super(key: key);
 
-  final int pricingId;
+  final Categories$Query$Category pricing;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,8 @@ class ItemsActions extends StatelessWidget {
           TextButton(
             onPressed: () => redirectTo(
               context,
-              "${Routes.printPricing}/$pricingId",
+              Routes.printPricing,
+              args: pricing,
               replace: true,
             ),
             child: const Text("Print Price List"),

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 
@@ -8,15 +9,16 @@ import '../../pdf/price_list.dart';
 import '../../widgets/searchable_dropdown.dart';
 import '../../widgets/store_builder.dart';
 import '../category/pricing_builder.dart';
+import 'items_list_cubit.dart';
 import 'pricing_items_wrapper.dart';
 
 class PrintPriceListPage extends StatefulWidget {
   const PrintPriceListPage({
     Key? key,
-    required this.pricingId,
+    required this.pricing,
   }) : super(key: key);
 
-  final int pricingId;
+  final Categories$Query$Category pricing;
 
   @override
   State<StatefulWidget> createState() {
@@ -25,20 +27,22 @@ class PrintPriceListPage extends StatefulWidget {
 }
 
 class _PrintPriceListPageState extends State<PrintPriceListPage> {
-  int? _pricingId;
-  String _title = "";
+  Categories$Query$Category? _pricing;
 
   @override
   void initState() {
     super.initState();
-    _pricingId = widget.pricingId;
+    _pricing = widget.pricing;
   }
 
   @override
   Widget build(BuildContext context) {
+    //We need updated prices
+    BlocProvider.of<ItemsListCubit>(context).fetch();
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("$_title Prices"),
+        title: Text("${_pricing?.name ?? ""} Prices"),
         actions: [
           IconButton(
             icon: const Icon(Icons.filter_alt),
@@ -60,10 +64,9 @@ class _PrintPriceListPageState extends State<PrintPriceListPage> {
                             hintText: "Type pricing name",
                             helperText:
                                 "Prices will be printed based on pricing category.",
-                            selectedItem: (e) => e.id == _pricingId,
+                            selectedItem: (e) => e.id == _pricing?.id,
                             onChanged: (p) => setState(() {
-                              _pricingId = p?.id;
-                              _title = p?.name ?? "";
+                              _pricing = p;
 
                               Navigator.pop(context);
                             }),
@@ -83,23 +86,23 @@ class _PrintPriceListPageState extends State<PrintPriceListPage> {
           return const SizedBox();
         },
         builder: (context, store) {
-          if (_pricingId == null) {
+          if (_pricing == null) {
             return const SizedBox.shrink();
           }
 
           return PricingItemsWrapper(
-            pricingId: _pricingId!,
+            pricingId: _pricing!.id,
             builder: (context, items) {
               return PdfPreview(
                 canDebug: kDebugMode,
-                pdfFileName: "${_title}_prices.pdf",
+                pdfFileName: "${_pricing!.name}_prices.pdf",
                 initialPageFormat: PdfPageFormat.a4,
                 build: (PdfPageFormat format) {
                   return generatePriceList(
                     format,
                     items.items,
                     store,
-                    _title,
+                    _pricing!,
                   );
                 },
               );

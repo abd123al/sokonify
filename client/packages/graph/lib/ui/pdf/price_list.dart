@@ -5,19 +5,20 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 import '../../gql/generated/graphql_api.graphql.dart';
+import '../pages/inventory/item_tile.dart';
 
 Future<Uint8List> generatePriceList(
   PdfPageFormat pageFormat,
   List<Items$Query$Item> list,
   CurrentStore$Query$Store store,
-  String title,
+    Categories$Query$Category pricing,
 ) async {
   final List<Items$Query$Item> items = list;
   items.sort((a, b) => a.product.name.compareTo(b.product.name));
 
   final invoice = Invoice(
     store: store,
-    title: title,
+    pricing: pricing,
     items: items,
     baseColor: PdfColors.teal,
     accentColor: PdfColors.blueGrey900,
@@ -31,13 +32,13 @@ class Invoice {
     required this.items,
     required this.store,
     required this.baseColor,
-    required this.title,
+    required this.pricing,
     required this.accentColor,
   });
 
   final List<Items$Query$Item> items;
   final CurrentStore$Query$Store store;
-  final String title;
+  final Categories$Query$Category pricing;
   final PdfColor baseColor;
   final PdfColor accentColor;
 
@@ -104,7 +105,7 @@ class Invoice {
         pw.Container(
           alignment: pw.Alignment.center,
           child: pw.Text(
-            '$title Prices',
+            '${pricing.name} Prices',
             style: pw.TextStyle(
               fontWeight: pw.FontWeight.bold,
               fontSize: 20,
@@ -208,7 +209,7 @@ class Invoice {
                 (e.product.name),
                 (e.brand?.name ?? ""),
                 e.quantity,
-                "formatCurrency(e.subTotalPrice)",
+                ItemTile.price(e, pricing.id),
               ])
           .toList(),
     );
