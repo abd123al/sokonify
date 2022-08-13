@@ -2,9 +2,12 @@ package helpers_test
 
 import (
 	"fmt"
+	"github.com/stretchr/testify/require"
 	"mahesabu/graph/model"
+
 	"mahesabu/helpers"
 	"testing"
+	"time"
 )
 
 func TestDate(t *testing.T) {
@@ -66,5 +69,13 @@ func TestDate(t *testing.T) {
 
 		fmt.Printf("BeginningOfYear: %s\n", BeginningOfYear)
 		fmt.Printf("EndOfYear: %s\n", EndOfYear)
+	})
+
+	t.Run("Test time", func(t *testing.T) {
+		l := "2022-06-30T14:13:37.56575+03:00"
+		res, err := time.Parse(time.RFC3339, l)
+		require.Nil(t, err)
+		require.NotNil(t, res)
+		println(res.String())
 	})
 }

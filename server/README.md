@@ -1,7 +1,11 @@
 # Todo
 
+- add tracking service functionality
+- serving web.
+- expire date in build.
+- strict mode don't allow creating of account randomly. We give password to owner so that he can create account on their behalf.
 - add item freeze so that user kan sell users first 
-- add sub kategory 4 traking only items categories
+- add sub category 4 tracking only items categories
 - resolve name by joining product/
 - backup should be encrypted.
 - in staff table add permissions separated by , only

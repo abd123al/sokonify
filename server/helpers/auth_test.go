@@ -10,7 +10,7 @@ import (
 
 func TestGenerateAuthToken(t *testing.T) {
 	t.Run("GenerateAuthToken with store", func(t *testing.T) {
-		perm := model.PermissionTypeCreateOrder
+		perm := model.PermissionTypeAll
 		pricingId := 1
 
 		token := helpers.GenerateAuthToken(1, &helpers.FindDefaultStoreAndRoleResult{

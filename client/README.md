@@ -1,9 +1,12 @@
+- print sales report/price list
+- purchasing order
 - hiding items based on permissions
+- redirect to inventory page after new product
 - search invoice
+- expense/brand/unit page view and edit..
+- fetch payments by items/products/category
 - 
 - 
-- 
--
 - show item view in tabs show details, sales.
 - show stats for categories
 - print invoice and receipt from payment page too
