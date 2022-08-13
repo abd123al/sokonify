@@ -26,6 +26,14 @@ class ItemsActions extends StatelessWidget {
             child: const Text("Convert Stock"),
           ),
           TextButton(
+            onPressed: () => redirectTo(
+              context,
+              Routes.convertStock,
+              replace: true,
+            ),
+            child: const Text("Print Price List"),
+          ),
+          TextButton(
             onPressed: () {
               Navigator.of(context).pop();
 
