@@ -175,7 +175,6 @@ class Invoice {
     List<String> headers = [
       "#",
       "Item Name",
-      "Brand",
       "Unit",
       "Unit Price",
     ];
@@ -183,14 +182,13 @@ class Invoice {
     final List<List<Object>> data = items.mapIndexed((i, e) {
       List<Object> list = [
         (i + 1),
-        (e.product.name),
-        (e.brand?.name ?? ""),
+        "${e.product.name}${e.brand?.name != null ?" (${e.brand?.name})":""}" ,
         (e.unit.name),
         ItemTile.price(e, pricing.id),
       ];
 
-      final sub = Decimal.parse(ItemTile.price(e, pricing.id)) *
-          Decimal.fromInt(e.quantity);
+      // final sub = Decimal.parse(ItemTile.price(e, pricing.id)) *
+      //     Decimal.fromInt(e.quantity);
 
       if (isInventory) {
         list.addAll([
@@ -250,47 +248,47 @@ class Invoice {
     );
   }
 
-  pw.Widget _buildBelow(pw.Context context) {
-    final total = calculateTotal(
-      items.map(
-        (e) => TotalPriceArgs(
-          price: ItemTile.price(e, pricing.id),
-          quantity: e.quantity,
-        ),
-      ),
-    );
-
-    return pw.Column(
-      crossAxisAlignment: pw.CrossAxisAlignment.start,
-      children: [
-        pw.Row(
-          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-          children: [
-            pw.Expanded(child: pw.SizedBox(height: 8)),
-            pw.Container(
-              child: pw.Text(
-                'Total Cost',
-                style: pw.TextStyle(
-                  fontSize: 12,
-                  fontStyle: pw.FontStyle.italic,
-                ),
-              ),
-            ),
-            pw.SizedBox(width: 32),
-            pw.Container(
-              child: pw.Text(
-                total,
-                style: pw.TextStyle(
-                  fontSize: 12,
-                  fontWeight: pw.FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
-        )
-      ],
-    );
-  }
+  // pw.Widget _buildBelow(pw.Context context) {
+  //   final total = calculateTotal(
+  //     items.map(
+  //       (e) => TotalPriceArgs(
+  //         price: ItemTile.price(e, pricing.id),
+  //         quantity: e.quantity,
+  //       ),
+  //     ),
+  //   );
+  //
+  //   return pw.Column(
+  //     crossAxisAlignment: pw.CrossAxisAlignment.start,
+  //     children: [
+  //       pw.Row(
+  //         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+  //         children: [
+  //           pw.Expanded(child: pw.SizedBox(height: 8)),
+  //           pw.Container(
+  //             child: pw.Text(
+  //               'Total Cost',
+  //               style: pw.TextStyle(
+  //                 fontSize: 12,
+  //                 fontStyle: pw.FontStyle.italic,
+  //               ),
+  //             ),
+  //           ),
+  //           pw.SizedBox(width: 32),
+  //           pw.Container(
+  //             child: pw.Text(
+  //               total,
+  //               style: pw.TextStyle(
+  //                 fontSize: 12,
+  //                 fontWeight: pw.FontWeight.bold,
+  //               ),
+  //             ),
+  //           ),
+  //         ],
+  //       )
+  //     ],
+  //   );
+  // }
 }
 
 String _formatDate(DateTime date) {
