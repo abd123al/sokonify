@@ -1,5 +1,6 @@
 import 'package:currency_formatter/currency_formatter.dart';
 import 'package:decimal/decimal.dart';
+import 'package:intl/intl.dart';
 
 String formatCurrency(String amount) {
   try {
@@ -19,7 +20,6 @@ String formatCurrency(String amount) {
     return "..";
   }
 }
-
 
 class TotalPriceArgs {
   final String price;
@@ -44,4 +44,19 @@ String calculateTotal(Iterable<TotalPriceArgs> list) {
   }
 
   return formatCurrency(sum.toString());
+}
+
+String formatToGoTime(DateTime time) {
+  //2022-06-30T14:13:37.56575+03:00
+  var format = DateFormat("yyyy-MM-dd'T'HH:mm:ss.'00000+03:00'");
+  var dateString = format.format(time);
+  return dateString;
+}
+
+DateTime extractGoTime(String time) {
+  print("gotime $time");
+  //2022-06-30T14:13:37.56575+03:00
+  final t = time.substring(0, time.lastIndexOf(".", time.length));
+  print("exxxx: $t");
+  return DateTime.parse(t);
 }
