@@ -1,17 +1,21 @@
 import 'dart:typed_data';
 
+import 'package:collection/collection.dart';
+import 'package:decimal/decimal.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 import '../../gql/generated/graphql_api.graphql.dart';
+import '../helpers/currency_formatter.dart';
 import '../pages/inventory/item_tile.dart';
 
 Future<Uint8List> generatePriceList(
   PdfPageFormat pageFormat,
   List<Items$Query$Item> list,
   CurrentStore$Query$Store store,
-    Categories$Query$Category pricing,
+  Categories$Query$Category pricing,
+  bool isInventory,
 ) async {
   final List<Items$Query$Item> items = list;
   items.sort((a, b) => a.product.name.compareTo(b.product.name));
@@ -21,6 +25,7 @@ Future<Uint8List> generatePriceList(
     pricing: pricing,
     items: items,
     baseColor: PdfColors.teal,
+    isInventory: isInventory,
     accentColor: PdfColors.blueGrey900,
   );
 
@@ -34,6 +39,7 @@ class Invoice {
     required this.baseColor,
     required this.pricing,
     required this.accentColor,
+    required this.isInventory,
   });
 
   final List<Items$Query$Item> items;
@@ -41,6 +47,7 @@ class Invoice {
   final Categories$Query$Category pricing;
   final PdfColor baseColor;
   final PdfColor accentColor;
+  final bool isInventory;
 
   static const _darkColor = PdfColors.blueGrey800;
 
@@ -61,6 +68,7 @@ class Invoice {
           _buildHeader(context),
           _contentTable(context),
           pw.SizedBox(height: 20),
+        if(isInventory)  _buildBelow(context),
         ],
       ),
     );
@@ -105,7 +113,7 @@ class Invoice {
         pw.Container(
           alignment: pw.Alignment.center,
           child: pw.Text(
-            '${pricing.name} Prices',
+            '${pricing.name} ${isInventory ? "Inventory" : "Prices"}',
             style: pw.TextStyle(
               fontWeight: pw.FontWeight.bold,
               fontSize: 20,
@@ -164,6 +172,39 @@ class Invoice {
   }
 
   pw.Widget _contentTable(pw.Context context) {
+    List<String> headers = [
+      "#",
+      "Item Name",
+      "Brand",
+      "Unit",
+      "Unit Price",
+    ];
+
+    final List<List<Object>> data = items.mapIndexed((i, e) {
+      List<Object> list = [
+        (i + 1),
+        (e.product.name),
+        (e.brand?.name ?? ""),
+        (e.unit.name),
+        ItemTile.price(e, pricing.id),
+      ];
+
+      final sub = Decimal.parse(ItemTile.price(e, pricing.id)) * Decimal.fromInt(e.quantity);
+
+      if (isInventory) {
+        list.addAll([
+          e.quantity,
+          formatCurrency(sub.toString()),
+        ]);
+      }
+
+      return list;
+    }).toList();
+
+    if (isInventory) {
+      headers.addAll(["Quantity","Sub Cost"]);
+    }
+
     return pw.Table.fromTextArray(
       border: null,
       cellAlignment: pw.Alignment.centerLeft,
@@ -177,10 +218,12 @@ class Invoice {
       cellHeight: 40,
       cellAlignments: {
         0: pw.Alignment.centerLeft,
-        1: pw.Alignment.center,
-        2: pw.Alignment.center,
+        1: pw.Alignment.centerLeft,
+        2: pw.Alignment.centerLeft,
         3: pw.Alignment.center,
-        4: pw.Alignment.centerRight,
+        4: pw.Alignment.center,
+        5: pw.Alignment.center,
+        6: pw.Alignment.centerRight,
       },
       headerStyle: pw.TextStyle(
         fontSize: 10,
@@ -198,20 +241,50 @@ class Invoice {
           ),
         ),
       ),
-      headers: [
-        "Item Name",
-        "Brand",
-        "Quantity",
-        "Unit Price",
+      headers: headers,
+      data: data,
+    );
+  }
+
+  pw.Widget _buildBelow(pw.Context context) {
+    final total = calculateTotal(
+      items.map(
+            (e) => TotalPriceArgs(
+          price: ItemTile.price(e, pricing.id),
+          quantity: e.quantity,
+        ),
+      ),
+    );
+
+    return pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      children: [
+        pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+          children: [
+            pw.Expanded(child: pw.SizedBox(height: 8)),
+            pw.Container(
+              child: pw.Text(
+                'Total Cost',
+                style: pw.TextStyle(
+                  fontSize: 12,
+                  fontStyle: pw.FontStyle.italic,
+                ),
+              ),
+            ),
+            pw.SizedBox(width: 32),
+            pw.Container(
+              child: pw.Text(
+                total,
+                style: pw.TextStyle(
+                  fontSize: 12,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        )
       ],
-      data: items
-          .map((e) => [
-                (e.product.name),
-                (e.brand?.name ?? ""),
-                e.quantity,
-                ItemTile.price(e, pricing.id),
-              ])
-          .toList(),
     );
   }
 }

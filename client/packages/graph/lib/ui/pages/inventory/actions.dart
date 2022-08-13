@@ -38,6 +38,15 @@ class ItemsActions extends StatelessWidget {
             child: const Text("Print Price List"),
           ),
           TextButton(
+            onPressed: () => redirectTo(
+              context,
+              Routes.printInventory,
+              args: pricing,
+              replace: true,
+            ),
+            child: const Text("Print Inventory List"),
+          ),
+          TextButton(
             onPressed: () {
               Navigator.of(context).pop();
 

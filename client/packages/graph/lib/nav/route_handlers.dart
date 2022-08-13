@@ -202,15 +202,22 @@ var changePassPageRouterHandler = Handler(handlerFunc: (_, __) {
 });
 
 var printPricingPageRouterHandler = Handler(handlerFunc: (context, params) {
-  return  PrintPriceListPage(
+  return PrintPriceListPage(
     pricing: context?.settings?.arguments as Categories$Query$Category,
+  );
+});
+
+var printInventoryPageRouterHandler = Handler(handlerFunc: (context, params) {
+  return PrintPriceListPage(
+    pricing: context?.settings?.arguments as Categories$Query$Category,
+    inventory: true,
   );
 });
 
 var createStaffRouterHandler = Handler(handlerFunc: (_, params) {
   final id = params["id"]![0];
 
-  return  CreateStaffPage(
+  return CreateStaffPage(
     roleId: int.parse(id),
   );
 });

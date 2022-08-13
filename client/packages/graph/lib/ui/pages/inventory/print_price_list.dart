@@ -16,9 +16,11 @@ class PrintPriceListPage extends StatefulWidget {
   const PrintPriceListPage({
     Key? key,
     required this.pricing,
+    this.inventory = false,
   }) : super(key: key);
 
   final Categories$Query$Category pricing;
+  final bool inventory;
 
   @override
   State<StatefulWidget> createState() {
@@ -42,7 +44,8 @@ class _PrintPriceListPageState extends State<PrintPriceListPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("${_pricing?.name ?? ""} Prices"),
+        title: Text(
+            "${_pricing?.name ?? ""} ${widget.inventory ? "Inventory" : "Prices"}"),
         actions: [
           IconButton(
             icon: const Icon(Icons.filter_alt),
@@ -95,7 +98,8 @@ class _PrintPriceListPageState extends State<PrintPriceListPage> {
             builder: (context, items) {
               return PdfPreview(
                 canDebug: kDebugMode,
-                pdfFileName: "${_pricing!.name}_prices.pdf",
+                pdfFileName:
+                    "${_pricing!.name}${widget.inventory ? "_inventory" : "_prices"}.pdf",
                 initialPageFormat: PdfPageFormat.a4,
                 build: (PdfPageFormat format) {
                   return generatePriceList(
@@ -103,6 +107,7 @@ class _PrintPriceListPageState extends State<PrintPriceListPage> {
                     items.items,
                     store,
                     _pricing!,
+                    widget.inventory,
                   );
                 },
               );
