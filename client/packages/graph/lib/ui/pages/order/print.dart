@@ -5,7 +5,7 @@ import 'package:printing/printing.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../widgets/store_builder.dart';
-import 'invoice.dart';
+import '../../pdf/invoice.dart';
 
 class PrintPage extends StatelessWidget {
   const PrintPage({

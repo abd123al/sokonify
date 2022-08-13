@@ -81,7 +81,9 @@ class InventoryStats extends StatelessWidget {
                     showModalBottomSheet(
                       context: context,
                       builder: (context) {
-                        return const ItemsActions();
+                        return ItemsActions(
+                          pricingId: category.id,
+                        );
                       },
                     );
                   },

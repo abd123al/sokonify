@@ -1,4 +1,3 @@
-import 'package:blocitory/blocitory.dart';
 import 'package:flutter/material.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
@@ -6,8 +5,8 @@ import '../../../nav/nav.dart';
 import '../../widgets/widgets.dart';
 import '../category/pricing_builder.dart';
 import 'item_tile.dart';
-import 'items_list_cubit.dart';
 import 'items_stats.dart';
+import 'pricing_items_wrapper.dart';
 
 class ItemsList extends StatelessWidget {
   const ItemsList({Key? key}) : super(key: key);
@@ -43,30 +42,19 @@ class ItemsList extends StatelessWidget {
     return Builder(
       builder: (context) {
         return Scaffold(
-          body:
-              QueryBuilder<ResourceListData<Items$Query$Item>, ItemsListCubit>(
-            retry: (cubit) => cubit.fetch(),
-            builder: (context, data, _) {
-              List<Items$Query$Item> cats = [];
-
-              for (var e in data.items) {
-                if (e.prices.map((e) => e.categoryId).contains(cat.id)) {
-                  cats.add(e);
-                }
-              }
-
+          body: PricingItemsWrapper(
+            pricingId: cat.id,
+            builder: (context, cats) {
               return ListView(
                 children: [
-                  if (cats.isNotEmpty)
+                  if (cats.items.isNotEmpty)
                     InventoryStats(
                       category: cat,
                     ),
                   const SizedBox(height: 8),
                   SearchableList<Items$Query$Item>(
                     hintName: "Item",
-                    data: data.copyWith(
-                      items: cats,
-                    ),
+                    data: cats,
                     mainAxisSize: MainAxisSize.min,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),

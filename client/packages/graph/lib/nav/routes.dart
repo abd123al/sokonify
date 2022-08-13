@@ -50,6 +50,8 @@ class Routes {
   static String store = "/store";
   static String units = "/units";
 
+  static String printPricing = "/printPricing";
+
   /// [:params] should be defined here.
   static void configureRoutes(FluroRouter router) {
     // router.notFoundHandler = Handler(handlerFunc: (_, __) {
@@ -313,6 +315,12 @@ class Routes {
     router.define(
       units,
       handler: unitsListPageRouterHandler,
+      transitionType: TransitionType.inFromLeft,
+    );
+
+    router.define(
+      "$printPricing/:id",
+      handler: printPricingPageRouterHandler,
       transitionType: TransitionType.inFromLeft,
     );
   }

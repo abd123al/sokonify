@@ -48,7 +48,7 @@ class _ItemFormState<T extends PricingCubit> extends State<ItemForm<T>> {
   int? _brandId;
   DateTime? _expireDate;
   late List<Categories$Query$Category> _categories;
-  Categories$Query$Category? _item;
+  Categories$Query$Category? _pricingId;
 
   late bool isEdit;
 
@@ -62,7 +62,7 @@ class _ItemFormState<T extends PricingCubit> extends State<ItemForm<T>> {
     _productId = widget.item?.product.id;
     _unitId = widget.item?.unit.id;
     _brandId = widget.item?.brand?.id;
-    _item = widget.pricing;
+    _pricingId = widget.pricing;
 
     _categories = widget.item?.categories
             ?.map((e) => Categories$Query$Category.fromJson(e.toJson()))
@@ -263,16 +263,16 @@ class _ItemFormState<T extends PricingCubit> extends State<ItemForm<T>> {
                           labelText: "Enter selling price",
                           hintText: "Type pricing name",
                           helperText: "Type pricing to add",
-                          selectedItem: (e) => e.id == _item?.id,
+                          selectedItem: (e) => e.id == _pricingId?.id,
                           onChanged: (item) => setState(() {
-                            _item = item;
+                            _pricingId = item;
                           }),
                         ),
                         const SizedBox(
                           height: 16,
                           width: 8,
                         ),
-                        if (_item != null)
+                        if (_pricingId != null)
                           TextFormField(
                             controller: _amountController,
                             textInputAction: TextInputAction.send,
@@ -289,20 +289,20 @@ class _ItemFormState<T extends PricingCubit> extends State<ItemForm<T>> {
                               return null;
                             },
                             decoration: InputDecoration(
-                              hintText: 'Enter ${_item?.name ?? ""} price',
-                              labelText: "${_item?.name ?? ""} price",
+                              hintText: 'Enter ${_pricingId?.name ?? ""} price',
+                              labelText: "${_pricingId?.name ?? ""} price",
                               border: const OutlineInputBorder(),
                               suffixIcon: TextButton.icon(
                                 onPressed: () {
                                   priceCubit.addItem(
-                                    _item!,
+                                    _pricingId!,
                                     _amountController.text,
                                   );
 
                                   //Resetting fields
                                   _amountController.text = "";
                                   setState(() {
-                                    _item = null;
+                                    _pricingId = null;
                                   });
                                 },
                                 icon: const Icon(Icons.add_box, size: 40),

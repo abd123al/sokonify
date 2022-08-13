@@ -7,3 +7,4 @@ export 'items_list.dart';
 export 'items_list_cubit.dart';
 export 'items_list_cubit.dart';
 export 'items_stats.dart';
+export 'print_price_list.dart';

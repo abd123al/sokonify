@@ -7,8 +7,10 @@ import 'items_stats_cubit.dart';
 
 class ItemsActions extends StatelessWidget {
   const ItemsActions({
-    Key? key,
+    Key? key, required this.pricingId,
   }) : super(key: key);
+
+  final int pricingId;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class ItemsActions extends StatelessWidget {
           TextButton(
             onPressed: () => redirectTo(
               context,
-              Routes.convertStock,
+              "${Routes.printPricing}/$pricingId",
               replace: true,
             ),
             child: const Text("Print Price List"),

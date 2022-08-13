@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
-import '../../../gql/generated/graphql_api.graphql.dart';
+import '../../gql/generated/graphql_api.graphql.dart';
 
 Future<Uint8List> generateInvoice(
   PdfPageFormat pageFormat,
