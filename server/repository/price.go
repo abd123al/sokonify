@@ -35,12 +35,22 @@ func EditPrice(DB *gorm.DB, ItemID int, input model.PriceInput, CreatorID int) (
 	var price *model.Price
 
 	price = &model.Price{
-		Amount:    input.Amount,
-		CreatorID: CreatorID,
+		Amount:     input.Amount,
+		CreatorID:  CreatorID,
+		ItemID:     ItemID,
+		CategoryID: input.CategoryID,
 	}
 
-	if err := DB.Model(&model.Price{}).Where(&model.Price{ItemID: ItemID, CategoryID: input.CategoryID}).Updates(&price).Error; err != nil {
-		return nil, err
+	res := DB.Model(&model.Price{}).Where(&model.Price{ItemID: ItemID, CategoryID: input.CategoryID}).Updates(&price)
+
+	if res.Error != nil {
+		return nil, res.Error
+	}
+
+	if res.RowsAffected == 0 {
+		if err := DB.Model(&model.Price{}).Create(&price).Error; err != nil {
+			return nil, err
+		}
 	}
 
 	return price, nil
