@@ -1,7 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart';
-import 'package:graph/ui/helpers/helpers.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -10,14 +8,16 @@ import '../../gql/generated/graphql_api.graphql.dart';
 
 Future<Uint8List> generatePriceList(
   PdfPageFormat pageFormat,
-  List<Items$Query$Item> order,
+  List<Items$Query$Item> list,
   CurrentStore$Query$Store store,
+  String title,
 ) async {
-  final List<Items$Query$Item> items = order;
+  final List<Items$Query$Item> items = list;
   items.sort((a, b) => a.product.name.compareTo(b.product.name));
 
   final invoice = Invoice(
     store: store,
+    title: title,
     items: items,
     baseColor: PdfColors.teal,
     accentColor: PdfColors.blueGrey900,
@@ -31,11 +31,13 @@ class Invoice {
     required this.items,
     required this.store,
     required this.baseColor,
+    required this.title,
     required this.accentColor,
   });
 
   final List<Items$Query$Item> items;
   final CurrentStore$Query$Store store;
+  final String title;
   final PdfColor baseColor;
   final PdfColor accentColor;
 
@@ -102,7 +104,7 @@ class Invoice {
         pw.Container(
           alignment: pw.Alignment.center,
           child: pw.Text(
-            'Invoice/Delivery Note',
+            '$title Prices',
             style: pw.TextStyle(
               fontWeight: pw.FontWeight.bold,
               fontSize: 20,

@@ -39,61 +39,73 @@ class _PrintPriceListPageState extends State<PrintPriceListPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("$_title Prices"),
-      ),
-      body: Column(
-        children: [
-          PricingBuilder(
-            builder: (context, cats) {
-              if (_pricingId == null) {
-                return SearchableDropdown<Categories$Query$Category>(
-                  asString: (i) => i.name,
-                  data: cats,
-                  labelText: "Select Pricing",
-                  hintText: "Type pricing name",
-                  helperText:
-                      "Prices will be printed based on pricing category.",
-                  selectedItem: (e) => e.id == _pricingId,
-                  onChanged: (p) => setState(() {
-                    _pricingId = p?.id;
-                    _title = p?.name ?? "";
-                  }),
-                );
-              }
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.filter_alt),
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (context) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      height: 200,
+                      child: PricingBuilder(
+                        builder: (context, cats) {
+                          return SearchableDropdown<Categories$Query$Category>(
+                            asString: (i) => i.name,
+                            searchAutofocus: false,
+                            data: cats,
+                            labelText: "Select Pricing",
+                            hintText: "Type pricing name",
+                            helperText:
+                                "Prices will be printed based on pricing category.",
+                            selectedItem: (e) => e.id == _pricingId,
+                            onChanged: (p) => setState(() {
+                              _pricingId = p?.id;
+                              _title = p?.name ?? "";
 
-              return const SizedBox();
+                              Navigator.pop(context);
+                            }),
+                          );
+                        },
+                      ),
+                    ),
+                  );
+                },
+              );
             },
-          ),
-          Expanded(
-            child: StoreBuilder(
-              noBuilder: (BuildContext ctx) {
-                return const SizedBox();
-              },
-              builder: (context, store) {
-                if (_pricingId == null) {
-                  return const SizedBox.shrink();
-                }
-
-                return PricingItemsWrapper(
-                  pricingId: _pricingId!,
-                  builder: (context, items) {
-                    return PdfPreview(
-                      canDebug: kDebugMode,
-                      pdfFileName: "${_title}_prices.pdf",
-                      initialPageFormat: PdfPageFormat.a4,
-                      build: (PdfPageFormat format) {
-                        return generatePriceList(
-                          format,
-                          items.items,
-                          store,
-                        );
-                      },
-                    );
-                  },
-                );
-              },
-            ),
-          ),
+          )
         ],
+      ),
+      body: StoreBuilder(
+        noBuilder: (BuildContext ctx) {
+          return const SizedBox();
+        },
+        builder: (context, store) {
+          if (_pricingId == null) {
+            return const SizedBox.shrink();
+          }
+
+          return PricingItemsWrapper(
+            pricingId: _pricingId!,
+            builder: (context, items) {
+              return PdfPreview(
+                canDebug: kDebugMode,
+                pdfFileName: "${_title}_prices.pdf",
+                initialPageFormat: PdfPageFormat.a4,
+                build: (PdfPageFormat format) {
+                  return generatePriceList(
+                    format,
+                    items.items,
+                    store,
+                    _title,
+                  );
+                },
+              );
+            },
+          );
+        },
       ),
     );
   }
