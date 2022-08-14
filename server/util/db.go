@@ -9,6 +9,7 @@ import (
 	"mahesabu/graph/model"
 	"mahesabu/helpers"
 	"mahesabu/repository"
+	"time"
 )
 
 type InitDbArgs struct {
@@ -39,6 +40,7 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 		db, err = gorm.Open(postgres.New(postgres.Config{DSN: dsn}), &gorm.Config{
 			//Logger: logger.Default.LogMode(logger.Info),
 		})
+
 	} else {
 		dsn := "sokonify.db"
 		if args.Dsn != "" {
@@ -51,6 +53,21 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 	if err != nil {
 		panic(fmt.Sprintf("failed to connect database with error: %s", err.Error()))
 	}
+
+	sqlDB, err1 := db.DB()
+
+	if err1 != nil {
+		panic(fmt.Sprintf("failed to connect database with error: %s", err1.Error()))
+	}
+
+	// SetMaxIdleConns sets the maximum number of connections in the idle connection pool.
+	sqlDB.SetMaxIdleConns(10)
+
+	// SetMaxOpenConns sets the maximum number of open connections to the database.
+	sqlDB.SetMaxOpenConns(100)
+
+	// SetConnMaxLifetime sets the maximum amount of time a connection may be reused.
+	sqlDB.SetConnMaxLifetime(time.Hour)
 
 	if args.Clear && !args.IsRelease {
 		if args.IsServer {
