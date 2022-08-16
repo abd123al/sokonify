@@ -1,5 +1,7 @@
 # Todo
 
+- ability to add things kwa order nzima. yani kama nimetoka kununua mzigo
+- in item add supplier ref id. so we can know nani auza vizuri nani mwizi
 - add tracking service functionality
 - serving web.
 - expire date in build.

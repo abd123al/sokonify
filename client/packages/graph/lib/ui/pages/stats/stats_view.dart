@@ -2,6 +2,7 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
+import '../../../nav/nav.dart';
 import '../../helpers/currency_formatter.dart';
 import '../../widgets/topper.dart';
 import 'stat_tile.dart';
@@ -38,12 +39,12 @@ class StatsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
-        return _body();
+        return _body(context);
       },
     );
   }
 
-  ListView _body() {
+  ListView _body(BuildContext context) {
     //todo in large display use Grid/ but in phones ListView
     final List<Widget> children = [
       StatTile(

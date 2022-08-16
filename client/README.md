@@ -1,4 +1,5 @@
 - print sales report/price list
+- make sure user has pricing permission
 - purchasing order
 - hiding items based on permissions
 - redirect to inventory page after new product
