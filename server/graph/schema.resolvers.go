@@ -569,6 +569,10 @@ func (r *queryResolver) Products(ctx context.Context, args model.ProductsArgs) (
 	return repository.FindProducts(r.DB, args, helpers.ForContext(ctx).StoreID)
 }
 
+func (r *queryResolver) Sales(ctx context.Context, args model.StatsArgs) ([]*model.OrderItem, error) {
+	return repository.FindSoldItems(r.DB, helpers.ForContext(ctx).StoreID, args)
+}
+
 func (r *queryResolver) Staff(ctx context.Context, id int) (*model.Staff, error) {
 	return repository.FindStaff(r.DB, id)
 }

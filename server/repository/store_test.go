@@ -18,7 +18,7 @@ func TestStore(t *testing.T) {
 		store, err := repository.CreateStore(DB, UserID, model.StoreInput{
 			Name:         faker.Name(),
 			BusinessType: model.BusinessTypeBoth,
-		}, false)
+		}, 2)
 
 		assert.Nil(t, err)
 		assert.NotNil(t, store)
@@ -42,7 +42,7 @@ func TestStore(t *testing.T) {
 
 		store, err := repository.CreateStore(DB, UserID, model.StoreInput{
 			Name: faker.Name(),
-		}, false)
+		}, 2)
 
 		assert.NotNil(t, err)
 		assert.Nil(t, store)

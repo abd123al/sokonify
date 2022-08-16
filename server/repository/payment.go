@@ -267,8 +267,8 @@ func SumExpensePayment(db *gorm.DB, StoreID int, args model.StatsArgs) (string, 
 	return amount, nil
 }
 
-func SumGrossProfit(db *gorm.DB, StoreID int, args model.StatsArgs) (*model.Profit, error) {
-	var profit *model.Profit
+// GetOrderItemsFilters / This is reused in finding items too
+func GetOrderItemsFilters(db *gorm.DB, StoreID int, args model.StatsArgs) *gorm.DB {
 	StartDate, EndDate := helpers.HandleStatsDates(args)
 
 	a := db.Table("order_items")
@@ -307,9 +307,19 @@ func SumGrossProfit(db *gorm.DB, StoreID int, args model.StatsArgs) (*model.Prof
 	}
 
 	var f = y
+
 	if isDateDependent {
 		f = y.Where("payments.created_at BETWEEN ? AND ?", StartDate, EndDate)
 	}
+
+	return f
+}
+
+func SumGrossProfit(db *gorm.DB, StoreID int, args model.StatsArgs) (*model.Profit, error) {
+	var profit *model.Profit
+
+	var f = GetOrderItemsFilters(db, StoreID, args)
+
 	g := f.Select(`
 COALESCE(SUM((order_items.price - items.buying_price) * order_items.quantity),0.00) AS real, 
 COALESCE(SUM(order_items.price * order_items.quantity),0.00) AS sales

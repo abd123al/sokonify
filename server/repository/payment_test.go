@@ -290,6 +290,17 @@ func TestPayment(t *testing.T) {
 
 		require.Nil(t, err)
 		require.NotEmpty(t, profit)
+
+		items, err1 := repository.FindSoldItems(DB, re.StoreID, model.StatsArgs{
+			Timeframe: &timeframe,
+			PricingID: re.PricingID,
+			Value:     &value,
+			Filter:    &filter,
+		})
+
+		require.Nil(t, err1)
+		require.NotEmpty(t, items)
+		//fmt.Printf("Sales %v", items)
 	})
 
 	t.Run("SumGrossProfit to return zero when nothing found", func(t *testing.T) {

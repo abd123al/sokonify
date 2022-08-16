@@ -881,6 +881,7 @@ type Query {
     permissions(roleId: ID!): [Permission!]! @isAuthenticated
     product(id: ID!): Product!
     products(args: ProductsArgs!): [Product!]!
+    sales(args:StatsArgs!): [OrderItem!]! @isAuthenticated
     staff(id: ID!): Staff! @isAuthenticated
     staffs(args: StaffsArgs): [Staff!]! @isAuthenticated
     store(id: ID!): Store! @isAuthenticated

@@ -91,3 +91,17 @@ func DeleteOrderItems(DB *gorm.DB, OrderID int) ([]*model.OrderItem, error) {
 
 	return items, nil
 }
+
+func FindSoldItems(DB *gorm.DB, StoreID int, args model.StatsArgs) ([]*model.OrderItem, error) {
+	var items []*model.OrderItem
+
+	var f = GetOrderItemsFilters(DB, StoreID, args)
+
+	result := f.Find(&items)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return items, nil
+}
