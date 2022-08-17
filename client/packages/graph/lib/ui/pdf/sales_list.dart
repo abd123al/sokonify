@@ -11,6 +11,7 @@ Future<Uint8List> generateSalesList(
   PdfPageFormat pageFormat,
   List<Sales$Query$OrderItem> list,
   CurrentStore$Query$Store store,
+  String word,
 ) async {
   final List<Sales$Query$OrderItem> items = list;
   items.sort((a, b) => a.item.product.name.compareTo(b.item.product.name));
@@ -20,6 +21,7 @@ Future<Uint8List> generateSalesList(
     items: items,
     baseColor: PdfColors.teal,
     accentColor: PdfColors.blueGrey900,
+    word: word,
   );
 
   return await invoice.buildPdf(pageFormat);
@@ -31,12 +33,14 @@ class Invoice {
     required this.store,
     required this.baseColor,
     required this.accentColor,
+    required this.word,
   });
 
   final List<Sales$Query$OrderItem> items;
   final CurrentStore$Query$Store store;
   final PdfColor baseColor;
   final PdfColor accentColor;
+  String word;
 
   static const _darkColor = PdfColors.blueGrey800;
 
@@ -102,7 +106,7 @@ class Invoice {
         pw.Container(
           alignment: pw.Alignment.center,
           child: pw.Text(
-            'Sales List',
+            '$word Sales',
             style: pw.TextStyle(
               fontWeight: pw.FontWeight.bold,
               fontSize: 20,
@@ -158,8 +162,8 @@ class Invoice {
       "#",
       "Item Name",
       "Unit",
-      "Unit Price",
       "Quantity",
+      "Unit Price",
       "Sub Total",
     ];
 
@@ -168,8 +172,8 @@ class Invoice {
         (i + 1),
         "${e.item.product.name}${e.item.brand?.name != null ? " (${e.item.brand?.name})" : ""}",
         (e.item.unit.name),
-        e.price,
         e.quantity,
+        e.price,
         e.subTotalPrice,
       ];
 

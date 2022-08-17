@@ -57,6 +57,7 @@ class PrintSalesPage extends StatelessWidget {
                     format,
                     data,
                     store,
+                    word,
                   );
                 },
               );
