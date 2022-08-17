@@ -2,7 +2,6 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
-import '../../../nav/nav.dart';
 import '../../helpers/currency_formatter.dart';
 import '../../widgets/topper.dart';
 import 'stat_tile.dart';

@@ -1,0 +1,10 @@
+query sales($args:StatsArgs!) {
+    sales(args: $args){
+        item {
+            ...ItemParts
+        }
+        quantity
+        price
+        subTotalPrice
+    }
+}

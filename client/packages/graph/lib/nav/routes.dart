@@ -52,6 +52,7 @@ class Routes {
 
   static String printPricing = "/printPricing";
   static String printInventory = "/printInventory";
+  static String printSales = "/printSales";
 
   /// [:params] should be defined here.
   static void configureRoutes(FluroRouter router) {
@@ -256,6 +257,12 @@ class Routes {
     router.define(
       "$payment/:id/:word",
       handler: paymentPageRouterHandler,
+      transitionType: TransitionType.inFromLeft,
+    );
+
+    router.define(
+      "$printSales/:word",
+      handler: printSalesPageRouterHandler,
       transitionType: TransitionType.inFromLeft,
     );
 

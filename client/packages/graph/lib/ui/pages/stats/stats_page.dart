@@ -72,7 +72,8 @@ class StatsWidget extends StatelessWidget {
                     OutlinedButton(
                       onPressed: () => redirectTo(
                         context,
-                        Routes.convertStock,
+                        "${Routes.printSales}/${tab.title}",
+                        args: statsArgs,
                       ),
                       child: const Text("Print Sales"),
                     ),

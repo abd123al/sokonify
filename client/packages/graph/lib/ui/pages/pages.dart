@@ -10,7 +10,7 @@ export 'order/order.dart';
 export 'payment/payment.dart';
 export 'product/product.dart';
 export 'staff/staff.dart';
-export 'stats/stats_page.dart';
+export 'stats/stats.dart';
 export 'store/create_store_page.dart';
 export 'store/store.dart';
 export 'unit/unit.dart';

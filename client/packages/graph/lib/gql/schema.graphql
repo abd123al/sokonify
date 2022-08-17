@@ -321,6 +321,7 @@ type Query {
     permissions(roleId: ID!): [Permission!]!
     product(id: ID!): Product!
     products(args: ProductsArgs!): [Product!]!
+    sales(args: StatsArgs!): [OrderItem!]!
     staff(id: ID!): Staff!
     staffs(args: StaffsArgs): [Staff!]!
     store(id: ID!): Store!

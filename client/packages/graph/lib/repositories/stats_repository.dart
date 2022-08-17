@@ -31,4 +31,13 @@ class StatsRepository {
 
     return client.query(options);
   }
+
+  fetchSales(StatsArgs args) {
+    final options = QueryOptions(
+      document: SALES_QUERY_DOCUMENT,
+      variables: SalesArguments(args: args).toJson(),
+    );
+
+    return client.query(options);
+  }
 }

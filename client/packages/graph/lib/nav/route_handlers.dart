@@ -255,3 +255,13 @@ var editPermissionsRouterHandler = Handler(handlerFunc: (context, params) {
     type: type,
   );
 });
+
+var printSalesPageRouterHandler = Handler(handlerFunc: (context, params) {
+  final args = context?.settings?.arguments as StatsArgs;
+  final word = params["word"]![0];
+
+  return PrintSalesPage(
+    args: args,
+    word: word,
+  );
+});

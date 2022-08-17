@@ -81,6 +81,10 @@ func (r *expenseResolver) Creator(ctx context.Context, obj *model.Expense) (*mod
 	return nil, nil
 }
 
+func (r *itemResolver) Name(ctx context.Context, obj *model.Item) (*string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *itemResolver) BuyingPrice(ctx context.Context, obj *model.Item) (string, error) {
 	return obj.BuyingPrice, nil
 }
