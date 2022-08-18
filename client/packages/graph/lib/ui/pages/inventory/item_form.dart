@@ -205,7 +205,7 @@ class _ItemFormState<T extends PricingCubit> extends State<ItemForm<T>> {
                     hintText: 'The number of items',
                   ),
                   validator: (value) {
-                    if (value == null || value.isEmpty || value == "0") {
+                    if (value == null || value.isEmpty) {
                       return 'Please valid enter quantity..';
                     }
                     return null;
@@ -247,7 +247,7 @@ class _ItemFormState<T extends PricingCubit> extends State<ItemForm<T>> {
                     hintText: 'Enter item buying price',
                   ),
                   validator: (value) {
-                    if (value == null || value.isEmpty || value == "0") {
+                    if (value == null || value.isEmpty) {
                       return 'Please valid buying price';
                     }
                     return null;
@@ -281,11 +281,14 @@ class _ItemFormState<T extends PricingCubit> extends State<ItemForm<T>> {
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                             validator: (value) {
-                              if (value == null ||
-                                  value.isEmpty ||
-                                  value == "0") {
-                                return 'Please enter valid selling price..';
+                              if (state.prices.isEmpty) {
+                                if (value == null ||
+                                    value.isEmpty ||
+                                    value == "0") {
+                                  return 'Please enter valid selling price..';
+                                }
                               }
+
                               return null;
                             },
                             decoration: InputDecoration(
