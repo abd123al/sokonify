@@ -6,6 +6,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 import '../../gql/generated/graphql_api.graphql.dart';
+import '../helpers/currency_formatter.dart';
 
 Future<Uint8List> generateSalesList(
   PdfPageFormat pageFormat,
@@ -61,7 +62,7 @@ class Invoice {
           _buildHeader(context),
           _contentTable(context),
           pw.SizedBox(height: 20),
-          //if (isInventory) _buildBelow(context),
+           _buildBelow(context),
         ],
       ),
     );
@@ -197,8 +198,7 @@ class Invoice {
         2: pw.Alignment.centerLeft,
         3: pw.Alignment.center,
         4: pw.Alignment.center,
-        5: pw.Alignment.center,
-        6: pw.Alignment.centerRight,
+        5: pw.Alignment.centerRight,
       },
       headerStyle: pw.TextStyle(
         fontSize: 10,
@@ -221,47 +221,47 @@ class Invoice {
     );
   }
 
-// pw.Widget _buildBelow(pw.Context context) {
-//   final total = calculateTotal(
-//     items.map(
-//       (e) => TotalPriceArgs(
-//         price: ItemTile.price(e, pricing.id),
-//         quantity: e.quantity,
-//       ),
-//     ),
-//   );
-//
-//   return pw.Column(
-//     crossAxisAlignment: pw.CrossAxisAlignment.start,
-//     children: [
-//       pw.Row(
-//         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-//         children: [
-//           pw.Expanded(child: pw.SizedBox(height: 8)),
-//           pw.Container(
-//             child: pw.Text(
-//               'Total Cost',
-//               style: pw.TextStyle(
-//                 fontSize: 12,
-//                 fontStyle: pw.FontStyle.italic,
-//               ),
-//             ),
-//           ),
-//           pw.SizedBox(width: 32),
-//           pw.Container(
-//             child: pw.Text(
-//               total,
-//               style: pw.TextStyle(
-//                 fontSize: 12,
-//                 fontWeight: pw.FontWeight.bold,
-//               ),
-//             ),
-//           ),
-//         ],
-//       )
-//     ],
-//   );
-// }
+  pw.Widget _buildBelow(pw.Context context) {
+    final total = calculateTotal(
+      items.map(
+        (e) => TotalPriceArgs(
+          price: e.subTotalPrice,
+          quantity: 1,
+        ),
+      ),
+    );
+
+    return pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      children: [
+        pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+          children: [
+            pw.Expanded(child: pw.SizedBox(height: 4)),
+            pw.Container(
+              child: pw.Text(
+                'Total Sales',
+                style: pw.TextStyle(
+                  fontSize: 12,
+                  fontStyle: pw.FontStyle.italic,
+                ),
+              ),
+            ),
+            pw.SizedBox(width: 32),
+            pw.Container(
+              child: pw.Text(
+                total,
+                style: pw.TextStyle(
+                  fontSize: 12,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        )
+      ],
+    );
+  }
 }
 
 String _formatDate(DateTime date) {
