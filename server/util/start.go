@@ -60,7 +60,11 @@ func ConfigureGraphql(DB *gorm.DB, NoOfStores int64, isServer bool, port string)
 
 	//todo websockets too https://gqlgen.com/recipes/cors/
 	router.Use(cors.New(cors.Options{
-		AllowedOrigins:   []string{fmt.Sprintf("http://localhost:%s", port), fmt.Sprintf("http://127.0.0.1:%s", port)},
+		AllowedOrigins: []string{
+			fmt.Sprintf("http://localhost:%s", port), //web can also be saved from here
+			fmt.Sprintf("http://localhost:%d", 8081), //static port on development
+			fmt.Sprintf("http://localhost:%d", 9091), //static port on production
+		},
 		AllowCredentials: true,
 		AllowedHeaders:   []string{"*"},
 	}).Handler)
@@ -90,8 +94,9 @@ func ConfigureGraphql(DB *gorm.DB, NoOfStores int64, isServer bool, port string)
 
 	if isServer {
 		workDir, _ := os.Getwd()
-		filesDir := http.Dir(filepath.Join(workDir, "web"))
-		helpers.FileServer(router, "/", filesDir)
+		dir := http.Dir(filepath.Join(workDir, "web"))
+		fs := http.FileServer(dir)
+		router.Handle("/*", http.StripPrefix("/", fs))
 	}
 
 	return router

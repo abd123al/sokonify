@@ -4,7 +4,7 @@ cd..
 cd apps/online
 
 $ipv4 = (Test-Connection -ComputerName (hostname) -Count 1 | Select -ExpandProperty IPv4Address).IPAddressToString
-$baseUrl = "http://$($ipv4):9191"
+$baseUrl = "http://$($ipv4):9090"
 $baseUrl
 
 flutter run --release -d R9ANB0BYKXJ --dart-define BASE_URL=$baseUrl

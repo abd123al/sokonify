@@ -21,12 +21,12 @@ void main() async {
               }
             }
 
-            final url = "http://${await ip() ?? "127.0.0.1"}:9191";
+            final url = "http://${await ip() ?? "127.0.0.1"}:9090";
 
             return url;
           }
 
-          return "http://127.0.0.1:9191";
+          return "http://127.0.0.1:9090";
         } else {
           //Web don't support platform
           if (!kIsWeb) {
