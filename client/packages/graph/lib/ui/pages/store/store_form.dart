@@ -1,10 +1,10 @@
 import 'package:blocitory/blocitory.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/store_repository.dart';
-import '../../widgets/store_builder_cubit.dart';
 import '../../widgets/widgets.dart';
 import 'create_store_cubit.dart';
 import 'stores_list_cubit.dart';
@@ -154,9 +154,11 @@ class _FormStoreState extends State<StoreForm> {
                   (l) => l.firstWhere((e) => e.id == widget.store?.id),
                   Stores$Query$Store.fromJson(data.toJson()),
                 );
-                BlocProvider.of<StoreBuilderCubit>(context).update(
-                  CurrentStore$Query$Store.fromJson(data.toJson()),
-                );
+                BlocProvider.of<StoreBuilderCubit>(context).fetch();
+                // todo
+                // BlocProvider.of<StoreBuilderCubit>(context).update(
+                //   CurrentStore$Query$Store.fromJson(data.toJson()),
+                // );
               }
             },
         pop: widget.onSuccess == null,
