@@ -273,7 +273,7 @@ func GetOrderItemsFilters(db *gorm.DB, StoreID int, args model.StatsArgs) *gorm.
 
 	a := db.Table("order_items")
 	b := a.Joins("inner join items on order_items.item_id = items.id")
-	c := b.Joins("inner join orders on order_items.order_id = orders.id AND orders.issuer_id = ?", StoreID)
+	c := b.Joins("inner join orders on order_items.order_id = orders.id AND orders.issuer_id = ? AND orders.status = ?", StoreID, model.OrderStatusCompleted)
 	d := c.Joins("inner join payments on orders.id = payments.order_id")
 
 	var y = d
