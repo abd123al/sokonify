@@ -191,7 +191,7 @@ class Invoice {
         borderRadius: borderRadius,
       ),
       headerHeight: 25,
-      cellHeight: 40,
+      cellHeight: 20,
       cellAlignments: {
         0: pw.Alignment.centerLeft,
         1: pw.Alignment.centerLeft,

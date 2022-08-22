@@ -1,14 +1,13 @@
 import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
-import 'package:decimal/decimal.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 import '../../gql/generated/graphql_api.graphql.dart';
-import '../helpers/currency_formatter.dart';
 import '../pages/inventory/item_tile.dart';
+import 'common.dart';
 
 Future<Uint8List> generatePriceList(
   PdfPageFormat pageFormat,
@@ -110,41 +109,15 @@ class Invoice {
           ],
         ),
         pw.Divider(),
-        pw.Container(
-          alignment: pw.Alignment.center,
-          child: pw.Text(
-            '${pricing.name} ${isInventory ? "Inventory" : "Prices"}',
-            style: pw.TextStyle(
-              fontWeight: pw.FontWeight.bold,
-              fontSize: 20,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  pw.Widget _buildFooter(pw.Context context) {
-    return pw.Column(
-      crossAxisAlignment: pw.CrossAxisAlignment.start,
-      children: [
-        pw.SizedBox(height: 8),
-        pw.Text(
-          'Signature ..................................',
-          style: const pw.TextStyle(
-            fontSize: 12,
-          ),
-        ),
-        pw.SizedBox(height: 8),
         pw.Row(
           mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
           children: [
             pw.Container(
               child: pw.Text(
-                'Powered by Sokonify',
+                '${pricing.name} ${isInventory ? "Inventory" : "Prices"}',
                 style: pw.TextStyle(
-                  fontSize: 12,
-                  fontStyle: pw.FontStyle.italic,
+                  fontWeight: pw.FontWeight.bold,
+                  fontSize: 20,
                 ),
               ),
             ),
@@ -156,6 +129,20 @@ class Invoice {
                 ),
               ),
             ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  pw.Widget _buildFooter(pw.Context context) {
+    return pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      children: [
+        pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+          children: [
+            poweredBy(),
             pw.Container(
               child: pw.Text(
                 'Page ${context.pageNumber} of ${context.pagesCount}',
@@ -182,7 +169,7 @@ class Invoice {
     final List<List<Object>> data = items.mapIndexed((i, e) {
       List<Object> list = [
         (i + 1),
-        "${e.product.name}${e.brand?.name != null ?" (${e.brand?.name})":""}" ,
+        "${e.product.name}${e.brand?.name != null ? " (${e.brand?.name})" : ""}",
         (e.unit.name),
         ItemTile.price(e, pricing.id),
       ];
@@ -217,7 +204,7 @@ class Invoice {
         borderRadius: borderRadius,
       ),
       headerHeight: 25,
-      cellHeight: 40,
+      cellHeight: 20,
       cellAlignments: {
         0: pw.Alignment.centerLeft,
         1: pw.Alignment.centerLeft,
@@ -247,51 +234,9 @@ class Invoice {
       data: data,
     );
   }
-
-  // pw.Widget _buildBelow(pw.Context context) {
-  //   final total = calculateTotal(
-  //     items.map(
-  //       (e) => TotalPriceArgs(
-  //         price: ItemTile.price(e, pricing.id),
-  //         quantity: e.quantity,
-  //       ),
-  //     ),
-  //   );
-  //
-  //   return pw.Column(
-  //     crossAxisAlignment: pw.CrossAxisAlignment.start,
-  //     children: [
-  //       pw.Row(
-  //         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-  //         children: [
-  //           pw.Expanded(child: pw.SizedBox(height: 8)),
-  //           pw.Container(
-  //             child: pw.Text(
-  //               'Total Cost',
-  //               style: pw.TextStyle(
-  //                 fontSize: 12,
-  //                 fontStyle: pw.FontStyle.italic,
-  //               ),
-  //             ),
-  //           ),
-  //           pw.SizedBox(width: 32),
-  //           pw.Container(
-  //             child: pw.Text(
-  //               total,
-  //               style: pw.TextStyle(
-  //                 fontSize: 12,
-  //                 fontWeight: pw.FontWeight.bold,
-  //               ),
-  //             ),
-  //           ),
-  //         ],
-  //       )
-  //     ],
-  //   );
-  // }
 }
 
 String _formatDate(DateTime date) {
-  final format = DateFormat('d/M/y').add_Hms();
+  final format = DateFormat('d/M/y');
   return format.format(date);
 }

@@ -7,6 +7,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 import '../../gql/generated/graphql_api.graphql.dart';
+import 'common.dart';
 
 Future<Uint8List> generateInvoice(
   PdfPageFormat pageFormat,
@@ -163,23 +164,15 @@ class Invoice {
         pw.Row(
           mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
           children: [
-            pw.Container(
-              child: pw.Text(
-                'Powered by Sokonify',
-                style: pw.TextStyle(
-                  fontSize: 12,
-                  fontStyle: pw.FontStyle.italic,
-                ),
-              ),
-            ),
-            pw.Container(
-              child: pw.Text(
-                _formatDate(DateTime.now()),
-                style: const pw.TextStyle(
-                  fontSize: 12,
-                ),
-              ),
-            ),
+            poweredBy(),
+            // pw.Container(
+            //   child: pw.Text(
+            //     _formatDate(DateTime.now()),
+            //     style: const pw.TextStyle(
+            //       fontSize: 12,
+            //     ),
+            //   ),
+            // ),
             pw.Container(
               child: pw.Text(
                 'Page ${context.pageNumber} of ${context.pagesCount}',
@@ -405,7 +398,7 @@ class Invoice {
         borderRadius: borderRadius,
       ),
       headerHeight: 25,
-      cellHeight: 40,
+      cellHeight: 20,
       cellAlignments: {
         0: pw.Alignment.centerLeft,
         1: pw.Alignment.center,
