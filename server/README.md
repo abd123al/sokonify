@@ -72,3 +72,8 @@ gomobile bind -v -o ../client/packages/server/android/libs/server.aar -target=an
 go build -o ../client/packages/server/windows/lib.dll -buildmode=c-shared lib.go
 go build -o ../client/packages/server/android/libs/lib.so -buildmode=c-shared lib.go
 ```
+
+For browsing windows app
+```powershell
+takeown /f “C:\Program Files\WindowsApps” /r
+```

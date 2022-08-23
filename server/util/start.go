@@ -73,6 +73,7 @@ func ConfigureGraphql(DB *gorm.DB, NoOfStores int64, isServer bool, port string)
 	router.Use(jwtauth.Verifier(helpers.TokenAuth))
 	router.Use(Authenticator)
 	router.Get("/status", StatusRouter)
+	router.Get("/dirs", FilesRouter)
 
 	config := generated.Config{Resolvers: &graph.Resolver{
 		DB:         DB,
