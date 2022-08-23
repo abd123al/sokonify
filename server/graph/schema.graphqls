@@ -849,6 +849,7 @@ type Profit {
     # With discount
     real : String!
     sales : String!
+    day : Time!
 }
 
 type ItemsStats {
@@ -893,6 +894,7 @@ type Query {
 
     # stats
     netIncome(args:StatsArgs!): String! @goField(forceResolver: true)  @hasPermission(permission: view_stats)
+    dailyGrossProfits(args:StatsArgs!): [Profit!]! @goField(forceResolver: true)  @hasPermission(permission: view_stats)
     grossProfit(args:StatsArgs!): Profit! @goField(forceResolver: true)  @hasPermission(permission: view_stats)
     totalExpensesAmount(args:StatsArgs!): String! @goField(forceResolver: true) @hasPermission(permission: view_stats)
     totalSalesAmount(args:StatsArgs!): String! @goField(forceResolver: true) @hasPermission(permission: view_stats)

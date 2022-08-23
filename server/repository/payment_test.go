@@ -320,4 +320,23 @@ func TestPayment(t *testing.T) {
 		require.NotEmpty(t, profit.Expected)
 		require.NotEmpty(t, profit.Sales)
 	})
+
+	t.Run("SumGrossProfitsByDay", func(t *testing.T) {
+		re := util.CreatePayment(DB, nil, true)
+
+		timeframe := model.TimeframeTypeThisYear
+		value := re.Payment.ID
+
+		profit, err := repository.SumGrossProfitsByDay(DB.Debug(), re.StoreID, model.StatsArgs{
+			Timeframe: &timeframe,
+			PricingID: re.PricingID,
+			Value:     &value,
+		})
+
+		fmt.Printf("Day %s\n", profit[0].Day)
+		fmt.Printf("Profit %s\n", profit[0].Real)
+		fmt.Printf("Expected %s\n", profit[0].Expected)
+		fmt.Printf("Sales %s\n", profit[0].Sales)
+		require.Nil(t, err)
+	})
 }

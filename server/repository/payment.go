@@ -331,3 +331,21 @@ COALESCE(SUM(order_items.price * order_items.quantity),0.00) AS sales
 
 	return profit, nil
 }
+
+func SumGrossProfitsByDay(db *gorm.DB, StoreID int, args model.StatsArgs) ([]*model.Profit, error) {
+	var profit []*model.Profit
+
+	f := GetOrderItemsFilters(db, StoreID, args)
+
+	g := f.Table("order_items").Select(`
+DATE_TRUNC('day', order_items.created_at) as day,
+COALESCE(SUM((order_items.price - items.buying_price) * order_items.quantity),0.00) AS real, 
+COALESCE(SUM(order_items.price * order_items.quantity),0.00) AS sales
+`).Group("day")
+
+	if err := g.Scan(&profit).Error; err != nil {
+		return nil, err
+	}
+
+	return profit, nil
+}
