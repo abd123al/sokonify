@@ -207,7 +207,7 @@ func (r *mutationResolver) ChangePassword(ctx context.Context, input model.Chang
 }
 
 func (r *mutationResolver) EditBrand(ctx context.Context, id int, input model.BrandInput) (*model.Brand, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.EditBrand(r.DB, id, input, helpers.ForContext(ctx).UserID)
 }
 
 func (r *mutationResolver) EditCategory(ctx context.Context, id int, input model.CategoryInput) (*model.Category, error) {

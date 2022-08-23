@@ -16,6 +16,21 @@ func CreateBrand(db *gorm.DB, input model.BrandInput, CreatorID int) (*model.Bra
 	return &brand, result.Error
 }
 
+func EditBrand(db *gorm.DB, ID int, input model.BrandInput, CreatorID int) (*model.Brand, error) {
+	brand := model.Brand{
+		Name:         input.Name,
+		Manufacturer: input.Manufacturer,
+		ProductID:    input.ProductID,
+		CreatorID:    &CreatorID,
+	}
+
+	if err := db.Model(&brand).Where(&model.Brand{ID: ID}).Updates(&brand).Error; err != nil {
+		return nil, err
+	}
+
+	return &brand, nil
+}
+
 func FindBrands(db *gorm.DB, args model.BrandsArgs, StoreId int) ([]*model.Brand, error) {
 	var result *gorm.DB
 
