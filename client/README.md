@@ -1,4 +1,5 @@
 - print sales report/price list
+- fix bug when you try to add item using dicount price which actually dont exisyt
 - make sure user has pricing permission
 - purchasing order
 - hiding items based on permissions

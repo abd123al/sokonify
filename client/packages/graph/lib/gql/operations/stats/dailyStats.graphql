@@ -1,0 +1,8 @@
+query dailyStats($args:StatsArgs!) {
+    totalExpensesAmount(args: $args)
+    dailyGrossProfits(args: $args){
+        day
+        real
+        sales
+    }
+}

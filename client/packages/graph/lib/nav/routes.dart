@@ -50,6 +50,7 @@ class Routes {
   static String store = "/store";
   static String units = "/units";
 
+  static String printDailyStats = "/printDailyStats";
   static String printPricing = "/printPricing";
   static String printInventory = "/printInventory";
   static String printSales = "/printSales";
@@ -263,6 +264,12 @@ class Routes {
     router.define(
       "$printSales/:word",
       handler: printSalesPageRouterHandler,
+      transitionType: TransitionType.inFromLeft,
+    );
+
+    router.define(
+      "$printDailyStats/:word",
+      handler: printDailyStatsPageRouterHandler,
       transitionType: TransitionType.inFromLeft,
     );
 

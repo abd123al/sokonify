@@ -84,6 +84,14 @@ class StatsWidget extends StatelessWidget {
                       ),
                       child: const Text("Print Expenses"),
                     ),
+                    OutlinedButton(
+                      onPressed: () => redirectTo(
+                        context,
+                        "${Routes.printDailyStats}/${tab.title}",
+                        args: statsArgs,
+                      ),
+                      child: const Text("Print Daily Stats"),
+                    ),
                   ],
                 ),
               )

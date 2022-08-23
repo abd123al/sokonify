@@ -289,6 +289,7 @@ type ProductCategory implements Gorm {
 }
 
 type Profit {
+    day: Time!
     expected: String!
     real: String!
     sales: String!
@@ -305,6 +306,7 @@ type Query {
     currentStore: Store
     customer(id: ID!): Customer!
     customers: [Customer!]!
+    dailyGrossProfits(args: StatsArgs!): [Profit!]!
     expense(id: ID!): Expense!
     expenses(args: ExpensesArgs!): [Expense!]!
     grossProfit(args: StatsArgs!): Profit!

@@ -40,4 +40,13 @@ class StatsRepository {
 
     return client.query(options);
   }
+
+  fetchDailySales(StatsArgs args) {
+    final options = QueryOptions(
+      document: DAILY_STATS_QUERY_DOCUMENT,
+      variables: DailyStatsArguments(args: args).toJson(),
+    );
+
+    return client.query(options);
+  }
 }

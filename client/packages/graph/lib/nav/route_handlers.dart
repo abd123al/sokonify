@@ -265,3 +265,13 @@ var printSalesPageRouterHandler = Handler(handlerFunc: (context, params) {
     word: word,
   );
 });
+
+var printDailyStatsPageRouterHandler = Handler(handlerFunc: (context, params) {
+  final args = context?.settings?.arguments as StatsArgs;
+  final word = params["word"]![0];
+
+  return PrintDailyStatsPage(
+    args: args,
+    word: word,
+  );
+});
