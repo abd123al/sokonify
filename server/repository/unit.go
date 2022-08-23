@@ -21,6 +21,21 @@ func CreateUnit(db *gorm.DB, input model.UnitInput, Args CreateUnitsArgs) (*mode
 	return &unit, result.Error
 }
 
+func EditUnit(db *gorm.DB, ID int, input model.UnitInput, Args CreateUnitsArgs) (*model.Unit, error) {
+	Unit := model.Unit{
+		Name:         input.Name,
+		TemplateType: input.TemplateType,
+		StoreID:      Args.StoreID,
+		UserID:       Args.UserID,
+	}
+
+	if err := db.Model(&Unit).Where(&model.Unit{ID: ID}).Updates(&Unit).Error; err != nil {
+		return nil, err
+	}
+
+	return &Unit, nil
+}
+
 func FindUnits(db *gorm.DB, StoreID int) ([]*model.Unit, error) {
 	var units []*model.Unit
 	//todo we should get units by template
