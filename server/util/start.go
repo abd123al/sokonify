@@ -16,7 +16,6 @@ import (
 	"mahesabu/helpers"
 	"net/http"
 	"os"
-	"path/filepath"
 )
 
 type StartServerArgs struct {
@@ -94,10 +93,16 @@ func ConfigureGraphql(DB *gorm.DB, NoOfStores int64, isServer bool, port string)
 	router.Handle("/graphql", srv)
 
 	if isServer {
-		workDir, _ := os.Getwd()
-		dir := http.Dir(filepath.Join(workDir, "web"))
-		fs := http.FileServer(dir)
-		router.Handle("/*", http.StripPrefix("/", fs))
+		workDir, err := GetWebAppPath()
+		if err != nil {
+			router.Get("/error", func(w http.ResponseWriter, r *http.Request) {
+				_, _ = w.Write([]byte(fmt.Sprintf("error in reading web: %s", err.Error())))
+			})
+		} else {
+			dir := http.Dir(*workDir)
+			fs := http.FileServer(dir)
+			router.Handle("/*", http.StripPrefix("/", fs))
+		}
 	}
 
 	return router
