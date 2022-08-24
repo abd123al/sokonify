@@ -1,6 +1,7 @@
 # Todo
 
-- add brand description
+- add tabs stats filter
+- edit payment especially payment method
 - some expenses on daily basis pia ili uje utoe kwenye reports
 - print daily sales. group days sales like 1.09.2022 mauz0 100, profit 8000
 - Loans

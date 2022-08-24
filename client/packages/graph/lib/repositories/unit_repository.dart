@@ -15,6 +15,24 @@ class UnitRepository {
     return client.mutate(options);
   }
 
+  editUnit(EditUnitArguments input) {
+    final options = MutationOptions(
+      document: EDIT_UNIT_MUTATION_DOCUMENT,
+      variables: input.toJson(),
+    );
+
+    return client.mutate(options);
+  }
+
+
+  fetchUnit(int id) {
+    final options = QueryOptions(
+        document: UNIT_QUERY_DOCUMENT,
+        variables: UnitArguments(id: id).toJson());
+
+    return client.query(options);
+  }
+
   fetchUnits() {
     final options = QueryOptions(
       document: UnitsQuery().document,

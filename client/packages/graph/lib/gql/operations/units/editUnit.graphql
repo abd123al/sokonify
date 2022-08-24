@@ -1,0 +1,5 @@
+mutation editUnit($id: ID!,$input:UnitInput!) {
+    editUnit(id: $id,input: $input) {
+        ...UnitParts
+    }
+}

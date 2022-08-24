@@ -692,7 +692,7 @@ func (r *subscriptionResolver) TotalSalesAmount(ctx context.Context, args model.
 }
 
 func (r *unitResolver) User(ctx context.Context, obj *model.Unit) (*model.User, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.FindUser(r.DB, *obj.UserID)
 }
 
 func (r *userResolver) Password(ctx context.Context, obj *model.User) (*string, error) {

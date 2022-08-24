@@ -1,0 +1,9 @@
+query unit($id: ID!) {
+    unit(id: $id) {
+        name
+        createdAt
+        user {
+            ...CreatorParts
+        }
+    }
+}

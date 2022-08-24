@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
+import '../../../nav/nav.dart';
 
 class UnitTile extends StatelessWidget {
   const UnitTile({
@@ -21,6 +22,9 @@ class UnitTile extends StatelessWidget {
           style: Theme.of(context).textTheme.headlineSmall,
         ),
         tileColor: color,
+        onTap: () {
+          redirectTo(context, "${Routes.unit}/${unit.id}");
+        },
       ),
     );
   }

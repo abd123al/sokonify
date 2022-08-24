@@ -31,6 +31,7 @@ class Routes {
   static String editProduct = "/editProduct";
   static String editProfile = "/editProfile";
   static String editStore = "/editStore";
+  static String editUnit = "/editUnit";
 
   static String brand = "/brand";
   static String brands = "/brands";
@@ -51,6 +52,7 @@ class Routes {
   static String stats = "/stats";
   static String store = "/store";
   static String units = "/units";
+  static String unit = "/unit";
 
   static String printDailyStats = "/printDailyStats";
   static String printPricing = "/printPricing";
@@ -222,6 +224,12 @@ class Routes {
     );
 
     router.define(
+      "$editUnit/:id",
+      handler: editUnitPageRouterHandler,
+      transitionType: TransitionType.nativeModal,
+    );
+
+    router.define(
       brands,
       handler: brandsPagePageRouterHandler,
       transitionType: TransitionType.inFromLeft,
@@ -314,6 +322,12 @@ class Routes {
     router.define(
       store,
       handler: storePagePageRouterHandler,
+      transitionType: TransitionType.inFromLeft,
+    );
+
+    router.define(
+      "$unit/:id",
+      handler: unitPageRouterHandler,
       transitionType: TransitionType.inFromLeft,
     );
 

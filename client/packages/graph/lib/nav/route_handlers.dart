@@ -294,3 +294,19 @@ var editBrandPageRouterHandler = Handler(handlerFunc: (context, params) {
     id: int.parse(id),
   );
 });
+
+var unitPageRouterHandler = Handler(handlerFunc: (context, params) {
+  final id = params["id"]![0];
+
+  return UnitPage(
+    id: int.parse(id),
+  );
+});
+
+var editUnitPageRouterHandler = Handler(handlerFunc: (context, params) {
+  final id = params["id"]![0];
+
+  return EditUnitPage(
+    id: int.parse(id),
+  );
+});
