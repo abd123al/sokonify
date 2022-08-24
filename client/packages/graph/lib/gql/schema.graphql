@@ -47,8 +47,8 @@ type Brand implements Gorm {
     creator: User
     creatorId: Int
     deletedAt: Time
+    description: String
     id: ID!
-    manufacturer: String
     name: String!
     product: Product!
     productId: Int!
@@ -578,7 +578,7 @@ enum TimeframeType {
 scalar Time
 
 input BrandInput {
-    manufacturer: String
+    description: String
     name: String!
     productId: Int!
 }
@@ -719,7 +719,7 @@ input PriceInput {
 }
 
 input ProductBrandInput {
-    manufacturer: String
+    description: String
     name: String!
 }
 

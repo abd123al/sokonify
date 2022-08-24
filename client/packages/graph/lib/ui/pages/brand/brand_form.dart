@@ -28,7 +28,7 @@ class BrandForm extends StatefulWidget {
 
 class _CreateBrandPageState extends State<BrandForm> {
   final _nameController = TextEditingController();
-  final _manufacturerController = TextEditingController();
+  final _descriptionController = TextEditingController();
   int? _productId;
   late bool isEdit;
 
@@ -74,7 +74,7 @@ class _CreateBrandPageState extends State<BrandForm> {
               },
             ),
             TextField(
-              controller: _manufacturerController,
+              controller: _descriptionController,
               keyboardType: TextInputType.multiline,
               maxLines: 5,
               maxLength: 250,
@@ -107,7 +107,7 @@ class _CreateBrandPageState extends State<BrandForm> {
                   callback: () {
                     final input = BrandInput(
                       name: _nameController.text,
-                      manufacturer: _manufacturerController.text,
+                      description: _descriptionController.text,
                       productId: _productId!,
                     );
 
@@ -133,7 +133,7 @@ class _CreateBrandPageState extends State<BrandForm> {
   @override
   void dispose() {
     _nameController.dispose();
-    _manufacturerController.dispose();
+    _descriptionController.dispose();
     super.dispose();
   }
 }

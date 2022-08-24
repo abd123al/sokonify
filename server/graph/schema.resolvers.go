@@ -34,7 +34,7 @@ func (r *authPayloadResolver) User(ctx context.Context, obj *model.AuthPayload) 
 }
 
 func (r *brandResolver) Product(ctx context.Context, obj *model.Brand) (*model.Product, error) {
-	panic(fmt.Errorf("not implemented"))
+	return repository.FindProduct(r.DB, obj.ProductID, helpers.ForContext(ctx).StoreID)
 }
 
 func (r *brandResolver) Creator(ctx context.Context, obj *model.Brand) (*model.User, error) {
@@ -785,13 +785,3 @@ type storeResolver struct{ *Resolver }
 type subscriptionResolver struct{ *Resolver }
 type unitResolver struct{ *Resolver }
 type userResolver struct{ *Resolver }
-
-// !!! WARNING !!!
-// The code below was going to be deleted when updating resolvers. It has been copied here so you have
-// one last chance to move it out of harms way if you want. There are two reasons this happens:
-//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
-//    it when you're done.
-//  - You have helper methods in this file. Move them out to keep these resolver files clean.
-func (r *queryResolver) DailyGrossProfit(ctx context.Context, args model.StatsArgs) ([]*model.Profit, error) {
-	panic(fmt.Errorf("not implemented"))
-}

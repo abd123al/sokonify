@@ -56,8 +56,12 @@ class BrandWidget extends StatelessWidget {
               value: data.name,
             ),
             ShortDetailTile(
-              subtitle: "Manufacturer",
-              value: data.manufacturer,
+              subtitle: "Product",
+              value: data.product.name,
+            ),
+            ShortDetailTile(
+              subtitle: "Description",
+              value: data.description,
             ),
             ShortDetailTile(
               subtitle: "Created By",

@@ -2,8 +2,11 @@ query brand($id: ID!) {
     brand(id: $id) {
         name
         createdAt
-        manufacturer
+        description
         productId
+        product {
+            name
+        }
         creator {
             ...CreatorParts
         }
