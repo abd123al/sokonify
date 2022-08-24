@@ -86,8 +86,8 @@ Future<GraphQLClient> graphQLClient({
   if (kDebugMode) {
     dio.interceptors.add(
       PrettyDioLogger(
-        requestBody: false,
-        responseBody: false,
+        requestBody: true,
+        responseBody: true,
         requestHeader: false,
         responseHeader: false,
         error: true,

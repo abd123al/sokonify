@@ -15,6 +15,15 @@ class BrandRepository {
     return client.mutate(options);
   }
 
+  editBrand(EditBrandArguments input) {
+    final options = MutationOptions(
+      document: EDIT_BRAND_MUTATION_DOCUMENT,
+      variables: input.toJson(),
+    );
+
+    return client.mutate(options);
+  }
+
   fetchBrands() {
     final options = QueryOptions(
       document: BRANDS_QUERY_DOCUMENT,

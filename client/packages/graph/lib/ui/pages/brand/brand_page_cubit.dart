@@ -2,8 +2,6 @@ import 'package:blocitory/blocitory.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/brand_repository.dart';
-import '../../../repositories/category_repository.dart';
-import '../../../repositories/product_repository.dart';
 
 class BrandCubit extends ResourceCubit<Brand$Query$Brand> {
   final BrandRepository _repository;

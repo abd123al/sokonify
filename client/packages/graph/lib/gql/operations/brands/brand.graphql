@@ -3,6 +3,7 @@ query brand($id: ID!) {
         name
         createdAt
         manufacturer
+        productId
         creator {
             ...CreatorParts
         }

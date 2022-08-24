@@ -168,6 +168,12 @@ class Routes {
     );
 
     router.define(
+      "$editBrand/:id",
+      handler: editBrandPageRouterHandler,
+      transitionType: TransitionType.nativeModal,
+    );
+
+    router.define(
       "$editCategory/:id",
       handler: editCategoryPageRouterHandler,
       transitionType: TransitionType.nativeModal,

@@ -79,7 +79,7 @@ class _CreateBrandPageState extends State<CreateBrandPage> {
                   Button(
                     padding: EdgeInsets.zero,
                     callback: () {
-                      cubit.submit(
+                      cubit.create(
                         BrandInput(
                           name: _nameController.text,
                           productId: _productId!,

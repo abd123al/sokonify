@@ -29,7 +29,6 @@ class BrandTile extends StatelessWidget {
               redirectTo(
                 context,
                 "${Routes.brand}/${brand.id}",
-                args: brand.name,
               );
             },
           ),

@@ -286,11 +286,11 @@ var brandPageRouterHandler = Handler(handlerFunc: (context, params) {
   );
 });
 
-//todo nitaedit badae
+
 var editBrandPageRouterHandler = Handler(handlerFunc: (context, params) {
   final id = params["id"]![0];
 
-  return BrandPage(
+  return EditBrandPage(
     id: int.parse(id),
   );
 });

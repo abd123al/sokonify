@@ -1,0 +1,5 @@
+mutation editBrand($id: ID!,$input:BrandInput!) {
+    editBrand(id: $id,input: $input) {
+        ...BrandParts
+    }
+}
