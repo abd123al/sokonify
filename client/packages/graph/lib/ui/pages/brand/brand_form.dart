@@ -31,6 +31,7 @@ class _CreateBrandPageState extends State<BrandForm> {
   final _descriptionController = TextEditingController();
   int? _productId;
   late bool isEdit;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -43,19 +44,27 @@ class _CreateBrandPageState extends State<BrandForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
+      key: _formKey,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: FormList(
           children: [
-            TextField(
+            TextFormField(
               autofocus: true,
               controller: _nameController,
               keyboardType: TextInputType.text,
               decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Brand name',
-                  hintText: 'Enter Brand name',
-                  helperText: "eg. Antibiotics, Shoes"),
+                border: OutlineInputBorder(),
+                labelText: 'Brand name',
+                hintText: 'Enter Brand name',
+                helperText: "eg. Antibiotics, Shoes",
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter brand name';
+                }
+                return null;
+              },
             ),
             QueryBuilder<ResourceListData<Products$Query$Product>,
                 ProductsListCubit>(
@@ -70,6 +79,12 @@ class _CreateBrandPageState extends State<BrandForm> {
                     _productId = item?.id;
                   }),
                   selectedItem: (e) => e.id == _productId,
+                  validator: (value) {
+                    if (value == null) {
+                      return 'Please choose product';
+                    }
+                    return null;
+                  },
                 );
               },
             ),
@@ -82,8 +97,7 @@ class _CreateBrandPageState extends State<BrandForm> {
                 border: OutlineInputBorder(),
                 labelText: 'Brand Description (Optional)',
                 hintText: "Anything you like here",
-                helperText:
-                    "This can help you remember what brand is about.",
+                helperText: "This can help you remember what brand is about.",
               ),
             ),
             MutationBuilder<CreateBrand$Mutation$Brand, CreateBrandCubit,
@@ -105,19 +119,21 @@ class _CreateBrandPageState extends State<BrandForm> {
                 return Button(
                   padding: EdgeInsets.zero,
                   callback: () {
-                    final input = BrandInput(
-                      name: _nameController.text,
-                      description: _descriptionController.text,
-                      productId: _productId!,
-                    );
+                    if (_formKey.currentState!.validate()) {
+                      final input = BrandInput(
+                        name: _nameController.text,
+                        description: _descriptionController.text,
+                        productId: _productId!,
+                      );
 
-                    if (isEdit) {
-                      cubit.edit(EditBrandArguments(
-                        input: input,
-                        id: widget.id!,
-                      ));
-                    } else {
-                      cubit.create(input);
+                      if (isEdit) {
+                        cubit.edit(EditBrandArguments(
+                          input: input,
+                          id: widget.id!,
+                        ));
+                      } else {
+                        cubit.create(input);
+                      }
                     }
                   },
                   title: 'Submit',
