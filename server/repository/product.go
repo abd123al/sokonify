@@ -14,8 +14,8 @@ func CreateProduct(DB *gorm.DB, input model.ProductInput, args helpers.UserAndSt
 	err := DB.Transaction(func(tx *gorm.DB) error {
 		for _, k := range input.Brands {
 			brand := model.Brand{
-				Manufacturer: k.Manufacturer,
-				Name:         k.Name,
+				Description: k.Description,
+				Name:        k.Name,
 			}
 
 			brands = append(brands, &brand)

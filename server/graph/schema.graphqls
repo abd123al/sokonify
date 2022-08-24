@@ -334,7 +334,7 @@ type Brand implements Gorm {
     deletedAt:Time
 
     name: String! @goTag(key: "gorm", value: "index;not null;type:varchar(50);default:null")
-    manufacturer: String @goTag(key: "gorm", value: "type:varchar(50);default:null")
+    description: String @goTag(key: "gorm", value: "")
 
     productId: Int!
     product: Product! @goTag(key: "gorm", value:  "foreignKey:ProductID;")  @goField(forceResolver: true)
@@ -346,12 +346,12 @@ type Brand implements Gorm {
 # This is used to create brand when creating product itself.
 input ProductBrandInput {
     name: String!
-    manufacturer: String
+    description: String
 }
 
 input BrandInput {
     name: String!
-    manufacturer: String
+    description: String
     productId: Int!
 }
 

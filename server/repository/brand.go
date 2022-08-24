@@ -7,10 +7,10 @@ import (
 
 func CreateBrand(db *gorm.DB, input model.BrandInput, CreatorID int) (*model.Brand, error) {
 	brand := model.Brand{
-		Name:         input.Name,
-		Manufacturer: input.Manufacturer,
-		ProductID:    input.ProductID,
-		CreatorID:    &CreatorID,
+		Name:        input.Name,
+		Description: input.Description,
+		ProductID:   input.ProductID,
+		CreatorID:   &CreatorID,
 	}
 	result := db.Create(&brand)
 	return &brand, result.Error
@@ -18,11 +18,11 @@ func CreateBrand(db *gorm.DB, input model.BrandInput, CreatorID int) (*model.Bra
 
 func EditBrand(db *gorm.DB, ID int, input model.BrandInput, CreatorID int) (*model.Brand, error) {
 	brand := model.Brand{
-		ID:           ID,
-		Name:         input.Name,
-		Manufacturer: input.Manufacturer,
-		ProductID:    input.ProductID,
-		CreatorID:    &CreatorID,
+		ID:          ID,
+		Name:        input.Name,
+		Description: input.Description,
+		ProductID:   input.ProductID,
+		CreatorID:   &CreatorID,
 	}
 
 	if err := db.Model(&brand).Where(&model.Brand{ID: ID}).Updates(&brand).Error; err != nil {
