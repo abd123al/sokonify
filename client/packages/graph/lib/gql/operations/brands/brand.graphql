@@ -1,0 +1,10 @@
+query brand($id: ID!) {
+    brand(id: $id) {
+        name
+        createdAt
+        manufacturer
+        creator {
+            ...CreatorParts
+        }
+    }
+}

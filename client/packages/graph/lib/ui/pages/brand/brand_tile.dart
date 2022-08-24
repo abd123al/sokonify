@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
+import '../../../nav/nav.dart';
 
 class BrandTile extends StatelessWidget {
   const BrandTile({
@@ -24,6 +25,13 @@ class BrandTile extends StatelessWidget {
               style: Theme.of(context).textTheme.titleLarge,
               overflow: TextOverflow.ellipsis,
             ),
+            onTap: () {
+              redirectTo(
+                context,
+                "${Routes.brand}/${brand.id}",
+                args: brand.name,
+              );
+            },
           ),
         );
       },

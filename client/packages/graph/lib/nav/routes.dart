@@ -22,6 +22,7 @@ class Routes {
   static String createUnit = "/createUnit";
 
   static String changePassword = "/changePassword";
+  static String editBrand = "/editBrand";
   static String editCategory = "/editCategory";
   static String editCustomer = "/editCustomer";
   static String editItem = "/editItem";
@@ -31,6 +32,7 @@ class Routes {
   static String editProfile = "/editProfile";
   static String editStore = "/editStore";
 
+  static String brand = "/brand";
   static String brands = "/brands";
   static String categories = "/categories";
   static String category = "/category";
@@ -234,6 +236,12 @@ class Routes {
     router.define(
       gains,
       handler: gainsListPageRouterHandler,
+      transitionType: TransitionType.inFromLeft,
+    );
+
+    router.define(
+      "$brand/:id",
+      handler: brandPageRouterHandler,
       transitionType: TransitionType.inFromLeft,
     );
 

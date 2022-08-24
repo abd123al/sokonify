@@ -23,4 +23,12 @@ class BrandRepository {
 
     return client.query(options);
   }
+
+  fetchBrand(int id) {
+    final options = QueryOptions(
+        document: BRAND_QUERY_DOCUMENT,
+        variables: BrandArguments(id: id).toJson());
+
+    return client.query(options);
+  }
 }

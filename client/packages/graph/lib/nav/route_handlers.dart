@@ -275,3 +275,22 @@ var printDailyStatsPageRouterHandler = Handler(handlerFunc: (context, params) {
     word: word,
   );
 });
+
+
+
+var brandPageRouterHandler = Handler(handlerFunc: (context, params) {
+  final id = params["id"]![0];
+
+  return BrandPage(
+    id: int.parse(id),
+  );
+});
+
+//todo nitaedit badae
+var editBrandPageRouterHandler = Handler(handlerFunc: (context, params) {
+  final id = params["id"]![0];
+
+  return BrandPage(
+    id: int.parse(id),
+  );
+});

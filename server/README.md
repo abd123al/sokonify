@@ -1,5 +1,7 @@
 # Todo
 
+- add brand description
+- some expenses on daily basis pia ili uje utoe kwenye reports
 - print daily sales. group days sales like 1.09.2022 mauz0 100, profit 8000
 - Loans
 - ability to add things kwa order nzima. yani kama nimetoka kununua mzigo
