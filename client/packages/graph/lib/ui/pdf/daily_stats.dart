@@ -15,7 +15,7 @@ Future<Uint8List> generateDailyStats(
   String word,
 ) async {
   final List<DailyStats$Query$Profit> items = data.dailyGrossProfits;
-  items.sort((a, b) => a.day.compareTo(b.day));
+  items.sort((a, b) => b.day.compareTo(a.day));
 
   final invoice = Invoice(
     store: store,
@@ -168,8 +168,8 @@ class Invoice {
     final List<List<Object>> data = items.mapIndexed((i, e) {
       List<Object> list = [
         _formatDailyDate(e.day),
-        e.sales,
-        e.real,
+        formatCurrency(e.sales),
+        formatCurrency(e.real),
       ];
 
       return list;
@@ -188,10 +188,10 @@ class Invoice {
       cellHeight: 20,
       cellAlignments: {
         0: pw.Alignment.centerLeft,
-        1: pw.Alignment.centerLeft,
-        2: pw.Alignment.centerLeft,
-        3: pw.Alignment.center,
-        4: pw.Alignment.center,
+        1: pw.Alignment.centerRight,
+        2: pw.Alignment.centerRight,
+        3: pw.Alignment.centerRight,
+        4: pw.Alignment.centerRight,
         5: pw.Alignment.centerRight,
       },
       headerStyle: pw.TextStyle(
@@ -258,7 +258,7 @@ class Invoice {
   // }
 
   String _formatDailyDate(DateTime date) {
-    final format = DateFormat('d/M/y');
+    final format = DateFormat('dd/MM/y EEEE');
     return format.format(date);
   }
 }
