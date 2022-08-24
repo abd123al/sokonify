@@ -23,6 +23,7 @@ func CreateUnit(db *gorm.DB, input model.UnitInput, Args CreateUnitsArgs) (*mode
 
 func EditUnit(db *gorm.DB, ID int, input model.UnitInput, Args CreateUnitsArgs) (*model.Unit, error) {
 	Unit := model.Unit{
+		ID:           ID,
 		Name:         input.Name,
 		TemplateType: input.TemplateType,
 		StoreID:      Args.StoreID,

@@ -18,6 +18,7 @@ func CreateBrand(db *gorm.DB, input model.BrandInput, CreatorID int) (*model.Bra
 
 func EditBrand(db *gorm.DB, ID int, input model.BrandInput, CreatorID int) (*model.Brand, error) {
 	brand := model.Brand{
+		ID:           ID,
 		Name:         input.Name,
 		Manufacturer: input.Manufacturer,
 		ProductID:    input.ProductID,
