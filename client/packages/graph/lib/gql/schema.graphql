@@ -550,6 +550,7 @@ enum StatsFilter {
     products_category
     staff
     stocks_category
+    unit
 }
 
 enum StoreType {

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:graph/nav/redirect_to.dart';
 
+import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../nav/routes.dart';
 import '../../widgets/widgets.dart';
+import '../stats/sub_stats.dart';
 import 'unit_wrapper.dart';
 
 class UnitPage extends StatelessWidget {
@@ -48,7 +50,7 @@ class UnitWidget extends StatelessWidget {
       builder: (context, data) {
         return DetailsList(
           children: [
-            //SubStats(filter: StatsFilter.u, id: id),
+            SubStats(filter: StatsFilter.unit, id: id),
             ShortDetailTile(
               subtitle: "Unit Name",
               value: data.name,

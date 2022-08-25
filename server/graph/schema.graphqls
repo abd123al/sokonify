@@ -772,6 +772,7 @@ enum StatsFilter {
     order #profit we got from certain order
     payment
     pricing
+    unit
 }
 
 # We may use duration

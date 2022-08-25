@@ -303,6 +303,8 @@ func GetOrderItemsFilters(db *gorm.DB, StoreID int, args model.StatsArgs) *gorm.
 			y = d.Where("orders.id = ?", args.Value)
 		} else if *args.Filter == model.StatsFilterPricing {
 			y = d.Joins("inner join prices on prices.item_id = items.id AND prices.category_id = ?", args.Value)
+		} else if *args.Filter == model.StatsFilterUnit {
+			y = d.Where("items.unit_id = ?", args.Value)
 		}
 	}
 
