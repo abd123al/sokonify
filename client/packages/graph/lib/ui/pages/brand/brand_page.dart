@@ -50,7 +50,11 @@ class BrandWidget extends StatelessWidget {
       builder: (context, data) {
         return DetailsList(
           children: [
-            SubStats(filter: StatsFilter.brand, id: id),
+            SubStats(
+              filter: StatsFilter.brand,
+              id: id,
+              name: data.name,
+            ),
             ShortDetailTile(
               subtitle: "Brand Name",
               value: data.name,

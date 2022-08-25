@@ -50,6 +50,7 @@ class OrderPage extends StatelessWidget {
               filter: StatsFilter.order,
               id: id,
               hasMore: false,
+              name: "Order",
             ),
           if (data.customer?.name != null)
             ShortDetailTile(

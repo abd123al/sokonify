@@ -50,6 +50,7 @@ class PaymentPage extends StatelessWidget {
               filter: StatsFilter.payment,
               id: id,
               hasMore: false,
+             name: "Payment",
             ),
             ShortDetailTile(
                 subtitle: "Paid Amount", value: formatCurrency(data.amount)),

@@ -16,6 +16,7 @@ class CustomerStats extends StatelessWidget {
     return SubStats(
       filter: StatsFilter.customer,
       id: customerId,
+      name: "Customer",
     );
   }
 }

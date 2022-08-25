@@ -1,6 +1,7 @@
 import 'package:blocitory/helpers/resource_query_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:graph/ui/helpers/helpers.dart';
 import 'package:graph/ui/pages/stats/stats_view.dart';
 import 'package:graph/ui/widgets/widgets.dart';
 
@@ -22,9 +23,11 @@ class StatsWidget extends StatelessWidget {
     Key? key,
     required this.tab,
     this.args,
+    required this.name,
   }) : super(key: key);
 
   final StatTab tab;
+  final String name;
   final StatsArgs? args;
 
   @override
@@ -42,6 +45,8 @@ class StatsWidget extends StatelessWidget {
   }
 
   BlocProvider<StatsCubit> _body(StatsArgs statsArgs) {
+    final word = "${tab.title} $name".cleanSpaces();
+
     return BlocProvider(
       create: (context) {
         return StatsCubit(RepositoryProvider.of<StatsRepository>(context));
@@ -59,7 +64,7 @@ class StatsWidget extends StatelessWidget {
                   expenses: data.totalExpensesAmount,
                 ),
                 sub: statsArgs.value != null,
-                title: "${tab.title} Statistics",
+                title: "$word Statistics".cleanSpaces(),
               ),
               const Topper(
                 label: 'Actions',
@@ -72,25 +77,25 @@ class StatsWidget extends StatelessWidget {
                     OutlinedButton(
                       onPressed: () => redirectTo(
                         context,
-                        "${Routes.printSales}/${tab.title}",
+                        "${Routes.printSales}/$word",
                         args: statsArgs,
                       ),
-                      child: const Text("Print Sales"),
+                      child: Text("Print $word Sales".cleanSpaces()),
                     ),
                     OutlinedButton(
                       onPressed: () => redirectTo(
                         context,
                         Routes.convertStock,
                       ),
-                      child: const Text("Print Expenses"),
+                      child:  Text("Print ${tab.title} Expenses"),
                     ),
                     OutlinedButton(
                       onPressed: () => redirectTo(
                         context,
-                        "${Routes.printDailyStats}/${tab.title}",
+                        "${Routes.printDailyStats}/$word",
                         args: statsArgs,
                       ),
-                      child: const Text("Print Daily Stats"),
+                      child: Text("Print $word Daily Stats".cleanSpaces()),
                     ),
                   ],
                 ),
@@ -103,12 +108,22 @@ class StatsWidget extends StatelessWidget {
   }
 }
 
+class StatsPageArgs {
+  final StatsArgs? args;
+  final String name;
+
+  StatsPageArgs({
+    this.args,
+    required this.name,
+  });
+}
+
 class StatsPage extends StatefulWidget {
   const StatsPage({
     Key? key,
     this.args,
   }) : super(key: key);
-  final StatsArgs? args;
+  final StatsPageArgs? args;
 
   @override
   State<StatsPage> createState() => _HomePageState();
@@ -159,7 +174,8 @@ class _HomePageState extends State<StatsPage> {
       children: list
           .map((e) => StatsWidget(
                 tab: e,
-                args: widget.args,
+                name: widget.args?.name ?? "",
+                args: widget.args?.args,
               ))
           .toList(),
     );

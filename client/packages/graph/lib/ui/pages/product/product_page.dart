@@ -46,7 +46,11 @@ class ProductPage extends StatelessWidget {
   Widget builder(BuildContext context, Product$Query$Product data) {
     return ListView(
       children: [
-        SubStats(filter: StatsFilter.product, id: id),
+        SubStats(
+          filter: StatsFilter.product,
+          id: id,
+          name: data.name,
+        ),
         ShortDetailTile(subtitle: "Product Name", value: data.name),
         const Divider(),
         ShortDetailTile(subtitle: "Description", value: data.description),

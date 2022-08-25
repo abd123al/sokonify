@@ -41,7 +41,11 @@ class ItemPage extends StatelessWidget {
   Widget builder(BuildContext context, Item$Query$Item data) {
     return DetailsList(
       children: [
-        SubStats(filter: StatsFilter.item, id: id),
+        SubStats(
+          filter: StatsFilter.item,
+          id: id,
+          name: data.product.name,
+        ),
         ShortDetailTile(subtitle: "Item Name", value: data.product.name),
         ShortDetailTile(subtitle: "Brand Name", value: data.brand?.name),
         PermissionBuilder(

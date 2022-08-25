@@ -62,7 +62,8 @@ class CategoryWidget extends StatelessWidget {
               }
 
               if (filter != null) {
-                return SubStats(filter: filter, id: id);
+                return SubStats(filter: filter, id: id,
+                  name: data.name,);
               }
 
               return const SizedBox.shrink();

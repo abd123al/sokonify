@@ -50,7 +50,11 @@ class UnitWidget extends StatelessWidget {
       builder: (context, data) {
         return DetailsList(
           children: [
-            SubStats(filter: StatsFilter.unit, id: id),
+            SubStats(
+              filter: StatsFilter.unit,
+              id: id,
+              name: data.name,
+            ),
             ShortDetailTile(
               subtitle: "Unit Name",
               value: data.name,
