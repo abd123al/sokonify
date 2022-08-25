@@ -50,7 +50,8 @@ String calculateAvg(Iterable<String> list) {
   final sum = list.fold<String>(
       "0", (p, c) => (Decimal.parse(p) + Decimal.parse(c)).toString());
 
-  var avg = Decimal.parse(sum) / Decimal.fromInt(list.length);
+  //Will it be safe?
+  var avg = Decimal.parse(sum).toDouble() / list.length;
 
   return formatCurrency(avg.toString());
 }
