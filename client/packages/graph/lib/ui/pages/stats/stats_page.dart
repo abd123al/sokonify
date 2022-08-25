@@ -13,8 +13,9 @@ import 'stats_cubit.dart';
 class StatTab {
   final TimeframeType type;
   final String title;
+  final bool hasMultipleDays;
 
-  StatTab(this.type, this.title);
+  StatTab(this.type, this.title, [this.hasMultipleDays = true]);
 }
 
 /// This is used in home page only
@@ -87,16 +88,17 @@ class StatsWidget extends StatelessWidget {
                         context,
                         Routes.convertStock,
                       ),
-                      child:  Text("Print ${tab.title} Expenses"),
+                      child: Text("Print ${tab.title} Expenses"),
                     ),
-                    OutlinedButton(
-                      onPressed: () => redirectTo(
-                        context,
-                        "${Routes.printDailyStats}/$word",
-                        args: statsArgs,
+                    if (tab.hasMultipleDays)
+                      OutlinedButton(
+                        onPressed: () => redirectTo(
+                          context,
+                          "${Routes.printDailyStats}/$word",
+                          args: statsArgs,
+                        ),
+                        child: Text("Print $word Daily Stats".cleanSpaces()),
                       ),
-                      child: Text("Print $word Daily Stats".cleanSpaces()),
-                    ),
                   ],
                 ),
               )
@@ -131,8 +133,8 @@ class StatsPage extends StatefulWidget {
 
 class _HomePageState extends State<StatsPage> {
   final List<StatTab> list = [
-    StatTab(TimeframeType.today, "Today"),
-    StatTab(TimeframeType.yesterday, "Yesterday"),
+    StatTab(TimeframeType.today, "Today", false),
+    StatTab(TimeframeType.yesterday, "Yesterday", false),
     StatTab(TimeframeType.thisWeek, "This Week"),
     StatTab(TimeframeType.lastWeek, "Last Week"),
     StatTab(TimeframeType.thisMonth, "This Month"),
