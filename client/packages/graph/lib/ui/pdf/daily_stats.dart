@@ -259,7 +259,8 @@ class Invoice {
 
   String _formatDailyDate(DateTime date) {
     final format = DateFormat('dd/MM/y EEEE');
-    return format.format(date);
+    //todo when fix date deal with this
+    return format.format(date.add(const Duration(days: 1)));
   }
 }
 

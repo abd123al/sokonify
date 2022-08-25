@@ -1,6 +1,7 @@
 # Todo
 
 - edit payment and its items.
+- log errors 
 - add tabs stats filter
 - edit payment especially payment method
 - some expenses on daily basis pia ili uje utoe kwenye reports
