@@ -1,12 +1,12 @@
 import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
+import 'package:graph/ui/helpers/helpers.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 import '../../gql/generated/graphql_api.graphql.dart';
-import '../helpers/currency_formatter.dart';
 
 Future<Uint8List> generateDailyStats(
   PdfPageFormat pageFormat,
@@ -107,7 +107,7 @@ class Invoice {
         pw.Container(
           alignment: pw.Alignment.center,
           child: pw.Text(
-            '$word Daily Stats',
+            '$word Daily Stats'.cleanSpaces(),
             style: pw.TextStyle(
               fontWeight: pw.FontWeight.bold,
               fontSize: 20,
@@ -165,7 +165,7 @@ class Invoice {
       "Gross Profit",
     ];
 
-    final List<List<Object>> data = items.mapIndexed((i, e) {
+    List<List<Object>> data = items.mapIndexed((i, e) {
       List<Object> list = [
         _formatDailyDate(e.day),
         formatCurrency(e.sales),
@@ -174,6 +174,38 @@ class Invoice {
 
       return list;
     }).toList();
+
+    final totalProfit = calculateTotal(
+      items.map(
+        (e) => TotalPriceArgs(
+          price: e.real,
+          quantity: 1, //hack
+        ),
+      ),
+    );
+
+    final totalSales = calculateTotal(
+      items.map(
+        (e) => TotalPriceArgs(
+          price: e.sales,
+          quantity: 1, //hack
+        ),
+      ),
+    );
+
+    final profitArr = items.map((e) => e.real);
+    final salesArr = items.map((e) => e.sales);
+
+    final salesAvg = calculateAvg(salesArr);
+    final profitAvg = calculateAvg(profitArr);
+
+    final List<Object> empties = ["", "", ""];
+    final List<Object> averages = ["Average", salesAvg, profitAvg];
+    final List<Object> totals = ["Total", totalSales, totalProfit];
+
+    data.add(empties);
+    data.add(averages);
+    data.add(totals);
 
     return pw.Table.fromTextArray(
       border: null,
@@ -214,48 +246,6 @@ class Invoice {
       data: data,
     );
   }
-
-  // pw.Widget _buildBelow(pw.Context context) {
-  //   final total = calculateTotal(
-  //     items.map(
-  //       (e) => TotalPriceArgs(
-  //         price: e.subTotalPrice,
-  //         quantity: 1,
-  //       ),
-  //     ),
-  //   );
-  //
-  //   return pw.Column(
-  //     crossAxisAlignment: pw.CrossAxisAlignment.start,
-  //     children: [
-  //       pw.Row(
-  //         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-  //         children: [
-  //           pw.Expanded(child: pw.SizedBox(height: 4)),
-  //           pw.Container(
-  //             child: pw.Text(
-  //               'Total Sales',
-  //               style: pw.TextStyle(
-  //                 fontSize: 12,
-  //                 fontStyle: pw.FontStyle.italic,
-  //               ),
-  //             ),
-  //           ),
-  //           pw.SizedBox(width: 32),
-  //           pw.Container(
-  //             child: pw.Text(
-  //               total,
-  //               style: pw.TextStyle(
-  //                 fontSize: 12,
-  //                 fontWeight: pw.FontWeight.bold,
-  //               ),
-  //             ),
-  //           ),
-  //         ],
-  //       )
-  //     ],
-  //   );
-  // }
 
   String _formatDailyDate(DateTime date) {
     final format = DateFormat('dd/MM/y EEEE');

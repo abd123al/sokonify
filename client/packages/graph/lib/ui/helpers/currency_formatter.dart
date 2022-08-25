@@ -46,6 +46,15 @@ String calculateTotal(Iterable<TotalPriceArgs> list) {
   return formatCurrency(sum.toString());
 }
 
+String calculateAvg(Iterable<String> list) {
+  final sum = list.fold<String>(
+      "0", (p, c) => (Decimal.parse(p) + Decimal.parse(c)).toString());
+
+  var avg = Decimal.parse(sum) / Decimal.fromInt(list.length);
+
+  return formatCurrency(avg.toString());
+}
+
 String formatToGoTime(DateTime time) {
   //2022-06-30T14:13:37.56575+03:00
   var format = DateFormat("yyyy-MM-dd'T'HH:mm:ss.'00000+03:00'");
