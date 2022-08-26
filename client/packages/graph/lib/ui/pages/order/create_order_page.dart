@@ -20,7 +20,7 @@ class CreateOrderPage extends StatelessWidget {
       ),
       body: BlocProvider(
         create: (context) {
-          return NewOrderCubit();
+          return NewOrderCubit(isOrder);
         },
         child: OrderForm<NewOrderCubit>(
           isOrder: isOrder,

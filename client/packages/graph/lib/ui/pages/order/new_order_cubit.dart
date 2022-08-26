@@ -205,11 +205,23 @@ class NewOrder extends Equatable {
   }
 }
 
-class OrderCubit extends HydratedCubit<NewOrder> {
-  OrderCubit(NewOrder initialState) : super(initialState);
+class OrderCubit extends Cubit<NewOrder> with HydratedMixin {
+  OrderCubit(NewOrder initialState, this.persist, this.storageId)
+      : super(initialState) {
+    if (persist) {
+      hydrate();
+    }
+  }
+
+  bool persist;
+  String storageId;
+
+  @override
+  String get id => storageId;
 
   reset() {
     emit(const NewOrder(items: []).empty());
+    clear(); //clear storage too
   }
 
   /// todo return error for duplicated items
@@ -270,9 +282,14 @@ class OrderCubit extends HydratedCubit<NewOrder> {
 }
 
 class NewOrderCubit extends OrderCubit {
-  NewOrderCubit() : super(const NewOrder(items: []).empty());
+  NewOrderCubit(bool isOrder)
+      : super(
+          const NewOrder(items: []).empty(),
+          true,
+          isOrder ? "order" : "sales",
+        );
 }
 
 class EditOrderCubit extends OrderCubit {
-  EditOrderCubit(NewOrder initial) : super(initial);
+  EditOrderCubit(NewOrder initial, int id) : super(initial, false, "edit:$id");
 }
