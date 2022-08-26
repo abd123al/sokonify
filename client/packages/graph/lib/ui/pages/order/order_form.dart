@@ -206,7 +206,7 @@ class _OrderFormState<T extends OrderCubit> extends State<OrderForm<T>> {
                   itemCount: state.items.length,
                   itemBuilder: (context, index) {
                     final item = state.items[index];
-                    return OrderItem(
+                    return OrderItem<T>(
                       item: item,
                       items: itemsData.items,
                       index: index,

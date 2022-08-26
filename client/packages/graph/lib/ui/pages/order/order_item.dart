@@ -5,7 +5,7 @@ import 'package:graph/ui/pages/inventory/item_tile.dart';
 import '../../../gql/generated/graphql_api.graphql.dart';
 import 'new_order_cubit.dart';
 
-class OrderItem extends StatefulWidget {
+class OrderItem<T extends OrderCubit> extends StatefulWidget {
   const OrderItem({
     Key? key,
     required this.item,
@@ -18,11 +18,11 @@ class OrderItem extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _OrderItemState();
+    return _OrderItemState<T>();
   }
 }
 
-class _OrderItemState extends State<OrderItem> {
+class _OrderItemState<T extends OrderCubit> extends State<OrderItem<T>> {
   final _quantityController = TextEditingController();
   bool _editing = false;
 
@@ -34,7 +34,7 @@ class _OrderItemState extends State<OrderItem> {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = BlocProvider.of<NewOrderCubit>(context);
+    final cubit = BlocProvider.of<T>(context);
 
     return ExpansionTile(
       title: Text(

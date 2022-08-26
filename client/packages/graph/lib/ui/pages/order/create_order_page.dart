@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'new_order_cubit.dart';
 import 'order_form.dart';
@@ -17,8 +18,13 @@ class CreateOrderPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(isOrder ? "New Order" : "New Sales"),
       ),
-      body: OrderForm<NewOrderCubit>(
-        isOrder: isOrder,
+      body: BlocProvider(
+        create: (context) {
+          return NewOrderCubit();
+        },
+        child: OrderForm<NewOrderCubit>(
+          isOrder: isOrder,
+        ),
       ),
     );
   }
