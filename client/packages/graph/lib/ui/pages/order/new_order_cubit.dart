@@ -1,6 +1,6 @@
 import 'package:decimal/decimal.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../helpers/currency_formatter.dart';
@@ -38,6 +38,24 @@ class NewOrderItem extends Equatable {
       quantity: quantity ?? this.quantity,
       pricingId: pricingId ?? this.pricingId,
     );
+  }
+
+  static NewOrderItem fromJson(Map<String, dynamic> json) {
+    return NewOrderItem(
+      quantity: json['quantity'] as int,
+      item: Items$Query$Item.fromJson(json['item'] as Map<String, dynamic>),
+      pricingId: json['pricingId'] as int,
+      customSellingPrice: json['customSellingPrice'] as String?,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'quantity': quantity,
+      'item': item.toJson(),
+      'customSellingPrice': customSellingPrice,
+      'pricingId': pricingId,
+    };
   }
 
   @override
@@ -153,9 +171,41 @@ class NewOrder extends Equatable {
         time,
         error,
       ];
+
+  static NewOrder? fromJson(Map<String, dynamic> json) {
+    Customers$Query$Customer? customer;
+
+    customer = Customers$Query$Customer.fromJson(json['customer']);
+
+    final jsonItems = json['items'] as List<dynamic>?;
+
+    final items = jsonItems
+        ?.map(
+          (e) => NewOrderItem.fromJson(e as Map<String, dynamic>),
+        )
+        .toList();
+
+    return NewOrder(
+      customer: customer,
+      items: items ?? [],
+      time: json['time'] as int?,
+      error: json['error'] as String?,
+    );
+  }
+
+  Map<String, dynamic>? toJson() {
+    final map = {
+      'items': items.map((e) => e.toJson()).toList(),
+      'customer': customer?.toJson(),
+      'time': time,
+      'error': error,
+    };
+
+    return map;
+  }
 }
 
-class OrderCubit extends Cubit<NewOrder> {
+class OrderCubit extends HydratedCubit<NewOrder> {
   OrderCubit(NewOrder initialState) : super(initialState);
 
   reset() {
@@ -206,6 +256,16 @@ class OrderCubit extends Cubit<NewOrder> {
         customer: customer,
       ),
     );
+  }
+
+  @override
+  NewOrder? fromJson(Map<String, dynamic> json) {
+    return NewOrder.fromJson(json);
+  }
+
+  @override
+  Map<String, dynamic>? toJson(NewOrder state) {
+    return state.toJson();
   }
 }
 
