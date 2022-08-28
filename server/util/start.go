@@ -100,8 +100,9 @@ func ConfigureGraphql(DB *gorm.DB, NoOfStores int64, isServer bool, port string)
 			})
 		} else {
 			dir := http.Dir(*workDir)
-			fs := http.FileServer(dir)
-			router.Handle("/*", http.StripPrefix("/", fs))
+			helpers.FileServer(router, "/", dir)
+			//fs := http.FileServer(dir)
+			//router.Handle("/*", http.StripPrefix("/", fs))
 		}
 	}
 
