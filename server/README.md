@@ -1,6 +1,7 @@
 # Todo
 
-- options to find best supplier with low price
+- self-signed certificate
+- options to find the best supplier with low price
 - add supplier in stock category, isActive, possible to delete
 - when printing price list have prices of different brands of the same product has equal price. We just print product name without brand.
 - edit payment and its items.

@@ -1,7 +1,7 @@
 - print sales report/price list
 - show batch number on invoice
 - deal with expenses
-- fix bug when you try to add item using dicount price which actually dont exisyt
+- fix bug when you try to add item using discount price which actually dont exisyt
 - make sure user has pricing permission
 - purchasing order
 - hiding items based on permissions

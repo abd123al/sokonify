@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graph/ui/widgets/widgets.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:in_app_update/in_app_update.dart';
 
 import '../../repositories/repositories.dart';
 import '../pages/inventory/items_stats_cubit.dart';
@@ -32,7 +31,11 @@ class UniBlocProviderState extends State<UniBlocProvider> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => AuthWrapperCubit()..check(),
-      child: _buildClient(),
+      child: BlocBuilder<AuthWrapperCubit,AuthState>(
+        builder: (context, state) {
+          return _buildClient();
+        },
+      ),
     );
   }
 
