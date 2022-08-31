@@ -39,21 +39,24 @@ class EditOrderPage extends StatelessWidget {
                 ),
               );
             },
-            child: Builder(builder: (context) {
-              if (o.status != OrderStatus.pending) {
-                return Center(
-                  child: Text(
-                    "You can't edit this this order",
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
+            child: Builder(
+              builder: (context) {
+                if (o.status != OrderStatus.pending) {
+                  return Center(
+                    child: Text(
+                      "You can't edit this this order",
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  );
+                }
+                return OrderForm<EditOrderCubit>(
+                  isOrder: true,
+                  order: o,
+                  id: id,
+                  pricingId: o.pricing.id,
                 );
-              }
-              return OrderForm<EditOrderCubit>(
-                isOrder: true,
-                order: o,
-                id: id,
-              );
-            }),
+              },
+            ),
           );
         },
       ),

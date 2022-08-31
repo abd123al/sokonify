@@ -111,7 +111,8 @@ class Tabbed extends StatefulWidget {
   }
 }
 
-class _TabbedState extends State<Tabbed> with SingleTickerProviderStateMixin {
+class _TabbedState extends State<Tabbed>
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late TabController _tabController;
 
   @override
@@ -124,7 +125,12 @@ class _TabbedState extends State<Tabbed> with SingleTickerProviderStateMixin {
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     final tabs = widget.categories.map((e) => Tab(text: e.name)).toList();
 
     return Column(

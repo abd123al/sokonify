@@ -8,13 +8,12 @@ import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/order_repository.dart';
 import '../../../repositories/payment_repository.dart';
 import '../../widgets/searchable_dropdown.dart';
-import '../category/category.dart';
 import '../customer/customers_list_cubit.dart';
-import '../stats/home_stats_cubit.dart';
 import '../inventory/inventory.dart';
 import '../inventory/items_list_cubit.dart';
 import '../payment/create_order_payment_cubit.dart';
 import '../payment/payments_list_cubit.dart';
+import '../stats/home_stats_cubit.dart';
 import 'create_order_cubit.dart';
 import 'new_order_cubit.dart';
 import 'order_item.dart';
@@ -25,12 +24,14 @@ class OrderForm<T extends OrderCubit> extends StatefulWidget {
   const OrderForm({
     Key? key,
     required this.isOrder,
+    required this.pricingId,
     this.order,
     this.id,
   }) : super(key: key);
 
   final bool isOrder;
   final Order$Query$Order? order;
+  final int pricingId;
   final int? id;
 
   @override
@@ -55,21 +56,12 @@ class _OrderFormState<T extends OrderCubit> extends State<OrderForm<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return PricingBuilder(
-      builder: (context, list) {
-        if (list.items.length == 1) {
-          return _buildForm(list.items[0]);
-        }
-
-        return Tabbed(
-          builder: (context, cat) => _buildForm(cat),
-          categories: list.items,
-        );
-      },
-    );
+    return _buildForm();
   }
 
-  Widget _buildForm(Categories$Query$Category pricing) {
+  Widget _buildForm() {
+    final pricingId = widget.pricingId;
+
     return BlocConsumer<T, NewOrder>(
       listener: (context, state) {
         if (state.hasError) {
@@ -88,7 +80,7 @@ class _OrderFormState<T extends OrderCubit> extends State<OrderForm<T>> {
             List<Items$Query$Item> cats = [];
 
             for (var e in itemsData.items) {
-              if (e.prices.map((e) => e.categoryId).contains(pricing.id)) {
+              if (e.prices.map((e) => e.categoryId).contains(pricingId)) {
                 cats.add(e);
               }
             }
@@ -150,7 +142,7 @@ class _OrderFormState<T extends OrderCubit> extends State<OrderForm<T>> {
                             selectedItem: (e) => e == _item,
                             builder: (_, i) => ItemTile(
                               item: i,
-                              pricingId: pricing.id,
+                              pricingId: pricingId,
                             ),
                             onChanged: (item) => setState(() {
                               _item = item;
@@ -177,7 +169,7 @@ class _OrderFormState<T extends OrderCubit> extends State<OrderForm<T>> {
                                       quantity: int.parse(
                                         _quantityAddController.text,
                                       ),
-                                      pricingId: pricing.id,
+                                      pricingId: pricingId,
                                     );
 
                                     //Resetting fields
@@ -268,7 +260,7 @@ class _OrderFormState<T extends OrderCubit> extends State<OrderForm<T>> {
                                           (e) => OrderItemInput(
                                             price: e.customSellingPrice ??
                                                 ItemTile.price(
-                                                    e.item, pricing.id),
+                                                    e.item, pricingId),
                                             itemId: e.item.id,
                                             quantity: e.quantity,
                                           ),
@@ -281,7 +273,7 @@ class _OrderFormState<T extends OrderCubit> extends State<OrderForm<T>> {
                                         comment: _commentController.text,
                                         customerId: state.customer?.id,
                                         items: items,
-                                        pricingId: pricing.id,
+                                        pricingId: pricingId,
                                       );
 
                                       if (_isEdit) {
@@ -299,7 +291,7 @@ class _OrderFormState<T extends OrderCubit> extends State<OrderForm<T>> {
                                         SalesInput(
                                           comment: _commentController.text,
                                           items: items,
-                                          pricingId: pricing.id,
+                                          pricingId: pricingId,
                                         ),
                                       );
                                     }
