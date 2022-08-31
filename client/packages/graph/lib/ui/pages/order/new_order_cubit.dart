@@ -135,6 +135,12 @@ class NewOrder extends Equatable {
     );
   }
 
+  NewOrder showError({
+    required String error,
+  }) {
+    return copyWith(error: error);
+  }
+
   NewOrder edit({
     required NewOrderItem item,
     required int index,
@@ -232,15 +238,23 @@ class OrderCubit extends Cubit<NewOrder> with HydratedMixin {
     required int quantity,
     required int pricingId,
   }) {
-    emit(
-      state.addItem(
-        obj: NewOrderItem(
-          quantity: quantity,
-          item: item,
-          pricingId: pricingId,
+    final prices = state.items.map((e) => e.pricingId);
+
+    if (prices.isNotEmpty && !prices.contains(pricingId)) {
+      emit(state.showError(
+        error: "${item.product.name} has different pricing from the rest",
+      ));
+    } else {
+      emit(
+        state.addItem(
+          obj: NewOrderItem(
+            quantity: quantity,
+            item: item,
+            pricingId: pricingId,
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   deleteItem(int index) {
@@ -282,11 +296,11 @@ class OrderCubit extends Cubit<NewOrder> with HydratedMixin {
 }
 
 class NewOrderCubit extends OrderCubit {
-  NewOrderCubit(bool isOrder)
+  NewOrderCubit(bool isOrder, int id)
       : super(
           const NewOrder(items: []).empty(),
           true,
-          isOrder ? "order" : "sales",
+          isOrder ? "order:$id" : "sales:$id",
         );
 }
 

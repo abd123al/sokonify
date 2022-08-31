@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../gql/generated/graphql_api.graphql.dart';
+import '../category/pricing_builder.dart';
+import '../inventory/items_list.dart';
 import 'new_order_cubit.dart';
 import 'order_form.dart';
 
@@ -18,13 +21,31 @@ class CreateOrderPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(isOrder ? "New Order" : "New Sales"),
       ),
-      body: BlocProvider(
-        create: (context) {
-          return NewOrderCubit(isOrder);
+      body: PricingBuilder(
+        builder: (context, list) {
+          _buildForm(Categories$Query$Category pricing) {
+            return OrderForm<NewOrderCubit>(
+              isOrder: isOrder,
+              pricingId: pricing.id,
+            );
+          }
+
+          if (list.items.length == 1) {
+            return _buildForm(list.items[0]);
+          }
+
+          return Tabbed(
+            builder: (context, cat) {
+              return BlocProvider(
+                create: (context) {
+                  return NewOrderCubit(isOrder, cat.id);
+                },
+                child: _buildForm(cat),
+              );
+            },
+            categories: list.items,
+          );
         },
-        child: OrderForm<NewOrderCubit>(
-          isOrder: isOrder,
-        ),
       ),
     );
   }
