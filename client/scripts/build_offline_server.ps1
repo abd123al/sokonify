@@ -20,7 +20,7 @@ Set-Location $PSScriptRoot
 cd..
 
 cd apps/offline
-#flutter pub get
+flutter pub get
 flutter build windows `
                     --dart-define PORT=9090 `
                     --dart-define NO_OF_STORES=1 `

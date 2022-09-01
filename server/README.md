@@ -1,5 +1,7 @@
 # Todo
 
+- add warnings functionality
+- options to find best supplier with low price
 - self-signed certificate
 - options to find the best supplier with low price
 - add supplier in stock category, isActive, possible to delete

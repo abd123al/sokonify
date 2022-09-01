@@ -56,6 +56,7 @@ class ItemPage extends StatelessWidget {
           },
         ),
         ShortDetailTile(subtitle: "Unit", value: data.unit.name),
+        ShortDetailTile(subtitle: "Alert Quantity", value: data.alertQuantity.toString()),
         ShortDetailTile(
             subtitle: "Buying Price", value: formatCurrency(data.buyingPrice)),
         const WordDivider(text: "Selling Prices"),
