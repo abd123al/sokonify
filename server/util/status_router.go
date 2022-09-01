@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
+	"mime"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -28,6 +30,18 @@ func GetWebAppPath() (*string, error) {
 	path := filepath.Join(dir, "web")
 
 	return &path, nil
+}
+
+func FixMimeTypes() {
+	err1 := mime.AddExtensionType(".js", "text/javascript")
+	if err1 != nil {
+		log.Printf("Error in mime js %s", err1.Error())
+	}
+
+	err2 := mime.AddExtensionType(".css", "text/css")
+	if err2 != nil {
+		log.Printf("Error in mime js %s", err2.Error())
+	}
 }
 
 func FilesRouter(w http.ResponseWriter, r *http.Request) {
