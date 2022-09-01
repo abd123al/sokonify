@@ -1,6 +1,7 @@
 import 'package:blocitory/blocitory.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:graph/ui/helpers/helpers.dart';
 import 'package:intl/intl.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
@@ -36,6 +37,7 @@ class ItemForm<T extends PricingCubit> extends StatefulWidget {
 }
 
 class _ItemFormState<T extends PricingCubit> extends State<ItemForm<T>> {
+  final _alertController = TextEditingController();
   final _batchPriceController = TextEditingController();
   final _buyingPriceController = TextEditingController();
   final _dateController = TextEditingController();
@@ -74,6 +76,7 @@ class _ItemFormState<T extends PricingCubit> extends State<ItemForm<T>> {
     _descriptionPriceController.text = widget.item?.description ?? "";
     _expireDateController.text = widget.item?.expiresAt.toString() ?? "";
     _quantityController.text = widget.item?.quantity.toString() ?? "";
+    _alertController.text = widget.item?.alertQuantity.toString() ?? "";
     _expireDate = widget.item?.expiresAt;
     _dateController.text = formatDate(widget.item?.expiresAt) ?? "";
   }
@@ -160,6 +163,8 @@ class _ItemFormState<T extends PricingCubit> extends State<ItemForm<T>> {
                       isOptional: true,
                       labelText: "Brand (Optional)",
                       hintText: "Select Brand (Optional)",
+                      helperText:
+                          "Brand may help you differentiate items of the same product",
                       selectedItem: (e) => e.id == _brandId,
                       onChanged: (item) => setState(() {
                         _brandId = item?.id;
@@ -333,6 +338,32 @@ class _ItemFormState<T extends PricingCubit> extends State<ItemForm<T>> {
                     );
                   },
                 ),
+                TextFormField(
+                  controller: _alertController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Alert Quantity',
+                    hintText: "Example 10",
+                    helperText:
+                        'System will notify you when stock is below this level.',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please alert quantity quantity..';
+                    }
+
+                    if (value == _quantityController.text) {
+                      return 'Alert Quantity cant be same with stock quantity';
+                    }
+
+                    if (value.toInt() > _quantityController.text.toInt()) {
+                      return 'Alert Quantity can not be greater than stock quantity';
+                    }
+
+                    return null;
+                  },
+                ),
                 TextField(
                   controller: _descriptionPriceController,
                   keyboardType: TextInputType.text,
@@ -340,6 +371,8 @@ class _ItemFormState<T extends PricingCubit> extends State<ItemForm<T>> {
                     border: OutlineInputBorder(),
                     labelText: 'Description (Optional)',
                     hintText: 'Enter item selling price',
+                    helperText:
+                        "You can type anything to help you remember something",
                   ),
                 ),
                 TextField(
@@ -349,6 +382,7 @@ class _ItemFormState<T extends PricingCubit> extends State<ItemForm<T>> {
                     border: OutlineInputBorder(),
                     labelText: 'Batch (Optional)',
                     hintText: 'Enter batch number',
+                    helperText: "This may help identify items",
                   ),
                 ),
                 TextFormField(
@@ -358,6 +392,7 @@ class _ItemFormState<T extends PricingCubit> extends State<ItemForm<T>> {
                     border: OutlineInputBorder(),
                     labelText: 'Expire Date (Optional)',
                     hintText: 'Enter expire date here',
+                    helperText: "You will get warning when this date is near.",
                   ),
                   onTap: () async {
                     // Below line stops keyboard from appearing
@@ -401,7 +436,8 @@ class _ItemFormState<T extends PricingCubit> extends State<ItemForm<T>> {
                         if (priceCubit.validate()) {
                           if (_formKey.currentState!.validate()) {
                             final input = ItemInput(
-                              quantity: int.parse(_quantityController.text),
+                              alertQuantity: _alertController.text.toInt(),
+                              quantity: _quantityController.text.toInt(),
                               buyingPrice: _buyingPriceController.text,
                               unitId: _unitId!,
                               description: _descriptionPriceController.text,

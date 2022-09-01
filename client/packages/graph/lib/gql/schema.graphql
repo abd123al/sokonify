@@ -106,6 +106,7 @@ type Expense implements Gorm {
 }
 
 type Item implements Gorm {
+    alertQuantity: Int!
     batch: String
     brand: Brand
     brandId: Int
@@ -649,6 +650,7 @@ input ExpensesArgs {
 }
 
 input ItemInput {
+    alertQuantity: Int!
     batch: String
     brandId: Int
     buyingPrice: String!

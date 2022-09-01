@@ -4,6 +4,7 @@ query item($id: ID!) {
         createdAt
         description
         expiresAt
+        alertQuantity
         prices {
             amount
             category {
