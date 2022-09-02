@@ -62,6 +62,7 @@ type Category implements Gorm {
     deletedAt: Time
     description: String
     id: ID!
+    module: SaleModule
     name: String!
     store: Store
     storeId: Int
@@ -105,6 +106,7 @@ type Expense implements Gorm {
 }
 
 type Item implements Gorm {
+    alertQuantity: Int!
     batch: String
     brand: Brand
     brandId: Int
@@ -529,6 +531,12 @@ enum ProductsBy {
     store
 }
 
+enum SaleModule {
+    both
+    direct
+    order
+}
+
 enum SortBy {
     ASC
     DESC
@@ -590,6 +598,7 @@ input BrandsArgs {
 
 input CategoryInput {
     description: String
+    module: SaleModule
     name: String!
     permissionTypes: [PermissionType!]
     pricingIds: [ID!]
@@ -641,6 +650,7 @@ input ExpensesArgs {
 }
 
 input ItemInput {
+    alertQuantity: Int!
     batch: String
     brandId: Int
     buyingPrice: String!

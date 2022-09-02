@@ -23,16 +23,17 @@ func CreateItem(DB *gorm.DB, input model.ItemInput, CreatorID int) (*model.Item,
 	}
 
 	item := model.Item{
-		Quantity:    input.Quantity,
-		Batch:       input.Batch,
-		Description: input.Description,
-		BuyingPrice: input.BuyingPrice,
-		ExpiresAt:   input.ExpiresAt,
-		ProductID:   input.ProductID,
-		BrandID:     input.BrandID,
-		UnitID:      input.UnitID,
-		CreatorID:   &CreatorID,
-		Prices:      Prices,
+		AlertQuantity: input.AlertQuantity,
+		Quantity:      input.Quantity,
+		Batch:         input.Batch,
+		Description:   input.Description,
+		BuyingPrice:   input.BuyingPrice,
+		ExpiresAt:     input.ExpiresAt,
+		ProductID:     input.ProductID,
+		BrandID:       input.BrandID,
+		UnitID:        input.UnitID,
+		CreatorID:     &CreatorID,
+		Prices:        Prices,
 	}
 
 	err := DB.Transaction(func(tx *gorm.DB) error {
@@ -59,16 +60,17 @@ func CreateItem(DB *gorm.DB, input model.ItemInput, CreatorID int) (*model.Item,
 
 func EditItem(DB *gorm.DB, ID int, input model.ItemInput, CreatorID int) (*model.Item, error) {
 	update := model.Item{
-		ID:          ID,
-		Quantity:    input.Quantity,
-		Batch:       input.Batch,
-		Description: input.Description,
-		BuyingPrice: input.BuyingPrice,
-		ExpiresAt:   input.ExpiresAt,
-		ProductID:   input.ProductID,
-		BrandID:     input.BrandID,
-		UnitID:      input.UnitID,
-		CreatorID:   &CreatorID,
+		ID:            ID,
+		AlertQuantity: input.AlertQuantity,
+		Quantity:      input.Quantity,
+		Batch:         input.Batch,
+		Description:   input.Description,
+		BuyingPrice:   input.BuyingPrice,
+		ExpiresAt:     input.ExpiresAt,
+		ProductID:     input.ProductID,
+		BrandID:       input.BrandID,
+		UnitID:        input.UnitID,
+		CreatorID:     &CreatorID,
 	}
 
 	err := DB.Transaction(func(tx *gorm.DB) error {
