@@ -58,15 +58,13 @@ String calculateAvg(Iterable<String> list) {
 
 String formatToGoTime(DateTime time) {
   //2022-06-30T14:13:37.56575+03:00
-  var format = DateFormat("yyyy-MM-dd'T'HH:mm:ss.'00000+03:00'");
+  var format = DateFormat("yyyy-MM-dd'T'HH:mm:ss.'00000+00:00'");
   var dateString = format.format(time);
   return dateString;
 }
 
 DateTime extractGoTime(String time) {
-  print("gotime $time");
   //2022-06-30T14:13:37.56575+03:00
   final t = time.substring(0, time.lastIndexOf(".", time.length));
-  print("exxxx: $t");
   return DateTime.parse(t);
 }

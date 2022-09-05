@@ -11,10 +11,9 @@ targets:
             - output: lib/gql/generated/graphql_api.dart
               schema: lib/gql/schema.graphql
               queries_glob: lib/gql/operations/**.graphql
-              custom_parser_import: 'packages:graph/gql/coercers.dart'
           scalar_mapping:
-            - graphql_type: Time
+            - custom_parser_import: 'package:graph/gql/coercers.dart'
+              graphql_type: Time
               dart_type: DateTime
-              use_custom_parser: true
             - graphql_type: ID
               dart_type: int
