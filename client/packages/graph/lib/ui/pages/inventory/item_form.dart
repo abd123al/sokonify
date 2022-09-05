@@ -435,6 +435,8 @@ class _ItemFormState<T extends PricingCubit> extends State<ItemForm<T>> {
                       callback: () {
                         if (priceCubit.validate()) {
                           if (_formKey.currentState!.validate()) {
+                            print("expire $_expireDate");
+
                             final input = ItemInput(
                               alertQuantity: _alertController.text.toInt(),
                               quantity: _quantityController.text.toInt(),
