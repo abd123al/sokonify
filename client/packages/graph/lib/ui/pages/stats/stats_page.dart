@@ -171,26 +171,34 @@ class _HomePageState extends State<StatsPage> {
           ),
           title: const Text("Statistics"),
           actions: [
-            IconButton(
-              icon: const Icon(Icons.filter_alt_outlined),
-              tooltip: 'Open QR Code Scanner',
-              onPressed: () async {
-                final picked = await showDateRangePicker(
-                  context: context,
-                  initialDateRange: _range,
-                  lastDate: DateTime.now(),
-                  firstDate: DateTime(2022, 6),
-                  currentDate: DateTime.now(),
-                  initialEntryMode: DatePickerEntryMode.input,
-                );
+            Builder(builder: (context) {
+              goToEnd() {
+                DefaultTabController.of(context)?.animateTo(list.length - 1);
+              }
 
-                if (picked != null) {
-                  setState(() {
-                    _range = picked;
-                  });
-                }
-              },
-            ),
+              return IconButton(
+                icon: const Icon(Icons.filter_alt_outlined),
+                tooltip: 'Open QR Code Scanner',
+                onPressed: () async {
+                  final picked = await showDateRangePicker(
+                    context: context,
+                    initialDateRange: _range,
+                    lastDate: DateTime.now(),
+                    firstDate: DateTime(2022, 6),
+                    currentDate: DateTime.now(),
+                    initialEntryMode: DatePickerEntryMode.input,
+                  );
+
+                  if (picked != null) {
+                    goToEnd();
+
+                    setState(() {
+                      _range = picked;
+                    });
+                  }
+                },
+              );
+            }),
           ],
         ),
         body: _body(),
