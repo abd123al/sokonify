@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graph/ui/helpers/helpers.dart';
 import 'package:graph/ui/pages/stats/stats_view.dart';
 import 'package:graph/ui/widgets/widgets.dart';
+import 'package:intl/intl.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../nav/nav.dart';
@@ -49,13 +50,35 @@ class StatsWidget extends StatelessWidget {
               .subtract(const Duration(seconds: 1));
         }
 
-        return _body(statsArgs);
+        return _body(statsArgs, context);
       },
     );
   }
 
-  BlocProvider<StatsCubit> _body(StatsArgs statsArgs) {
-    final word = "${tab.title} $name".cleanSpaces();
+  Widget _body(StatsArgs statsArgs, BuildContext context) {
+    if (tab.type == null && range == null) {
+      return Center(
+        child: Text(
+          "Please select custom dates.",
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+      );
+    }
+
+    String word;
+    if (tab.type == null) {
+      final formatter = DateFormat('dd.MMM');
+      final start = formatter.format(range!.start);
+      final end = formatter.format(range!.end);
+
+      word = "$start - $end $name".cleanSpaces();
+
+      if (start == end) {
+        word = word.replaceFirst("- $end ", "").cleanSpaces();
+      }
+    } else {
+      word = "${tab.title} $name".cleanSpaces();
+    }
 
     return BlocProvider(
       create: (context) {
@@ -92,13 +115,13 @@ class StatsWidget extends StatelessWidget {
                       ),
                       child: Text("Print $word Sales".cleanSpaces()),
                     ),
-                    OutlinedButton(
-                      onPressed: () => redirectTo(
-                        context,
-                        Routes.convertStock,
-                      ),
-                      child: Text("Print ${tab.title} Expenses"),
-                    ),
+                    // OutlinedButton(
+                    //   onPressed: () => redirectTo(
+                    //     context,
+                    //     Routes.convertStock,
+                    //   ),
+                    //   child: Text("Print ${tab.title} Expenses"),
+                    // ),
                     if (tab.hasMultipleDays)
                       OutlinedButton(
                         onPressed: () => redirectTo(
