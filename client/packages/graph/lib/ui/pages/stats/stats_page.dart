@@ -11,7 +11,7 @@ import '../../../repositories/stats_repository.dart';
 import 'stats_cubit.dart';
 
 class StatTab {
-  final TimeframeType type;
+  final TimeframeType? type;
   final String title;
   final bool hasMultipleDays;
 
@@ -25,11 +25,13 @@ class StatsWidget extends StatelessWidget {
     required this.tab,
     this.args,
     required this.name,
+    this.range,
   }) : super(key: key);
 
   final StatTab tab;
   final String name;
   final StatsArgs? args;
+  final DateTimeRange? range;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +40,14 @@ class StatsWidget extends StatelessWidget {
       builder: (context) {
         var statsArgs = args ?? StatsArgs();
 
-        statsArgs.timeframe = tab.type;
+        if (tab.type != null) {
+          statsArgs.timeframe = tab.type;
+        } else {
+          statsArgs.startDate = range?.start;
+          statsArgs.endDate = range?.end
+              .add(const Duration(days: 1))
+              .subtract(const Duration(seconds: 1));
+        }
 
         return _body(statsArgs);
       },
@@ -140,7 +149,10 @@ class _HomePageState extends State<StatsPage> {
     StatTab(TimeframeType.thisMonth, "This Month"),
     StatTab(TimeframeType.lastMonth, "Last Month"),
     StatTab(TimeframeType.thisYear, "This Year"),
+    StatTab(null, "Custom Range"),
   ];
+
+  DateTimeRange? _range;
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +174,22 @@ class _HomePageState extends State<StatsPage> {
             IconButton(
               icon: const Icon(Icons.filter_alt_outlined),
               tooltip: 'Open QR Code Scanner',
-              onPressed: () {},
+              onPressed: () async {
+                final picked = await showDateRangePicker(
+                  context: context,
+                  initialDateRange: _range,
+                  lastDate: DateTime.now(),
+                  firstDate: DateTime(2022, 6),
+                  currentDate: DateTime.now(),
+                  initialEntryMode: DatePickerEntryMode.input,
+                );
+
+                if (picked != null) {
+                  setState(() {
+                    _range = picked;
+                  });
+                }
+              },
             ),
           ],
         ),
@@ -178,6 +205,7 @@ class _HomePageState extends State<StatsPage> {
                 tab: e,
                 name: widget.args?.name ?? "",
                 args: widget.args?.args,
+                range: _range,
               ))
           .toList(),
     );
