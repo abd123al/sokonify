@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/foundation.dart';
 import 'package:graph/ui/helpers/helpers.dart';
 import 'package:intl/intl.dart';
@@ -154,11 +152,23 @@ class Invoice {
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
         pw.SizedBox(height: 8),
-        pw.Text(
-          'Signature ..................................',
-          style: const pw.TextStyle(
-            fontSize: 12,
-          ),
+        pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+          children: [
+            pw.Text(
+              'Signature ..................................',
+              style: const pw.TextStyle(
+                fontSize: 12,
+              ),
+            ),
+            pw.Text(
+              order.pricing.name,
+              style:  pw.TextStyle(
+                fontSize: 12,
+                fontWeight: pw.FontWeight.bold,
+              ),
+            ),
+          ],
         ),
         pw.SizedBox(height: 8),
         pw.Row(
