@@ -85,7 +85,7 @@ class ItemPage extends StatelessWidget {
             subtitle: "Expires at", value: data.expiresAt?.toString()),
         ShortDetailTile(subtitle: "Batch", value: data.batch),
         ShortDetailTile(subtitle: "Added By", value: data.creator?.name),
-        ShortDetailTile(subtitle: "Added on", value: data.createdAt.toString()),
+        ShortDetailTile(subtitle: "Added on", value: data.createdAt.toTime().toString()),
         const WordDivider(text: 'Categories'),
         //todo share one widget
         Builder(

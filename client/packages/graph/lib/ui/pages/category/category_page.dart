@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:graph/nav/redirect_to.dart';
+import 'package:graph/ui/helpers/extensions.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../nav/routes.dart';
@@ -82,7 +83,7 @@ class CategoryWidget extends StatelessWidget {
             ),
             ShortDetailTile(
               subtitle: "Created on",
-              value: data.createdAt.toString(),
+              value: data.createdAt.toTime().toString(),
             ),
           ],
         );

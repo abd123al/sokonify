@@ -60,7 +60,7 @@ class PaymentPage extends StatelessWidget {
             ShortDetailTile(subtitle: "Description", value: data.description),
             ShortDetailTile(subtitle: "Submitted By", value: data.staff.name),
             ShortDetailTile(
-                subtitle: "Submitted on", value: data.createdAt.toString()),
+                subtitle: "Submitted on", value: data.createdAt.toTime().toString()),
             if (data.orderItems != null) const WordDivider(text: 'Items'),
             if (data.orderItems != null)
               Builder(

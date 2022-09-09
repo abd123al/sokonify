@@ -31,10 +31,10 @@ class PaymentTile extends StatelessWidget {
           style: Theme.of(context).textTheme.titleMedium,
           overflow: TextOverflow.ellipsis,
         ),
-        subtitle: Text(
-          "${payment.createdAt}",
-          style: Theme.of(context).textTheme.titleSmall,
-        ),
+        // subtitle: Text(
+        //   "${payment.createdAt.toTime()}",
+        //   style: Theme.of(context).textTheme.titleSmall,
+        // ),
         trailing: Text(
           formatCurrency(payment.amount),
           overflow: TextOverflow.ellipsis,
