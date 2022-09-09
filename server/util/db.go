@@ -36,7 +36,7 @@ func InitDB(args InitDbArgs) (DB *gorm.DB) {
 			port = "5433"
 			dbName = "sokonify"
 		}
-		dsn := fmt.Sprintf("host=localhost user=postgres password=%s dbname=%s port=%s sslmode=disable TimeZone=Africa/Nairobi", password, dbName, port)
+		dsn := fmt.Sprintf("host=localhost user=postgres password=%s dbname=%s port=%s sslmode=disable", password, dbName, port)
 		db, err = gorm.Open(postgres.New(postgres.Config{DSN: dsn}), &gorm.Config{
 			//Logger: logger.Default.LogMode(logger.Info),
 		})

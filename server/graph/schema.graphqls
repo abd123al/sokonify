@@ -490,6 +490,7 @@ enum PermissionType {
     edit_category
     edit_customer
     edit_order
+    edit_payment
     edit_product
     edit_stock
     edit_staff
