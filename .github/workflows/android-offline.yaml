@@ -40,8 +40,8 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           cache: true
-          cache-key: flutter # optional, change this to force refresh cache
-          flutter-version: '3.0.0'
+          cache-key: 'flutter-3.3.0' # optional, change this to force refresh cache
+          flutter-version: '3.3.0'
 
       - name: setup-android-tools
         uses: maxim-lobanov/setup-android-tools@v1
