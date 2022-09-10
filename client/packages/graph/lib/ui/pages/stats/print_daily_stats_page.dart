@@ -9,9 +9,7 @@ import 'package:printing/printing.dart';
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../repositories/stats_repository.dart';
 import '../../pdf/daily_stats.dart';
-import '../../pdf/sales_list.dart';
 import 'daily_stats_cubit.dart';
-import 'sales_cubit.dart';
 
 class PrintDailyStatsPage extends StatelessWidget {
   const PrintDailyStatsPage({
