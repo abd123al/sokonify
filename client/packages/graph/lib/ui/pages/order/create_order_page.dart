@@ -23,7 +23,7 @@ class CreateOrderPage extends StatelessWidget {
       ),
       body: PricingBuilder(
         builder: (context, list) {
-          _buildForm(Categories$Query$Category pricing) {
+          buildForm(Categories$Query$Category pricing) {
             return OrderForm<NewOrderCubit>(
               isOrder: isOrder,
               pricingId: pricing.id,
@@ -31,7 +31,7 @@ class CreateOrderPage extends StatelessWidget {
           }
 
           if (list.items.length == 1) {
-            return _buildForm(list.items[0]);
+            return buildForm(list.items[0]);
           }
 
           return Tabbed(
@@ -40,7 +40,7 @@ class CreateOrderPage extends StatelessWidget {
                 create: (context) {
                   return NewOrderCubit(isOrder, cat.id);
                 },
-                child: _buildForm(cat),
+                child: buildForm(cat),
               );
             },
             categories: list.items,

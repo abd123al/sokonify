@@ -1,5 +1,8 @@
 # Todo
 
+- items don't update quantity to zero...
+- add purchase order.
+- add supplier for items. so we know where this things come from.
 - add warnings functionality
 - options to find best supplier with low price
 - self-signed certificate
