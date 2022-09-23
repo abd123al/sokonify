@@ -2,4 +2,5 @@ fragment CustomerParts on Customer {
     id
     name
     address
+    phone
 }

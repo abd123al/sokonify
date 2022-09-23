@@ -21,8 +21,6 @@ Future<Uint8List> generateInvoice(
     order: order,
     invoiceNumber: '$id',
     items: items,
-    customerName: order.customer?.name ?? "No customer",
-    customerAddress: order.customer?.address ?? "",
     baseColor: PdfColors.teal,
     accentColor: PdfColors.blueGrey900,
   );
@@ -35,8 +33,6 @@ class Invoice {
     required this.items,
     required this.store,
     required this.order,
-    required this.customerName,
-    required this.customerAddress,
     required this.invoiceNumber,
     required this.baseColor,
     required this.accentColor,
@@ -45,8 +41,6 @@ class Invoice {
   final List<Order$Query$Order$OrderItem> items;
   final CurrentStore$Query$Store store;
   final Order$Query$Order order;
-  final String customerName;
-  final String customerAddress;
   final String invoiceNumber;
   final PdfColor baseColor;
   final PdfColor accentColor;
@@ -163,7 +157,7 @@ class Invoice {
             ),
             pw.Text(
               order.pricing.name,
-              style:  pw.TextStyle(
+              style: pw.TextStyle(
                 fontSize: 12,
                 fontWeight: pw.FontWeight.bold,
               ),
@@ -226,13 +220,14 @@ class Invoice {
                     children: [
                       pw.Text("Bill to:"),
                       pw.Text(
-                        customerName,
+                        order.customer?.name ?? "No customer",
                         style: pw.TextStyle(
                           fontWeight: pw.FontWeight.bold,
                           fontSize: 14,
                         ),
                       ),
-                      pw.Text(customerAddress),
+                      pw.Text(order.customer?.address ?? ""),
+                      pw.Text(order.customer?.phone ?? ""),
                     ],
                   ),
                 ),
