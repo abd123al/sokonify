@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:graph/ui/helpers/extensions.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
 import '../../../nav/nav.dart';
@@ -41,10 +42,10 @@ class OrderTile extends StatelessWidget {
               style: Theme.of(context).textTheme.titleLarge,
               overflow: TextOverflow.ellipsis,
             ),
-            subtitle: Text(
-              "${order.createdAt}",
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
+            // subtitle: Text(
+            //   "${order.createdAt.toTime()}",
+            //   style: Theme.of(context).textTheme.titleSmall,
+            // ),
             dense: true,
             trailing: Text(
               describeEnum(order.status).toUpperCase(),

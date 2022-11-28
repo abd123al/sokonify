@@ -27,7 +27,11 @@ class CustomerTile extends StatelessWidget {
             ),
             dense: true,
             onTap: () {
-              redirectTo(context, "${Routes.customer}/${customer.id}");
+              redirectTo(
+                context,
+                "${Routes.customer}/${customer.id}",
+                args: customer.name,
+              );
             },
           );
         },

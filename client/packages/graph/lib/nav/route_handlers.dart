@@ -155,7 +155,12 @@ var editOrderPageRouterHandler = Handler(handlerFunc: (context, params) {
 
 var customerPageRouterHandler = Handler(handlerFunc: (context, params) {
   final id = params["id"]![0];
-  return CustomerPage(id: int.parse(id));
+  final name = context?.settings?.arguments as String;
+
+  return CustomerPage(
+    id: int.parse(id),
+    name: name,
+  );
 });
 
 var editCustomerPageRouterHandler = Handler(handlerFunc: (context, params) {
@@ -276,8 +281,6 @@ var printDailyStatsPageRouterHandler = Handler(handlerFunc: (context, params) {
   );
 });
 
-
-
 var brandPageRouterHandler = Handler(handlerFunc: (context, params) {
   final id = params["id"]![0];
 
@@ -285,7 +288,6 @@ var brandPageRouterHandler = Handler(handlerFunc: (context, params) {
     id: int.parse(id),
   );
 });
-
 
 var editBrandPageRouterHandler = Handler(handlerFunc: (context, params) {
   final id = params["id"]![0];

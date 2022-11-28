@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:graph/gql/generated/graphql_api.dart';
+import 'package:graph/ui/helpers/extensions.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 import '../../../nav/nav.dart';
@@ -55,7 +56,7 @@ class OrderPage extends StatelessWidget {
           if (data.customer?.name != null)
             ShortDetailTile(
                 subtitle: "Customer", value: "${data.customer?.name}"),
-          ShortDetailTile(subtitle: "Created At", value: "${data.createdAt}"),
+          ShortDetailTile(subtitle: "Created At", value: "${data.createdAt.toTime()}"),
           ShortDetailTile(subtitle: "Status", value: describeEnum(data.status)),
           ShortDetailTile(subtitle: "Pricing", value: data.pricing.name),
           ShortDetailTile(subtitle: "Comment", value: data.comment),

@@ -18,9 +18,11 @@ class CustomerPage extends StatefulWidget {
   const CustomerPage({
     Key? key,
     required this.id,
+    required this.name,
   }) : super(key: key);
 
   final int id;
+  final String name;
 
   @override
   State<CustomerPage> createState() => _HomePageState();
@@ -57,6 +59,7 @@ class _HomePageState extends State<CustomerPage> {
         "Stats",
         CustomerStats(
           customerId: widget.id,
+          name: widget.name,
         ),
       ),
     ];
@@ -76,7 +79,7 @@ class _HomePageState extends State<CustomerPage> {
                 )
                 .toList(),
           ),
-          title: const Text("Customer"),
+          title: Text(widget.name),
           actions: [
             IconButton(
               icon: const Icon(Icons.edit),

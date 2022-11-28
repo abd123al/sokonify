@@ -31,11 +31,11 @@ dependencies:
   gql: 0.13.1
   gql_dio_link: ^0.2.2
   graphql_flutter: ^5.1.1-beta.3
-  hive: ^2.0.4
+  hive: ^2.2.3
   hive_flutter: ^1.1.0
-  hydrated_bloc: ^8.1.0
+  hydrated_bloc: ^9.0.0-dev.3
   in_app_update: ^3.0.0
-  path_provider: ^2.0.6
+  path_provider: ^2.0.1
   permission_handler: ^9.2.0
   pretty_dio_logger: ^1.2.0-beta-1
   pdf: ^3.8.1

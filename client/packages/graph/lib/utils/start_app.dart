@@ -17,6 +17,12 @@ startApp({
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: kIsWeb
+        ? HydratedStorage.webStorageDirectory
+        : await getTemporaryDirectory(),
+  );
+
   try {
     await windowManager.ensureInitialized();
 
@@ -38,22 +44,13 @@ startApp({
     Hive.initFlutter(),
   ]);
 
-  final storage = await HydratedStorage.build(
-    storageDirectory: kIsWeb
-        ? HydratedStorage.webStorageDirectory
-        : await getTemporaryDirectory(),
-  );
-
-  HydratedBlocOverrides.runZoned(
-    () => runApp(
-      GraphqlClientBuilder(
-        urlHandler: urlHandler,
-        statusHandler: statusHandler,
-        onDone: () {
-          FlutterNativeSplash.remove();
-        },
-      ),
+  runApp(
+    GraphqlClientBuilder(
+      urlHandler: urlHandler,
+      statusHandler: statusHandler,
+      onDone: () {
+        FlutterNativeSplash.remove();
+      },
     ),
-    storage: storage,
   );
 }

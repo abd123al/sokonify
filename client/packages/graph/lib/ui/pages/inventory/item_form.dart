@@ -353,10 +353,6 @@ class _ItemFormState<T extends PricingCubit> extends State<ItemForm<T>> {
                       return 'Please alert quantity quantity..';
                     }
 
-                    if (value == _quantityController.text) {
-                      return 'Alert Quantity cant be same with stock quantity';
-                    }
-
                     if (value.toInt() > _quantityController.text.toInt()) {
                       return 'Alert Quantity can not be greater than stock quantity';
                     }
@@ -435,6 +431,8 @@ class _ItemFormState<T extends PricingCubit> extends State<ItemForm<T>> {
                       callback: () {
                         if (priceCubit.validate()) {
                           if (_formKey.currentState!.validate()) {
+                            print("expire $_expireDate");
+
                             final input = ItemInput(
                               alertQuantity: _alertController.text.toInt(),
                               quantity: _quantityController.text.toInt(),

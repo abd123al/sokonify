@@ -1,6 +1,7 @@
 import 'package:blocitory/blocitory.dart';
 import 'package:flutter/material.dart';
 import 'package:graph/nav/redirect_to.dart';
+import 'package:graph/ui/helpers/extensions.dart';
 import 'package:graph/ui/widgets/widgets.dart';
 
 import '../../../gql/generated/graphql_api.graphql.dart';
@@ -57,7 +58,7 @@ class ProductPage extends StatelessWidget {
         const Divider(),
         ShortDetailTile(subtitle: "Created By", value: data.creator?.name),
         ShortDetailTile(
-            subtitle: "Created on", value: data.createdAt.toString()),
+            subtitle: "Created on", value: data.createdAt.toTime().toString()),
         const WordDivider(text: 'Brands'),
         //todo use tab for showing brands and categories
         Builder(

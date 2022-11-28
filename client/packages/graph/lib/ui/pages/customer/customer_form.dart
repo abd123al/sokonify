@@ -63,7 +63,7 @@ class _CreateCustomerPageState extends State<CustomerForm> {
                   labelText: 'Name',
                   hintText: "Enter Customer's name",
                   helperText: "Example: Mwanana Pharmacy or John Doe"),
-              maxLength: 20,
+              maxLength: 50,
             ),
             TextField(
               controller: _addressController,
