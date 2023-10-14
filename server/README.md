@@ -1,6 +1,6 @@
 # Todo
 
-- 
+- Implement FEFO or FIFO. So that drugs will be deducted in order.
 - items don't update quantity to zero...
 - add purchase order.
 - add supplier for items. so we know where this things come from.
