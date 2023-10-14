@@ -1,5 +1,6 @@
 # Todo
 
+- group by price too when fetching items eg diclofenac gel ya 2000 & 4000
 - Implement FEFO or FIFO. So that drugs will be deducted in order.
 - items don't update quantity to zero...
 - add purchase order.
