@@ -1,6 +1,7 @@
-# sokonify
+# Sokonify
 
-The source code of Sokonify System.
+## What is this?
+This is open source point of sale system (POS). The idea was to create it to run anyware and that is accomplished by using dart (flutter) and golang which both can be compiled to any operating system.
 
 ## Branches
 
